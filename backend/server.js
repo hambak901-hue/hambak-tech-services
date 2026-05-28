@@ -18,108 +18,49 @@ import adminRoutes from "./routes/adminRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
-/* =========================
-CONFIG
-========================= */
-
 dotenv.config();
-
-/* =========================
-CONNECT DATABASE
-========================= */
-
 connectDB();
-
-/* =========================
-INITIALIZE APP
-========================= */
 
 const app = express();
 
-/* =========================
-MIDDLEWARE
-========================= */
-
 app.use(express.json());
-
-app.use(
-  express.urlencoded({
-    extended: true
-  })
-);
-
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-
 app.use(morgan("dev"));
-
 app.use(cookieParser());
 
 /* =========================
-STATIC FILES
+STATIC FILES & FRONTEND
 ========================= */
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
-app.use(
-"/uploads",
-express.static(
-path.join(process.cwd(),"uploads")
-)
-);
+// This line allows Render to find your HTML files cleanly
+app.use(express.static(path.resolve(process.cwd(), "..", "frontend")));
 
 /* =========================
 HOME ROUTE
 ========================= */
-
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
-    message:
-      "HAMBAK TECH & SERVICES Backend Running Successfully"
+    message: "HAMBAK TECH & SERVICES Backend Running Successfully"
   });
 });
 
 /* =========================
 API ROUTES
 ========================= */
-
-app.use(
-  "/api/auth",
-  authRoutes
-);
-
-app.use(
-  "/api/services",
-  serviceRoutes
-);
-
-app.use(
-  "/api/upload",
-  uploadRoutes
-);
-
-app.use(
-  "/api/admin",
-  adminRoutes
-);
-
-app.use(
-  "/api/transactions",
-  transactionRoutes
-);
-
-app.use(
-  "/api/users",
-  userRoutes
-);
-
-app.use(
-"/api/orders",
-orderRoutes
-);
+app.use("/api/auth", authRoutes);
+app.use("/api/services", serviceRoutes);
+app.use("/api/upload", uploadRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/transactions", transactionRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/orders", orderRoutes);
 
 /* =========================
 404 ROUTE
 ========================= */
-
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -129,14 +70,7 @@ app.use((req, res) => {
 
 app.use(errorHandler);
 
-/* =========================
-START SERVER
-========================= */
-
-const PORT = process.env.PORT || 5000;
-
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
-  console.log(
-    `Server running on port ${PORT}`
-  );
+  console.log(`Server running on port ${PORT}`);
 });
