@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Register | HAMBAK TECH & SERVICES
+</title>
+
+<link
+rel="stylesheet"
+href="../css/style.css"
+>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+>
+
+<style>
+
+/* =========================
+REGISTER PAGE
+========================= */
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:
+linear-gradient(
+135deg,
+#020617,
+#0d47a1
+);
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:40px 20px;
+}
+
+/* CONTAINER */
+
+.register-container{
+width:100%;
+max-width:1200px;
+background:white;
+border-radius:35px;
+overflow:hidden;
+display:grid;
+grid-template-columns:1fr 1fr;
+box-shadow:0 20px 60px rgba(0,0,0,0.3);
+}
+
+/* LEFT */
+
+.register-left{
+padding:70px 60px;
+background:
+linear-gradient(
+135deg,
+#081120,
+#0d47a1
+);
+color:white;
+display:flex;
+flex-direction:column;
+justify-content:center;
+}
+
+.register-left h1{
+font-size:4rem;
+margin-bottom:25px;
+line-height:1.2;
+}
+
+.register-left p{
+line-height:1.9;
+font-size:1.1rem;
+color:#cbd5e1;
+margin-bottom:35px;
+}
+
+.left-features{
+display:flex;
+flex-direction:column;
+gap:20px;
+}
+
+.feature-item{
+display:flex;
+align-items:center;
+gap:15px;
+font-size:1rem;
+}
+
+.feature-item i{
+width:50px;
+height:50px;
+background:rgba(255,255,255,0.1);
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:1.2rem;
+}
+
+/* RIGHT */
+
+.register-right{
+padding:70px 60px;
+overflow-y:auto;
+}
+
+.form-header{
+margin-bottom:40px;
+}
+
+.form-header h2{
+font-size:3rem;
+margin-bottom:15px;
+color:#0f172a;
+}
+
+.form-header p{
+line-height:1.8;
+color:#64748b;
+}
+
+/* FORM */
+
+.register-form{
+display:flex;
+flex-direction:column;
+gap:22px;
+}
+
+.form-group{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.form-group label{
+font-weight:bold;
+color:#0f172a;
+}
+
+.input-box{
+position:relative;
+}
+
+.input-box input,
+.input-box select{
+width:100%;
+padding:16px 18px;
+padding-left:50px;
+border:1px solid #ddd;
+border-radius:14px;
+outline:none;
+font-size:1rem;
+box-sizing:border-box;
+transition:0.3s;
+}
+
+.input-box input:focus,
+.input-box select:focus{
+border-color:#0d47a1;
+}
+
+.input-box i{
+position:absolute;
+left:18px;
+top:50%;
+transform:translateY(-50%);
+color:#64748b;
+}
+
+/* PASSWORD TOGGLE */
+
+.password-toggle{
+position:absolute;
+right:18px;
+top:50%;
+transform:translateY(-50%);
+cursor:pointer;
+color:#64748b;
+}
+
+/* UPLOAD */
+
+.upload-box{
+border:2px dashed #0d47a1;
+padding:25px;
+border-radius:18px;
+text-align:center;
+background:#f8fafc;
+}
+
+.upload-box i{
+font-size:2rem;
+color:#0d47a1;
+margin-bottom:15px;
+}
+
+.upload-box p{
+margin-bottom:15px;
+color:#555;
+}
+
+/* CHECKBOX */
+
+.checkbox-group{
+display:flex;
+align-items:flex-start;
+gap:12px;
+font-size:0.95rem;
+line-height:1.7;
+color:#555;
+}
+
+.checkbox-group input{
+margin-top:4px;
+}
+
+/* BUTTON */
+
+.register-btn{
+padding:18px;
+background:#0d47a1;
+color:white;
+border:none;
+border-radius:14px;
+font-size:1rem;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+.register-btn:hover{
+background:#1565c0;
+}
+
+/* SOCIAL */
+
+.social-login{
+margin-top:30px;
+}
+
+.social-login p{
+text-align:center;
+margin-bottom:20px;
+color:#64748b;
+}
+
+.social-buttons{
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+}
+
+.social-btn{
+flex:1;
+min-width:140px;
+padding:15px;
+border:none;
+border-radius:14px;
+cursor:pointer;
+font-size:1rem;
+font-weight:bold;
+display:flex;
+justify-content:center;
+align-items:center;
+gap:10px;
+transition:0.3s;
+}
+
+.google-btn{
+background:#ea4335;
+color:white;
+}
+
+.facebook-btn{
+background:#1877f2;
+color:white;
+}
+
+.github-btn{
+background:#111827;
+color:white;
+}
+
+/* LOGIN LINK */
+
+.login-link{
+text-align:center;
+margin-top:30px;
+color:#555;
+}
+
+.login-link a{
+color:#0d47a1;
+text-decoration:none;
+font-weight:bold;
+}
+
+/* MOBILE */
+
+@media(max-width:950px){
+
+.register-container{
+grid-template-columns:1fr;
+}
+
+.register-left{
+display:none;
+}
+
+}
+
+@media(max-width:768px){
+
+.register-right{
+padding:50px 25px;
+}
+
+.form-header h2{
+font-size:2.2rem;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="register-container">
+
+<!-- LEFT SIDE -->
+
+<div class="register-left">
+
+<h1>
+Join HAMBAK TECH & SERVICES
+</h1>
+
+<p>
+Create your professional account to access
+digital services, ICT training, VTU, online
+registrations, dashboards and business solutions.
+</p>
+
+<div class="left-features">
+
+<div class="feature-item">
+
+<i class="fa-solid fa-user-shield"></i>
+
+<span>
+Secure Authentication System
+</span>
+
+</div>
+
+<div class="feature-item">
+
+<i class="fa-solid fa-chart-line"></i>
+
+<span>
+Advanced Customer Dashboard
+</span>
+
+</div>
+
+<div class="feature-item">
+
+<i class="fa-solid fa-wallet"></i>
+
+<span>
+Wallet & Payment Management
+</span>
+
+</div>
+
+<div class="feature-item">
+
+<i class="fa-solid fa-graduation-cap"></i>
+
+<span>
+Training & ICT Learning Access
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- RIGHT SIDE -->
+
+<div class="register-right">
+
+<div class="form-header">
+
+<h2>
+Create Account
+</h2>
+
+<p>
+Fill in your details to register your account.
+</p>
+
+</div>
+
+<form class="register-form" id="registerForm">
+
+<!-- FULL NAME -->
+
+<div class="form-group">
+
+<label>
+Full Name
+</label>
+
+<div class="input-box">
+
+<i class="fa-solid fa-user"></i>
+
+<input
+type="text"
+id="name"
+name="name"
+placeholder="Enter full name"
+required
+>
+
+</div>
+
+</div>
+
+<!-- USERNAME -->
+
+<div class="form-group">
+
+<label>
+Username
+</label>
+
+<div class="input-box">
+
+<i class="fa-solid fa-at"></i>
+
+<input
+type="text"
+id="username"
+name="username"
+placeholder="Choose username"
+required
+>
+
+</div>
+
+</div>
+
+<!-- EMAIL -->
+
+<div class="form-group">
+
+<label>
+Email Address
+</label>
+
+<div class="input-box">
+
+<i class="fa-solid fa-envelope"></i>
+
+<input
+type="email"
+id="email"
+name="email"
+placeholder="Enter email address"
+required
+>
+
+</div>
+
+</div>
+
+<!-- PHONE -->
+
+<div class="form-group">
+
+<label>
+Phone Number
+</label>
+
+<div class="input-box">
+
+<i class="fa-solid fa-phone"></i>
+
+<input
+type="tel"
+id="phone"
+name="phone"
+placeholder="Enter phone number"
+required
+>
+
+</div>
+
+</div>
+
+<!-- ROLE -->
+
+<div class="form-group">
+
+<label>
+Select Role
+</label>
+
+<div class="input-box">
+
+<i class="fa-solid fa-user-tag"></i>
+
+<select
+id="role"
+name="role"
+required
+>
+
+<option value="">
+Choose account type
+</option>
+
+<option value="user">
+Customer
+</option>
+
+<option value="student">
+Student
+</option>
+
+<option value="admin">
+Admin
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<!-- PASSWORD -->
+
+<div class="form-group">
+
+<label>
+Password
+</label>
+
+<div class="input-box">
+
+<i class="fa-solid fa-lock"></i>
+
+<input
+type="password"
+id="password"
+name="password"
+placeholder="Create password"
+required
+>
+
+<span
+class="password-toggle"
+onclick="togglePassword('password', this)"
+>
+
+<i class="fa-solid fa-eye"></i>
+
+</span>
+
+</div>
+
+</div>
+
+<!-- CONFIRM PASSWORD -->
+
+<div class="form-group">
+
+<label>
+Confirm Password
+</label>
+
+<div class="input-box">
+
+<i class="fa-solid fa-lock"></i>
+
+<input
+type="password"
+id="confirmPassword"
+name="confirmPassword"
+placeholder="Confirm password"
+required
+>
+
+<span
+class="password-toggle"
+onclick="togglePassword('confirmPassword', this)"
+>
+
+<i class="fa-solid fa-eye"></i>
+
+</span>
+
+</div>
+
+</div>
+
+<!-- UPLOAD -->
+
+<div class="form-group">
+
+<label>
+Profile Upload
+</label>
+
+<div class="upload-box">
+
+<i class="fa-solid fa-cloud-arrow-up"></i>
+
+<p>
+Upload profile picture
+</p>
+
+<input type="file">
+
+</div>
+
+</div>
+
+<!-- TERMS -->
+
+<div class="checkbox-group">
+
+<input
+type="checkbox"
+required
+>
+
+<span>
+I agree to the Terms & Conditions and Privacy Policy
+of HAMBAK TECH & SERVICES.
+</span>
+
+</div>
+
+<div id="messageBox"></div>
+
+<!-- BUTTON -->
+
+<button
+type="submit"
+class="register-btn"
+>
+
+Create Account
+
+</button>
+
+</form>
+
+<!-- SOCIAL -->
+
+<div class="social-login">
+
+<p>
+Or register with
+</p>
+
+<div class="social-buttons">
+
+<button class="social-btn google-btn">
+
+<i class="fa-brands fa-google"></i>
+Google
+
+</button>
+
+<button class="social-btn facebook-btn">
+
+<i class="fa-brands fa-facebook-f"></i>
+Facebook
+
+</button>
+
+<button class="social-btn github-btn">
+
+<i class="fa-brands fa-github"></i>
+GitHub
+
+</button>
+
+</div>
+
+</div>
+
+<!-- LOGIN -->
+
+<div class="login-link">
+
+Already have an account?
+
+<a href="login.html">
+Login Here
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* =========================
+PASSWORD TOGGLE
+========================= */
+
+function togglePassword(id, element){
+
+const input =
+document.getElementById(id);
+
+const icon =
+element.querySelector("i");
+
+if(input.type === "password"){
+
+input.type = "text";
+
+icon.classList.remove("fa-eye");
+
+icon.classList.add("fa-eye-slash");
+
+}else{
+
+input.type = "password";
+
+icon.classList.remove("fa-eye-slash");
+
+icon.classList.add("fa-eye");
+
+}
+
+}
+
+/* =========================
+REGISTER FORM
+========================= */
+
+const registerForm =
+document.getElementById("registerForm");
+
+const messageBox =
+document.getElementById("messageBox");
+
+registerForm.addEventListener(
+"submit",
+async (e)=>{
+
+e.preventDefault();
+
+/* GET VALUES */
+
+const name =
+document.getElementById("name").value;
+
+const username =
+document.getElementById("username").value;
+
+const email =
+document.getElementById("email").value;
+
+const phone =
+document.getElementById("phone").value;
+
+const role =
+document.getElementById("role").value;
+
+const password =
+document.getElementById("password").value;
+
+const confirmPassword =
+document.getElementById("confirmPassword").value;
+
+/* PASSWORD CHECK */
+
+if(password !== confirmPassword){
+
+messageBox.innerHTML = `
+<p style="
+color:red;
+margin-bottom:15px;
+font-weight:bold;
+">
+Passwords do not match
+</p>
+`;
+
+return;
+
+}
+
+/* SEND TO BACKEND */
+
+try{
+
+const response =
+await fetch(
+"http://localhost:5000/api/auth/register",
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+name,
+username,
+email,
+phone,
+role,
+password
+
+})
+
+}
+
+);
+
+const data =
+await response.json();
+
+/* ERROR */
+
+if(!data.success){
+
+messageBox.innerHTML = `
+<p style="
+color:red;
+margin-bottom:15px;
+font-weight:bold;
+">
+${data.message}
+</p>
+`;
+
+return;
+
+}
+
+/* SUCCESS */
+
+messageBox.innerHTML = `
+<p style="
+color:green;
+margin-bottom:15px;
+font-weight:bold;
+">
+Registration Successful
+</p>
+`;
+
+/* SAVE TOKEN */
+
+localStorage.setItem(
+"token",
+data.token
+);
+
+/* REDIRECT */
+
+setTimeout(()=>{
+
+window.location.href =
+"login.html";
+
+},2000);
+
+}catch(error){
+
+messageBox.innerHTML = `
+<p style="
+color:red;
+margin-bottom:15px;
+font-weight:bold;
+">
+Server Error
+</p>
+`;
+
+console.log(error);
+
+}
+
+});
+
+</script>
+
+</body>
+
+</html>

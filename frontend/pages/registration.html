@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Online Registration | HAMBAK TECH & SERVICES
+</title>
+
+<link
+rel="stylesheet"
+href="../css/style.css"
+>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+>
+
+<style>
+
+/* =========================
+REGISTRATION PORTAL
+========================= */
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f5f7fb;
+color:#0f172a;
+}
+
+/* HERO */
+
+.registration-hero{
+padding:140px 8% 90px;
+background:
+linear-gradient(
+135deg,
+#081120,
+#0d47a1
+);
+color:white;
+text-align:center;
+}
+
+.registration-hero h1{
+font-size:4rem;
+margin-bottom:20px;
+}
+
+.registration-hero p{
+max-width:760px;
+margin:auto;
+line-height:1.9;
+font-size:1.2rem;
+color:#cbd5e1;
+}
+
+/* SECTION */
+
+.section{
+padding:90px 8%;
+}
+
+.section-title{
+text-align:center;
+margin-bottom:60px;
+}
+
+.section-title h2{
+font-size:3rem;
+margin-bottom:15px;
+}
+
+.section-title p{
+max-width:700px;
+margin:auto;
+line-height:1.8;
+color:#555;
+}
+
+/* GRID */
+
+.registration-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:35px;
+}
+
+/* CARD */
+
+.registration-card{
+background:white;
+padding:35px;
+border-radius:25px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+transition:0.4s;
+}
+
+.registration-card:hover{
+transform:translateY(-10px);
+}
+
+.registration-icon{
+width:90px;
+height:90px;
+background:#0d47a1;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:2rem;
+color:white;
+margin-bottom:25px;
+}
+
+.registration-card h3{
+font-size:1.7rem;
+margin-bottom:20px;
+}
+
+.registration-card p{
+line-height:1.8;
+color:#555;
+margin-bottom:25px;
+}
+
+/* FORM */
+
+.reg-form{
+display:flex;
+flex-direction:column;
+gap:18px;
+}
+
+.reg-form input,
+.reg-form select,
+.reg-form textarea{
+padding:15px;
+border:1px solid #ddd;
+border-radius:12px;
+outline:none;
+font-size:1rem;
+}
+
+.reg-form textarea{
+resize:none;
+height:120px;
+}
+
+.upload-box{
+padding:20px;
+border:2px dashed #0d47a1;
+border-radius:15px;
+text-align:center;
+background:#f8fafc;
+}
+
+.reg-btn{
+padding:16px;
+border:none;
+background:#0d47a1;
+color:white;
+border-radius:12px;
+cursor:pointer;
+font-size:1rem;
+transition:0.3s;
+}
+
+.reg-btn:hover{
+background:#1565c0;
+}
+
+/* STATUS */
+
+.status-section{
+padding:0 8% 90px;
+}
+
+.status-box{
+background:white;
+padding:50px;
+border-radius:30px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+text-align:center;
+}
+
+.status-box h2{
+font-size:2.5rem;
+margin-bottom:20px;
+}
+
+.status-box p{
+max-width:700px;
+margin:auto;
+line-height:1.8;
+color:#555;
+margin-bottom:35px;
+}
+
+.status-form{
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.status-form input{
+padding:16px;
+width:320px;
+border:1px solid #ddd;
+border-radius:12px;
+outline:none;
+}
+
+/* TABLE */
+
+.table-section{
+padding:0 8% 90px;
+}
+
+.table-box{
+background:white;
+padding:35px;
+border-radius:25px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+overflow:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+table th,
+table td{
+padding:16px;
+text-align:left;
+border-bottom:1px solid #eee;
+}
+
+table th{
+background:#0d47a1;
+color:white;
+}
+
+/* PAYMENT */
+
+.payment-section{
+padding:0 8% 90px;
+}
+
+.payment-card{
+background:
+linear-gradient(
+135deg,
+#081120,
+#0d47a1
+);
+padding:60px;
+border-radius:30px;
+color:white;
+text-align:center;
+}
+
+.payment-card h2{
+font-size:3rem;
+margin-bottom:20px;
+}
+
+.payment-card p{
+max-width:700px;
+margin:auto;
+line-height:1.8;
+margin-bottom:35px;
+color:#cbd5e1;
+}
+
+.payment-btn{
+display:inline-block;
+padding:16px 35px;
+background:#f5b942;
+color:black;
+text-decoration:none;
+border-radius:12px;
+font-weight:bold;
+}
+
+/* FOOTER */
+
+.footer{
+background:#020617;
+color:white;
+padding:70px 8% 20px;
+}
+
+.footer-content{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:40px;
+margin-bottom:40px;
+}
+
+.footer h3{
+margin-bottom:20px;
+color:#f5b942;
+}
+
+.footer p{
+line-height:1.8;
+color:#cbd5e1;
+}
+
+.footer-links a{
+display:block;
+margin-bottom:10px;
+color:#cbd5e1;
+text-decoration:none;
+}
+
+.footer-bottom{
+text-align:center;
+padding-top:20px;
+border-top:1px solid rgba(255,255,255,0.1);
+color:#94a3b8;
+}
+
+/* WHATSAPP */
+
+.whatsapp-float{
+position:fixed;
+bottom:25px;
+right:25px;
+width:60px;
+height:60px;
+background:#25d366;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:1.8rem;
+color:white;
+text-decoration:none;
+z-index:999;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.registration-hero h1{
+font-size:2.8rem;
+}
+
+.section-title h2,
+.status-box h2,
+.payment-card h2{
+font-size:2.2rem;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+<div class="logo">
+
+<span>HAMBAK</span>
+
+<small>TECH & SERVICES</small>
+
+</div>
+
+<nav class="nav-links">
+
+<a href="../index.html">Home</a>
+<a href="services.html">Services</a>
+<a href="registration.html">Registration</a>
+<a href="contact.html">Contact</a>
+
+</nav>
+
+</header>
+
+<!-- HERO -->
+
+<section class="registration-hero">
+
+<h1>
+Online Registration Portal
+</h1>
+
+<p>
+Professional registration services for WAEC,
+JAMB, NECO, NYSC and other educational
+and government-related applications.
+</p>
+
+</section>
+
+<!-- REGISTRATION SERVICES -->
+
+<section class="section">
+
+<div class="section-title">
+
+<h2>
+Registration Services
+</h2>
+
+<p>
+Secure online registration and application processing.
+</p>
+
+</div>
+
+<div class="registration-grid">
+
+<!-- WAEC -->
+
+<div class="registration-card">
+
+<div class="registration-icon">
+<i class="fa-solid fa-graduation-cap"></i>
+</div>
+
+<h3>
+WAEC Registration
+</h3>
+
+<p>
+Apply and upload your documents for WAEC registration.
+</p>
+
+<form class="reg-form">
+
+<input
+type="text"
+placeholder="Full Name"
+>
+
+<input
+type="email"
+placeholder="Email Address"
+>
+
+<input
+type="tel"
+placeholder="Phone Number"
+>
+
+<div class="upload-box">
+
+<i class="fa-solid fa-upload"></i>
+
+<p>
+Upload Passport Photo
+</p>
+
+<input type="file">
+
+</div>
+
+<button
+type="submit"
+class="reg-btn"
+>
+
+Submit Registration
+
+</button>
+
+</form>
+
+</div>
+
+<!-- JAMB -->
+
+<div class="registration-card">
+
+<div class="registration-icon">
+<i class="fa-solid fa-book"></i>
+</div>
+
+<h3>
+JAMB Registration
+</h3>
+
+<p>
+Register for JAMB examination and upload required details.
+</p>
+
+<form class="reg-form">
+
+<input
+type="text"
+placeholder="Full Name"
+>
+
+<select>
+
+<option>Select Institution Type</option>
+<option>University</option>
+<option>Polytechnic</option>
+<option>College of Education</option>
+
+</select>
+
+<textarea
+placeholder="Preferred Course / Institution"
+></textarea>
+
+<div class="upload-box">
+
+<i class="fa-solid fa-file-arrow-up"></i>
+
+<p>
+Upload Documents
+</p>
+
+<input type="file">
+
+</div>
+
+<button
+type="submit"
+class="reg-btn"
+>
+
+Submit Registration
+
+</button>
+
+</form>
+
+</div>
+
+<!-- NYSC -->
+
+<div class="registration-card">
+
+<div class="registration-icon">
+<i class="fa-solid fa-id-card"></i>
+</div>
+
+<h3>
+NYSC Registration
+</h3>
+
+<p>
+NYSC registration support and document processing.
+</p>
+
+<form class="reg-form">
+
+<input
+type="text"
+placeholder="Full Name"
+>
+
+<input
+type="text"
+placeholder="Institution"
+>
+
+<input
+type="text"
+placeholder="Matric Number"
+>
+
+<div class="upload-box">
+
+<i class="fa-solid fa-cloud-arrow-up"></i>
+
+<p>
+Upload Required Files
+</p>
+
+<input type="file">
+
+</div>
+
+<button
+type="submit"
+class="reg-btn"
+>
+
+Submit Registration
+
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- STATUS CHECK -->
+
+<section class="status-section">
+
+<div class="status-box">
+
+<h2>
+Track Registration Status
+</h2>
+
+<p>
+Enter your registration ID to check your application progress.
+</p>
+
+<form class="status-form">
+
+<input
+type="text"
+placeholder="Enter Registration ID"
+>
+
+<button
+type="submit"
+class="reg-btn"
+>
+
+Check Status
+
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+<!-- RECENT APPLICATIONS -->
+
+<section class="table-section">
+
+<div class="table-box">
+
+<h2>
+Recent Applications
+</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Application</th>
+<th>Applicant</th>
+<th>Status</th>
+<th>Date</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+<td>WAEC</td>
+<td>Applicant One</td>
+<td>Pending</td>
+<td>July 2026</td>
+</tr>
+
+<tr>
+<td>JAMB</td>
+<td>Applicant Two</td>
+<td>Approved</td>
+<td>July 2026</td>
+</tr>
+
+<tr>
+<td>NYSC</td>
+<td>Applicant Three</td>
+<td>Processing</td>
+<td>July 2026</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+<!-- PAYMENT -->
+
+<section class="payment-section">
+
+<div class="payment-card">
+
+<h2>
+Online Payment System
+</h2>
+
+<p>
+Secure online payment integration for registration fees,
+application processing and digital services.
+</p>
+
+<a
+href="#"
+class="payment-btn"
+>
+Proceed To Payment
+</a>
+
+</div>
+
+</section>
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+<div class="footer-content">
+
+<div>
+
+<h3>
+HAMBAK TECH & SERVICES
+</h3>
+
+<p>
+Where technology meet services.
+Professional online registration and digital solutions.
+</p>
+
+</div>
+
+<div>
+
+<h3>
+Quick Links
+</h3>
+
+<div class="footer-links">
+
+<a href="../index.html">Home</a>
+<a href="registration.html">Registration</a>
+<a href="services.html">Services</a>
+<a href="contact.html">Contact</a>
+
+</div>
+
+</div>
+
+<div>
+
+<h3>
+Contact Info
+</h3>
+
+<p>
+09127469686
+</p>
+
+<p>
+hambak901@gmail.com
+</p>
+
+<p>
+Ibeju-Lekki, Lagos Nigeria
+</p>
+
+</div>
+
+</div>
+
+<div class="footer-bottom">
+
+© 2026 HAMBAK TECH & SERVICES
+
+</div>
+
+</footer>
+
+<!-- WHATSAPP -->
+
+<a
+href="https://wa.me/2349155104724"
+class="whatsapp-float"
+>
+
+<i class="fa-brands fa-whatsapp"></i>
+
+</a>
+
+</body>
+
+</html>

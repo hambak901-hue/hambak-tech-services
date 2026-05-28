@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Order Service | HAMBAK
+</title>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#0f172a;
+color:white;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:40px 20px;
+}
+
+.page-title{
+text-align:center;
+margin-bottom:40px;
+}
+
+.service-box{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(300px,1fr));
+gap:30px;
+margin-bottom:40px;
+}
+
+.service-image{
+width:100%;
+height:350px;
+object-fit:cover;
+border-radius:20px;
+}
+
+.service-details{
+background:#1e293b;
+padding:30px;
+border-radius:20px;
+}
+
+.service-details h2{
+margin-top:0;
+color:#f5b942;
+}
+
+.service-details p{
+line-height:1.8;
+color:#cbd5e1;
+}
+
+.price{
+font-size:2rem;
+font-weight:bold;
+margin-top:20px;
+color:#16a34a;
+}
+
+.form-box{
+background:#1e293b;
+padding:30px;
+border-radius:20px;
+}
+
+.form-box h2{
+margin-top:0;
+margin-bottom:25px;
+}
+
+.form-group{
+margin-bottom:20px;
+}
+
+.form-group input,
+.form-group textarea{
+width:100%;
+padding:15px;
+border:none;
+border-radius:12px;
+box-sizing:border-box;
+}
+
+.form-group textarea{
+height:120px;
+resize:none;
+}
+
+.submit-btn{
+width:100%;
+padding:16px;
+border:none;
+background:#0d47a1;
+color:white;
+font-size:1rem;
+border-radius:12px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.submit-btn:hover{
+background:#1565c0;
+}
+
+.loading{
+text-align:center;
+font-size:1.2rem;
+margin-top:50px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="page-title">
+
+<h1>
+Order Service
+</h1>
+
+<p>
+Complete the form below to place your order
+</p>
+
+</div>
+
+<div id="serviceContainer">
+
+<div class="loading">
+
+Loading service...
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* =========================
+GET SERVICE ID
+========================= */
+
+const serviceId =
+new URLSearchParams(
+window.location.search
+).get("id");
+
+if(!serviceId){
+
+alert("Service ID missing");
+
+window.location.href =
+"services.html";
+
+}
+
+/* =========================
+LOAD SERVICE
+========================= */
+
+async function loadService(){
+
+try{
+
+const response =
+await fetch(
+`http://localhost:5000/api/services/${serviceId}`
+);
+
+const data =
+await response.json();
+
+const service =
+data.service;
+
+document.getElementById(
+"serviceContainer"
+).innerHTML = `
+
+<div class="service-box">
+
+<div>
+
+<img
+src="http://localhost:5000${service.image}"
+class="service-image"
+>
+
+</div>
+
+<div class="service-details">
+
+<h2>
+${service.name}
+</h2>
+
+<p>
+${service.description}
+</p>
+
+<div class="price">
+
+₦${service.price}
+
+</div>
+
+</div>
+
+</div>
+
+<div class="form-box">
+
+<h2>
+Customer Information
+</h2>
+
+<form id="orderForm">
+
+<div class="form-group">
+
+<input
+type="text"
+id="customerName"
+placeholder="Full Name"
+required
+>
+
+</div>
+
+<div class="form-group">
+
+<input
+type="email"
+id="customerEmail"
+placeholder="Email Address"
+required
+>
+
+</div>
+
+<div class="form-group">
+
+<input
+type="text"
+id="customerPhone"
+placeholder="Phone Number"
+required
+>
+
+</div>
+
+<div class="form-group">
+
+<input
+type="number"
+id="quantity"
+placeholder="Quantity"
+value="1"
+min="1"
+required
+>
+
+</div>
+
+<div class="form-group">
+
+<textarea
+id="message"
+placeholder="Additional Message"
+></textarea>
+
+</div>
+
+<div class="form-group">
+
+<input
+type="file"
+id="file"
+>
+
+</div>
+
+<button
+type="submit"
+class="submit-btn"
+>
+
+Place Order
+
+</button>
+
+</form>
+
+</div>
+
+`;
+
+/* =========================
+ORDER FORM
+========================= */
+
+document.getElementById(
+"orderForm"
+).addEventListener(
+"submit",
+async(e)=>{
+
+e.preventDefault();
+
+/* =========================
+GET QUANTITY
+========================= */
+
+const quantity =
+Number(
+document.getElementById(
+"quantity"
+).value
+);
+
+/* =========================
+TOTAL AMOUNT
+========================= */
+
+const totalAmount =
+service.price * quantity;
+
+/* =========================
+FORM DATA
+========================= */
+
+const formData =
+new FormData();
+
+formData.append(
+"customerName",
+document.getElementById(
+"customerName"
+).value
+);
+
+formData.append(
+"customerEmail",
+document.getElementById(
+"customerEmail"
+).value
+);
+
+formData.append(
+"customerPhone",
+document.getElementById(
+"customerPhone"
+).value
+);
+
+formData.append(
+"service",
+service._id
+);
+
+formData.append(
+"quantity",
+quantity
+);
+
+formData.append(
+"amount",
+totalAmount
+);
+
+formData.append(
+"message",
+document.getElementById(
+"message"
+).value
+);
+
+if(
+document.getElementById(
+"file"
+).files[0]
+){
+
+formData.append(
+"file",
+document.getElementById(
+"file"
+).files[0]
+);
+
+}
+
+/* =========================
+SEND ORDER
+========================= */
+
+try{
+
+const response =
+await fetch(
+"http://localhost:5000/api/orders",
+{
+method:"POST",
+body:formData
+}
+);
+
+const data =
+await response.json();
+
+if(data.success){
+
+alert(
+"Order placed successfully"
+);
+
+window.location.href =
+"services.html";
+
+}else{
+
+alert(data.message);
+
+}
+
+}catch(error){
+
+console.log(error);
+
+alert(
+"Something went wrong"
+);
+
+}
+
+}
+);
+
+}catch(error){
+
+console.log(error);
+
+document.getElementById(
+"serviceContainer"
+).innerHTML = `
+
+<div class="loading">
+
+Failed to load service
+
+</div>
+
+`;
+
+}
+
+}
+
+loadService();
+
+</script>
+
+</body>
+
+</html>

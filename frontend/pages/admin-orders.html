@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Admin Orders | HAMBAK
+</title>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#0f172a;
+color:white;
+}
+
+.admin-container{
+display:flex;
+min-height:100vh;
+}
+
+.sidebar{
+width:260px;
+background:#081120;
+padding:30px 20px;
+position:fixed;
+height:100%;
+}
+
+.logo{
+text-align:center;
+margin-bottom:40px;
+}
+
+.logo h2{
+color:#f5b942;
+}
+
+.menu{
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+.menu a{
+text-decoration:none;
+color:#cbd5e1;
+padding:14px;
+border-radius:12px;
+display:flex;
+align-items:center;
+gap:12px;
+transition:0.3s;
+}
+
+.menu a:hover{
+background:#0d47a1;
+color:white;
+}
+
+.main{
+margin-left:260px;
+flex:1;
+padding:40px;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.search-box{
+margin-bottom:25px;
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+}
+
+.search-box input,
+.search-box select{
+padding:14px;
+border:none;
+border-radius:10px;
+min-width:250px;
+}
+
+.table-box{
+background:#1e293b;
+padding:30px;
+border-radius:20px;
+overflow:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+table th,
+table td{
+padding:15px;
+text-align:left;
+border-bottom:
+1px solid rgba(255,255,255,0.1);
+}
+
+table th{
+background:#0d47a1;
+}
+
+.status{
+padding:7px 14px;
+border-radius:50px;
+font-size:0.85rem;
+font-weight:bold;
+}
+
+.pending{
+background:#f59e0b;
+}
+
+.processing{
+background:#2563eb;
+}
+
+.completed{
+background:#16a34a;
+}
+
+.cancelled{
+background:#dc2626;
+}
+
+.action-btn{
+border:none;
+padding:10px 15px;
+border-radius:8px;
+cursor:pointer;
+margin-right:5px;
+color:white;
+}
+
+.complete-btn{
+background:#16a34a;
+}
+
+.delete-btn{
+background:#dc2626;
+}
+
+.print-btn{
+background:#2563eb;
+}
+
+@media(max-width:900px){
+
+.admin-container{
+flex-direction:column;
+}
+
+.sidebar{
+position:relative;
+width:100%;
+height:auto;
+}
+
+.main{
+margin-left:0;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="admin-container">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">
+
+<h2>HAMBAK</h2>
+
+<p>ADMIN PANEL</p>
+
+</div>
+
+<div class="menu">
+
+<a href="admin.html">
+<i class="fa-solid fa-chart-line"></i>
+Dashboard
+</a>
+
+<a href="admin-services.html">
+<i class="fa-solid fa-briefcase"></i>
+Services
+</a>
+
+<a href="admin-users.html">
+<i class="fa-solid fa-users"></i>
+Users
+</a>
+
+<a href="admin-orders.html">
+<i class="fa-solid fa-cart-shopping"></i>
+Orders
+</a>
+
+<a href="#" id="logoutBtn">
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+</a>
+
+</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="topbar">
+
+<h1>
+Manage Orders
+</h1>
+
+<h3 id="adminName">
+Admin
+</h3>
+
+</div>
+
+<!-- SEARCH -->
+
+<div class="search-box">
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search customer/service..."
+>
+
+<select id="statusFilter">
+
+<option value="">
+All Status
+</option>
+
+<option value="Pending">
+Pending
+</option>
+
+<option value="Processing">
+Processing
+</option>
+
+<option value="Completed">
+Completed
+</option>
+
+<option value="Cancelled">
+Cancelled
+</option>
+
+</select>
+
+</div>
+
+<!-- TABLE -->
+
+<div class="table-box">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Customer</th>
+<th>Phone</th>
+<th>Service</th>
+<th>Amount</th>
+<th>Status</th>
+<th>File</th>
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody id="ordersTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* =========================
+AUTH
+========================= */
+
+const user =
+JSON.parse(
+localStorage.getItem(
+"hambak_user"
+)
+);
+
+const token =
+localStorage.getItem(
+"hambak_token"
+);
+
+if(!user || !token){
+
+window.location.href =
+"login.html";
+
+}
+
+document.getElementById(
+"adminName"
+).innerHTML =
+user.name;
+
+/* =========================
+LOAD ORDERS
+========================= */
+
+async function loadOrders(){
+
+try{
+
+const response =
+await fetch(
+"http://localhost:5000/api/orders",
+{
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+const data =
+await response.json();
+
+const table =
+document.getElementById(
+"ordersTable"
+);
+
+table.innerHTML = "";
+
+const search =
+document.getElementById(
+"searchInput"
+).value.toLowerCase();
+
+const statusFilter =
+document.getElementById(
+"statusFilter"
+).value;
+
+let orders =
+data.orders;
+
+if(search){
+
+orders =
+orders.filter(order=>
+
+order.customerName
+.toLowerCase()
+.includes(search)
+
+||
+
+order.service?.name
+?.toLowerCase()
+.includes(search)
+
+);
+
+}
+
+if(statusFilter){
+
+orders =
+orders.filter(order=>
+
+order.status === statusFilter
+
+);
+
+}
+
+orders.forEach(order=>{
+
+table.innerHTML += `
+
+<tr>
+
+<td>
+${order.customerName}
+</td>
+
+<td>
+${order.customerPhone}
+</td>
+
+<td>
+${order.service?.name || "Service"}
+</td>
+
+<td>
+₦${Number(order.amount).toLocaleString()}
+</td>
+
+<td>
+
+<span class="status ${order.status.toLowerCase()}">
+
+${order.status}
+
+</span>
+
+</td>
+
+<td>
+
+${
+order.file
+?
+
+`<a
+href="http://localhost:5000${order.file}"
+target="_blank"
+style="color:#60a5fa;"
+>
+View File
+</a>`
+
+:
+
+"No File"
+
+}
+
+</td>
+
+<td>
+
+<button
+class="action-btn complete-btn"
+onclick="updateStatus(
+'${order._id}',
+'Completed'
+)"
+>
+
+Complete
+
+</button>
+
+<button
+class="action-btn delete-btn"
+onclick="deleteOrder(
+'${order._id}'
+)"
+>
+
+Delete
+
+</button>
+
+<button
+class="action-btn print-btn"
+onclick="printReceipt(
+'${order.customerName}',
+'${order.service?.name || ""}',
+'${order.amount}',
+'${order.status}'
+)"
+>
+
+Print
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+/* =========================
+UPDATE STATUS
+========================= */
+
+async function updateStatus(id,status){
+
+try{
+
+await fetch(
+
+`http://localhost:5000/api/orders/${id}`,
+
+{
+method:"PUT",
+
+headers:{
+"Content-Type":
+"application/json",
+
+Authorization:
+`Bearer ${token}`
+},
+
+body:JSON.stringify({
+status
+})
+
+}
+
+);
+
+loadOrders();
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+/* =========================
+DELETE ORDER
+========================= */
+
+async function deleteOrder(id){
+
+const confirmDelete =
+confirm(
+"Delete this order?"
+);
+
+if(!confirmDelete){
+
+return;
+
+}
+
+try{
+
+await fetch(
+
+`http://localhost:5000/api/orders/${id}`,
+
+{
+method:"DELETE",
+
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+
+);
+
+loadOrders();
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+/* =========================
+PRINT RECEIPT
+========================= */
+
+function printReceipt(
+customer,
+service,
+amount,
+status
+){
+
+const receipt = `
+
+HAMBAK TECH & SERVICES
+
+Customer: ${customer}
+
+Service: ${service}
+
+Amount: ₦${amount}
+
+Status: ${status}
+
+Thank you for your patronage.
+
+`;
+
+const win =
+window.open(
+"",
+"",
+"width=800,height=600"
+);
+
+win.document.write(
+`<pre>${receipt}</pre>`
+);
+
+win.print();
+
+}
+
+/* =========================
+SEARCH EVENTS
+========================= */
+
+document.getElementById(
+"searchInput"
+).addEventListener(
+"input",
+loadOrders
+);
+
+document.getElementById(
+"statusFilter"
+).addEventListener(
+"change",
+loadOrders
+);
+
+/* =========================
+LOGOUT
+========================= */
+
+document.getElementById(
+"logoutBtn"
+).addEventListener(
+"click",
+()=>{
+
+localStorage.removeItem(
+"hambak_user"
+);
+
+localStorage.removeItem(
+"hambak_token"
+);
+
+window.location.href =
+"login.html";
+
+}
+);
+
+loadOrders();
+
+</script>
+
+</body>
+
+</html>

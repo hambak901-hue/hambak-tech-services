@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Admin Dashboard | HAMBAK
+</title>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#0f172a;
+color:white;
+}
+
+.admin-container{
+display:flex;
+min-height:100vh;
+}
+
+.sidebar{
+width:260px;
+background:#081120;
+padding:30px 20px;
+position:fixed;
+height:100%;
+}
+
+.logo{
+text-align:center;
+margin-bottom:40px;
+}
+
+.logo h2{
+color:#f5b942;
+}
+
+.menu{
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+.menu a{
+text-decoration:none;
+color:#cbd5e1;
+padding:14px;
+border-radius:12px;
+display:flex;
+align-items:center;
+gap:12px;
+transition:0.3s;
+}
+
+.menu a:hover{
+background:#0d47a1;
+color:white;
+}
+
+.main{
+margin-left:260px;
+flex:1;
+padding:40px;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:40px;
+flex-wrap:wrap;
+gap:20px;
+}
+
+.stats-grid{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+}
+
+.stat-card{
+background:#1e293b;
+padding:30px;
+border-radius:20px;
+box-shadow:
+0 10px 30px rgba(0,0,0,0.2);
+}
+
+.stat-card i{
+font-size:2rem;
+color:#f5b942;
+margin-bottom:15px;
+}
+
+.stat-card h2{
+font-size:2.5rem;
+margin:10px 0;
+}
+
+.stat-card p{
+color:#cbd5e1;
+}
+
+.welcome-box{
+background:#1e293b;
+padding:30px;
+border-radius:20px;
+margin-bottom:40px;
+}
+
+@media(max-width:900px){
+
+.admin-container{
+flex-direction:column;
+}
+
+.sidebar{
+position:relative;
+width:100%;
+height:auto;
+}
+
+.main{
+margin-left:0;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="admin-container">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">
+
+<h2>
+HAMBAK
+</h2>
+
+<p>
+ADMIN PANEL
+</p>
+
+</div>
+
+<div class="menu">
+
+<a href="admin.html">
+
+<i class="fa-solid fa-chart-line"></i>
+
+Dashboard
+
+</a>
+
+<a href="admin-services.html">
+
+<i class="fa-solid fa-briefcase"></i>
+
+Services
+
+</a>
+
+<a href="admin-users.html">
+
+<i class="fa-solid fa-users"></i>
+
+Users
+
+</a>
+
+<a href="admin-orders.html">
+
+<i class="fa-solid fa-cart-shopping"></i>
+
+Orders
+
+</a>
+
+<a href="#" id="logoutBtn">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+Logout
+
+</a>
+
+</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="topbar">
+
+<h1>
+Admin Dashboard
+</h1>
+
+<h3 id="adminName">
+Admin
+</h3>
+
+</div>
+
+<div class="welcome-box">
+
+<h2>
+Welcome Back
+</h2>
+
+<p>
+Manage your business activities,
+services, customers and orders.
+</p>
+
+</div>
+
+<div class="stats-grid">
+
+<div class="stat-card">
+
+<i class="fa-solid fa-briefcase"></i>
+
+<p>Total Services</p>
+
+<h2 id="totalServices">
+0
+</h2>
+
+</div>
+
+<div class="stat-card">
+
+<i class="fa-solid fa-users"></i>
+
+<p>Total Users</p>
+
+<h2 id="totalUsers">
+0
+</h2>
+
+</div>
+
+<div class="stat-card">
+
+<i class="fa-solid fa-cart-shopping"></i>
+
+<p>Total Orders</p>
+
+<h2 id="totalOrders">
+0
+</h2>
+
+</div>
+
+<div class="stat-card">
+
+<i class="fa-solid fa-money-bill"></i>
+
+<p>Total Revenue</p>
+
+<h2 id="totalRevenue">
+₦0
+</h2>
+
+</div>
+
+</div>
+
+<!-- QUICK ACTIONS -->
+
+<div
+style="
+margin-top:40px;
+background:#1e293b;
+padding:30px;
+border-radius:20px;
+"
+>
+
+<h2>
+Quick Actions
+</h2>
+
+<div
+style="
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-top:25px;
+"
+>
+
+<a
+href="admin-services.html"
+style="
+background:#0d47a1;
+padding:20px;
+border-radius:15px;
+text-decoration:none;
+color:white;
+text-align:center;
+"
+>
+
+<i
+class="fa-solid fa-plus"
+style="font-size:2rem;"
+></i>
+
+<h3>
+Add Service
+</h3>
+
+</a>
+
+<a
+href="admin-orders.html"
+style="
+background:#2563eb;
+padding:20px;
+border-radius:15px;
+text-decoration:none;
+color:white;
+text-align:center;
+"
+>
+
+<i
+class="fa-solid fa-cart-shopping"
+style="font-size:2rem;"
+></i>
+
+<h3>
+Manage Orders
+</h3>
+
+</a>
+
+<a
+href="admin-users.html"
+style="
+background:#16a34a;
+padding:20px;
+border-radius:15px;
+text-decoration:none;
+color:white;
+text-align:center;
+"
+>
+
+<i
+class="fa-solid fa-users"
+style="font-size:2rem;"
+></i>
+
+<h3>
+Manage Users
+</h3>
+
+</a>
+
+</div>
+
+</div>
+
+<!-- RECENT ORDERS -->
+
+<div
+style="
+margin-top:40px;
+background:#1e293b;
+padding:30px;
+border-radius:20px;
+overflow:auto;
+"
+>
+
+<h2>
+Recent Orders
+</h2>
+
+<table
+style="
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+"
+>
+
+<thead>
+
+<tr>
+
+<th
+style="
+padding:15px;
+text-align:left;
+background:#0d47a1;
+"
+>
+Customer
+</th>
+
+<th
+style="
+padding:15px;
+text-align:left;
+background:#0d47a1;
+"
+>
+Service
+</th>
+
+<th
+style="
+padding:15px;
+text-align:left;
+background:#0d47a1;
+"
+>
+Amount
+</th>
+
+<th
+style="
+padding:15px;
+text-align:left;
+background:#0d47a1;
+"
+>
+Status
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="recentOrdersTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+/* =========================
+AUTH
+========================= */
+
+const user =
+JSON.parse(
+localStorage.getItem(
+"hambak_user"
+)
+);
+
+const token =
+localStorage.getItem(
+"hambak_token"
+);
+
+if(!user || !token){
+
+window.location.href =
+"login.html";
+
+}
+
+document.getElementById(
+"adminName"
+).innerHTML =
+user.name;
+
+/* =========================
+LOAD DASHBOARD
+========================= */
+
+async function loadDashboard(){
+
+try{
+
+/* =========================
+FETCH SERVICES
+========================= */
+
+const servicesResponse =
+await fetch(
+"http://localhost:5000/api/services"
+);
+
+const servicesData =
+await servicesResponse.json();
+
+document.getElementById(
+"totalServices"
+).innerHTML =
+servicesData.services.length;
+
+/* =========================
+FETCH USERS
+========================= */
+
+const usersResponse =
+await fetch(
+"http://localhost:5000/api/users",
+{
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+const usersData =
+await usersResponse.json();
+
+document.getElementById(
+"totalUsers"
+).innerHTML =
+usersData.users.length;
+
+/* =========================
+FETCH ORDERS
+========================= */
+
+const ordersResponse =
+await fetch(
+"http://localhost:5000/api/orders",
+{
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+const ordersData =
+await ordersResponse.json();
+
+/* =========================
+ORDERS COUNT
+========================= */
+
+document.getElementById(
+"totalOrders"
+).innerHTML =
+ordersData.orders.length;
+
+/* =========================
+CALCULATE REVENUE
+========================= */
+
+let revenue = 0;
+
+ordersData.orders.forEach(order=>{
+
+revenue += Number(order.amount || 0);
+
+});
+
+document.getElementById(
+"totalRevenue"
+).innerHTML =
+`₦${revenue.toLocaleString()}`;
+
+/* =========================
+RECENT ORDERS TABLE
+========================= */
+
+const recentOrdersTable =
+document.getElementById(
+"recentOrdersTable"
+);
+
+recentOrdersTable.innerHTML = "";
+
+ordersData.orders
+.slice(0,5)
+.forEach(order=>{
+
+recentOrdersTable.innerHTML += `
+
+<tr>
+
+<td
+style="
+padding:15px;
+border-bottom:
+1px solid rgba(255,255,255,0.1);
+"
+>
+
+${order.customerName}
+
+</td>
+
+<td
+style="
+padding:15px;
+border-bottom:
+1px solid rgba(255,255,255,0.1);
+"
+>
+
+${order.service?.name || "Service"}
+
+</td>
+
+<td
+style="
+padding:15px;
+border-bottom:
+1px solid rgba(255,255,255,0.1);
+"
+>
+
+₦${Number(order.amount).toLocaleString()}
+
+</td>
+
+<td
+style="
+padding:15px;
+border-bottom:
+1px solid rgba(255,255,255,0.1);
+"
+>
+
+<span
+style="
+background:#16a34a;
+padding:6px 12px;
+border-radius:50px;
+font-size:0.9rem;
+"
+>
+
+${order.status || "Completed"}
+
+</span>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+/* =========================
+LOGOUT
+========================= */
+
+document.getElementById(
+"logoutBtn"
+).addEventListener(
+"click",
+()=>{
+
+localStorage.removeItem(
+"hambak_user"
+);
+
+localStorage.removeItem(
+"hambak_token"
+);
+
+window.location.href =
+"login.html";
+
+}
+);
+
+loadDashboard();
+
+</script>
+
+</body>
+
+</html>

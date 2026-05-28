@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Blog | HAMBAK TECH & SERVICES
+</title>
+
+<link
+rel="stylesheet"
+href="../css/style.css"
+>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+>
+
+<style>
+
+/* =========================
+BLOG PAGE
+========================= */
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f5f7fb;
+color:#0f172a;
+}
+
+/* HERO */
+
+.blog-hero{
+padding:140px 8% 90px;
+background:
+linear-gradient(
+135deg,
+#081120,
+#0d47a1
+);
+color:white;
+text-align:center;
+}
+
+.blog-hero h1{
+font-size:4rem;
+margin-bottom:20px;
+}
+
+.blog-hero p{
+max-width:750px;
+margin:auto;
+line-height:1.9;
+font-size:1.2rem;
+color:#cbd5e1;
+}
+
+/* SEARCH */
+
+.search-section{
+padding:50px 8% 20px;
+}
+
+.search-box{
+background:white;
+padding:20px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+}
+
+.search-box input{
+flex:1;
+padding:16px;
+border:1px solid #ddd;
+border-radius:12px;
+outline:none;
+font-size:1rem;
+}
+
+.search-box button{
+padding:16px 30px;
+border:none;
+background:#0d47a1;
+color:white;
+border-radius:12px;
+cursor:pointer;
+font-size:1rem;
+}
+
+/* CATEGORIES */
+
+.category-section{
+padding:20px 8% 50px;
+}
+
+.category-grid{
+display:flex;
+flex-wrap:wrap;
+gap:15px;
+justify-content:center;
+}
+
+.category-btn{
+padding:12px 24px;
+background:white;
+border-radius:50px;
+text-decoration:none;
+color:#0f172a;
+box-shadow:0 5px 20px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+
+.category-btn:hover{
+background:#0d47a1;
+color:white;
+}
+
+/* FEATURED */
+
+.featured-section{
+padding:30px 8% 90px;
+}
+
+.featured-card{
+background:white;
+border-radius:30px;
+overflow:hidden;
+box-shadow:0 15px 40px rgba(0,0,0,0.1);
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+}
+
+.featured-image img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.featured-content{
+padding:50px;
+}
+
+.featured-tag{
+display:inline-block;
+padding:8px 18px;
+background:#f5b942;
+border-radius:50px;
+font-weight:bold;
+margin-bottom:20px;
+}
+
+.featured-content h2{
+font-size:2.5rem;
+margin-bottom:20px;
+}
+
+.featured-content p{
+line-height:1.9;
+color:#475569;
+margin-bottom:30px;
+}
+
+.read-btn{
+display:inline-block;
+padding:15px 30px;
+background:#0d47a1;
+color:white;
+text-decoration:none;
+border-radius:12px;
+}
+
+/* BLOGS */
+
+.blog-section{
+padding:0 8% 90px;
+}
+
+.section-title{
+text-align:center;
+margin-bottom:60px;
+}
+
+.section-title h2{
+font-size:3rem;
+margin-bottom:15px;
+}
+
+.section-title p{
+max-width:700px;
+margin:auto;
+line-height:1.8;
+color:#555;
+}
+
+.blog-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:35px;
+}
+
+/* CARD */
+
+.blog-card{
+background:white;
+border-radius:25px;
+overflow:hidden;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+transition:0.4s;
+}
+
+.blog-card:hover{
+transform:translateY(-10px);
+}
+
+.blog-image img{
+width:100%;
+height:230px;
+object-fit:cover;
+}
+
+.blog-content{
+padding:30px;
+}
+
+.blog-date{
+font-size:0.9rem;
+color:#64748b;
+margin-bottom:15px;
+}
+
+.blog-content h3{
+font-size:1.6rem;
+margin-bottom:15px;
+}
+
+.blog-content p{
+line-height:1.8;
+color:#555;
+margin-bottom:25px;
+}
+
+/* SIDEBAR */
+
+.extra-section{
+padding:0 8% 90px;
+}
+
+.extra-grid{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:40px;
+}
+
+.sidebar{
+display:flex;
+flex-direction:column;
+gap:30px;
+}
+
+.sidebar-card{
+background:white;
+padding:30px;
+border-radius:25px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+.sidebar-card h3{
+margin-bottom:20px;
+}
+
+.sidebar-post{
+margin-bottom:20px;
+padding-bottom:20px;
+border-bottom:1px solid #eee;
+}
+
+.sidebar-post:last-child{
+border:none;
+margin-bottom:0;
+padding-bottom:0;
+}
+
+.sidebar-post p{
+margin-top:10px;
+color:#555;
+line-height:1.7;
+}
+
+/* PAGINATION */
+
+.pagination{
+display:flex;
+justify-content:center;
+gap:15px;
+margin-top:60px;
+}
+
+.pagination a{
+width:50px;
+height:50px;
+display:flex;
+justify-content:center;
+align-items:center;
+background:white;
+border-radius:12px;
+text-decoration:none;
+color:#0f172a;
+box-shadow:0 5px 20px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+
+.pagination a:hover{
+background:#0d47a1;
+color:white;
+}
+
+/* ADMIN */
+
+.admin-box{
+background:
+linear-gradient(
+135deg,
+#081120,
+#0d47a1
+);
+padding:50px;
+border-radius:30px;
+color:white;
+text-align:center;
+margin-top:60px;
+}
+
+.admin-box h2{
+margin-bottom:20px;
+font-size:2.5rem;
+}
+
+.admin-box p{
+max-width:700px;
+margin:auto;
+line-height:1.8;
+margin-bottom:30px;
+color:#cbd5e1;
+}
+
+.admin-btn{
+display:inline-block;
+padding:16px 35px;
+background:#f5b942;
+color:black;
+text-decoration:none;
+border-radius:12px;
+font-weight:bold;
+}
+
+/* FOOTER */
+
+.footer{
+background:#020617;
+color:white;
+padding:70px 8% 20px;
+}
+
+.footer-content{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:40px;
+margin-bottom:40px;
+}
+
+.footer h3{
+margin-bottom:20px;
+color:#f5b942;
+}
+
+.footer p{
+line-height:1.8;
+color:#cbd5e1;
+}
+
+.footer-links a{
+display:block;
+margin-bottom:10px;
+color:#cbd5e1;
+text-decoration:none;
+}
+
+.footer-bottom{
+text-align:center;
+padding-top:20px;
+border-top:1px solid rgba(255,255,255,0.1);
+color:#94a3b8;
+}
+
+/* WHATSAPP */
+
+.whatsapp-float{
+position:fixed;
+bottom:25px;
+right:25px;
+width:60px;
+height:60px;
+background:#25d366;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:1.8rem;
+color:white;
+text-decoration:none;
+z-index:999;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+.extra-grid{
+grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:768px){
+
+.blog-hero h1{
+font-size:2.8rem;
+}
+
+.section-title h2,
+.featured-content h2,
+.admin-box h2{
+font-size:2.2rem;
+}
+
+}
+
+/* =========================
+AI CHAT
+========================= */
+
+.ai-chat-section{
+padding:0 8% 90px;
+}
+
+.ai-chat-box{
+background:white;
+border-radius:30px;
+overflow:hidden;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+max-width:900px;
+margin:auto;
+}
+
+.ai-header{
+background:
+linear-gradient(
+135deg,
+#081120,
+#0d47a1
+);
+color:white;
+padding:25px;
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+.ai-header i{
+font-size:2rem;
+}
+
+.chat-body{
+height:400px;
+overflow-y:auto;
+padding:25px;
+background:#f8fafc;
+display:flex;
+flex-direction:column;
+gap:20px;
+}
+
+.chat-message{
+max-width:75%;
+padding:15px 20px;
+border-radius:20px;
+line-height:1.7;
+}
+
+.chat-message.ai{
+background:white;
+align-self:flex-start;
+}
+
+.chat-message.user{
+background:#0d47a1;
+color:white;
+align-self:flex-end;
+}
+
+.chat-input{
+display:flex;
+border-top:1px solid #eee;
+}
+
+.chat-input input{
+flex:1;
+padding:18px;
+border:none;
+outline:none;
+font-size:1rem;
+}
+
+.chat-input button{
+width:80px;
+border:none;
+background:#0d47a1;
+color:white;
+font-size:1.2rem;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+<div class="logo">
+
+<span>HAMBAK</span>
+
+<small>TECH & SERVICES</small>
+
+</div>
+
+<nav class="nav-links">
+
+<a href="../index.html">Home</a>
+<a href="about.html">About</a>
+<a href="services.html">Services</a>
+<a href="blog.html">Blog</a>
+<a href="contact.html">Contact</a>
+
+</nav>
+
+</header>
+
+<!-- HERO -->
+
+<section class="blog-hero">
+
+<h1>
+HAMBAK Blog System
+</h1>
+
+<p>
+Technology news, ICT tutorials, digital updates,
+business tips and educational articles from
+HAMBAK TECH & SERVICES.
+</p>
+
+</section>
+
+<!-- SEARCH -->
+
+<section class="search-section">
+
+<div class="search-box">
+
+<input
+type="text"
+placeholder="Search articles, tutorials, news..."
+>
+
+<button>
+Search
+</button>
+
+</div>
+
+</section>
+
+<!-- CATEGORIES -->
+
+<section class="category-section">
+
+<div class="category-grid">
+
+<a href="#" class="category-btn">ICT</a>
+<a href="#" class="category-btn">Technology</a>
+<a href="#" class="category-btn">Web Design</a>
+<a href="#" class="category-btn">Graphics</a>
+<a href="#" class="category-btn">Business</a>
+<a href="#" class="category-btn">Education</a>
+<a href="#" class="category-btn">Tutorials</a>
+
+</div>
+
+</section>
+
+<!-- FEATURED -->
+
+<section class="featured-section">
+
+<div class="featured-card">
+
+<div class="featured-image">
+
+<img
+src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop"
+alt="featured"
+>
+
+</div>
+
+<div class="featured-content">
+
+<div class="featured-tag">
+Featured Article
+</div>
+
+<h2>
+How Technology is Transforming Small Businesses
+</h2>
+
+<p>
+Discover how digital tools, online systems,
+ICT training and smart technology solutions
+are helping small businesses grow faster in Nigeria.
+</p>
+
+<a
+href="#"
+class="read-btn"
+>
+Read Article
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- BLOG POSTS -->
+
+<section class="blog-section">
+
+<div class="section-title">
+
+<h2>
+Latest Articles
+</h2>
+
+<p>
+Explore tutorials, updates and professional insights.
+</p>
+
+</div>
+
+<div class="blog-grid">
+
+<!-- BLOG -->
+
+<div class="blog-card">
+
+<div class="blog-image">
+
+<img
+src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop"
+alt="blog"
+>
+
+</div>
+
+<div class="blog-content">
+
+<div class="blog-date">
+July 2026
+</div>
+
+<h3>
+Beginner ICT Skills Everyone Should Learn
+</h3>
+
+<p>
+Important computer and digital skills for beginners.
+</p>
+
+<a
+href="#"
+class="read-btn"
+>
+Read More
+</a>
+
+</div>
+
+</div>
+
+<!-- BLOG -->
+
+<div class="blog-card">
+
+<div class="blog-image">
+
+<img
+src="https://images.unsplash.com/photo-1556155092-490a1ba16284?q=80&w=1200&auto=format&fit=crop"
+alt="blog"
+>
+
+</div>
+
+<div class="blog-content">
+
+<div class="blog-date">
+July 2026
+</div>
+
+<h3>
+Best Online Tools for Business Growth
+</h3>
+
+<p>
+Top digital tools to improve productivity and branding.
+</p>
+
+<a
+href="#"
+class="read-btn"
+>
+Read More
+</a>
+
+</div>
+
+</div>
+
+<!-- BLOG -->
+
+<div class="blog-card">
+
+<div class="blog-image">
+
+<img
+src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1200&auto=format&fit=crop"
+alt="blog"
+>
+
+</div>
+
+<div class="blog-content">
+
+<div class="blog-date">
+July 2026
+</div>
+
+<h3>
+Frontend Development Roadmap
+</h3>
+
+<p>
+Learn the modern frontend development journey.
+</p>
+
+<a
+href="#"
+class="read-btn"
+>
+Read More
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="pagination">
+
+<a href="#">1</a>
+<a href="#">2</a>
+<a href="#">3</a>
+
+</div>
+
+</section>
+
+<!-- EXTRA -->
+
+<section class="extra-section">
+
+<div class="extra-grid">
+
+<div>
+
+<div class="admin-box">
+
+<h2>
+Admin Blog Publishing
+</h2>
+
+<p>
+Admins can publish articles, tutorials,
+news updates and announcements directly
+from the admin dashboard system.
+</p>
+
+<a
+href="#"
+class="admin-btn"
+>
+Open Admin Panel
+</a>
+
+</div>
+
+</div>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="sidebar-card">
+
+<h3>
+Recent Posts
+</h3>
+
+<div class="sidebar-post">
+
+<strong>
+How to Start Learning Web Design
+</strong>
+
+<p>
+Beginner roadmap for future developers.
+</p>
+
+</div>
+
+<div class="sidebar-post">
+
+<strong>
+Benefits of ICT Training
+</strong>
+
+<p>
+Why ICT skills are important today.
+</p>
+
+</div>
+
+<div class="sidebar-post">
+
+<strong>
+Digital Business Tips
+</strong>
+
+<p>
+Grow your business using technology.
+</p>
+
+</div>
+
+</div>
+
+<div class="sidebar-card">
+
+<h3>
+Popular Topics
+</h3>
+
+<p>✔ Web Development</p>
+<p>✔ Business Branding</p>
+<p>✔ ICT Tutorials</p>
+<p>✔ VTU Systems</p>
+<p>✔ Technology News</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+<div class="footer-content">
+
+<div>
+
+<h3>
+HAMBAK TECH & SERVICES
+</h3>
+
+<p>
+Where technology meet services.
+Professional ICT and digital media solutions.
+</p>
+
+</div>
+
+<div>
+
+<h3>
+Quick Links
+</h3>
+
+<div class="footer-links">
+
+<a href="../index.html">Home</a>
+<a href="blog.html">Blog</a>
+<a href="services.html">Services</a>
+<a href="contact.html">Contact</a>
+
+</div>
+
+</div>
+
+<div>
+
+<h3>
+Contact Info
+</h3>
+
+<p>
+09127469686
+</p>
+
+<p>
+hambak901@gmail.com
+</p>
+
+<p>
+Ibeju-Lekki, Lagos Nigeria
+</p>
+
+</div>
+
+</div>
+
+<div class="footer-bottom">
+
+© 2026 HAMBAK TECH & SERVICES
+
+</div>
+
+</footer>
+
+<!-- WHATSAPP -->
+
+<a
+href="https://wa.me/2349155104724"
+class="whatsapp-float"
+>
+
+<i class="fa-brands fa-whatsapp"></i>
+
+</a>
+
+<!-- AI ASSISTANT -->
+
+<section class="ai-chat-section">
+
+<div class="ai-chat-box">
+
+<div class="ai-header">
+
+<i class="fa-solid fa-robot"></i>
+
+<h2>
+HAMBAK AI Assistant
+</h2>
+
+</div>
+
+<div
+class="chat-body"
+id="chatBody"
+>
+
+<div class="chat-message ai">
+
+<p>
+Hello 👋
+Ask me anything about our services,
+training, ICT or registrations.
+</p>
+
+</div>
+
+</div>
+
+<div class="chat-input">
+
+<input
+type="text"
+id="questionInput"
+placeholder="Ask AI anything..."
+>
+
+<button onclick="askAI()">
+
+<i class="fa-solid fa-paper-plane"></i>
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<script src="../js/ai-blog.js"></script>
+
+
+</body>
+
+</html>

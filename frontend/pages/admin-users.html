@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Admin Users | HAMBAK
+</title>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#0f172a;
+color:white;
+}
+
+.admin-container{
+display:flex;
+min-height:100vh;
+}
+
+.sidebar{
+width:260px;
+background:#081120;
+padding:30px 20px;
+position:fixed;
+height:100%;
+}
+
+.logo{
+text-align:center;
+margin-bottom:40px;
+}
+
+.logo h2{
+color:#f5b942;
+}
+
+.menu{
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+.menu a{
+text-decoration:none;
+color:#cbd5e1;
+padding:14px;
+border-radius:12px;
+display:flex;
+align-items:center;
+gap:12px;
+transition:0.3s;
+}
+
+.menu a:hover{
+background:#0d47a1;
+color:white;
+}
+
+.main{
+margin-left:260px;
+flex:1;
+padding:40px;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.table-box{
+background:#1e293b;
+padding:30px;
+border-radius:20px;
+overflow:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+table th,
+table td{
+padding:15px;
+border-bottom:1px solid rgba(255,255,255,0.1);
+text-align:left;
+}
+
+table th{
+background:#0d47a1;
+}
+
+.role-badge{
+padding:6px 12px;
+border-radius:20px;
+font-size:0.8rem;
+font-weight:bold;
+}
+
+.admin-role{
+background:#16a34a;
+}
+
+.user-role{
+background:#2563eb;
+}
+
+.delete-btn{
+background:#dc2626;
+color:white;
+border:none;
+padding:10px 14px;
+border-radius:8px;
+cursor:pointer;
+}
+
+@media(max-width:900px){
+
+.admin-container{
+flex-direction:column;
+}
+
+.sidebar{
+position:relative;
+width:100%;
+height:auto;
+}
+
+.main{
+margin-left:0;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="admin-container">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">
+
+<h2>
+HAMBAK
+</h2>
+
+<p>
+ADMIN PANEL
+</p>
+
+</div>
+
+<div class="menu">
+
+<a href="admin.html">
+
+<i class="fa-solid fa-chart-line"></i>
+
+Dashboard
+
+</a>
+
+<a href="admin-services.html">
+
+<i class="fa-solid fa-briefcase"></i>
+
+Services
+
+</a>
+
+<a href="admin-users.html">
+
+<i class="fa-solid fa-users"></i>
+
+Users
+
+</a>
+
+<a href="admin-orders.html">
+
+<i class="fa-solid fa-cart-shopping"></i>
+
+Orders
+
+</a>
+
+<a href="#" id="logoutBtn">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+Logout
+
+</a>
+
+</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="topbar">
+
+<h1>
+Users Management
+</h1>
+
+<h3 id="adminName">
+Admin
+</h3>
+
+</div>
+
+<div class="table-box">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+<th>Email</th>
+<th>Role</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="usersTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* =========================
+AUTH
+========================= */
+
+const user =
+JSON.parse(
+localStorage.getItem(
+"hambak_user"
+)
+);
+
+const token =
+localStorage.getItem(
+"hambak_token"
+);
+
+if(!user || !token){
+
+window.location.href =
+"login.html";
+
+}
+
+document.getElementById(
+"adminName"
+).innerHTML =
+user.name;
+
+/* =========================
+LOAD USERS
+========================= */
+
+async function loadUsers(){
+
+try{
+
+const response =
+await fetch(
+"http://localhost:5000/api/users",
+{
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+const data =
+await response.json();
+
+const table =
+document.getElementById(
+"usersTable"
+);
+
+table.innerHTML = "";
+
+data.users.forEach(user=>{
+
+table.innerHTML += `
+
+<tr>
+
+<td>${user.name}</td>
+
+<td>${user.email}</td>
+
+<td>
+
+<span class="
+role-badge
+${user.isAdmin
+? "admin-role"
+: "user-role"}
+">
+
+${user.isAdmin
+? "Admin"
+: "User"}
+
+</span>
+
+</td>
+
+<td>
+
+<button
+class="delete-btn"
+onclick="deleteUser('${user._id}')"
+>
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+/* =========================
+DELETE USER
+========================= */
+
+async function deleteUser(id){
+
+const confirmDelete =
+confirm(
+"Delete this user?"
+);
+
+if(!confirmDelete){
+
+return;
+
+}
+
+try{
+
+await fetch(
+
+`http://localhost:5000/api/users/${id}`,
+
+{
+method:"DELETE",
+
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+
+}
+
+);
+
+alert(
+"User deleted successfully"
+);
+
+loadUsers();
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+/* =========================
+LOGOUT
+========================= */
+
+document.getElementById(
+"logoutBtn"
+).addEventListener(
+"click",
+()=>{
+
+localStorage.removeItem(
+"hambak_user"
+);
+
+localStorage.removeItem(
+"hambak_token"
+);
+
+window.location.href =
+"login.html";
+
+}
+);
+
+loadUsers();
+
+</script>
+
+</body>
+
+</html>

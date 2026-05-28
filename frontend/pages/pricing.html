@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Pricing | HAMBAK TECH & SERVICES
+</title>
+
+<link
+rel="stylesheet"
+href="../css/style.css"
+>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+>
+
+<style>
+
+/* =========================
+PRICING PAGE
+========================= */
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f5f7fb;
+color:#0f172a;
+}
+
+/* HERO */
+
+.pricing-hero{
+padding:140px 8% 90px;
+background:
+linear-gradient(
+135deg,
+#081120,
+#0d47a1
+);
+color:white;
+text-align:center;
+}
+
+.pricing-hero h1{
+font-size:4rem;
+margin-bottom:20px;
+}
+
+.pricing-hero p{
+max-width:760px;
+margin:auto;
+line-height:1.9;
+font-size:1.2rem;
+color:#cbd5e1;
+}
+
+/* SECTION */
+
+.section{
+padding:90px 8%;
+}
+
+.section-title{
+text-align:center;
+margin-bottom:60px;
+}
+
+.section-title h2{
+font-size:3rem;
+margin-bottom:15px;
+}
+
+.section-title p{
+max-width:700px;
+margin:auto;
+line-height:1.8;
+color:#555;
+}
+
+/* TOGGLE */
+
+.toggle-wrapper{
+display:flex;
+justify-content:center;
+margin-bottom:50px;
+}
+
+.toggle-box{
+background:white;
+padding:10px;
+border-radius:50px;
+display:flex;
+gap:10px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+.toggle-btn{
+padding:14px 30px;
+border:none;
+border-radius:50px;
+cursor:pointer;
+font-weight:bold;
+background:transparent;
+transition:0.3s;
+}
+
+.toggle-btn.active{
+background:#0d47a1;
+color:white;
+}
+
+/* GRID */
+
+.pricing-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:35px;
+}
+
+/* CARD */
+
+.price-card{
+background:white;
+padding:45px 35px;
+border-radius:30px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+position:relative;
+transition:0.4s;
+overflow:hidden;
+}
+
+.price-card:hover{
+transform:translateY(-10px);
+}
+
+.popular-badge{
+position:absolute;
+top:20px;
+right:-40px;
+background:#f5b942;
+padding:10px 50px;
+transform:rotate(45deg);
+font-size:0.8rem;
+font-weight:bold;
+}
+
+.price-icon{
+width:90px;
+height:90px;
+background:#0d47a1;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:2rem;
+color:white;
+margin-bottom:25px;
+}
+
+.price-card h3{
+font-size:2rem;
+margin-bottom:15px;
+}
+
+.price{
+font-size:3rem;
+font-weight:bold;
+color:#0d47a1;
+margin-bottom:10px;
+}
+
+.price small{
+font-size:1rem;
+color:#64748b;
+}
+
+.price-description{
+line-height:1.8;
+color:#555;
+margin-bottom:30px;
+}
+
+.price-features{
+list-style:none;
+padding:0;
+margin:0 0 35px;
+}
+
+.price-features li{
+margin-bottom:15px;
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.price-features i{
+color:#22c55e;
+}
+
+.price-btn{
+display:block;
+text-align:center;
+padding:16px;
+background:#0d47a1;
+color:white;
+text-decoration:none;
+border-radius:12px;
+font-weight:bold;
+transition:0.3s;
+}
+
+.price-btn:hover{
+background:#1565c0;
+}
+
+/* TABLE */
+
+.table-section{
+padding:0 8% 90px;
+}
+
+.table-box{
+background:white;
+padding:35px;
+border-radius:30px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+overflow:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+table th,
+table td{
+padding:18px;
+text-align:left;
+border-bottom:1px solid #eee;
+}
+
+table th{
+background:#0d47a1;
+color:white;
+}
+
+/* CTA */
+
+.cta-section{
+padding:0 8% 90px;
+}
+
+.cta-card{
+background:
+linear-gradient(
+135deg,
+#081120,
+#0d47a1
+);
+padding:70px;
+border-radius:35px;
+text-align:center;
+color:white;
+}
+
+.cta-card h2{
+font-size:3rem;
+margin-bottom:20px;
+}
+
+.cta-card p{
+max-width:700px;
+margin:auto;
+line-height:1.8;
+margin-bottom:35px;
+color:#cbd5e1;
+}
+
+.cta-btn{
+display:inline-block;
+padding:16px 35px;
+background:#f5b942;
+color:black;
+text-decoration:none;
+border-radius:12px;
+font-weight:bold;
+}
+
+/* FOOTER */
+
+.footer{
+background:#020617;
+color:white;
+padding:70px 8% 20px;
+}
+
+.footer-content{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:40px;
+margin-bottom:40px;
+}
+
+.footer h3{
+margin-bottom:20px;
+color:#f5b942;
+}
+
+.footer p{
+line-height:1.8;
+color:#cbd5e1;
+}
+
+.footer-links a{
+display:block;
+margin-bottom:10px;
+color:#cbd5e1;
+text-decoration:none;
+}
+
+.footer-bottom{
+text-align:center;
+padding-top:20px;
+border-top:1px solid rgba(255,255,255,0.1);
+color:#94a3b8;
+}
+
+/* WHATSAPP */
+
+.whatsapp-float{
+position:fixed;
+bottom:25px;
+right:25px;
+width:60px;
+height:60px;
+background:#25d366;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:1.8rem;
+color:white;
+text-decoration:none;
+z-index:999;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.pricing-hero h1{
+font-size:2.8rem;
+}
+
+.section-title h2,
+.cta-card h2{
+font-size:2.2rem;
+}
+
+.price{
+font-size:2.3rem;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+<div class="logo">
+
+<span>HAMBAK</span>
+
+<small>TECH & SERVICES</small>
+
+</div>
+
+<nav class="nav-links">
+
+<a href="../index.html">Home</a>
+<a href="services.html">Services</a>
+<a href="pricing.html">Pricing</a>
+<a href="contact.html">Contact</a>
+
+</nav>
+
+</header>
+
+<!-- HERO -->
+
+<section class="pricing-hero">
+
+<h1>
+Pricing Plans
+</h1>
+
+<p>
+Affordable and professional pricing for digital services,
+ICT training, VTU, registrations, printing and more.
+</p>
+
+</section>
+
+<!-- PRICING -->
+
+<section class="section">
+
+<div class="section-title">
+
+<h2>
+Choose Your Plan
+</h2>
+
+<p>
+Flexible pricing for students, businesses and professionals.
+</p>
+
+</div>
+
+<div class="toggle-wrapper">
+
+<div class="toggle-box">
+
+<button class="toggle-btn active">
+Monthly
+</button>
+
+<button class="toggle-btn">
+Yearly
+</button>
+
+</div>
+
+</div>
+
+<div class="pricing-grid">
+
+<!-- BASIC -->
+
+<div class="price-card">
+
+<div class="price-icon">
+<i class="fa-solid fa-user"></i>
+</div>
+
+<h3>
+Basic Plan
+</h3>
+
+<div class="price">
+₦5,000
+<small>/month</small>
+</div>
+
+<p class="price-description">
+Perfect for beginners and small digital service users.
+</p>
+
+<ul class="price-features">
+
+<li>
+<i class="fa-solid fa-check"></i>
+Printing Services
+</li>
+
+<li>
+<i class="fa-solid fa-check"></i>
+Internet Browsing
+</li>
+
+<li>
+<i class="fa-solid fa-check"></i>
+Basic ICT Support
+</li>
+
+<li>
+<i class="fa-solid fa-check"></i>
+Customer Support
+</li>
+
+</ul>
+
+<a
+href="#"
+class="price-btn"
+>
+Choose Plan
+</a>
+
+</div>
+
+<!-- PRO -->
+
+<div class="price-card">
+
+<div class="popular-badge">
+POPULAR
+</div>
+
+<div class="price-icon">
+<i class="fa-solid fa-briefcase"></i>
+</div>
+
+<h3>
+Professional Plan
+</h3>
+
+<div class="price">
+₦15,000
+<small>/month</small>
+</div>
+
+<p class="price-description">
+Advanced package for businesses and training services.
+</p>
+
+<ul class="price-features">
+
+<li>
+<i class="fa-solid fa-check"></i>
+ICT Training Access
+</li>
+
+<li>
+<i class="fa-solid fa-check"></i>
+VTU Services
+</li>
+
+<li>
+<i class="fa-solid fa-check"></i>
+Priority Support
+</li>
+
+<li>
+<i class="fa-solid fa-check"></i>
+Online Registration
+</li>
+
+<li>
+<i class="fa-solid fa-check"></i>
+Business Services
+</li>
+
+</ul>
+
+<a
+href="#"
+class="price-btn"
+>
+Choose Plan
+</a>
+
+</div>
+
+<!-- ENTERPRISE -->
+
+<div class="price-card">
+
+<div class="price-icon">
+<i class="fa-solid fa-building"></i>
+</div>
+
+<h3>
+Enterprise Plan
+</h3>
+
+<div class="price">
+₦50,000
+<small>/month</small>
+</div>
+
+<p class="price-description">
+Full enterprise package with premium business solutions.
+</p>
+
+<ul class="price-features">
+
+<li>
+<i class="fa-solid fa-check"></i>
+Unlimited Services
+</li>
+
+<li>
+<i class="fa-solid fa-check"></i>
+Admin Dashboard
+</li>
+
+<li>
+<i class="fa-solid fa-check"></i>
+Advanced Reports
+</li>
+
+<li>
+<i class="fa-solid fa-check"></i>
+Dedicated Support
+</li>
+
+<li>
+<i class="fa-solid fa-check"></i>
+Premium Business Access
+</li>
+
+</ul>
+
+<a
+href="#"
+class="price-btn"
+>
+Choose Plan
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- SERVICE TABLE -->
+
+<section class="table-section">
+
+<div class="section-title">
+
+<h2>
+Service Pricing Table
+</h2>
+
+<p>
+Estimated prices for available services.
+</p>
+
+</div>
+
+<div class="table-box">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Service</th>
+<th>Price</th>
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+<td>NIN Enrollment</td>
+<td>₦2,000</td>
+<td>Available</td>
+</tr>
+
+<tr>
+<td>NIN Modification</td>
+<td>₦3,500</td>
+<td>Available</td>
+</tr>
+
+<tr>
+<td>WAEC Registration</td>
+<td>₦25,000</td>
+<td>Available</td>
+</tr>
+
+<tr>
+<td>JAMB Registration</td>
+<td>₦8,000</td>
+<td>Available</td>
+</tr>
+
+<tr>
+<td>Printing Black & White</td>
+<td>₦50/page</td>
+<td>Available</td>
+</tr>
+
+<tr>
+<td>Color Printing</td>
+<td>₦200/page</td>
+<td>Available</td>
+</tr>
+
+<tr>
+<td>Passport Photograph</td>
+<td>₦1,500</td>
+<td>Available</td>
+</tr>
+
+<tr>
+<td>ICT Training</td>
+<td>₦15,000</td>
+<td>Open</td>
+</tr>
+
+<tr>
+<td>POS Withdrawal</td>
+<td>Charges Apply</td>
+<td>Available</td>
+</tr>
+
+<tr>
+<td>Internet Browsing</td>
+<td>₦300/hour</td>
+<td>Available</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+<!-- CTA -->
+
+<section class="cta-section">
+
+<div class="cta-card">
+
+<h2>
+Need Custom Pricing?
+</h2>
+
+<p>
+Contact HAMBAK TECH & SERVICES for customized
+business packages, training plans and enterprise solutions.
+</p>
+
+<a
+href="contact.html"
+class="cta-btn"
+>
+Contact Us
+</a>
+
+</div>
+
+</section>
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+<div class="footer-content">
+
+<div>
+
+<h3>
+HAMBAK TECH & SERVICES
+</h3>
+
+<p>
+Where technology meet services.
+Affordable digital and business solutions.
+</p>
+
+</div>
+
+<div>
+
+<h3>
+Quick Links
+</h3>
+
+<div class="footer-links">
+
+<a href="../index.html">Home</a>
+<a href="pricing.html">Pricing</a>
+<a href="services.html">Services</a>
+<a href="contact.html">Contact</a>
+
+</div>
+
+</div>
+
+<div>
+
+<h3>
+Contact Info
+</h3>
+
+<p>
+09127469686
+</p>
+
+<p>
+hambak901@gmail.com
+</p>
+
+<p>
+Ibeju-Lekki, Lagos Nigeria
+</p>
+
+</div>
+
+</div>
+
+<div class="footer-bottom">
+
+© 2026 HAMBAK TECH & SERVICES
+
+</div>
+
+</footer>
+
+<!-- WHATSAPP -->
+
+<a
+href="https://wa.me/2349155104724"
+class="whatsapp-float"
+>
+
+<i class="fa-brands fa-whatsapp"></i>
+
+</a>
+
+</body>
+
+</html>
