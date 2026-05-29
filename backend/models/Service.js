@@ -3,133 +3,39 @@ import mongoose from "mongoose";
 /* =========================
 SERVICE SCHEMA
 ========================= */
-
 const serviceSchema = new mongoose.Schema({
-
-  /* BASIC INFO */
-
   name: {
     type: String,
     required: true,
     trim: true
   },
-
-  slug: {
+  category: {
     type: String,
-    unique: true,
-    lowercase: true,
-    trim: true
+    required: true,
+    enum: ["Printing", "NIN", "VTU", "Training", "Registration", "Design", "General"],
+    default: "General"
   },
-
   description: {
     type: String,
     required: true
   },
-
-  category: {
-    type: String,
-    required: true,
-    enum: [
-      "NIN",
-      "Printing",
-      "VTU",
-      "Training",
-      "Registration",
-      "POS",
-      "Design",
-      "Internet",
-      "Gaming",
-      "Business",
-      "Other"
-    ]
-  },
-
-  /* PRICE */
-
   price: {
     type: Number,
     required: true,
     default: 0
   },
-
-  discountPrice: {
-    type: Number,
-    default: 0
-  },
-
-  currency: {
-    type: String,
-    default: "NGN"
-  },
-
-  /* IMAGE */
-
   image: {
     type: String,
-    default: ""
+    required: true,
+    default: "/uploads/placeholder.png"
   },
-
-  /* STATUS */
-
-  available: {
+  isActive: {
     type: Boolean,
     default: true
-  },
-
-  featured: {
-    type: Boolean,
-    default: false
-  },
-
-  /* DETAILS */
-
-  duration: {
-    type: String,
-    default: ""
-  },
-
-  requirements: {
-    type: [String],
-    default: []
-  },
-
-  benefits: {
-    type: [String],
-    default: []
-  },
-
-  /* ADMIN */
-
-  createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
   }
-
-},
-{
+}, {
   timestamps: true
 });
 
-/* =========================
-INDEXES
-========================= */
-
-serviceSchema.index({
-  category: 1
-});
-
-serviceSchema.index({
-  featured: 1
-});
-
-/* =========================
-MODEL
-========================= */
-
-const Service =
-  mongoose.model(
-    "Service",
-    serviceSchema
-  );
-
+const Service = mongoose.model("Service", serviceSchema);
 export default Service;
