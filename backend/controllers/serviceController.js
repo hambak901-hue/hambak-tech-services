@@ -1,50 +1,31 @@
-import Transaction from "../models/Transaction.js";
-import User from "../models/User.js";
+import Service from "../models/Service.js";
 
 /* =========================
-CREATE TRANSACTION / EXECUTE FINANCIAL MATRIX
+CREATE SERVICE
 ========================= */
-export const createTransaction = async (req, res) => {
+export const createService = async (req, res) => {
   try {
-    const { type, amount, description, paymentMethod } = req.body;
+    const { name, category, description, price, image } = req.body;
 
-    if (!type || !amount) {
-      return res.status(400).json({ success: false, message: "Amount and transactional type tracking required" });
-    }
-
-    const userProfile = await User.findById(req.user.id);
-    
-    /* OVERDRAFT GUARD PROTECTION ROUTINE */
-    if ((type === "withdrawal" || type === "service_payment" || type === "vtu") && userProfile.wallet < Number(amount)) {
+    if (!name || !price) {
       return res.status(400).json({
         success: false,
-        message: "Insufficient wallet balance to perform operation"
+        message: "Service name and pricing criteria required"
       });
     }
 
-    const reference = `HTS-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-
-    const transaction = await Transaction.create({
-      user: req.user.id,
-      type,
-      amount: Number(amount),
-      description: description || `${type} processing record`,
-      paymentMethod: paymentMethod || "wallet",
-      reference,
-      status: "successful"
+    const service = await Service.create({
+      name,
+      category,
+      description,
+      price,
+      image: image || "/uploads/placeholder.png"
     });
-
-    /* UPDATE BALANCES DYNAMICALLY IN DB */
-    if (type === "wallet_funding" || type === "deposit" || type === "refund") {
-      await User.findByIdAndUpdate(req.user.id, { $inc: { wallet: Number(amount) } });
-    } else {
-      await User.findByIdAndUpdate(req.user.id, { $inc: { wallet: -Number(amount) } });
-    }
 
     res.status(201).json({
       success: true,
-      message: "Transaction logged and balance synchronized successfully",
-      transaction
+      message: "Service item registered successfully",
+      service
     });
   } catch (error) {
     res.status(500).json({
@@ -55,36 +36,101 @@ export const createTransaction = async (req, res) => {
 };
 
 /* =========================
-GET CURRENT LOGGED IN USER LOGS
+GET ALL SERVICES
 ========================= */
-export const getMyTransactions = async (req, res) => {
+export const getServices = async (req, res) => {
   try {
-    const transactions = await Transaction.find({ user: req.user.id }).sort({ createdAt: -1 });
+    const services = await Service.find().sort({ createdAt: -1 });
     res.status(200).json({
       success: true,
-      count: transactions.length,
-      transactions
+      count: services.length,
+      services
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
   }
 };
 
 /* =========================
-ADMIN: MONITOR ALL SYSTEM TRANSFERS
+GET SINGLE SERVICE
 ========================= */
-export const getAllTransactions = async (req, res) => {
+export const getSingleService = async (req, res) => {
   try {
-    const transactions = await Transaction.find()
-      .populate("user", "name email phone")
-      .sort({ createdAt: -1 });
+    const service = await Service.findById(req.params.id);
+    if (!service) {
+      return res.status(404).json({
+        success: false,
+        message: "Service matching that ID not found"
+      });
+    }
+    res.status(200).json({
+      success: true,
+      service
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+/* =========================
+UPDATE SERVICE DETAILS
+========================= */
+export const updateService = async (req, res) => {
+  try {
+    const service = await Service.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    if (!service) {
+      return res.status(404).json({
+        success: false,
+        message: "Service registry item target missing"
+      });
+    }
 
     res.status(200).json({
       success: true,
-      count: transactions.length,
-      transactions
+      message: "Service database item updated smoothly",
+      service
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+/* =========================
+DELETE SERVICE ITEM
+========================= */
+export const deleteService = async (req, res) => {
+  try {
+    const service = await Service.findById(req.params.id);
+    if (!service) {
+      return res.status(404).json({
+        success: false,
+        message: "Service match not found"
+      });
+    }
+
+    await service.deleteOne();
+    res.status(200).json({
+      success: true,
+      message: "Service record stripped completely from systems"
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
   }
 };
