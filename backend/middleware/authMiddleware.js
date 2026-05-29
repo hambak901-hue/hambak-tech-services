@@ -2,123 +2,74 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
 /* =========================
-PROTECT ROUTES
+PROTECT ROUTES MIDDLEWARE
 ========================= */
+export const protect = async (req, res, next) => {
+  try {
+    let token;
 
-export const protect = async (
-req,
-res,
-next
-)=>{
+    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+      token = req.headers.authorization.split(" ")[1];
+    }
 
-try{
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Not authorized, token missing"
+      });
+    }
 
-let token;
+    /* VERIFY TOKEN Safely */
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-/* GET TOKEN */
+    /* ATTACH USER MATRIX TO ROUTE */
+    req.user = await User.findById(decoded.id).select("-password");
 
-if(
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "User account no longer exists"
+      });
+    }
 
-req.headers.authorization &&
+    if (req.user.isBlocked) {
+      return res.status(403).json({
+        success: false,
+        message: "This account has been suspended by management"
+      });
+    }
 
-req.headers.authorization.startsWith(
-"Bearer"
-)
-
-){
-
-token =
-req.headers.authorization.split(" ")[1];
-
-}
-
-/* NO TOKEN */
-
-if(!token){
-
-return res.status(401).json({
-
-success:false,
-
-message:"Not authorized"
-
-});
-
-}
-
-/* VERIFY TOKEN */
-
-const decoded =
-jwt.verify(
-token,
-process.env.JWT_SECRET
-);
-
-/* FIND USER */
-
-req.user =
-await User.findById(decoded.id)
-.select("-password");
-
-/* USER NOT FOUND */
-
-if(!req.user){
-
-return res.status(401).json({
-
-success:false,
-
-message:"User not found"
-
-});
-
-}
-
-next();
-
-}catch(error){
-
-console.log(error);
-
-return res.status(401).json({
-
-success:false,
-
-message:"Token failed"
-
-});
-
-}
-
+    next();
+  } catch (error) {
+    console.error("Auth Guard Error:", error.message);
+    return res.status(401).json({
+      success: false,
+      message: "Authorization expired or signature invalid"
+    });
+  }
 };
 
 /* =========================
-ADMIN ONLY
+ROLE ACCESS GUARDS
 ========================= */
+export const adminOnly = (req, res, next) => {
+  if (req.user && req.user.role === "admin") {
+    next();
+  } else {
+    return res.status(403).json({
+      success: false,
+      message: "Access Denied: Administrative Clearance Required"
+    });
+  }
+};
 
-export const adminOnly = (
-req,
-res,
-next
-)=>{
-
-if(
-req.user &&
-req.user.role === "admin"
-){
-
-next();
-
-}else{
-
-return res.status(403).json({
-
-success:false,
-
-message:"Admin access only"
-
-});
-
-}
-
+export const studentOnly = (req, res, next) => {
+  if (req.user && req.user.role === "student") {
+    next();
+  } else {
+    return res.status(403).json({
+      success: false,
+      message: "Access Denied: Student Account Clearance Required"
+    });
+  }
 };
