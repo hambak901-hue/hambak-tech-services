@@ -3,325 +3,134 @@ import Service from "../models/Service.js";
 /* =========================
 CREATE SERVICE
 ========================= */
-
 export const createService = async (req, res) => {
-
-  console.log(req.body);
-  console.log(req.file);
-
   try {
+    const { name, category, description, price, image } = req.body;
 
-    const slug = req.body.name
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, "-")
-      .replace(/[^\w-]+/g, "");
-
-    const existingService =
-      await Service.findOne({ slug });
-
-    if (existingService) {
-
+    if (!name || !price) {
       return res.status(400).json({
-
         success: false,
-        message: "Service already exists"
-
+        message: "Service name and pricing criteria required"
       });
-
     }
 
-    const service =
-      await Service.create({
-
-        name: req.body.name,
-
-        description: req.body.description,
-
-        category: req.body.category,
-
-        price: req.body.price,
-
-        slug,
-
-        image: req.file
-          ? `/uploads/${req.file.filename}`
-          : "",
-
-        createdBy: req.user._id
-
-      });
+    const service = await Service.create({
+      name,
+      category,
+      description,
+      price,
+      image: image || "/uploads/placeholder.png"
+    });
 
     res.status(201).json({
-
       success: true,
-
-      message:
-        "Service created successfully",
-
+      message: "Service item registered successfully",
       service
-
     });
-
   } catch (error) {
-
     res.status(500).json({
-
       success: false,
       message: error.message
-
     });
-
   }
-
 };
 
 /* =========================
 GET ALL SERVICES
 ========================= */
-
 export const getServices = async (req, res) => {
-
   try {
-
-    const services =
-      await Service.find()
-      .sort({ createdAt: -1 });
-
+    const services = await Service.find().sort({ createdAt: -1 });
     res.status(200).json({
-
       success: true,
       count: services.length,
       services
-
     });
-
   } catch (error) {
-
     res.status(500).json({
-
       success: false,
       message: error.message
-
     });
-
   }
-
 };
 
 /* =========================
 GET SINGLE SERVICE
 ========================= */
-
 export const getSingleService = async (req, res) => {
-
   try {
-
-    const service =
-      await Service.findById(
-        req.params.id
-      );
-
+    const service = await Service.findById(req.params.id);
     if (!service) {
-
       return res.status(404).json({
-
         success: false,
-        message: "Service not found"
-
+        message: "Service matching that ID not found"
       });
-
     }
-
     res.status(200).json({
-
       success: true,
       service
-
     });
-
   } catch (error) {
-
     res.status(500).json({
-
       success: false,
       message: error.message
-
     });
-
   }
-
 };
 
 /* =========================
-SEARCH SERVICES
+UPDATE SERVICE DETAILS
 ========================= */
-
-export const searchServices = async (req, res) => {
-
-try{
-
-const keyword = req.query.keyword
-? {
-   $or:[
-      {
-         name:{
-            $regex:req.query.keyword,
-            $options:"i"
-         }
-      },
-      {
-         category:{
-            $regex:req.query.keyword,
-            $options:"i"
-         }
-      },
-      {
-         description:{
-            $regex:req.query.keyword,
-            $options:"i"
-         }
-      }
-   ]
-}
-: {};
-
-const services =
-await Service.find(keyword);
-
-res.status(200).json({
-
-success:true,
-count:services.length,
-services
-
-});
-
-}catch(error){
-
-res.status(500).json({
-
-success:false,
-message:error.message
-
-});
-
-}
-
-};
-
 export const updateService = async (req, res) => {
-
   try {
-
-    if (req.body.name) {
-
-      req.body.slug = req.body.name
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, "-")
-        .replace(/[^\w-]+/g, "");
-
-    }
-
-    if (req.file) {
-
-      req.body.image =
-        `/uploads/${req.file.filename}`;
-
-    }
-
-    const service =
-      await Service.findByIdAndUpdate(
-
-        req.params.id,
-
-        req.body,
-
-        {
-          new: true,
-          runValidators: true
-        }
-
-      );
+    const service = await Service.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
 
     if (!service) {
-
       return res.status(404).json({
-
         success: false,
-        message: "Service not found"
-
+        message: "Service registry item target missing"
       });
-
     }
 
     res.status(200).json({
-
       success: true,
-
-      message:
-        "Service updated successfully",
-
+      message: "Service database item updated smoothly",
       service
-
     });
-
   } catch (error) {
-
     res.status(500).json({
-
       success: false,
       message: error.message
-
     });
-
   }
-
 };
 
 /* =========================
-DELETE SERVICE
+DELETE SERVICE ITEM
 ========================= */
-
 export const deleteService = async (req, res) => {
-
   try {
-
-    const service =
-      await Service.findById(
-        req.params.id
-      );
-
+    const service = await Service.findById(req.params.id);
     if (!service) {
-
       return res.status(404).json({
-
         success: false,
-        message: "Service not found"
-
+        message: "Service match not found"
       });
-
     }
 
     await service.deleteOne();
-
     res.status(200).json({
-
       success: true,
-      message: "Service deleted successfully"
-
+      message: "Service record stripped completely from systems"
     });
-
   } catch (error) {
-
     res.status(500).json({
-
       success: false,
       message: error.message
-
     });
-
   }
-
 };
