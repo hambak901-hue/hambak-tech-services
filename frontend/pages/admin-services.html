@@ -2,1011 +2,556 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Services | HAMBAK</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* =========================
+        BODY
+        ========================= */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+        }
 
-<meta charset="UTF-8">
+        /* =========================
+        LAYOUT
+        ========================= */
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
->
+        /* =========================
+        SIDEBAR
+        ========================= */
+        .sidebar {
+            width: 260px;
+            background: #081120;
+            padding: 30px 20px;
+            position: fixed;
+            height: 100%;
+            overflow: auto;
+        }
 
-<title>
-Admin Services | HAMBAK
-</title>
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
 
-<link
-rel="stylesheet"
-href="../css/style.css"
->
+        .logo h2 {
+            color: #f5b942;
+            margin-bottom: 10px;
+        }
 
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
->
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
-<style>
+        .menu a {
+            text-decoration: none;
+            color: #cbd5e1;
+            padding: 14px;
+            border-radius: 12px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-/* =========================
-BODY
-========================= */
+        .menu a:hover {
+            background: #0d47a1;
+            color: white;
+        }
 
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#0f172a;
-color:white;
-}
+        /* =========================
+        MAIN
+        ========================= */
+        .main {
+            margin-left: 260px;
+            flex: 1;
+            padding: 40px;
+        }
 
-/* =========================
-LAYOUT
-========================= */
+        /* =========================
+        TOPBAR
+        ========================= */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
 
-.admin-container{
-display:flex;
-min-height:100vh;
-}
+        .topbar h1 {
+            margin: 0;
+        }
 
-/* =========================
-SIDEBAR
-========================= */
+        .admin-info {
+            background: #1e293b;
+            padding: 12px 20px;
+            border-radius: 50px;
+        }
 
-.sidebar{
-width:260px;
-background:#081120;
-padding:30px 20px;
-position:fixed;
-height:100%;
-overflow:auto;
-}
+        /* =========================
+        FORM BOX
+        ========================= */
+        .form-box {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+        }
 
-.logo{
-text-align:center;
-margin-bottom:40px;
-}
+        .form-box h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
 
-.logo h2{
-color:#f5b942;
-margin-bottom:10px;
-}
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-.menu{
-display:flex;
-flex-direction:column;
-gap:15px;
-}
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
 
-.menu a{
-text-decoration:none;
-color:#cbd5e1;
-padding:14px;
-border-radius:12px;
-transition:0.3s;
-display:flex;
-align-items:center;
-gap:12px;
-}
+        .form-group textarea {
+            height: 120px;
+            resize: none;
+        }
 
-.menu a:hover{
-background:#0d47a1;
-color:white;
-}
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            background: #0d47a1;
+            color: white;
+            border-radius: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-/* =========================
-MAIN
-========================= */
+        .submit-btn:hover {
+            background: #1565c0;
+        }
 
-.main{
-margin-left:260px;
-flex:1;
-padding:40px;
-}
+        /* =========================
+        TABLE
+        ========================= */
+        .table-box {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 20px;
+            overflow: auto;
+        }
 
-/* =========================
-TOPBAR
-========================= */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-.topbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:40px;
-flex-wrap:wrap;
-gap:20px;
-}
+        table th,
+        table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: left;
+        }
 
-.topbar h1{
-margin:0;
-}
+        table th {
+            background: #0d47a1;
+        }
 
-.admin-info{
-background:#1e293b;
-padding:12px 20px;
-border-radius:50px;
-}
+        .service-image {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
 
-/* =========================
-FORM BOX
-========================= */
+        .delete-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
 
-.form-box{
-background:#1e293b;
-padding:30px;
-border-radius:20px;
-margin-bottom:40px;
-}
+        .delete-btn:hover {
+            background: #b91c1c;
+        }
 
-.form-box h2{
-margin-top:0;
-margin-bottom:25px;
-}
-
-.form-group{
-margin-bottom:20px;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select{
-width:100%;
-padding:15px;
-border:none;
-border-radius:10px;
-box-sizing:border-box;
-}
-
-.form-group textarea{
-height:120px;
-resize:none;
-}
-
-.submit-btn{
-width:100%;
-padding:15px;
-border:none;
-background:#0d47a1;
-color:white;
-border-radius:12px;
-font-size:1rem;
-cursor:pointer;
-transition:0.3s;
-}
-
-.submit-btn:hover{
-background:#1565c0;
-}
-
-/* =========================
-TABLE
-========================= */
-
-.table-box{
-background:#1e293b;
-padding:30px;
-border-radius:20px;
-overflow:auto;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-table th,
-table td{
-padding:15px;
-border-bottom:1px solid rgba(255,255,255,0.1);
-text-align:left;
-}
-
-table th{
-background:#0d47a1;
-}
-
-.service-image{
-width:70px;
-height:70px;
-object-fit:cover;
-border-radius:10px;
-}
-
-.delete-btn{
-background:#dc2626;
-color:white;
-border:none;
-padding:10px 16px;
-border-radius:8px;
-cursor:pointer;
-}
-
-.delete-btn:hover{
-background:#b91c1c;
-}
-
-/* =========================
-MOBILE
-========================= */
-
-@media(max-width:900px){
-
-.admin-container{
-flex-direction:column;
-}
-
-.sidebar{
-position:relative;
-width:100%;
-height:auto;
-}
-
-.main{
-margin-left:0;
-}
-
-}
-
-</style>
-
+        /* =========================
+        MOBILE
+        ========================= */
+        @media(max-width:900px){
+            .admin-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            .main {
+                margin-left: 0;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
 <div class="admin-container">
 
-<!-- SIDEBAR -->
-
-<div class="sidebar">
-
-<div class="logo">
-
-<h2>
-HAMBAK
-</h2>
-
-<p>
-ADMIN PANEL
-</p>
-
-</div>
-
-<div class="menu">
-
-<a href="admin.html">
-<i class="fa-solid fa-chart-line"></i>
-Dashboard
-</a>
-
-<a href="admin-services.html">
-<i class="fa-solid fa-briefcase"></i>
-Services
-</a>
-
-<a href="admin-users.html">
-<i class="fa-solid fa-users"></i>
-Users
-</a>
-
-<a href="admin-orders.html">
-<i class="fa-solid fa-cart-shopping"></i>
-Orders
-</a>
-
-<a href="#" id="logoutBtn">
-<i class="fa-solid fa-right-from-bracket"></i>
-Logout
-</a>
-
-</div>
-
-</div>
-
-<!-- MAIN -->
-
-<div class="main">
-
-<!-- TOPBAR -->
-
-<div class="topbar">
-
-<h1>
-Manage Services
-</h1>
-
-<div class="admin-info">
-
-<span id="adminName">
-Administrator
-</span>
-
-</div>
-
-</div>
-
-<!-- ADD SERVICE -->
-
-<div class="form-box">
-
-<h2>
-Add New Service
-</h2>
-
-<form id="serviceForm">
-
-<div class="form-group">
-
-<input
-type="text"
-id="serviceName"
-placeholder="Service Name"
-required
->
-
-</div>
-
-<div class="form-group">
-
-<select
-id="serviceCategory"
-required
->
-
-<option value="">
-Select Category
-</option>
-
-<option value="Printing">
-Printing
-</option>
-
-<option value="NIN">
-NIN
-</option>
-
-<option value="VTU">
-VTU
-</option>
-
-<option value="Training">
-Training
-</option>
-
-<option value="Registration">
-Registration
-</option>
-
-<option value="Design">
-Design
-</option>
-
-</select>
-
-</div>
-
-<div class="form-group">
-
-<textarea
-id="serviceDescription"
-placeholder="Service Description"
-required
-></textarea>
-
-</div>
-
-<div class="form-group">
-
-<input
-type="number"
-id="servicePrice"
-placeholder="Price"
-required
->
-
-</div>
-
-<div class="form-group">
-
-<input
-type="file"
-id="serviceImage"
-accept="image/*"
-required
->
-
-</div>
-
-<button
-type="submit"
-class="submit-btn"
->
-
-Add Service
-
-</button>
-
-</form>
-
-</div>
-
-<!-- SEARCH -->
-
-<div class="form-box">
-
-<input
-type="text"
-id="searchInput"
-placeholder="Search services..."
-style="
-width:100%;
-padding:15px;
-border:none;
-border-radius:10px;
-"
->
-
-</div>
-
-<!-- SERVICES TABLE -->
-
-<div class="table-box">
-
-<h2>
-All Services
-</h2>
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Image</th>
-<th>Name</th>
-<th>Category</th>
-<th>Price</th>
-<th>Action</th>
-
-</tr>
-
-</thead>
-
-<tbody id="servicesTable">
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
+    <div class="sidebar">
+        <div class="logo">
+            <h2>HAMBAK</h2>
+            <p>ADMIN PANEL</p>
+        </div>
+        <div class="menu">
+            <a href="admin.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a href="admin-services.html"><i class="fa-solid fa-briefcase"></i> Services</a>
+            <a href="admin-users.html"><i class="fa-solid fa-users"></i> Users</a>
+            <a href="admin-orders.html"><i class="fa-solid fa-cart-shopping"></i> Orders</a>
+            <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </div>
+    </div>
+
+    <div class="main">
+
+        <div class="topbar">
+            <h1>Manage Services</h1>
+            <div class="admin-info">
+                <span id="adminName">Administrator</span>
+            </div>
+        </div>
+
+        <div class="form-box">
+            <h2 id="formSubtitle">Add New Service</h2>
+            <form id="serviceForm">
+                <div class="form-group">
+                    <input type="text" id="serviceName" placeholder="Service Name" required>
+                </div>
+
+                <div class="form-group">
+                    <select id="serviceCategory" required>
+                        <option value="">Select Category</option>
+                        <option value="Printing">Printing</option>
+                        <option value="NIN">NIN</option>
+                        <option value="VTU">VTU</option>
+                        <option value="Training">Training</option>
+                        <option value="Registration">Registration</option>
+                        <option value="Design">Design</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <textarea id="serviceDescription" placeholder="Service Description" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <input type="number" id="servicePrice" placeholder="Price" required>
+                </div>
+
+                <div class="form-group">
+                    <input type="file" id="serviceImage" accept="image/*">
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitFormBtn">Add Service</button>
+            </form>
+        </div>
+
+        <div class="form-box">
+            <input type="text" id="searchInput" placeholder="Search services..." style="width:100%; padding:15px; border:none; border-radius:10px;">
+        </div>
+
+        <div class="table-box">
+            <h2>All Services</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="servicesTable"></tbody>
+            </table>
+        </div>
+
+    </div>
 </div>
 
 <script>
-
-/* =========================
-AUTH CHECK
-========================= */
-
-const user =
-JSON.parse(
-localStorage.getItem(
-"hambak_user"
-)
-);
-
-const token =
-localStorage.getItem(
-"hambak_token"
-);
-
-if(!user || !token){
-
-window.location.href =
-"login.html";
-
-}
-
-document.getElementById(
-"adminName"
-).innerHTML = user.name;
-
-/* =========================
-IMAGE PREVIEW
-========================= */
-
-document.getElementById(
-"serviceImage"
-).addEventListener(
-"change",
-function(){
-
-const file =
-this.files[0];
-
-if(file){
-
-const reader =
-new FileReader();
-
-reader.onload =
-function(e){
-
-let preview =
-document.getElementById(
-"previewImage"
-);
-
-if(!preview){
-
-preview =
-document.createElement("img");
-
-preview.id =
-"previewImage";
-
-preview.style.width =
-"120px";
-
-preview.style.marginTop =
-"15px";
-
-preview.style.borderRadius =
-"10px";
-
-document.querySelector(
-".form-box"
-).appendChild(preview);
-
-}
-
-preview.src =
-e.target.result;
-
-};
-
-reader.readAsDataURL(file);
-
-}
-
-}
-);
-
-/* =========================
-LOAD SERVICES
-========================= */
-
-async function loadServices(){
-
-try{
-
-const response =
-await fetch(
-"http://localhost:5000/api/services"
-);
-
-const data =
-await response.json();
-
-const table =
-document.getElementById(
-"servicesTable"
-);
-
-table.innerHTML = "";
-
-if(data.services.length === 0){
-
-table.innerHTML = `
-
-<tr>
-
-<td colspan="5"
-style="
-text-align:center;
-padding:30px;
-"
->
-
-No services available
-
-</td>
-
-</tr>
-
-`;
-
-return;
-
-}
-
-data.services.forEach(service=>{
-
-table.innerHTML += `
-
-<tr>
-
-<td>
-
-<img
-src="http://localhost:5000${service.image}"
-class="service-image"
->
-
-</td>
-
-<td>${service.name}</td>
-
-<td>${service.category}</td>
-
-<td>₦${service.price}</td>
-
-<td>
-
-<button
-class="edit-btn"
-onclick="editService('${service._id}')"
-style="
-background:#2563eb;
-color:white;
-border:none;
-padding:10px 16px;
-border-radius:8px;
-cursor:pointer;
-margin-right:10px;
-"
->
-
-Edit
-
-</button>
-
-<button
-class="delete-btn"
-onclick="deleteService('${service._id}')"
->
-
-Delete
-
-</button>
-
-</td>
-
-</tr>
-
-`;
-
-});
-
-}catch(error){
-
-console.log(error);
-
-}
-
-}
-
-/* =========================
-ADD SERVICE
-========================= */
-
-document.getElementById(
-"serviceForm"
-).addEventListener(
-"submit",
-async(e)=>{
-
-e.preventDefault();
-
-const formData =
-new FormData();
-
-formData.append(
-"name",
-document.getElementById(
-"serviceName"
-).value
-);
-
-formData.append(
-"description",
-document.getElementById(
-"serviceDescription"
-).value
-);
-
-formData.append(
-"category",
-document.getElementById(
-"serviceCategory"
-).value
-);
-
-formData.append(
-"price",
-document.getElementById(
-"servicePrice"
-).value
-);
-
-formData.append(
-"image",
-document.getElementById(
-"serviceImage"
-).files[0]
-);
-
-try{
-
-let url =
-"http://localhost:5000/api/services";
-
-let method =
-"POST";
-
-if(window.currentServiceId){
-
-url =
-`http://localhost:5000/api/services/${window.currentServiceId}`;
-
-method =
-"PUT";
-
-}
-
-const response =
-await fetch(
-url,
-{
-method,
-
-headers:{
-Authorization:
-`Bearer ${token}`
-},
-
-body:formData
-
-}
-);
-
-const data =
-await response.json();
-
-if(data.success){
-
-alert(
-"Service added successfully"
-);
-
-document.getElementById(
-"serviceForm"
-).reset();
-
-loadServices();
-
-}else{
-
-alert(data.message);
-
-}
-
-}catch(error){
-
-console.log(error);
-
-}
-
-}
-);
-
-/* =========================
-SEARCH SERVICES
-========================= */
-
-document.getElementById(
-"searchInput"
-).addEventListener(
-"keyup",
-async function(){
-
-const keyword = this.value;
-
-try{
-
-const response =
-await fetch(
-`http://localhost:5000/api/services/search?keyword=${keyword}`
-);
-
-const data =
-await response.json();
-
-const table =
-document.getElementById(
-"servicesTable"
-);
-
-table.innerHTML = "";
-
-data.services.forEach(service=>{
-
-table.innerHTML += `
-
-<tr>
-
-<td>
-<img
-src="http://localhost:5000${service.image}"
-class="service-image"
->
-</td>
-
-<td>${service.name}</td>
-
-<td>${service.category}</td>
-
-<td>₦${service.price}</td>
-
-<td>
-
-<button
-class="delete-btn"
-onclick="deleteService('${service._id}')"
->
-
-Delete
-
-</button>
-
-</td>
-
-</tr>
-
-`;
-
-});
-
-}catch(error){
-
-console.log(error);
-
-}
-
-}
-);
-
-/* =========================
-EDIT SERVICE
-========================= */
-
-async function editService(id){
-
-try{
-
-const response =
-await fetch(
-`http://localhost:5000/api/services/${id}`
-);
-
-const data =
-await response.json();
-
-const service =
-data.service;
-
-document.getElementById(
-"serviceName"
-).value =
-service.name;
-
-document.getElementById(
-"serviceCategory"
-).value =
-service.category;
-
-document.getElementById(
-"serviceDescription"
-).value =
-service.description;
-
-document.getElementById(
-"servicePrice"
-).value =
-service.price;
-
-window.currentServiceId = id;
-
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
-
-}catch(error){
-
-console.log(error);
-
-}
-
-}
-
-/* =========================
-DELETE SERVICE
-========================= */
-
-async function deleteService(id){
-
-const confirmDelete =
-confirm(
-"Delete this service?"
-);
-
-if(!confirmDelete){
-
-return;
-
-}
-
-try{
-
-await fetch(
-
-`http://localhost:5000/api/services/${id}`,
-
-{
-method:"DELETE",
-
-headers:{
-Authorization:
-`Bearer ${token}`
-}
-
-}
-
-);
-
-alert(
-"Service deleted"
-);
-
-loadServices();
-
-}catch(error){
-
-console.log(error);
-
-}
-
-}
-
-/* =========================
-LOGOUT
-========================= */
-
-document.getElementById(
-"logoutBtn"
-).addEventListener(
-"click",
-()=>{
-
-localStorage.removeItem(
-"hambak_user"
-);
-
-localStorage.removeItem(
-"hambak_token"
-);
-
-window.location.href =
-"login.html";
-
-}
-);
-
-loadServices();
-
-window.currentServiceId = null;
-
+    /* =========================
+    AUTH & ADMIN VALUE SECURITY GUARD
+    ========================= */
+    const user = JSON.parse(localStorage.getItem("hambak_user"));
+    const token = localStorage.getItem("hambak_token");
+
+    if (!user || !token || user.role !== "admin") {
+        localStorage.removeItem("hambak_user");
+        localStorage.removeItem("hambak_token");
+        window.location.href = "login.html";
+    } else {
+        document.getElementById("adminName").innerHTML = user.name;
+    }
+
+    /* =========================
+    PRODUCTION ROUTE API CONFIG
+    ========================= */
+    const BASE_HOST = "https://hambak-tech-services.onrender.com";
+    const API_URL = `${BASE_HOST}/api`;
+
+    window.currentServiceId = null;
+
+    /* =========================
+    IMAGE PREVIEW ENGINE
+    ========================= */
+    document.getElementById("serviceImage").addEventListener("change", function(){
+        const file = this.files[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload = function(e){
+                let preview = document.getElementById("previewImage");
+                if(!preview){
+                    preview = document.createElement("img");
+                    preview.id = "previewImage";
+                    preview.style.width = "120px";
+                    preview.style.marginTop = "15px";
+                    preview.style.borderRadius = "10px";
+                    document.getElementById("serviceForm").appendChild(preview);
+                }
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    /* =========================
+    LOAD SERVICES STREAM
+    ========================= */
+    async function loadServices(){
+        try {
+            const response = await fetch(`${API_URL}/services`);
+            const data = await response.json();
+            const table = document.getElementById("servicesTable");
+            table.innerHTML = "";
+
+            const servicesList = data.services || [];
+
+            if(servicesList.length === 0){
+                table.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:30px;">No services available</td></tr>`;
+                return;
+            }
+
+            servicesList.forEach(service => {
+                // Ensure image paths resolve cleanly with cloud URL mapping
+                const imageSrc = service.image.startsWith('http') ? service.image : `${BASE_HOST}${service.image}`;
+                
+                table.innerHTML += `
+                <tr>
+                    <td><img src="${imageSrc}" class="service-image" onerror="this.src='../images/placeholder.png'"></td>
+                    <td>${service.name}</td>
+                    <td>${service.category}</td>
+                    <td>₦${Number(service.price).toLocaleString()}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editService('${service._id}')" style="background:#2563eb; color:white; border:none; padding:10px 16px; border-radius:8px; cursor:pointer; margin-right:10px;">Edit</button>
+                        <button class="delete-btn" onclick="deleteService('${service._id}')">Delete</button>
+                    </td>
+                </tr>
+                `;
+            });
+        } catch(error) {
+            console.error("Fetch listing failure:", error);
+        }
+    }
+
+    /* =========================
+    ADD / UPDATE SERVICE ACTION
+    ========================= */
+    document.getElementById("serviceForm").addEventListener("submit", async(e)=>{
+        e.preventDefault();
+        
+        const formData = new FormData();
+        formData.append("name", document.getElementById("serviceName").value.trim());
+        formData.append("description", document.getElementById("serviceDescription").value.trim());
+        formData.append("category", document.getElementById("serviceCategory").value);
+        formData.append("price", document.getElementById("servicePrice").value);
+        
+        const imageFile = document.getElementById("serviceImage").files[0];
+        if (imageFile) {
+            formData.append("image", imageFile);
+        }
+
+        try {
+            let targetUrl = `${API_URL}/services`;
+            let reqMethod = "POST";
+
+            if(window.currentServiceId){
+                targetUrl = `${API_URL}/services/${window.currentServiceId}`;
+                reqMethod = "PUT";
+            }
+
+            const response = await fetch(targetUrl, {
+                method: reqMethod,
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if(data.success){
+                alert(window.currentServiceId ? "Service updated successfully" : "Service added successfully");
+                
+                // Complete clean form reset
+                document.getElementById("serviceForm").reset();
+                const preview = document.getElementById("previewImage");
+                if(preview) preview.remove();
+                
+                // Return interface back to basic add configuration
+                window.currentServiceId = null;
+                document.getElementById("formSubtitle").innerHTML = "Add New Service";
+                document.getElementById("submitFormBtn").innerHTML = "Add Service";
+                document.getElementById("serviceImage").required = true;
+                
+                loadServices();
+            } else {
+                alert(data.message || "Operation failed");
+            }
+        } catch(error) {
+            console.error("Form handling error:", error);
+            alert("Error sending form data");
+        }
+    });
+
+    /* =========================
+    LIVE KEYWORD SEARCH
+    ========================= */
+    document.getElementById("searchInput").addEventListener("keyup", async function(){
+        const keyword = this.value.trim();
+        if(!keyword) {
+            loadServices();
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/services/search?keyword=${keyword}`);
+            const data = await response.json();
+            const table = document.getElementById("servicesTable");
+            table.innerHTML = "";
+
+            const results = data.services || [];
+
+            results.forEach(service => {
+                const imageSrc = service.image.startsWith('http') ? service.image : `${BASE_HOST}${service.image}`;
+                table.innerHTML += `
+                <tr>
+                    <td><img src="${imageSrc}" class="service-image" onerror="this.src='../images/placeholder.png'"></td>
+                    <td>${service.name}</td>
+                    <td>${service.category}</td>
+                    <td>₦${Number(service.price).toLocaleString()}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editService('${service._id}')" style="background:#2563eb; color:white; border:none; padding:10px 16px; border-radius:8px; cursor:pointer; margin-right:10px;">Edit</button>
+                        <button class="delete-btn" onclick="deleteService('${service._id}')">Delete</button>
+                    </td>
+                </tr>
+                `;
+            });
+        } catch(error) {
+            console.error("Search failure:", error);
+        }
+    });
+
+    /* =========================
+    EDIT INITIALIZER
+    ========================= */
+    async function editService(id){
+        try {
+            const response = await fetch(`${API_URL}/services/${id}`);
+            const data = await response.json();
+            const service = data.service;
+
+            if(!service) return;
+
+            document.getElementById("serviceName").value = service.name;
+            document.getElementById("serviceCategory").value = service.category;
+            document.getElementById("serviceDescription").value = service.description;
+            document.getElementById("servicePrice").value = service.price;
+            
+            // File uploads are optional during an entry update structure
+            document.getElementById("serviceImage").required = false;
+
+            window.currentServiceId = id;
+            document.getElementById("formSubtitle").innerHTML = "Modify Existing Service";
+            document.getElementById("submitFormBtn").innerHTML = "Update Service";
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch(error) {
+            console.error("Error setting up edit variables:", error);
+        }
+    }
+
+    /* =========================
+    DELETE ACTION
+    ========================= */
+    async function deleteService(id){
+        const confirmDelete = confirm("Are you completely sure you want to delete this service?");
+        if(!confirmDelete) return;
+
+        try {
+            const response = await fetch(`${API_URL}/services/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            if(data.success) {
+                alert("Service deleted successfully");
+                loadServices();
+            } else {
+                alert(data.message || "Failed to delete item");
+            }
+        } catch(error) {
+            console.error("Deletion operation failure:", error);
+        }
+    }
+
+    /* =========================
+    LOGOUT LOGIC
+    ========================= */
+    document.getElementById("logoutBtn").addEventListener("click", (e)=>{
+        e.preventDefault();
+        localStorage.removeItem("hambak_user");
+        localStorage.removeItem("hambak_token");
+        window.location.href = "login.html";
+    });
+
+    // Run listing stream
+    loadServices();
 </script>
 
 </body>
-
 </html>
