@@ -472,247 +472,132 @@ Status
 </div>
 
 <script>
-
 /* =========================
-AUTH
+SECURITY & AUTH GUARD
 ========================= */
+const user = JSON.parse(localStorage.getItem("hambak_user"));
+const token = localStorage.getItem("hambak_token");
 
-const user =
-JSON.parse(
-localStorage.getItem(
-"hambak_user"
-)
-);
-
-const token =
-localStorage.getItem(
-"hambak_token"
-);
-
-if(!user || !token){
-
-window.location.href =
-"login.html";
-
+// Secure against logged-out users OR regular customers trying to view admin
+if (!user || !token || user.role !== "admin") {
+    localStorage.removeItem("hambak_user");
+    localStorage.removeItem("hambak_token");
+    window.location.href = "login.html";
+} else {
+    document.getElementById("adminName").innerHTML = user.name;
 }
 
-document.getElementById(
-"adminName"
-).innerHTML =
-user.name;
+/* =========================
+LIVE API BASE CONFIG
+========================= */
+const BASE_URL = "https://hambak-tech-services.onrender.com/api";
 
 /* =========================
 LOAD DASHBOARD
 ========================= */
+async function loadDashboard() {
+    try {
+        /* =========================
+        FETCH SERVICES
+        ========================= */
+        const servicesResponse = await fetch(`${BASE_URL}/services`);
+        const servicesData = await servicesResponse.json();
+        const servicesList = servicesData.services || [];
+        document.getElementById("totalServices").innerHTML = servicesList.length;
 
-async function loadDashboard(){
+        /* =========================
+        FETCH USERS
+        ========================= */
+        const usersResponse = await fetch(`${BASE_URL}/users`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        const usersData = await usersResponse.json();
+        const usersList = usersData.users || [];
+        document.getElementById("totalUsers").innerHTML = usersList.length;
 
-try{
+        /* =========================
+        FETCH ORDERS
+        ========================= */
+        const ordersResponse = await fetch(`${BASE_URL}/orders`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        const ordersData = await ordersResponse.json();
+        const ordersList = ordersData.orders || [];
+        
+        // Update Total Orders Counter
+        document.getElementById("totalOrders").innerHTML = ordersList.length;
 
-/* =========================
-FETCH SERVICES
-========================= */
+        /* =========================
+        CALCULATE REVENUE
+        ========================= */
+        let revenue = 0;
+        ordersList.forEach(order => {
+            if (order.status === "Completed" || !order.status) {
+                revenue += Number(order.amount || 0);
+            }
+        });
+        document.getElementById("totalRevenue").innerHTML = `₦${revenue.toLocaleString()}`;
 
-const servicesResponse =
-await fetch(
-"http://localhost:5000/api/services"
-);
+        /* =========================
+        RECENT ORDERS TABLE
+        ========================= */
+        const recentOrdersTable = document.getElementById("recentOrdersTable");
+        recentOrdersTable.innerHTML = "";
 
-const servicesData =
-await servicesResponse.json();
+        if (ordersList.length === 0) {
+            recentOrdersTable.innerHTML = `<tr><td colspan="4" style="padding:15px; text-align:center; color:#cbd5e1;">No orders found yet</td></tr>`;
+            return;
+        }
 
-document.getElementById(
-"totalServices"
-).innerHTML =
-servicesData.services.length;
+        ordersList
+            .slice(0, 5)
+            .forEach(order => {
+                const customerDisplay = order.customerName || (order.user ? order.user.name : "Guest User");
+                const serviceDisplay = order.serviceName || (order.service ? order.service.name : "Digital Registration");
+                
+                recentOrdersTable.innerHTML += `
+                <tr>
+                    <td style="padding:15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        ${customerDisplay}
+                    </td>
+                    <td style="padding:15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        ${serviceDisplay}
+                    </td>
+                    <td style="padding:15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        ₦${Number(order.amount || 0).toLocaleString()}
+                    </td>
+                    <td style="padding:15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <span style="background:${order.status === 'Pending' ? '#d97706' : '#16a34a'}; padding:6px 12px; border-radius:50px; font-size:0.9rem;">
+                            ${order.status || "Completed"}
+                        </span>
+                    </td>
+                </tr>
+                `;
+            });
 
-/* =========================
-FETCH USERS
-========================= */
-
-const usersResponse =
-await fetch(
-"http://localhost:5000/api/users",
-{
-headers:{
-Authorization:
-`Bearer ${token}`
+    } catch (error) {
+        console.error("Dashboard Loading Error:", error);
+    }
 }
-}
-);
-
-const usersData =
-await usersResponse.json();
-
-document.getElementById(
-"totalUsers"
-).innerHTML =
-usersData.users.length;
 
 /* =========================
-FETCH ORDERS
+LOGOUT ACTION
 ========================= */
-
-const ordersResponse =
-await fetch(
-"http://localhost:5000/api/orders",
-{
-headers:{
-Authorization:
-`Bearer ${token}`
-}
-}
-);
-
-const ordersData =
-await ordersResponse.json();
-
-/* =========================
-ORDERS COUNT
-========================= */
-
-document.getElementById(
-"totalOrders"
-).innerHTML =
-ordersData.orders.length;
-
-/* =========================
-CALCULATE REVENUE
-========================= */
-
-let revenue = 0;
-
-ordersData.orders.forEach(order=>{
-
-revenue += Number(order.amount || 0);
-
+document.getElementById("logoutBtn").addEventListener("click", (e) => {
+    e.preventDefault();
+    localStorage.removeItem("hambak_user");
+    localStorage.removeItem("hambak_token");
+    window.location.href = "login.html";
 });
 
-document.getElementById(
-"totalRevenue"
-).innerHTML =
-`₦${revenue.toLocaleString()}`;
-
-/* =========================
-RECENT ORDERS TABLE
-========================= */
-
-const recentOrdersTable =
-document.getElementById(
-"recentOrdersTable"
-);
-
-recentOrdersTable.innerHTML = "";
-
-ordersData.orders
-.slice(0,5)
-.forEach(order=>{
-
-recentOrdersTable.innerHTML += `
-
-<tr>
-
-<td
-style="
-padding:15px;
-border-bottom:
-1px solid rgba(255,255,255,0.1);
-"
->
-
-${order.customerName}
-
-</td>
-
-<td
-style="
-padding:15px;
-border-bottom:
-1px solid rgba(255,255,255,0.1);
-"
->
-
-${order.service?.name || "Service"}
-
-</td>
-
-<td
-style="
-padding:15px;
-border-bottom:
-1px solid rgba(255,255,255,0.1);
-"
->
-
-₦${Number(order.amount).toLocaleString()}
-
-</td>
-
-<td
-style="
-padding:15px;
-border-bottom:
-1px solid rgba(255,255,255,0.1);
-"
->
-
-<span
-style="
-background:#16a34a;
-padding:6px 12px;
-border-radius:50px;
-font-size:0.9rem;
-"
->
-
-${order.status || "Completed"}
-
-</span>
-
-</td>
-
-</tr>
-
-`;
-
-});
-
-}catch(error){
-
-console.log(error);
-
-}
-
-}
-
-/* =========================
-LOGOUT
-========================= */
-
-document.getElementById(
-"logoutBtn"
-).addEventListener(
-"click",
-()=>{
-
-localStorage.removeItem(
-"hambak_user"
-);
-
-localStorage.removeItem(
-"hambak_token"
-);
-
-window.location.href =
-"login.html";
-
-}
-);
-
+// Run metrics stream on paint
 loadDashboard();
-
 </script>
-
+  
 </body>
 
 </html>
