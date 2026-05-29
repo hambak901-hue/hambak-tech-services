@@ -1,263 +1,158 @@
-import generateToken from "../utils/generateToken.js";
 import User from "../models/User.js";
 
 /* =========================
 REGISTER USER
 ========================= */
-
 export const registerUser = async (req, res) => {
+  try {
+    const { name, username, email, phone, password } = req.body;
 
-try{
+    if (!name || !username || !email || !phone || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Please fill all required inputs"
+      });
+    }
 
-const {
-name,
-username,
-email,
-phone,
-password
-} = req.body;
+    /* CHECK EXISTING USER IN SYSTEM */
+    const existingUser = await User.findOne({
+      $or: [
+        { email: email.toLowerCase().trim() },
+        { username: username.toLowerCase().trim() }
+      ]
+    });
 
-/* CHECK REQUIRED FIELDS */
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: "Email or Username already registered in system"
+      });
+    }
 
-if(
-!name ||
-!username ||
-!email ||
-!phone ||
-!password
-){
+    /* CREATE NEW ACCOUNT */
+    const user = await User.create({
+      name,
+      username: username.toLowerCase().trim(),
+      email: email.toLowerCase().trim(),
+      phone,
+      password
+    });
 
-return res.status(400).json({
+    /* GENERATE TOKEN FROM USER METHOD NATIVELY */
+    const token = user.generateToken();
 
-success:false,
-message:"Please fill all fields"
-
-});
-
-}
-
-/* CHECK EXISTING USER */
-
-const existingUser =
-await User.findOne({
-
-$or:[
-{ email },
-{ username }
-]
-
-});
-
-if(existingUser){
-
-return res.status(400).json({
-
-success:false,
-message:"User already exists"
-
-});
-
-}
-
-/* CREATE USER */
-
-const user =
-await User.create({
-
-name,
-username,
-email,
-phone,
-password
-
-});
-
-/* GENERATE TOKEN */
-
-const token =
-generateToken(
-user._id,
-user.role
-);
-
-/* RESPONSE */
-
-res.status(201).json({
-
-success:true,
-message:"Registration successful",
-token,
-
-user:{
-id:user._id,
-name:user.name,
-username:user.username,
-email:user.email,
-phone:user.phone,
-role:user.role
-}
-
-});
-
-}catch(error){
-
-console.log(error);
-
-res.status(500).json({
-
-success:false,
-message:error.message
-
-});
-
-}
-
+    res.status(201).json({
+      success: true,
+      message: "Registration successful",
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        wallet: user.wallet
+      }
+    });
+  } catch (error) {
+    console.error("Register Controller Error:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
 };
 
 /* =========================
 LOGIN USER
 ========================= */
+export const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-export const loginUser = async (req,res)=>{
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide email and password details"
+      });
+    }
 
-try{
+    /* SEARCH PROFILE BY EMAIL */
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid login credentials"
+      });
+    }
 
-const {
-email,
-password
-} = req.body;
+    /* CHECK ENCRYPTED PASSWORDS MATCH */
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid login credentials"
+      });
+    }
 
-/* CHECK INPUT */
+    if (user.isBlocked) {
+      return res.status(403).json({
+        success: false,
+        message: "Your account is currently suspended"
+      });
+    }
 
-if(!email || !password){
+    /* GENERATE TOKEN */
+    const token = user.generateToken();
 
-return res.status(400).json({
-
-success:false,
-message:"Please provide email and password"
-
-});
-
-}
-
-/* FIND USER */
-
-const user =
-await User.findOne({ email });
-
-if(!user){
-
-return res.status(401).json({
-
-success:false,
-message:"Invalid credentials"
-
-});
-
-}
-
-/* CHECK PASSWORD */
-
-const isMatch =
-await user.comparePassword(password);
-
-if(!isMatch){
-
-return res.status(401).json({
-
-success:false,
-message:"Invalid credentials"
-
-});
-
-}
-
-/* GENERATE TOKEN */
-
-const token =
-generateToken(
-user._id,
-user.role
-);
-
-/* RESPONSE */
-
-res.status(200).json({
-
-success:true,
-message:"Login successful",
-token,
-
-user:{
-id:user._id,
-name:user.name,
-username:user.username,
-email:user.email,
-phone:user.phone,
-role:user.role,
-wallet:user.wallet
-}
-
-});
-
-}catch(error){
-
-console.log(error);
-
-res.status(500).json({
-
-success:false,
-message:error.message
-
-});
-
-}
-
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        wallet: user.wallet
+      }
+    });
+  } catch (error) {
+    console.error("Login Controller Error:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
 };
 
 /* =========================
-GET CURRENT USER
+GET CURRENT ACCOUNT MATRIX
 ========================= */
-
-export const getMe = async (req,res)=>{
-
-try{
-
-const user =
-await User.findById(req.user._id)
-.select("-password");
-
-res.status(200).json({
-
-success:true,
-user
-
-});
-
-}catch(error){
-
-res.status(500).json({
-
-success:false,
-message:error.message
-
-});
-
-}
-
+export const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.status(200).json({
+      success: true,
+      user
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
 };
 
 /* =========================
-LOGOUT USER
+LOGOUT ACCOUNT
 ========================= */
-
-export const logoutUser = async (req,res)=>{
-
-res.status(200).json({
-
-success:true,
-message:"Logged out successfully"
-
-});
-
+export const logoutUser = async (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Logged out cleanly from session matrices"
+  });
 };
