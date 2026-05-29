@@ -30,13 +30,19 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 
 /* =========================
-STATIC FILES & FRONTEND
+STATIC FILES & FRONTEND ROUTING
 ========================= */
+// 1. Serve upload folders smoothly
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
-// This line allows Render to find your HTML files cleanly
+// 2. Serve main frontend assets (css, js, images)
 app.use(express.static(path.resolve(process.cwd(), "..", "frontend")));
 
+// 3. Serve pages directory seamlessly (Fixes the admin and client pages 404s)
+app.use(express.static(path.resolve(process.cwd(), "..", "frontend", "pages")));
+
+// 4. Custom alias routing so "/admin/admin.html" maps perfectly to your folder structure
+app.use("/admin", express.static(path.resolve(process.cwd(), "..", "frontend", "pages")));
 /* =========================
 HOME ROUTE
 ========================= */
