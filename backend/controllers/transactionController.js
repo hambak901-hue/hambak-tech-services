@@ -27,13 +27,16 @@ export const initializePaystackDeposit = async (req, res, next) => {
       callback_url: `${frontendOrigin}/pages/dashboard.html`
     });
 
+    // Clean Secret Key whitespace strings automatically
+    const cleanSecretKey = process.env.PAYSTACK_SECRET_KEY ? process.env.PAYSTACK_SECRET_KEY.trim() : '';
+
     const options = {
       hostname: 'api.paystack.co',
       port: 443,
       path: '/transaction/initialize',
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+        Authorization: `Bearer ${cleanSecretKey}`,
         'Content-Type': 'application/json'
       }
     };
@@ -52,7 +55,7 @@ export const initializePaystackDeposit = async (req, res, next) => {
             // Register a baseline 'pending' record into your MongoDB cluster safely
             await Transaction.create({
               user: req.user._id || req.user.id,
-              type: "deposit", // Synced directly with your main query array enum types
+              type: "deposit", 
               amount: Number(amount),
               reference,
               description: "Paystack online wallet funding session initial entry",
@@ -110,13 +113,16 @@ export const verifyPaystackDeposit = async (req, res, next) => {
       return res.status(200).json({ success: true, message: "Transaction already processed and funded." });
     }
 
+    // Clean Secret Key whitespace strings automatically
+    const cleanSecretKey = process.env.PAYSTACK_SECRET_KEY ? process.env.PAYSTACK_SECRET_KEY.trim() : '';
+
     const options = {
       hostname: 'api.paystack.co',
       port: 443,
       path: `/transaction/verify/${encodeURIComponent(reference)}`,
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`
+        Authorization: `Bearer ${cleanSecretKey}`
       }
     };
 
@@ -130,11 +136,9 @@ export const verifyPaystackDeposit = async (req, res, next) => {
           const responseData = JSON.parse(data);
 
           if (responseData.status && responseData.data.status === "success") {
-            // Update data log parameters locally
             existingTx.status = "successful";
             await existingTx.save();
 
-            // Locate user profile and credit wallet matrices cleanly
             const user = await User.findById(existingTx.user);
             if (user) {
               user.wallet = (user.wallet || 0) + existingTx.amount;
