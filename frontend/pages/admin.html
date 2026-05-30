@@ -120,6 +120,15 @@
             <input type="text" id="serviceName" placeholder="e.g. Premium Graphics Bundle" required>
           </div>
           <div class="form-group">
+            <label>Service Category</label>
+            <select id="serviceCategory" required>
+              <option value="NIN">NIN</option>
+              <option value="Printing">Printing</option>
+              <option value="VTU">VTU</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label>Cost Charge Metric (₦)</label>
             <input type="number" id="servicePrice" placeholder="e.g. 25000" required>
           </div>
@@ -137,6 +146,7 @@
           <thead>
             <tr>
               <th>Service System Name</th>
+              <th>Category</th>
               <th>Price Index</th>
               <th>Execution Description Context</th>
             </tr>
@@ -167,14 +177,14 @@
       const tbody = document.getElementById("usersTableBody");
       tbody.innerHTML = "<tr><td colspan='5'>Querying cluster records...</td></tr>";
       try {
-        const res = await fetch(`${BASE_URL}/auth/users`, {
-          headers: { "Authorization": `Bearer ${token}` }
+        // FIXED: Pointed directly to /api/users instead of old /api/auth/users paths
+        const res = await fetch(`${BASE_URL}/users`, {
+          headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" }
         });
-        const users = await res.json();
+        const data = await res.json();
         tbody.innerHTML = "";
         
-        // Handle array validation safely
-        const records = Array.isArray(users) ? users : (users.data || []);
+        const records = data.users || (Array.isArray(data) ? data : []);
         if(records.length === 0) { tbody.innerHTML = "<tr><td colspan='5'>No accounts returned.</td></tr>"; return; }
         
         records.forEach(user => {
@@ -183,40 +193,42 @@
             <td>${user.username || 'N/A'}</td>
             <td>${user.email}</td>
             <td>${user.phone || 'N/A'}</td>
-            <td style="color:var(--brand-gold); font-weight:bold;">${user.role}</td>
+            <td style="color:var(--brand-gold); font-weight:bold; text-transform:uppercase;">${user.role}</td>
           </tr>`;
         });
       } catch (err) {
-        tbody.innerHTML = "<tr><td colspan='5' style='color:var(--accent-pink);'>Authorization endpoint path needs validation assignment on backend routes array.</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='5' style='color:var(--accent-pink);'>Authorization endpoint verification failed. Check server connection.</td></tr>";
       }
     }
 
     async function loadServicesEngine() {
       const tbody = document.getElementById("servicesTableBody");
-      tbody.innerHTML = "<tr><td colspan='3'>Querying item vectors...</td></tr>";
+      tbody.innerHTML = "<tr><td colspan='4'>Querying item vectors...</td></tr>";
       try {
         const res = await fetch(`${BASE_URL}/services`);
-        const services = await res.json();
+        const data = await res.json();
         tbody.innerHTML = "";
         
-        const records = Array.isArray(services) ? services : (services.data || []);
-        if(records.length === 0) { tbody.innerHTML = "<tr><td colspan='3'>No provisioned items found.</td></tr>"; return; }
+        const records = data.services || (Array.isArray(data) ? data : []);
+        if(records.length === 0) { tbody.innerHTML = "<tr><td colspan='4'>No provisioned items found.</td></tr>"; return; }
         
         records.forEach(srv => {
           tbody.innerHTML += `<tr>
             <td><strong>${srv.name}</strong></td>
+            <td><span style="background:rgba(13,71,161,0.3); padding:4px 8px; border-radius:5px; font-size:0.8rem;">${srv.category || 'Other'}</span></td>
             <td>₦${Number(srv.price).toLocaleString()}</td>
             <td>${srv.description || ''}</td>
           </tr>`;
         });
       } catch (err) {
-        tbody.innerHTML = "<tr><td colspan='3' style='color:var(--accent-pink);'>Failed to load data structures.</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='4' style='color:var(--accent-pink);'>Failed to load data structures.</td></tr>";
       }
     }
 
     document.getElementById("serviceForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const name = document.getElementById("serviceName").value.trim();
+      const category = document.getElementById("serviceCategory").value;
       const price = document.getElementById("servicePrice").value;
       const description = document.getElementById("serviceDesc").value.trim();
 
@@ -227,7 +239,7 @@
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
           },
-          body: JSON.stringify({ name, price, description })
+          body: JSON.stringify({ name, category, price, description })
         });
         if(res.ok) {
           alert("Service node created successfully inside cluster!");
@@ -246,7 +258,6 @@
       window.location.href = "login.html";
     });
 
-    // Security Verification Block
     document.addEventListener("DOMContentLoaded", () => {
       const storedUser = localStorage.getItem("hambak_user");
       if (!storedUser || JSON.parse(storedUser).role !== 'admin') {
