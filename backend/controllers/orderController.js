@@ -106,4 +106,43 @@ export const updateOrderStatus = async (req, res) => {
     const allowedStates = ["pending", "processing", "completed", "cancelled"];
 
     if (!allowedStates.includes(status)) {
-      return res.status(400).
+      return res.status(400).json({ success: false, message: "Invalid tracking target state designation." });
+    }
+
+    const executionOrder = await Order.findById(req.params.id);
+    if (!executionOrder) {
+      return res.status(404).json({ success: false, message: "Target order reference dataset missing." });
+    }
+
+    // Strategic fallback rule: If order is explicitly cancelled, return locked funds back into profile ledger
+    if (status === "cancelled" && executionOrder.status !== "cancelled") {
+      const associatedClient = await User.findById(executionOrder.user);
+      if (associatedClient) {
+        associatedClient.wallet += executionOrder.amount;
+        await associatedClient.save();
+
+        await Transaction.create({
+          user: executionOrder.user,
+          type: "refund",
+          amount: executionOrder.amount,
+          status: "successful",
+          reference: `HTS-RFD-${Date.now()}`,
+          description: `Reversal refund: Cancelled execution on order reference code: ${executionOrder._id}`,
+          paymentMethod: "wallet"
+        });
+      }
+    }
+
+    executionOrder.status = status;
+    await executionOrder.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Order workflow status successfully transitioned to: '${status}'.`,
+      order: executionOrder
+    });
+
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
