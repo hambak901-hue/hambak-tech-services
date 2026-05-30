@@ -4,13 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | HAMBAK TECH & SERVICES</title>
+  <title>Login & Register | HAMBAK TECH & SERVICES</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    /* =========================
-    LOGIN PAGE
-    ========================= */
     * {
       box-sizing: border-box;
     }
@@ -105,7 +102,7 @@
     }
 
     /* =========================
-    FORM
+    FORM MATRIX
     ========================= */
     .auth-form {
       display: flex;
@@ -136,7 +133,7 @@
     }
 
     .input-group input:focus {
-      border-color:#0d47a1;
+      border-color: #0d47a1;
     }
 
     .auth-btn {
@@ -167,9 +164,6 @@
       font-weight: 600;
     }
 
-    /* =========================
-    FORGOT PASSWORD
-    ========================= */
     .forgot-password {
       text-align: right;
       margin-top: -10px;
@@ -186,9 +180,6 @@
       text-decoration: underline;
     }
 
-    /* =========================
-    DEMO INFO
-    ========================= */
     .demo-info {
       margin-top: 30px;
       padding: 20px;
@@ -199,9 +190,6 @@
       line-height: 1.8;
     }
 
-    /* =========================
-    WHATSAPP
-    ========================= */
     .whatsapp-float {
       position: fixed;
       width: 60px;
@@ -220,25 +208,19 @@
       z-index: 1000;
     }
 
-    /* =========================
-    MOBILE RESPONSIVENESS
-    ========================= */
     @media(max-width: 768px) {
       .navbar {
         flex-direction: column;
         gap: 20px;
       }
-
       .nav-links {
         flex-wrap: wrap;
         justify-content: center;
         gap: 15px;
       }
-
       .auth-container {
         padding: 30px 20px;
       }
-
       .auth-header h1 {
         font-size: 2rem;
       }
@@ -266,7 +248,7 @@
       
       <div class="auth-header">
         <h1 id="formTitle">Customer Login</h1>
-        <p>Access your dashboard & services</p>
+        <p id="formSubtitle">Access your dashboard & services</p>
       </div>
 
       <form class="auth-form" id="authForm">
@@ -311,13 +293,8 @@
       </div>
 
       <div class="demo-info">
-        <strong>System Integrity Map:</strong><br><br>
-        ✔ Customer Login UI<br>
-        ✔ Registration UI<br>
-        ✔ Forgot Password System<br>
-        ✔ JWT Authentication Ecosystem<br>
-        ✔ Live Production Database Sync<br>
-        ✔ Role-Based Routing Control Matrix
+        <strong>System Information:</strong><br>
+        Ensure you fill correct inputs when creating an account. Built for live production tracking.
       </div>
 
     </div>
@@ -328,12 +305,10 @@
   </a>
 
   <script>
-    /* =========================
-    DOM ELEMENT SELECTION
-    ========================= */
     const authForm = document.getElementById("authForm");
     const toggleForm = document.getElementById("toggleForm");
     const formTitle = document.getElementById("formTitle");
+    const formSubtitle = document.getElementById("formSubtitle");
     const submitBtn = document.getElementById("submitBtn");
     const forgotPasswordWrapper = document.getElementById("forgotPasswordWrapper");
 
@@ -348,14 +323,10 @@
     const passwordField = document.getElementById("passwordField");
     const togglePassword = document.getElementById("togglePassword");
 
-    /* =========================
-    PRODUCTION ROUTE API CONFIG
-    ========================= */
+    // Live Render Production Endpoint Base Link
     const BASE_URL = "https://hambak-tech-services.onrender.com/api";
 
-    /* =========================
-    VISIBILITY PASS ENGINE
-    ========================= */
+    // Show/Hide Password Toggle Function
     togglePassword.addEventListener("click", () => {
       if (passwordField.type === "password") {
         passwordField.type = "text";
@@ -366,17 +337,16 @@
       }
     });
 
-    /* =========================
-    INTERACTION STATE CONFIG
-    ========================= */
     let loginMode = true;
 
+    // Toggle view layout between Login and Registration
     toggleForm.addEventListener("click", () => {
       loginMode = !loginMode;
-      authForm.reset(); // Clear data states on form flip
+      authForm.reset();
 
       if (loginMode) {
         formTitle.innerHTML = "Customer Login";
+        formSubtitle.innerHTML = "Access your dashboard & services";
         submitBtn.innerHTML = "Login";
         toggleForm.innerHTML = "Create New Account";
         forgotPasswordWrapper.style.display = "block";
@@ -385,6 +355,7 @@
         phoneWrapper.style.display = "none";
       } else {
         formTitle.innerHTML = "Create Account";
+        formSubtitle.innerHTML = "Join Hambak Tech & Services Ecosystem";
         submitBtn.innerHTML = "Register";
         toggleForm.innerHTML = "Already Have Account?";
         forgotPasswordWrapper.style.display = "none";
@@ -394,25 +365,21 @@
       }
     });
 
-    /* =========================
-    FORM TRANSACTIONS HANDLING
-    ========================= */
+    // Handle Form Operations (Login / Register)
     authForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const email = emailField.value.trim();
       const password = passwordField.value;
 
-      /* =========================
-      WORKFLOW EXECUTION: REGISTER
-      ========================= */
+      // WORKFLOW: REGISTRATION ROUTE
       if (!loginMode) {
         const name = nameField.value.trim();
         const username = usernameField.value.trim();
         const phone = phoneField.value.trim();
 
         if (!name || !username || !phone || !email || !password) {
-          alert("Please fill all required inputs parameters.");
+          alert("Please fill all fields completely.");
           return;
         }
 
@@ -429,26 +396,24 @@
           const data = await response.json();
 
           if (data.success) {
-            alert("Registration Successful! Switching to login view.");
-            toggleForm.click(); // Programmatically switches view mode smoothly back to login
+            alert("Registration successful! You can now log in.");
+            toggleForm.click(); // Returns user safely to login screen
           } else {
-            alert(data.message || "Registration sequence failed.");
+            alert(data.message || "Registration failed.");
           }
         } catch (error) {
-          console.error("Registration Engine Error:", error);
-          alert("Network connection error during registration.");
+          console.error("Client side error during registration fetch:", error);
+          alert("Connection error. Could not reach server cluster.");
         }
 
         submitBtn.disabled = false;
         submitBtn.innerHTML = "Register";
       }
 
-      /* =========================
-      WORKFLOW EXECUTION: LOGIN
-      ========================= */
+      // WORKFLOW: AUTHENTICATION LOGIN ROUTE
       else {
         if (!email || !password) {
-          alert("Please provide valid login details.");
+          alert("Please fill out your credentials.");
           return;
         }
 
@@ -465,24 +430,24 @@
           const data = await response.json();
 
           if (data.success) {
-            // Commit user data structures directly to cache storage matching dashboard guards
+            // Save parameters exactly as expected by dashboard verification filters
             localStorage.setItem("hambak_user", JSON.stringify(data.user));
             localStorage.setItem("hambak_token", data.token);
 
             alert("Login Successful!");
 
-            // Role-Based Router Management System
+            // Role-Based Redirect Router Matrix
             if (data.user.role === "admin") {
               window.location.href = "admin.html";
             } else {
               window.location.href = "dashboard.html";
             }
           } else {
-            alert(data.message || "Invalid authentication credentials.");
+            alert(data.message || "Invalid email or password combination.");
           }
         } catch (error) {
-          console.error("Login Engine Error:", error);
-          alert("Server failed to respond. Please verify connection metrics.");
+          console.error("Client side error during login fetch:", error);
+          alert("Server failed to respond. Check your web connection.");
         }
 
         submitBtn.disabled = false;
