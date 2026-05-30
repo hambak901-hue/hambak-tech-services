@@ -5,11 +5,11 @@ import {
   updateService, 
   deleteService 
 } from "../controllers/serviceController.js";
-import { protect, admin } from "../middleware/authMiddleware.js"; // Adjust path if needed
+import { protect, admin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// Core public or protected routes
+// Public / Protected base endpoints
 router.route("/")
   .get(getServices)
   .post(protect, admin, createService);
@@ -17,7 +17,6 @@ router.route("/")
 router.route("/:id")
   .put(protect, admin, updateService)
   .delete(protect, admin, deleteService);
-  // .get(getSingleService); // Kept commented out until defined in controller
 
 export default router;
 
