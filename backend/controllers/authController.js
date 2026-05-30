@@ -1,5 +1,6 @@
 import User from '../models/userModel.js';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs'; // Imported directly to compare passwords without crashing
 
 // Helper method to sign JSON Web Tokens
 const generateToken = (id) => {
@@ -15,7 +16,6 @@ export const registerUser = async (req, res, next) => {
   try {
     const { name, username, email, phone, password } = req.body;
 
-    // Validation: Check for blank inputs
     if (!name || !username || !email || !phone || !password) {
       return res.status(400).json({
         success: false,
@@ -26,7 +26,6 @@ export const registerUser = async (req, res, next) => {
     const sanitizedEmail = email.toLowerCase().trim();
     const sanitizedUsername = username.toLowerCase().trim();
 
-    // Sanity Check: Ensure user doesn't already exist in Atlas cluster
     const userExists = await User.findOne({ 
       $or: [{ email: sanitizedEmail }, { username: sanitizedUsername }] 
     });
@@ -38,7 +37,6 @@ export const registerUser = async (req, res, next) => {
       });
     }
 
-    // Create the new customer profile
     const user = await User.create({
       name,
       username: sanitizedUsername,
@@ -79,7 +77,6 @@ export const loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    // Validation: Check for empty input parameters
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -87,19 +84,18 @@ export const loginUser = async (req, res, next) => {
       });
     }
 
-    // Look up the user by email reference string safely
+    // Look up user profile directly from your Atlas cluster
     const user = await User.findOne({ email: email.toLowerCase().trim() });
     if (!user) {
       return res.status(401).json({ success: false, message: 'Invalid login credentials' });
     }
 
-    // Validate password string hash matching rules using schema methods
-    const isMatch = await user.matchPassword(password);
+    // DIRECT COMPARISON GATEWAY: Bypasses user.matchPassword function bugs entirely
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ success: false, message: 'Invalid login credentials' });
     }
 
-    // Security Gate: Verify account is active
     if (user.isBlocked) {
       return res.status(403).json({
         success: false,
@@ -131,7 +127,6 @@ export const loginUser = async (req, res, next) => {
 // @access  Private
 export const getMyProfile = async (req, res, next) => {
   try {
-    // req.user framework reference object is populated upstream via protect middleware
     const user = await User.findById(req.user._id || req.user.id).select("-password");
 
     if (user) {
