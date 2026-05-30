@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,226 +7,61 @@
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #081120;
-    }
-
-    /* =========================
-    NAVBAR
-    ========================= */
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, sans-serif; background: #081120; }
+    
     .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 8%;
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 8%; background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 1000;
     }
+    .logo { display: flex; flex-direction: column; }
+    .logo span { font-size: 2rem; font-weight: bold; color: #f5b942; }
+    .logo small { color: white; font-weight: bold; }
+    .nav-links { display: flex; gap: 30px; }
+    .nav-links a { text-decoration: none; color: white; font-weight: 600; transition: 0.3s; }
+    .nav-links a:hover { color: #f5b942; }
 
-    .logo {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .logo span {
-      font-size: 2rem;
-      font-weight: bold;
-      color: #f5b942;
-    }
-
-    .logo small {
-      color: white;
-      font-weight: bold;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 30px;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: white;
-      font-weight: 600;
-      transition: 0.3s;
-    }
-
-    .nav-links a:hover {
-      color: #f5b942;
-    }
-
-    /* =========================
-    AUTH SECTION
-    ========================= */
     .auth-section {
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 60px 8%;
+      min-height: 100vh; display: flex; justify-content: center;
+      align-items: center; padding: 60px 8%;
       background: linear-gradient(135deg, #081120, #0d47a1);
     }
-
     .auth-container {
-      width: 100%;
-      max-width: 500px;
-      background: white;
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      width: 100%; max-width: 500px; background: white;
+      padding: 40px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.2);
     }
+    .auth-header { text-align: center; margin-bottom: 30px; }
+    .auth-header h1 { font-size: 2.5rem; color: #0f172a; margin-bottom: 10px; }
+    .auth-header p { color: #555; }
 
-    .auth-header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
+    .auth-form { display: flex; flex-direction: column; gap: 20px; }
+    .input-group { position: relative; }
+    .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #888; }
+    .input-group input { width: 100%; padding: 15px 45px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; outline: none; transition: 0.3s; }
+    .input-group input:focus { border-color: #0d47a1; }
 
-    .auth-header h1 {
-      font-size: 2.5rem;
-      color: #0f172a;
-      margin-bottom: 10px;
-    }
+    .auth-btn { padding: 15px; border: none; border-radius: 10px; background: #0d47a1; color: white; font-size: 1rem; cursor: pointer; transition: 0.3s; font-weight: bold; }
+    .auth-btn:hover { background: #1565c0; }
+    .auth-btn:disabled { background: #555; cursor: not-allowed; }
 
-    .auth-header p {
-      color: #555;
-    }
+    .auth-switch { text-align: center; margin-top: 20px; color: #555; }
+    .auth-switch span { color: #0d47a1; cursor: pointer; font-weight: 600; }
+    .forgot-password { text-align: right; margin-top: -10px; }
+    .forgot-password a { color: #0d47a1; text-decoration: none; font-weight: bold; font-size: 0.95rem; }
+    .forgot-password a:hover { text-decoration: underline; }
 
-    /* =========================
-    FORM MATRIX
-    ========================= */
-    .auth-form {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .input-group {
-      position: relative;
-    }
-
-    .input-group i {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #888;
-    }
-
-    .input-group input {
-      width: 100%;
-      padding: 15px 45px 15px 45px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      font-size: 1rem;
-      outline: none;
-      transition: 0.3s;
-    }
-
-    .input-group input:focus {
-      border-color: #0d47a1;
-    }
-
-    .auth-btn {
-      padding: 15px;
-      border: none;
-      border-radius: 10px;
-      background: #0d47a1;
-      color: white;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.3s;
-      font-weight: bold;
-    }
-
-    .auth-btn:hover {
-      background: #1565c0;
-    }
-
-    .auth-switch {
-      text-align: center;
-      margin-top: 20px;
-      color: #555;
-    }
-
-    .auth-switch span {
-      color: #0d47a1;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .forgot-password {
-      text-align: right;
-      margin-top: -10px;
-    }
-
-    .forgot-password a {
-      color: #0d47a1;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 0.95rem;
-    }
-
-    .forgot-password a:hover {
-      text-decoration: underline;
-    }
-
-    .demo-info {
-      margin-top: 30px;
-      padding: 20px;
-      background: #f1f5f9;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      color: #475569;
-      line-height: 1.8;
-    }
-
-    .whatsapp-float {
-      position: fixed;
-      width: 60px;
-      height: 60px;
-      bottom: 25px;
-      right: 25px;
-      background: #25d366;
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 2rem;
-      text-decoration: none;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-    }
+    .demo-info { margin-top: 30px; padding: 20px; background: #f1f5f9; border-radius: 10px; font-size: 0.95rem; color: #475569; line-height: 1.8; }
+    .whatsapp-float { position: fixed; width: 60px; height: 60px; bottom: 25px; right: 25px; background: #25d366; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 2rem; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 1000; }
 
     @media(max-width: 768px) {
-      .navbar {
-        flex-direction: column;
-        gap: 20px;
-      }
-      .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
-      }
-      .auth-container {
-        padding: 30px 20px;
-      }
-      .auth-header h1 {
-        font-size: 2rem;
-      }
+      .navbar { flex-direction: column; gap: 20px; }
+      .nav-links { flex-wrap: wrap; justify-content: center; gap: 15px; }
+      .auth-container { padding: 30px 20px; }
+      .auth-header h1 { font-size: 2rem; }
     }
   </style>
 </head>
-
 <body>
 
   <header class="navbar">
@@ -252,7 +86,6 @@
       </div>
 
       <form class="auth-form" id="authForm">
-        
         <div class="input-group" id="nameWrapper" style="display:none">
           <i class="fa-solid fa-user"></i>
           <input type="text" placeholder="Full Name" id="nameField">
@@ -294,7 +127,7 @@
 
       <div class="demo-info">
         <strong>System Information:</strong><br>
-        Ensure you fill correct inputs when creating an account. Built for live production tracking.
+        Ensure you fill out all input parameter matrices properly.
       </div>
 
     </div>
@@ -323,10 +156,9 @@
     const passwordField = document.getElementById("passwordField");
     const togglePassword = document.getElementById("togglePassword");
 
-    // Live Render Production Endpoint Base Link
+    // Clear production route API link string
     const BASE_URL = "https://hambak-tech-services.onrender.com/api";
 
-    // Show/Hide Password Toggle Function
     togglePassword.addEventListener("click", () => {
       if (passwordField.type === "password") {
         passwordField.type = "text";
@@ -339,10 +171,15 @@
 
     let loginMode = true;
 
-    // Toggle view layout between Login and Registration
     toggleForm.addEventListener("click", () => {
       loginMode = !loginMode;
-      authForm.reset();
+      
+      // Explicit field sanitization on layout switch
+      nameField.value = "";
+      usernameField.value = "";
+      phoneField.value = "";
+      emailField.value = "";
+      passwordField.value = "";
 
       if (loginMode) {
         formTitle.innerHTML = "Customer Login";
@@ -365,21 +202,20 @@
       }
     });
 
-    // Handle Form Operations (Login / Register)
     authForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const email = emailField.value.trim();
       const password = passwordField.value;
 
-      // WORKFLOW: REGISTRATION ROUTE
+      // PIPELINE EXECUTION: USER REGISTRATION ROUTE
       if (!loginMode) {
         const name = nameField.value.trim();
         const username = usernameField.value.trim();
         const phone = phoneField.value.trim();
 
         if (!name || !username || !phone || !email || !password) {
-          alert("Please fill all fields completely.");
+          alert("All text input configurations are required.");
           return;
         }
 
@@ -395,25 +231,25 @@
 
           const data = await response.json();
 
-          if (data.success) {
-            alert("Registration successful! You can now log in.");
-            toggleForm.click(); // Returns user safely to login screen
+          if (data.success || response.status === 201) {
+            alert("Registration successful! Switching over to let you log in.");
+            toggleForm.click(); // Trigger view transition back to login view smoothly
           } else {
-            alert(data.message || "Registration failed.");
+            alert("Server Error Message: " + (data.message || "Registration failed. Check if username or email exists."));
           }
         } catch (error) {
-          console.error("Client side error during registration fetch:", error);
-          alert("Connection error. Could not reach server cluster.");
+          console.error("Pipeline failure on registry call:", error);
+          alert("Network connection error. Server cluster was unreachable.");
         }
 
         submitBtn.disabled = false;
         submitBtn.innerHTML = "Register";
       }
 
-      // WORKFLOW: AUTHENTICATION LOGIN ROUTE
+      // PIPELINE EXECUTION: USER LOGIN AUTH
       else {
         if (!email || !password) {
-          alert("Please fill out your credentials.");
+          alert("Please fill your login credentials completely.");
           return;
         }
 
@@ -430,24 +266,24 @@
           const data = await response.json();
 
           if (data.success) {
-            // Save parameters exactly as expected by dashboard verification filters
+            // Save cleanly to browser memory space
             localStorage.setItem("hambak_user", JSON.stringify(data.user));
             localStorage.setItem("hambak_token", data.token);
 
             alert("Login Successful!");
 
-            // Role-Based Redirect Router Matrix
+            // Role routing control evaluation
             if (data.user.role === "admin") {
               window.location.href = "admin.html";
             } else {
               window.location.href = "dashboard.html";
             }
           } else {
-            alert(data.message || "Invalid email or password combination.");
+            alert("Auth Fail Reason: " + (data.message || "Invalid email or password parameters."));
           }
         } catch (error) {
-          console.error("Client side error during login fetch:", error);
-          alert("Server failed to respond. Check your web connection.");
+          console.error("Pipeline failure on login call:", error);
+          alert("Server is loading/spinning up or offline. Please wait 10 seconds and try again.");
         }
 
         submitBtn.disabled = false;
@@ -456,5 +292,4 @@
     });
   </script>
 </body>
-
 </html>
