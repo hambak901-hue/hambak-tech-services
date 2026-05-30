@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-/* =========================
-SERVICE SCHEMA
-========================= */
+/* ==========================================================
+   ECOSYSTEM CORE SERVICE LISTING SCHEMA
+   ========================================================== */
 const serviceSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -37,5 +37,5 @@ const serviceSchema = new mongoose.Schema({
   timestamps: true
 });
 
-const Service = mongoose.model("Service", serviceSchema);
+const Service = mongoose.models.Service || mongoose.model("Service", serviceSchema);
 export default Service;
