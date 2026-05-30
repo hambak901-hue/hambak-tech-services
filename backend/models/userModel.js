@@ -1,9 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-// ==========================================================================
-// HAMBAK TECH ECOSYSTEM - PREMIUM COMPREHENSIVE USER SCHEMA
-// ==========================================================================
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -38,30 +35,30 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     enum: ['user', 'admin'],
-    default: 'user' // Ensures public signups default to customers securely
+    default: 'user'
   },
   wallet: {
     type: Number,
-    default: 0.00, // Matches your live floating-point currency decimal values
+    default: 0.00,
     min: [0, 'Wallet balance parameters cannot drop below zero threshold rules']
+  },
+  isBlocked: {
+    type: Boolean,
+    default: false
   },
   createdAt: {
     type: Date,
     default: Date.now
   }
 }, {
-  timestamps: true // Automates real-time tracking for recent user action logs
+  timestamps: true
 });
 
-// ==========================================================================
-// SECURITY MIDDLEWARE: AUTOMATIC PASSWORD HASHING BLOCKS
-// ==========================================================================
+// PASSWORD HASHING MIDDLEWARE
 userSchema.pre('save', async function (next) {
-  // Only hash password if it's new or actively modified
   if (!this.isModified('password')) {
     return next();
   }
-
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
@@ -71,12 +68,11 @@ userSchema.pre('save', async function (next) {
   }
 });
 
-// ==========================================================================
-// PROTOTYPE ENGINE METHOD: VERIFY MATCHING CREDS ON LOGIN
-// ==========================================================================
+// MATCHING METHOD FOR LOGIN
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-const User = mongoose.model('User', userSchema);
+// SAFE COMPILATION MATRIX: Prevents OverwriteModelErrors
+const User = mongoose.models.User || mongoose.model('User', userSchema);
 export default User;
