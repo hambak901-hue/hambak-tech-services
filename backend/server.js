@@ -43,6 +43,7 @@ app.use(express.static(path.resolve(process.cwd(), "..", "frontend", "pages")));
 
 // 4. Custom alias routing so "/admin/admin.html" maps perfectly to your folder structure
 app.use("/admin", express.static(path.resolve(process.cwd(), "..", "frontend", "pages")));
+
 /* =========================
 HOME ROUTE
 ========================= */
