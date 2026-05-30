@@ -27,6 +27,24 @@ export const getServices = async (req, res, next) => {
   }
 };
 
+// @desc    Get a single service profile details
+// @route   GET /api/services/:id
+// @access  Public
+export const getSingleService = async (req, res, next) => {
+  try {
+    const service = await Service.findById(req.params.id);
+    if (!service) {
+      return res.status(404).json({ success: false, message: "Target service listing not found." });
+    }
+    res.status(200).json({
+      success: true,
+      service
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // @desc    Create a new ecosystem service listing
 // @route   POST /api/services
 // @access  Private/Admin
@@ -49,6 +67,32 @@ export const createService = async (req, res, next) => {
       success: true,
       message: "Service listing generated successfully inside cluster",
       service
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Update an existing service configuration
+// @route   PUT /api/services/:id
+// @access  Private/Admin
+export const updateService = async (req, res, next) => {
+  try {
+    const service = await Service.findById(req.params.id);
+    if (!service) {
+      return res.status(404).json({ success: false, message: "Target service listing not found." });
+    }
+
+    const updatedService = await Service.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Service configurations updated successfully",
+      service: updatedService
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
