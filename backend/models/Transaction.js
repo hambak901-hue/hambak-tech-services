@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-/* =========================
-TRANSACTION SCHEMA
-========================= */
+/* ==========================================================
+   TRANSACTION DATA ENGINE SCHEMA
+   ========================================================== */
 const transactionSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -21,6 +21,8 @@ const transactionSchema = new mongoose.Schema({
       "service_payment",
       "vtu",
       "pos",
+      "printing",
+      "nin",
       "refund"
     ]
   },
@@ -45,7 +47,7 @@ const transactionSchema = new mongoose.Schema({
   paymentMethod: {
     type: String,
     enum: ["cash", "bank_transfer", "wallet", "card", "pos"],
-    default: "cash"
+    default: "wallet"
   },
   receiptUrl: {
     type: String,
