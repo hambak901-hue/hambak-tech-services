@@ -4,31 +4,31 @@ import bcrypt from 'bcryptjs';
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, 'Please provide your official full name'],
     trim: true
   },
   username: {
     type: String,
-    required: true,
+    required: [true, 'Please allocate a unique ecosystem username'],
     unique: true,
     trim: true,
     lowercase: true
   },
   email: {
     type: String,
-    required: true,
+    required: [true, 'Email authentication parameter required'],
     unique: true,
     trim: true,
     lowercase: true
   },
   phone: {
     type: String,
-    required: true,
+    required: [true, 'Ecosystem mobile contact matrix required'],
     trim: true
   },
   password: {
     type: String,
-    required: true
+    required: [true, 'Secure password string required']
   },
   role: {
     type: String,
@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Auto hash passwords smoothly before saving records
+// PASSWORD HASHING MIDDLEWARE
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
@@ -61,5 +61,16 @@ userSchema.pre('save', async function (next) {
   }
 });
 
-const User = mongoose.models.User || mongoose.model('User', userSchema);
+// MATCHING METHOD FOR LOGIN (Explicitly assigned directly to schema methods)
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+// Clear existing compiled models to force Mongoose to register our updated methods
+if (mongoose.models && mongoose.models.User) {
+  delete mongoose.models.User;
+}
+
+const User = mongoose.model('User', userSchema);
 export default User;
+
