@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'admin'],
+    enum: ['user', 'admin', 'student'],
     default: 'user'
   },
   wallet: {
@@ -61,16 +61,16 @@ userSchema.pre('save', async function (next) {
   }
 });
 
-// MATCHING METHOD FOR LOGIN (Explicitly assigned directly to schema methods)
+// MATCHING METHOD FOR LOGIN (Ensures user.matchPassword functions perfectly)
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Clear existing compiled models to force Mongoose to register our updated methods
-if (mongoose.models && mongoose.models.User) {
-  delete mongoose.models.User;
-}
+// Alternate helper mapping to prevent breaking legacy controllers using comparePassword
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
-const User = mongoose.model('User', userSchema);
+// Safe conditional compilation guard against OverwriteModelErrors
+const User = mongoose.models.User || mongoose.model('User', userSchema);
 export default User;
-
