@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 
+/* ==========================================================
+   CUSTOMER ORDER PROCESSING SCHEMA
+   ========================================================== */
 const orderSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -25,5 +28,5 @@ const orderSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-const Order = mongoose.model("Order", orderSchema);
+const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);
 export default Order;
