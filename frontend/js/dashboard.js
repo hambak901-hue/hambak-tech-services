@@ -26,3 +26,36 @@ async function handleWalletFunding(amountInput) {
     showLoadingSpinner(false);
   }
 }
+
+
+// Automatically check URL params for active Paystack payment redirections
+async function checkPaymentCallback() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const reference = urlParams.get("reference");
+
+  if (reference) {
+    try {
+      // Clear query params immediately so the user doesn't trigger multiple refreshes
+      window.history.replaceState({}, document.title, window.location.pathname);
+      
+      alert("Verifying payment with Paystack... Please hold on.");
+      
+      // Call backend handler to confirm payment settlement and credit wallet
+      const verification = await window.API.transactions.verifyDeposit(reference);
+      
+      if (verification.success) {
+        alert(`Success! ${verification.message}`);
+        // Trigger a fresh UI refresh to show the updated balance instantly
+        if (window.loadUserProfileData) window.loadUserProfileData(); 
+      } else {
+        alert("Payment Verification Failed: " + verification.message);
+      }
+    } catch (error) {
+      console.error("Callback Verification Error:", error);
+      alert("An error occurred while confirming your wallet funding status.");
+    }
+  }
+}
+
+// Run right away on dashboard initialization
+checkPaymentCallback();
