@@ -1,23 +1,23 @@
 import express from "express";
 import { 
-  getServices, 
   createService, 
+  getServices, 
   updateService, 
   deleteService 
 } from "../controllers/serviceController.js";
-import { protect, adminOnly } from "../middleware/authMiddleware.js";
+import { protect, admin } from "../middleware/authMiddleware.js"; // Adjust path if needed
 
 const router = express.Router();
 
-// Base collection mapping endpoints
+// Core public or protected routes
 router.route("/")
   .get(getServices)
-  .post(protect, adminOnly, createService);
+  .post(protect, admin, createService);
 
-// Specific resource target mapping endpoints
 router.route("/:id")
-  .get(getSingleService)
-  .put(protect, adminOnly, updateService)
-  .delete(protect, adminOnly, deleteService);
+  .put(protect, admin, updateService)
+  .delete(protect, admin, deleteService);
+  // .get(getSingleService); // Kept commented out until defined in controller
 
 export default router;
+
