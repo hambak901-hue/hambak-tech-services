@@ -1,15 +1,11 @@
-/* ==========================================================
-   GLOBAL SYSTEM ERROR EXCEPTION HANDLER
-   ========================================================== */
-const errorHandler = (err, req, res, next) => {
-  console.error("System Exception Executed:", err.stack);
-  
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-  
-  res.status(statusCode).json({
-    success: false,
-    message: err.message || "An internal ecosystem operation exception occurred."
-  });
-};
+import express from "express";
+import { getDashboardStats, getAllUsers, deleteUser } from "../controllers/adminController.js";
+import { protect, adminOnly } from "../middleware/authMiddleware.js";
 
-export default errorHandler;
+const router = express.Router();
+
+router.get("/dashboard", protect, adminOnly, getDashboardStats);
+router.get("/users", protect, adminOnly, getAllUsers);
+router.delete("/users/:id", protect, adminOnly, deleteUser);
+
+export default router;
