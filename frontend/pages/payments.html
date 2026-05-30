@@ -1,1 +1,626 @@
-<h1>Coming Soon</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Center | HAMBAK TECH & SERVICES</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* ==========================================================================
+       PREMIUM BRAND COLOR PALETTE (BLUE, GOLD, PEACH, PINK)
+       ========================================================================== */
+    :root {
+      --primary-blue: #0d47a1;
+      --deep-navy: #081120;
+      --brand-gold: #f5b942;
+      --soft-peach: #ffdfd3;
+      --accent-pink: #ff4081;
+      --clean-white: #ffffff;
+      --dark-card: #0f172a;
+      --input-bg: #1e293b;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--deep-navy);
+      color: var(--clean-white);
+      min-height: 100vh;
+    }
+
+    /* GLOBAL REGIONAL NAVBAR */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 8%;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .navbar .logo {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar .logo span {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--brand-gold);
+      letter-spacing: 1px;
+    }
+
+    .navbar .logo small {
+      color: var(--clean-white);
+      font-weight: 600;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--clean-white);
+      font-weight: 600;
+      margin-left: 25px;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--brand-gold);
+    }
+
+    /* MAIN CONTAINER INTERFACE */
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 60px 20px;
+    }
+
+    .page-title {
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .page-title h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin: 0 0 5px 0;
+      background: linear-gradient(135deg, var(--brand-gold), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* SPLIT SYSTEM SPLIT LAYOUT */
+    .payment-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 180px; /* Layout split */
+      grid-template-columns: 1.3fr 1fr;
+      gap: 40px;
+    }
+
+    .card-panel {
+      background: var(--dark-card);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 35px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .card-panel h2 {
+      margin-top: 0;
+      font-size: 1.6rem;
+      color: var(--brand-gold);
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* OFFICIAL SETTLEMENT BANK CREDENTIAL DETAILS */
+    .bank-details-box {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      border: 2px solid var(--soft-peach);
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bank-details-box::after {
+      content: '\f19c';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 20px;
+      bottom: -10px;
+      font-size: 6rem;
+      color: rgba(255, 255, 255, 0.02);
+      pointer-events: none;
+    }
+
+    .bank-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .bank-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .bank-label {
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    .bank-value {
+      font-weight: 700;
+      color: var(--clean-white);
+    }
+
+    .copy-trigger {
+      color: var(--brand-gold);
+      cursor: pointer;
+      margin-left: 8px;
+      transition: 0.2s;
+    }
+
+    .copy-trigger:hover {
+      color: var(--accent-pink);
+    }
+
+    /* TRANSACTIONS STATEMENT MATRIX TABLE */
+    .ledger-table-container {
+      overflow-x: auto;
+    }
+
+    .ledger-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .ledger-table th {
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      color: #94a3b8;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .ledger-table td {
+      padding: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.95rem;
+    }
+
+    .ledger-table tr:hover td {
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    /* STATE STATUS BADGES */
+    .status-pill {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .status-verified { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid #10b981; }
+    .status-awaiting { background: rgba(245, 185, 66, 0.15); color: var(--brand-gold); border: 1px solid var(--brand-gold); }
+
+    /* UPLOAD RECEIPT FORM FIELDS */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+
+    .form-group select, .form-group input {
+      width: 100%;
+      padding: 14px;
+      background: var(--input-bg);
+      border: 1px solid #475569;
+      border-radius: 12px;
+      color: white;
+      font-size: 1rem;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .form-group select:focus, .form-group input:focus {
+      border-color: var(--brand-gold);
+    }
+
+    .file-dropzone {
+      position: relative;
+      border: 2px dashed #475569;
+      background: rgba(255, 255, 255, 0.01);
+      border-radius: 14px;
+      padding: 25px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .file-dropzone:hover {
+      border-color: var(--accent-pink);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .file-dropzone input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .action-submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary-blue), #1565c0);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(13, 71, 161, 0.3);
+      transition: 0.3s;
+    }
+
+    .action-submit-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .action-submit-btn:disabled {
+      background: #475569;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* WHATSAPP FLOAT LOGO */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 60px;
+      height: 60px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.8rem;
+      color: white;
+      text-decoration: none;
+      z-index: 1000;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    /* RESPONSIVE MEDIA BREAKPOINTS */
+    @media(max-width: 950px) {
+      .payment-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="navbar">
+    <div class="logo">
+      <span>HAMBAK</span>
+      <small>TECH & SERVICES</small>
+    </div>
+    <nav class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="shop.html">Shop</a>
+      <a href="orders.html">My Orders</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    
+    <div class="page-title">
+      <h1>Payment Center</h1>
+      <p style="color: #94a3b8; margin: 0;">Settle project invoices and manage statements for your design, typing, and printing tasks.</p>
+    </div>
+
+    <div class="payment-layout">
+      
+      <div style="display: flex; flex-direction: column; gap: 35px;">
+        
+        <div class="card-panel">
+          <h2><i class="fa-solid fa-building-columns"></i> Official Settlement Channels</h2>
+          <p style="color: #94a3b8; margin-top: -15px; margin-bottom: 20px; font-size: 0.9rem;">Initiate standard transfers using the details listed below, then upload your transaction receipt on the right side panel.</p>
+          
+          <div class="bank-details-box">
+            <div class="bank-row">
+              <span class="bank-label">Institution Bank:</span>
+              <span class="bank-value">OPay / Moniepoint</span>
+            </div>
+            <div class="bank-row">
+              <span class="bank-label">Account Identification Number:</span>
+              <span class="bank-value">
+                <span id="accountNum">9155104724</span>
+                <i class="fa-regular fa-copy copy-trigger" onclick="copyValueToClipboard()" title="Copy Account Code"></i>
+              </span>
+            </div>
+            <div class="bank-row">
+              <span class="bank-label">Beneficiary Account Name:</span>
+              <span class="bank-value">HAMBAK TECH & SERVICES</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-panel">
+          <h2><i class="fa-solid fa-receipt"></i> Statement Ledger History</h2>
+          <div class="ledger-table-container">
+            <table class="ledger-table">
+              <thead>
+                <tr>
+                  <th>Order Reference</th>
+                  <th>Date Logged</th>
+                  <th>Amount</th>
+                  <th>Verification Status</th>
+                </tr>
+              </thead>
+              <tbody id="paymentHistoryTarget">
+                <tr>
+                  <td colspan="4" style="text-align: center; color: #64748b; padding: 40px 0;">
+                    <i class="fa-solid fa-spinner fa-spin" style="margin-right: 8px;"></i> Querying payment statements...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card-panel" style="height: fit-content;">
+        <h2><i class="fa-solid fa-file-invoice-dollar"></i> Settle Order Bill</h2>
+        <p style="color: #94a3b8; margin-top: -15px; margin-bottom: 25px; font-size: 0.9rem;">Submit transaction reference details to clear administrative billing queues.</p>
+        
+        <form id="receiptSubmissionForm">
+          <div class="form-group">
+            <label for="orderSelectionDropdown">Select Pending Service Order</label>
+            <select id="orderSelectionDropdown" required>
+              <option value="">-- Fetching your active orders --</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="paymentAmount">Amount Paid (₦)</label>
+            <input type="number" id="paymentAmount" placeholder="e.g. 5000" min="50" required>
+          </div>
+
+          <div class="form-group">
+            <label>Upload Payment Receipt Image (Max 15KB Target)</label>
+            <div class="file-dropzone">
+              <i class="fa-solid fa-camera" style="font-size: 1.8rem; color: var(--brand-gold); margin-bottom: 8px;"></i>
+              <p style="margin: 0; font-size: 0.95rem; font-weight: 600;">Attach transaction screenshot</p>
+              <p id="receiptNameTracker" style="margin: 5px 0 0 0; font-size: 0.8rem; color: #64748b;">No file selected</p>
+              <input type="file" id="receiptFileField" accept="image/*" onchange="monitorReceiptFootprint(this)" required>
+            </div>
+          </div>
+
+          <button type="submit" class="action-submit-btn" id="uploadActionBtn">Submit Proof of Payment</button>
+        </form>
+      </div>
+
+    </div>
+
+  </div>
+
+  <a href="https://wa.me/2349155104724" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <script>
+    const CLOUD_API_ROOT = "https://hambak-tech-services.onrender.com/api";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const systemToken = localStorage.getItem("hambak_token");
+      if (!systemToken) {
+        alert("Session verification token missing. Routing to Login screen area.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      // Initialize workspace content data streams
+      loadActiveOrdersIntoDropdown(systemToken);
+      fetchPaymentLedgerStatements(systemToken);
+    });
+
+    /**
+     * Account string buffer copy system
+     */
+    function copyValueToClipboard() {
+      const accountString = document.getElementById("accountNum").innerText;
+      navigator.clipboard.writeText(accountString).then(() => {
+        alert("Account number copied securely to clipboard: " + accountString);
+      }).catch(err => {
+        console.error("Clipboard drop error handles:", err);
+      });
+    }
+
+    /**
+     * File sizing inspector keeping validation sizes lightweight
+     */
+    function monitorReceiptFootprint(inputNode) {
+      const labelText = document.getElementById("receiptNameTracker");
+      const targetFile = inputNode.files[0];
+
+      if (!targetFile) {
+        labelText.innerText = "No file selected";
+        labelText.style.color = "#64748b";
+        return;
+      }
+
+      const calculatedSizeKb = targetFile.size / 1024;
+      labelText.innerText = `${targetFile.name} (${calculatedSizeKb.toFixed(1)} KB)`;
+
+      // Verification alert for asset footprints above 15kb
+      if (calculatedSizeKb > 15) {
+        labelText.innerText += " - Note: File exceeds standard 15KB recommendations.";
+        labelText.style.color = var(--brand-gold);
+      } else {
+        labelText.style.color = "#10b981";
+      }
+    }
+
+    /**
+     * Fetches client service requests to load into the selection field
+     */
+    async function loadActiveOrdersIntoDropdown(token) {
+      const dropdownSelect = document.getElementById("orderSelectionDropdown");
+      
+      try {
+        const response = await fetch(`${CLOUD_API_ROOT}/orders/myorders`, {
+          method: "GET",
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        const payloadData = await response.json();
+        const usersOrders = payloadData.orders || [];
+
+        if (usersOrders.length === 0) {
+          dropdownSelect.innerHTML = '<option value="">No pending orders found</option>';
+          return;
+        }
+
+        dropdownSelect.innerHTML = '<option value="">-- Choose Order Target --</option>';
+        usersOrders.forEach(order => {
+          const serviceLabelName = order.service ? order.service.name : "Custom Task Asset";
+          dropdownSelect.innerHTML += `
+            <option value="${order._id}">₦${Number(order.amount).toLocaleString()} - ${serviceLabelName} (${order._id.substring(order._id.length - 6)})</option>
+          `;
+        });
+      } catch (err) {
+        console.error("Dropdown injection failure:", err);
+        dropdownSelect.innerHTML = '<option value="">Error fetching orders stream</option>';
+      }
+    }
+
+    /**
+     * Gathers payment histories matching authentication records
+     */
+    async function fetchPaymentLedgerStatements(token) {
+      const ledgerTarget = document.getElementById("paymentHistoryTarget");
+      
+      try {
+        // Query route linked directly to the Render endpoint framework
+        const response = await fetch(`${CLOUD_API_ROOT}/orders/myorders`, {
+          method: "GET",
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        const fullPayload = await response.json();
+        const relevantOrders = fullPayload.orders || [];
+
+        if (relevantOrders.length === 0) {
+          ledgerTarget.innerHTML = `
+            <tr>
+              <td colspan="4" style="text-align: center; color: #64748b; padding: 30px 0;">No past statements or invoices found.</td>
+            </tr>
+          `;
+          return;
+        }
+
+        ledgerTarget.innerHTML = "";
+        relevantOrders.forEach(item => {
+          const dateString = item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-NG') : "Recent";
+          
+          // Map payment status dynamically based on administrative review states
+          const isSettled = item.status === "completed" || item.status === "processing";
+          const statusText = isSettled ? "Verified Settlement" : "Awaiting Verification";
+          const statusClass = isSettled ? "status-verified" : "status-awaiting";
+
+          ledgerTarget.innerHTML += `
+            <tr>
+              <td style="font-family: monospace; color: var(--brand-gold); font-weight: bold;">#${item._id.substring(item._id.length - 8)}</td>
+              <td>${dateString}</td>
+              <td style="font-weight: 700; color: #10b981;">₦${Number(item.amount).toLocaleString()}</td>
+              <td><span class="status-pill ${statusClass}">${statusText}</span></td>
+            </tr>
+          `;
+        });
+      } catch (error) {
+        console.error("Ledger mapping error handles:", error);
+        ledgerTarget.innerHTML = `
+          <tr>
+            <td colspan="4" style="text-align: center; color: #ef4444; padding: 30px 0;">Failed to establish communication line with cloud data stack.</td>
+          </tr>
+        `;
+      }
+    }
+
+    // Intercept form submission to post the payment validation data packet
+    document.getElementById("receiptSubmissionForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const actionBtn = document.getElementById("uploadActionBtn");
+      
+      actionBtn.disabled = true;
+      actionBtn.innerText = "Transmitting Receipt File...";
+
+      const userSessionToken = localStorage.getItem("hambak_token");
+      const transactionFormData = new FormData();
+
+      transactionFormData.append("orderId", document.getElementById("orderSelectionDropdown").value);
+      transactionFormData.append("amountPaid", document.getElementById("paymentAmount").value);
+      transactionFormData.append("file", document.getElementById("receiptFileField").files[0]);
+
+      try {
+        // Direct integration loop pointing out to your operational database structures
+        const submitResponse = await fetch(`${CLOUD_API_ROOT}/orders/pay`, {
+          method: "POST",
+          headers: { "Authorization": `Bearer ${userSessionToken}` },
+          body: transactionFormData
+        });
+
+        const feedbackResult = await submitResponse.json();
+
+        if (submitResponse.ok || feedbackResult.success) {
+          alert("Proof of payment successfully submitted! Administrators will verify the ledger shortly.");
+          location.reload();
+        } else {
+          alert("Submission dropped: " + (feedbackResult.message || "Invalid criteria mapping details."));
+          actionBtn.disabled = false;
+          actionBtn.innerText = "Submit Proof of Payment";
+        }
+      } catch (submitErr) {
+        console.error("Receipt upload network exception:", submitErr);
+        alert("Network execution error. Could not reach validation backend nodes.");
+        actionBtn.disabled = false;
+        actionBtn.innerText = "Submit Proof of Payment";
+      }
+    });
+  </script>
+
+</body>
+</html>
