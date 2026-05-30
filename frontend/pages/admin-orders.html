@@ -2,711 +2,440 @@
 <html lang="en">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Orders | HAMBAK</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+    }
 
-<meta charset="UTF-8">
+    .admin-container {
+      display: flex;
+      min-height: 100vh;
+    }
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
->
+    .sidebar {
+      width: 260px;
+      background: #081120;
+      padding: 30px 20px;
+      position: fixed;
+      height: 100%;
+    }
 
-<title>
-Admin Orders | HAMBAK
-</title>
+    .logo {
+      text-align: center;
+      margin-bottom: 40px;
+    }
 
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
->
+    .logo h2 {
+      color: #f5b942;
+      margin: 0;
+      font-size: 1.8rem;
+    }
 
-<style>
+    .logo p {
+      margin: 5px 0 0 0;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      letter-spacing: 2px;
+    }
 
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#0f172a;
-color:white;
-}
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
 
-.admin-container{
-display:flex;
-min-height:100vh;
-}
+    .menu a {
+      text-decoration: none;
+      color: #cbd5e1;
+      padding: 14px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: 0.3s;
+    }
 
-.sidebar{
-width:260px;
-background:#081120;
-padding:30px 20px;
-position:fixed;
-height:100%;
-}
+    .menu a:hover {
+      background: #0d47a1;
+      color: white;
+    }
 
-.logo{
-text-align:center;
-margin-bottom:40px;
-}
+    .main {
+      margin-left: 260px;
+      flex: 1;
+      padding: 40px;
+    }
 
-.logo h2{
-color:#f5b942;
-}
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
 
-.menu{
-display:flex;
-flex-direction:column;
-gap:15px;
-}
+    .search-box {
+      margin-bottom: 25px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
 
-.menu a{
-text-decoration:none;
-color:#cbd5e1;
-padding:14px;
-border-radius:12px;
-display:flex;
-align-items:center;
-gap:12px;
-transition:0.3s;
-}
+    .search-box input,
+    .search-box select {
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      min-width: 250px;
+      background: #1e293b;
+      color: white;
+    }
 
-.menu a:hover{
-background:#0d47a1;
-color:white;
-}
+    .search-box input::placeholder {
+      color: #94a3b8;
+    }
 
-.main{
-margin-left:260px;
-flex:1;
-padding:40px;
-}
+    .table-box {
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 20px;
+      overflow: auto;
+    }
 
-.topbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
-}
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-.search-box{
-margin-bottom:25px;
-display:flex;
-gap:15px;
-flex-wrap:wrap;
-}
+    table th,
+    table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
 
-.search-box input,
-.search-box select{
-padding:14px;
-border:none;
-border-radius:10px;
-min-width:250px;
-}
+    table th {
+      background: #0d47a1;
+    }
 
-.table-box{
-background:#1e293b;
-padding:30px;
-border-radius:20px;
-overflow:auto;
-}
+    .status {
+      padding: 7px 14px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      display: inline-block;
+    }
 
-table{
-width:100%;
-border-collapse:collapse;
-}
+    .pending { background: #f59e0b; }
+    .processing { background: #2563eb; }
+    .completed { background: #16a34a; }
+    .cancelled { background: #dc2626; }
 
-table th,
-table td{
-padding:15px;
-text-align:left;
-border-bottom:
-1px solid rgba(255,255,255,0.1);
-}
+    .action-btn {
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-right: 5px;
+      color: white;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
 
-table th{
-background:#0d47a1;
-}
+    .action-btn:hover {
+      opacity: 0.9;
+    }
 
-.status{
-padding:7px 14px;
-border-radius:50px;
-font-size:0.85rem;
-font-weight:bold;
-}
+    .complete-btn { background: #16a34a; }
+    .delete-btn { background: #dc2626; }
+    .print-btn { background: #2563eb; }
 
-.pending{
-background:#f59e0b;
-}
-
-.processing{
-background:#2563eb;
-}
-
-.completed{
-background:#16a34a;
-}
-
-.cancelled{
-background:#dc2626;
-}
-
-.action-btn{
-border:none;
-padding:10px 15px;
-border-radius:8px;
-cursor:pointer;
-margin-right:5px;
-color:white;
-}
-
-.complete-btn{
-background:#16a34a;
-}
-
-.delete-btn{
-background:#dc2626;
-}
-
-.print-btn{
-background:#2563eb;
-}
-
-@media(max-width:900px){
-
-.admin-container{
-flex-direction:column;
-}
-
-.sidebar{
-position:relative;
-width:100%;
-height:auto;
-}
-
-.main{
-margin-left:0;
-}
-
-}
-
-</style>
-
+    @media(max-width: 900px) {
+      .admin-container {
+        flex-direction: column;
+      }
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        box-sizing: border-box;
+      }
+      .main {
+        margin-left: 0;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="admin-container">
-
-<!-- SIDEBAR -->
-
-<div class="sidebar">
-
-<div class="logo">
-
-<h2>HAMBAK</h2>
-
-<p>ADMIN PANEL</p>
-
-</div>
-
-<div class="menu">
-
-<a href="admin.html">
-<i class="fa-solid fa-chart-line"></i>
-Dashboard
-</a>
-
-<a href="admin-services.html">
-<i class="fa-solid fa-briefcase"></i>
-Services
-</a>
-
-<a href="admin-users.html">
-<i class="fa-solid fa-users"></i>
-Users
-</a>
-
-<a href="admin-orders.html">
-<i class="fa-solid fa-cart-shopping"></i>
-Orders
-</a>
-
-<a href="#" id="logoutBtn">
-<i class="fa-solid fa-right-from-bracket"></i>
-Logout
-</a>
-
-</div>
-
-</div>
-
-<!-- MAIN -->
-
-<div class="main">
-
-<div class="topbar">
-
-<h1>
-Manage Orders
-</h1>
-
-<h3 id="adminName">
-Admin
-</h3>
-
-</div>
-
-<!-- SEARCH -->
-
-<div class="search-box">
-
-<input
-type="text"
-id="searchInput"
-placeholder="Search customer/service..."
->
-
-<select id="statusFilter">
-
-<option value="">
-All Status
-</option>
-
-<option value="Pending">
-Pending
-</option>
-
-<option value="Processing">
-Processing
-</option>
-
-<option value="Completed">
-Completed
-</option>
-
-<option value="Cancelled">
-Cancelled
-</option>
-
-</select>
-
-</div>
-
-<!-- TABLE -->
-
-<div class="table-box">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Customer</th>
-<th>Phone</th>
-<th>Service</th>
-<th>Amount</th>
-<th>Status</th>
-<th>File</th>
-<th>Actions</th>
-
-</tr>
-
-</thead>
-
-<tbody id="ordersTable">
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-</div>
-
-<script>
-
-/* =========================
-AUTH
-========================= */
-
-const user =
-JSON.parse(
-localStorage.getItem(
-"hambak_user"
-)
-);
-
-const token =
-localStorage.getItem(
-"hambak_token"
-);
-
-if(!user || !token){
-
-window.location.href =
-"login.html";
-
-}
-
-document.getElementById(
-"adminName"
-).innerHTML =
-user.name;
-
-/* =========================
-LOAD ORDERS
-========================= */
-
-async function loadOrders(){
-
-try{
-
-const response =
-await fetch(
-"http://localhost:5000/api/orders",
-{
-headers:{
-Authorization:
-`Bearer ${token}`
-}
-}
-);
-
-const data =
-await response.json();
-
-const table =
-document.getElementById(
-"ordersTable"
-);
-
-table.innerHTML = "";
-
-const search =
-document.getElementById(
-"searchInput"
-).value.toLowerCase();
-
-const statusFilter =
-document.getElementById(
-"statusFilter"
-).value;
-
-let orders =
-data.orders;
-
-if(search){
-
-orders =
-orders.filter(order=>
-
-order.customerName
-.toLowerCase()
-.includes(search)
-
-||
-
-order.service?.name
-?.toLowerCase()
-.includes(search)
-
-);
-
-}
-
-if(statusFilter){
-
-orders =
-orders.filter(order=>
-
-order.status === statusFilter
-
-);
-
-}
-
-orders.forEach(order=>{
-
-table.innerHTML += `
-
-<tr>
-
-<td>
-${order.customerName}
-</td>
-
-<td>
-${order.customerPhone}
-</td>
-
-<td>
-${order.service?.name || "Service"}
-</td>
-
-<td>
-₦${Number(order.amount).toLocaleString()}
-</td>
-
-<td>
-
-<span class="status ${order.status.toLowerCase()}">
-
-${order.status}
-
-</span>
-
-</td>
-
-<td>
-
-${
-order.file
-?
-
-`<a
-href="http://localhost:5000${order.file}"
-target="_blank"
-style="color:#60a5fa;"
->
-View File
-</a>`
-
-:
-
-"No File"
-
-}
-
-</td>
-
-<td>
-
-<button
-class="action-btn complete-btn"
-onclick="updateStatus(
-'${order._id}',
-'Completed'
-)"
->
-
-Complete
-
-</button>
-
-<button
-class="action-btn delete-btn"
-onclick="deleteOrder(
-'${order._id}'
-)"
->
-
-Delete
-
-</button>
-
-<button
-class="action-btn print-btn"
-onclick="printReceipt(
-'${order.customerName}',
-'${order.service?.name || ""}',
-'${order.amount}',
-'${order.status}'
-)"
->
-
-Print
-
-</button>
-
-</td>
-
-</tr>
-
-`;
-
-});
-
-}catch(error){
-
-console.log(error);
-
-}
-
-}
-
-/* =========================
-UPDATE STATUS
-========================= */
-
-async function updateStatus(id,status){
-
-try{
-
-await fetch(
-
-`http://localhost:5000/api/orders/${id}`,
-
-{
-method:"PUT",
-
-headers:{
-"Content-Type":
-"application/json",
-
-Authorization:
-`Bearer ${token}`
-},
-
-body:JSON.stringify({
-status
-})
-
-}
-
-);
-
-loadOrders();
-
-}catch(error){
-
-console.log(error);
-
-}
-
-}
-
-/* =========================
-DELETE ORDER
-========================= */
-
-async function deleteOrder(id){
-
-const confirmDelete =
-confirm(
-"Delete this order?"
-);
-
-if(!confirmDelete){
-
-return;
-
-}
-
-try{
-
-await fetch(
-
-`http://localhost:5000/api/orders/${id}`,
-
-{
-method:"DELETE",
-
-headers:{
-Authorization:
-`Bearer ${token}`
-}
-}
-
-);
-
-loadOrders();
-
-}catch(error){
-
-console.log(error);
-
-}
-
-}
-
-/* =========================
-PRINT RECEIPT
-========================= */
-
-function printReceipt(
-customer,
-service,
-amount,
-status
-){
-
-const receipt = `
-
-HAMBAK TECH & SERVICES
-
-Customer: ${customer}
-
-Service: ${service}
-
-Amount: ₦${amount}
-
-Status: ${status}
-
-Thank you for your patronage.
-
-`;
-
-const win =
-window.open(
-"",
-"",
-"width=800,height=600"
-);
-
-win.document.write(
-`<pre>${receipt}</pre>`
-);
-
-win.print();
-
-}
-
-/* =========================
-SEARCH EVENTS
-========================= */
-
-document.getElementById(
-"searchInput"
-).addEventListener(
-"input",
-loadOrders
-);
-
-document.getElementById(
-"statusFilter"
-).addEventListener(
-"change",
-loadOrders
-);
-
-/* =========================
-LOGOUT
-========================= */
-
-document.getElementById(
-"logoutBtn"
-).addEventListener(
-"click",
-()=>{
-
-localStorage.removeItem(
-"hambak_user"
-);
-
-localStorage.removeItem(
-"hambak_token"
-);
-
-window.location.href =
-"login.html";
-
-}
-);
-
-loadOrders();
-
-</script>
+  <div class="admin-container">
+
+    <div class="sidebar">
+      <div class="logo">
+        <h2>HAMBAK</h2>
+        <p>ADMIN PANEL</p>
+      </div>
+      <div class="menu">
+        <a href="admin.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        <a href="admin-services.html"><i class="fa-solid fa-briefcase"></i> Services</a>
+        <a href="admin-users.html"><i class="fa-solid fa-users"></i> Users</a>
+        <a href="admin-orders.html"><i class="fa-solid fa-cart-shopping"></i> Orders</a>
+        <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="topbar">
+        <h1>Manage Orders</h1>
+        <h3 id="adminName">Admin</h3>
+      </div>
+
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search customer or service...">
+        <select id="statusFilter">
+          <option value="">All Statuses</option>
+          <option value="Pending">Pending</option>
+          <option value="Processing">Processing</option>
+          <option value="Completed">Completed</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
+
+      <div class="table-box">
+        <table>
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Phone</th>
+              <th>Service</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Document Asset</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTable">
+            </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* ==========================================================
+       AUTHENTICATION & ENVIRONMENT CONFIGURATION
+       ========================================================== */
+    const LIVE_API_URL = "https://hambak-tech-services.onrender.com";
+    const user = JSON.parse(localStorage.getItem("hambak_user"));
+    const token = localStorage.getItem("hambak_token");
+
+    if (!user || !token) {
+      window.location.href = "login.html";
+    } else {
+      document.getElementById("adminName").innerHTML = user.name;
+    }
+
+    /* ==========================================================
+       DATA LOADER & RENDER ENGINE
+       ========================================================== */
+    async function loadOrders() {
+      try {
+        const response = await fetch(`${LIVE_API_URL}/api/orders`, {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        const data = await response.json();
+        const table = document.getElementById("ordersTable");
+        table.innerHTML = "";
+
+        const search = document.getElementById("searchInput").value.toLowerCase();
+        const statusFilter = document.getElementById("statusFilter").value;
+
+        if (!data.orders) return;
+        let orders = data.orders;
+
+        if (search) {
+          orders = orders.filter(order =>
+            order.customerName.toLowerCase().includes(search) ||
+            (order.service && order.service.name && order.service.name.toLowerCase().includes(search))
+          );
+        }
+
+        if (statusFilter) {
+          orders = orders.filter(order => order.status === statusFilter);
+        }
+
+        orders.forEach(order => {
+          const serviceName = order.service && order.service.name ? order.service.name : "Custom Digital Service";
+          const formattedAmount = Number(order.amount).toLocaleString();
+          
+          // Resource File URL evaluation Check
+          let fileCellLink = "<em>No File Uploaded</em>";
+          if (order.file) {
+            const secureFileUrl = order.file.startsWith("http") ? order.file : `${LIVE_API_URL}${order.file}`;
+            fileCellLink = `<a href="${secureFileUrl}" target="_blank" style="color:#60a5fa; font-weight:600;"><i class="fa-solid fa-file-arrow-down"></i> View Asset</a>`;
+          }
+
+          table.innerHTML += `
+            <tr>
+              <td><strong>${order.customerName}</strong></td>
+              <td>${order.customerPhone || "N/A"}</td>
+              <td>${serviceName}</td>
+              <td>₦${formattedAmount}</td>
+              <td><span class="status ${order.status.toLowerCase()}">${order.status}</span></td>
+              <td>${fileCellLink}</td>
+              <td>
+                ${order.status !== 'Completed' ? `
+                  <button class="action-btn complete-btn" onclick="updateStatus('${order._id}', 'Completed')">
+                    Complete
+                  </button>
+                ` : ''}
+                <button class="action-btn delete-btn" onclick="deleteOrder('${order._id}')">
+                  Delete
+                </button>
+                <button class="action-btn print-btn" onclick="printReceipt('${order.customerName.replace(/'/g, "\\'")}', '${serviceName.replace(/'/g, "\\'")}', '${order.amount}', '${order.status}')">
+                  Print Invoice
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+      } catch (error) {
+        console.error("Orders Matrix Critical Fetch Error:", error);
+      }
+    }
+
+    /* ==========================================================
+       ORDER ARCHITECTURE CONTROL MUTATIONS
+       ========================================================== */
+    async function updateStatus(id, status) {
+      try {
+        const response = await fetch(`${LIVE_API_URL}/api/orders/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({ status })
+        });
+        
+        if (response.ok) {
+          loadOrders();
+        } else {
+          alert("Failed to modify target order status parameters.");
+        }
+      } catch (error) {
+        console.error("Status Modification Exception:", error);
+      }
+    }
+
+    async function deleteOrder(id) {
+      if (!confirm("Are you sure you want to permanently erase this order index records?")) return;
+
+      try {
+        const response = await fetch(`${LIVE_API_URL}/api/orders/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          loadOrders();
+        } else {
+          alert("Error encountered processing deletion target layout.");
+        }
+      } catch (error) {
+        console.error("Delete Endpoint Interface Exception:", error);
+      }
+    }
+
+    /* ==========================================================
+       DYNAMIC BUSINESS RECEIPT GENERATION ENGINE
+       ========================================================== */
+    function printReceipt(customer, service, amount, status) {
+      const receiptWindow = window.open("", "", "width=450,height=650");
+      const localDateString = new Date().toLocaleString('en-NG', { timeZone: 'Africa/Lagos' });
+
+      receiptWindow.document.write(`
+        <html>
+        <head>
+          <title>Receipt - HAMBAK TECH</title>
+          <style>
+            body { font-family: 'Courier New', Courier, monospace; padding: 20px; color: #000; background: #fff; line-height: 1.4; }
+            .header { text-align: center; border-bottom: 2px dashed #000; padding-bottom: 15px; margin-bottom: 15px; }
+            .header h2 { margin: 0 0 5px 0; font-size: 22px; letter-spacing: 1px; }
+            .header p { margin: 0; font-size: 12px; }
+            .meta-info { font-size: 13px; margin-bottom: 15px; }
+            .line-item { display: flex; justify-content: space-between; font-size: 14px; margin: 8px 0; }
+            .total-line { border-top: 1px dashed #000; border-bottom: 2px double #000; padding: 10px 0; font-weight: bold; font-size: 16px; margin-top: 15px; }
+            .footer { text-align: center; margin-top: 30px; font-size: 12px; border-top: 1px dashed #000; padding-top: 15px; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h2>HAMBAK TECH & SERVICES</h2>
+            <p>Ibeju-Lekki, Lagos, Nigeria</p>
+            <p>Phone: 09127469686 | Email: hambak901@gmail.com</p>
+          </div>
+          <div class="meta-info">
+            <strong>Date:</strong> ${localDateString}<br>
+            <strong>Customer:</strong> ${customer}<br>
+            <strong>Status:</strong> ${status.toUpperCase()}
+          </div>
+          <div class="line-item">
+            <span>Item Description</span>
+            <span>Price</span>
+          </div>
+          <hr style="border: 0; border-top: 1px dashed #000; margin: 5px 0;">
+          <div class="line-item">
+            <span>${service}</span>
+            <span>₦${Number(amount).toLocaleString()}</span>
+          </div>
+          <div class="line-item total-line">
+            <span>TOTAL PAID:</span>
+            <span>₦${Number(amount).toLocaleString()}</span>
+          </div>
+          <div class="footer">
+            <p>Thank you for your valued patronage!</p>
+            <p>*** Powered by Hambak Matrix Gateway ***</p>
+          </div>
+          <script type="text/javascript">
+            window.onload = function() { window.print(); setTimeout(function(){ window.close(); }, 500); }
+          <\/script>
+        </body>
+        </html>
+      `);
+      receiptWindow.document.close();
+    }
+
+    /* ==========================================================
+       UI CONTROLLER EVENT LISTENERS
+       ========================================================== */
+    document.getElementById("searchInput").addEventListener("input", loadOrders);
+    document.getElementById("statusFilter").addEventListener("change", loadOrders);
+
+    document.getElementById("logoutBtn").addEventListener("click", (e) => {
+      e.preventDefault();
+      localStorage.removeItem("hambak_user");
+      localStorage.removeItem("hambak_token");
+      window.location.href = "login.html";
+    });
+
+    // Run Data Sweep Lifecycle Sequence on Page Init
+    loadOrders();
+  </script>
 
 </body>
-
 </html>
