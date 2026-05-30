@@ -64,19 +64,20 @@
     .sidebar-links {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 5px;
     }
 
     .sidebar-links a {
       text-decoration: none;
       color: #cbd5e1;
-      padding: 14px 18px;
+      padding: 12px 15px;
       border-radius: 12px;
       transition: 0.3s;
       display: flex;
       align-items: center;
       gap: 15px;
       font-weight: 600;
+      cursor: pointer;
     }
 
     .sidebar-links a:hover,
@@ -85,7 +86,6 @@
       color: white;
     }
 
-    /* ADMIN ONLY BACKEND ACTION TAGS */
     .admin-only-tab {
       border-left: 4px solid var(--brand-gold);
       background: rgba(245, 185, 66, 0.05);
@@ -131,6 +131,32 @@
       border: 2px solid var(--brand-gold);
     }
 
+    /* SINGLE PAGE APPLICATION VIEW SYSTEM */
+    .app-view {
+      display: none;
+    }
+
+    .app-view.active-view {
+      display: block;
+    }
+
+    /* SECTIONAL MODULE CARDS */
+    .module-card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      margin-bottom: 30px;
+    }
+
+    .module-card h2 {
+      color: var(--deep-navy);
+      margin-bottom: 20px;
+      font-weight: 800;
+      border-left: 5px solid var(--primary-blue);
+      padding-left: 15px;
+    }
+
     /* STATS METRIC MATRIX */
     .stats-grid {
       display: grid;
@@ -144,8 +170,6 @@
       padding: 30px;
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-      position: relative;
-      overflow: hidden;
     }
 
     .stat-card i {
@@ -166,7 +190,7 @@
       font-weight: 600;
     }
 
-    /* WALLET PROFILES */
+    /* WALLET CARD SPECIFICATIONS */
     .wallet-card {
       background: linear-gradient(135deg, var(--primary-blue), #1565c0);
       color: white;
@@ -177,22 +201,10 @@
       border-bottom: 4px solid var(--brand-gold);
     }
 
-    .wallet-card h3 {
-      margin-bottom: 10px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-
     .wallet-balance {
       font-size: 3rem;
       font-weight: bold;
       margin-bottom: 20px;
-    }
-
-    .wallet-actions {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
     }
 
     .wallet-actions button {
@@ -201,28 +213,57 @@
       border-radius: 12px;
       cursor: pointer;
       font-weight: bold;
-      transition: 0.2s ease;
+      margin-right: 10px;
     }
 
-    .deposit-btn {
-      background: var(--brand-gold);
-      color: var(--deep-navy);
+    .deposit-btn { background: var(--brand-gold); color: var(--deep-navy); }
+    .withdraw-btn { background: white; color: var(--primary-blue); }
+
+    /* SERVICE ORDER GRID MODAL FORM DESIGN */
+    .order-form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
     }
 
-    .deposit-btn:hover {
-      background: #e0aa3e;
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    .withdraw-btn {
-      background: white;
-      color: var(--primary-blue);
+    .form-group label {
+      font-weight: 700;
+      color: #475569;
     }
 
-    .withdraw-btn:hover {
-      background: #f1f5f9;
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      outline: none;
+      font-size: 1rem;
     }
 
-    /* ANALYTICS CHARTS SECTION */
+    .form-group input:focus {
+      border-color: var(--primary-blue);
+    }
+
+    .submit-action-btn {
+      background: var(--primary-blue);
+      color: white;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      margin-top: 20px;
+    }
+
+    .submit-action-btn:hover { background: #1565c0; }
+
+    /* CHARTS CONTAINER */
     .chart-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -237,35 +278,13 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     }
 
-    .chart-card h3 {
-      color: #0f172a;
-      margin-bottom: 20px;
-      font-weight: 700;
-    }
-
-    /* DATA TABLES */
-    .table-box {
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-      overflow: auto;
-      margin-bottom: 40px;
-    }
-
-    .table-box h2 {
-      margin-bottom: 20px;
-      color: #0f172a;
-      font-weight: 800;
-    }
-
     table {
       width: 100%;
       border-collapse: collapse;
+      margin-top: 15px;
     }
 
-    table th,
-    table td {
+    table th, table td {
       padding: 16px;
       text-align: left;
       border-bottom: 1px solid #e2e8f0;
@@ -274,20 +293,6 @@
     table th {
       background: var(--primary-blue);
       color: white;
-      font-weight: 600;
-    }
-
-    /* SYSTEM NOTIFICATIONS */
-    .notifications {
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    }
-
-    .notifications h2 {
-      margin-bottom: 20px;
-      font-weight: 800;
     }
 
     .notice {
@@ -296,32 +301,14 @@
       background: #f8fafc;
       margin-bottom: 15px;
       border-radius: 10px;
-      color: #334155;
-      font-weight: 500;
     }
 
-    /* DYNAMIC ADMIN PRIVILEGE CONTAINERS */
-    .admin-block-section {
-      display: none;
-    }
+    .admin-block-section { display: none; }
 
-    /* SCREEN RESPONSIVENESS */
     @media(max-width:900px) {
-      .dashboard {
-        flex-direction: column;
-      }
-
-      .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
-        padding: 20px;
-      }
-
-      .dashboard-main {
-        margin-left: 0;
-        padding: 20px;
-      }
+      .dashboard { flex-direction: column; }
+      .sidebar { position: relative; width: 100%; height: auto; padding: 20px; }
+      .dashboard-main { margin-left: 0; padding: 20px; }
     }
   </style>
 </head>
@@ -337,13 +324,13 @@
       </div>
 
       <div class="sidebar-links">
-        <a href="#" class="active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
-        <a href="#"><i class="fa-solid fa-wallet"></i> Wallet</a>
-        <a href="#"><i class="fa-solid fa-cart-shopping"></i> Orders</a>
-        <a href="#"><i class="fa-solid fa-id-card"></i> NIN Services</a>
-        <a href="#"><i class="fa-solid fa-print"></i> Printing</a>
-        <a href="#"><i class="fa-solid fa-graduation-cap"></i> Training</a>
-        <a href="#"><i class="fa-solid fa-gamepad"></i> Game Center</a>
+        <a id="nav-home" class="active" onclick="showSection('home-view')"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        <a id="nav-wallet" onclick="showSection('wallet-view')"><i class="fa-solid fa-wallet"></i> Wallet</a>
+        <a id="nav-orders" onclick="showSection('orders-view')"><i class="fa-solid fa-cart-shopping"></i> Orders Panel</a>
+        <a id="nav-nin" onclick="showSection('nin-view')"><i class="fa-solid fa-id-card"></i> NIN Services</a>
+        <a id="nav-print" onclick="showSection('print-view')"><i class="fa-solid fa-print"></i> Printing Node</a>
+        <a id="nav-training" onclick="showSection('training-view')"><i class="fa-solid fa-graduation-cap"></i> ICT Training</a>
+        <a id="nav-game" onclick="showSection('game-view')"><i class="fa-solid fa-gamepad"></i> Game Center</a>
         
         <a href="#" class="admin-block-section admin-only-tab" id="adminUsersLink"><i class="fa-solid fa-users-gear"></i> Manage Users</a>
         <a href="#" class="admin-block-section admin-only-tab" id="adminServicesLink"><i class="fa-solid fa-gears"></i> Core Settings</a>
@@ -359,91 +346,133 @@
         <div class="profile-box">
           <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Hambak" alt="profile">
           <div>
-            <h4 id="userName">Loading...</h4>
+            <h4 id="userName">Loading Name Parameters...</h4>
             <small id="userRole" style="text-transform: uppercase; font-weight: bold; color: var(--primary-blue);">Customer</small>
           </div>
         </div>
       </div>
 
-      <div class="wallet-card">
-        <h3>Account Fund Wallet Balance</h3>
-        <div class="wallet-balance">₦0.00</div>
-        <div class="wallet-actions">
-          <button class="deposit-btn"><i class="fa-solid fa-arrow-down-left"></i> Deposit</button>
-          <button class="withdraw-btn"><i class="fa-solid fa-paper-plane"></i> Transfer</button>
+      <div id="home-view" class="app-view active-view">
+        <div class="wallet-card">
+          <h3>Available Wallet Balance</h3>
+          <div class="wallet-balance">₦0.00</div>
+          <div class="wallet-actions">
+            <button class="deposit-btn" onclick="showSection('wallet-view')">Deposit Cash</button>
+          </div>
+        </div>
+
+        <div id="adminAnalyticsSection" class="admin-block-section">
+          <div class="stats-grid">
+            <div class="stat-card"><i class="fa-solid fa-cart-shopping"></i><h2>150</h2><p>Total Server Orders</p></div>
+            <div class="stat-card"><i class="fa-solid fa-money-bill-wave"></i><h2>₦450K</h2><p>Ecosystem Revenue</p></div>
+            <div class="stat-card"><i class="fa-solid fa-users"></i><h2>85</h2><p>Active Clients</p></div>
+            <div class="stat-card"><i class="fa-solid fa-chart-column"></i><h2>92%</h2><p>Growth Scale</p></div>
+          </div>
+          <div class="chart-grid">
+            <div class="chart-card"><h3>Revenue Graph</h3><canvas id="revenueChart"></canvas></div>
+            <div class="chart-card"><h3>Deployment Metrics</h3><canvas id="serviceChart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="table-box">
+          <h2>Recent Universal System Logs</h2>
+          <table>
+            <thead><tr><th>Service Category</th><th>Amount</th><th>Status</th><th>Date Logged</th></tr></thead>
+            <tbody>
+              <tr><td>Core Workspace Account Verification</td><td>₦0.00</td><td style="color:#25d366; font-weight:bold;">Success</td><td>Live Status</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <div id="adminAnalyticsSection" class="admin-block-section">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <i class="fa-solid fa-cart-shopping"></i>
-            <h2>150</h2>
-            <p>Total Server Orders</p>
-          </div>
-          <div class="stat-card">
-            <i class="fa-solid fa-money-bill-wave"></i>
-            <h2>₦450K</h2>
-            <p>Ecosystem Revenue</p>
-          </div>
-          <div class="stat-card">
-            <i class="fa-solid fa-users"></i>
-            <h2>85</h2>
-            <p>Active Registered Clients</p>
-          </div>
-          <div class="stat-card">
-            <i class="fa-solid fa-chart-column"></i>
-            <h2>92%</h2>
-            <p>Growth Scale Rate</p>
-          </div>
-        </div>
-
-        <div class="chart-grid">
-          <div class="chart-card">
-            <h3>Revenue Analytics Graph</h3>
-            <canvas id="revenueChart"></canvas>
-          </div>
-          <div class="chart-card">
-            <h3>Services Deployment Usage</h3>
-            <canvas id="serviceChart"></canvas>
+      <div id="wallet-view" class="app-view">
+        <div class="module-card">
+          <h2>My Hambak Wallet Balance Manager</h2>
+          <div class="wallet-balance" style="color: var(--deep-navy);">₦0.00</div>
+          <p style="color: #64748b; margin-bottom: 20px;">Add funds securely via automated bank transfer channel to execute technical services.</p>
+          
+          <div style="background: var(--soft-peach); padding: 20px; border-radius: 12px; color: var(--deep-navy); margin-bottom: 25px;">
+            <strong>Bank Deposit Account (Automated Paystack Processing Node):</strong><br>
+            Wema Bank Account Number: <span style="font-weight: 800; color: var(--primary-blue);">9928174621</span><br>
+            Account Reference Name: <span style="font-weight: 800;">HAMBAK TECH - Payments Matrix</span>
           </div>
         </div>
       </div>
 
-      <div class="table-box">
-        <h2>Recent Account Activity</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Service Details</th>
-              <th>Amount Parameter</th>
-              <th>Status Badge</th>
-              <th>Execution Date</th>
-            </tr>
-          </thead>
-          <tbody id="transactionTableBody">
-            <tr>
-              <td>NIN Modification Tracker</td>
-              <td>₦2,000.00</td>
-              <td style="color:#25d366; font-weight:bold;">Completed</td>
-              <td>2026-05-12</td>
-            </tr>
-            <tr>
-              <td>WAEC Exam Registration Unit</td>
-              <td>₦5,000.00</td>
-              <td style="color:var(--brand-gold); font-weight:bold;">Pending</td>
-              <td>2026-05-14</td>
-            </tr>
-          </tbody>
-        </table>
+      <div id="orders-view" class="app-view">
+        <div class="module-card">
+          <h2>Ecosystem Services Order Logs</h2>
+          <table>
+            <thead><tr><th>Order ID Reference</th><th>Item System Description</th><th>Price Metric</th><th>Status Grid</th></tr></thead>
+            <tbody id="ordersLogTable">
+              <tr><td colspan="4">No customized manual order logs assigned to account yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div class="notifications">
-        <h2>Live System Notifications</h2>
-        <div id="noticeContainer">
-          <div class="notice">Welcome to your updated premium workspace dashboard panel.</div>
-          <div class="notice">VTU automated electronic service updates are now active.</div>
+      <div id="nin-view" class="app-view">
+        <div class="module-card">
+          <h2>NIN Validation & Custom Modifications Form</h2>
+          <p>Deploy identity updates directly to corporate data review servers securely.</p>
+          <form class="order-form-grid" onsubmit="event.preventDefault(); alert('Identity task request staged into MongoDB cluster processing line.');">
+            <div class="form-group">
+              <label>Select Identity Modification Category</label>
+              <select><option>NIN Slip Re-Print</option><option>Date of Birth Correction</option><option>Name/Phone Alignment Fix</option></select>
+            </div>
+            <div class="form-group"><label>Existing 11-Digit NIN Number</label><input type="text" maxlength="11" required placeholder="Enter NIN matrix number"></div>
+            <div class="form-group"><label>Target Data Correction Context Description</label><textarea placeholder="State clear change variables needed"></textarea></div>
+            <button type="submit" class="submit-action-btn">Deploy Request Verification</button>
+          </form>
         </div>
+      </div>
+
+      <div id="print-view" class="app-view">
+        <div class="module-card">
+          <h2>Premium Graphic Print Scheduling Node</h2>
+          <form class="order-form-grid" onsubmit="event.preventDefault(); alert('Design layout matrix upload successfully allocated.');">
+            <div class="form-group">
+              <label>Target Print Item Type</label>
+              <select><option>Business Stationery Brand Assets</option><option>Corporate Identification Cards</option><option>Flyer Handouts / Custom Banners</option></select>
+            </div>
+            <div class="form-group"><label>Target Copy Print Quantities</label><input type="number" value="1" min="1"></div>
+            <div class="form-group"><label>Upload Document/Design Layout Drive Link</label><input type="url" placeholder="Paste structural image URL link asset"></div>
+            <button type="submit" class="submit-action-btn">Initialize Printing Job</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="training-view" class="app-view">
+        <div class="module-card">
+          <h2>Advanced Engineering Bootcamps Portal</h2>
+          <div class="stats-grid" style="margin-top: 20px;">
+            <div class="stat-card" style="border-top: 4px solid var(--accent-pink);">
+              <h3>Web Software Design Array</h3>
+              <p style="margin-top: 10px;">Mastering Full-stack backend structures with Javascript, Node.js development, and permanent MongoDB configurations.</p>
+            </div>
+            <div class="stat-card" style="border-top: 4px solid var(--brand-gold);">
+              <h3>Automated Office Matrices</h3>
+              <p style="margin-top: 10px;">Designing complex inventory management models and digital automation architectures with Excel sheets.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="game-view" class="app-view">
+        <div class="module-card">
+          <h2>PanCafe Automated Game Server Client Node</h2>
+          <p style="margin-bottom: 20px;">Track timing access credits across Hambak cyber workspace terminals directly.</p>
+          <div style="background: var(--deep-navy); color: white; padding: 25px; border-radius: 15px;">
+            <h4>Active Machine Terminal Token: <span style="color: var(--brand-gold);" id="machineTokenRef">HBK-GAME-UNSET</span></h4>
+            <p style="font-size: 0.9rem; color: #cbd5e1; margin-top: 10px;">Status: Awaiting operational login sequence confirmation from server router console.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="notifications" style="margin-top: 30px;">
+        <h2>Live System Notifications Area</h2>
+        <div class="notice">Welcome to your updated premium workspace dashboard panel safely.</div>
+        <div class="notice">VTU automated electronic service connections are live and active.</div>
       </div>
 
     </div>
@@ -452,34 +481,42 @@
   <script>
     const ctxRevenue = document.getElementById("revenueChart");
     const ctxService = document.getElementById("serviceChart");
-
     if (ctxRevenue && ctxService) {
       new Chart(ctxRevenue, {
         type: "line",
         data: {
           labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-          datasets: [{
-            label: "Gross Business Revenue",
-            data: [12000, 19000, 30000, 25000, 42000, 50000],
-            borderColor: "#0d47a1",
-            borderWidth: 3,
-            tension: 0.4,
-            fill: false
-          }]
+          datasets: [{ label: "Gross Revenue Index", data: [12000, 19000, 30000, 25000, 42000, 50000], borderColor: "#0d47a1", borderWidth: 3, tension: 0.4, fill: false }]
         }
       });
-
       new Chart(ctxService, {
         type: "doughnut",
         data: {
           labels: ["NIN", "Printing", "Training", "VTU"],
-          datasets: [{
-            data: [25, 20, 35, 20],
-            backgroundColor: ["#0d47a1", "#f5b942", "#ff4081", "#081120"],
-            borderWidth: 2
-          }]
+          datasets: [{ data: [25, 20, 35, 20], backgroundColor: ["#0d47a1", "#f5b942", "#ff4081", "#081120"], borderWidth: 2 }]
         }
       });
+    }
+  </script>
+
+  <script>
+    function showSection(sectionId) {
+      // Clear active layout markers on view sections
+      document.querySelectorAll('.app-view').forEach(view => {
+        view.classList.remove('active-view');
+      });
+      // Clear active highlighters on sidebar anchors
+      document.querySelectorAll('.sidebar-links a').forEach(link => {
+        link.classList.remove('active');
+      });
+      
+      // Inject visibility selectors
+      document.getElementById(sectionId).classList.add('active-view');
+      
+      // Map view names back to trigger element highlighters safely
+      const componentId = sectionId.split('-')[0];
+      const targetNavLink = document.getElementById(`nav-${componentId}`);
+      if(targetNavLink) targetNavLink.classList.add('active');
     }
   </script>
 
@@ -487,87 +524,65 @@
     const token = localStorage.getItem("hambak_token");
     const LIVE_API_URL = "https://hambak-tech-services.onrender.com/api";
 
-    if (!token) {
-      window.location.href = "login.html";
-    }
+    if (!token) { window.location.href = "login.html"; }
 
     async function loadUserDashboardEngine() {
       try {
         const response = await fetch(`${LIVE_API_URL}/auth/me`, {
           method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
+          headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" }
         });
-
         const data = await response.json();
 
-        // FAILSAFE VALIDATION MATRIX: Accepts standard wrappers or direct payload objects
         if (response.ok && data) {
-          
-          // Determine if data is wrapped inside data.user or sent directly
           const activeUser = data.user ? data.user : data;
+          if (!activeUser.role) { throw new Error("Format misalignment."); }
 
-          // Extra security checkpoint: If no role exists in the data payload, trigger fallback
-          if (!activeUser.role) {
-            throw new Error("Invalid user profile format returned from Atlas cluster.");
-          }
-
-          // Sync profile fields cleanly to the DOM
           document.getElementById("userName").innerHTML = activeUser.name || "Hambak Customer";
           document.getElementById("userRole").innerHTML = activeUser.role;
           
-          // Format wallet using fallback values if key hasn't initialized yet
           const walletVal = activeUser.wallet !== undefined ? activeUser.wallet : 0;
-          document.querySelector(".wallet-balance").innerHTML = `₦${Number(walletVal).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+          document.querySelectorAll(".wallet-balance").forEach(block => {
+            block.innerHTML = `₦${Number(walletVal).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+          });
 
-          // Keep localStorage reference accurate for other page actions
           localStorage.setItem("hambak_user", JSON.stringify(activeUser));
 
-          // DYNAMIC PRIVILEGE SPLITTER DISPATCHER
           if (activeUser.role === "admin") {
             document.getElementById("panelTitle").innerHTML = "Root Admin Terminal Control";
-            
-            // Unhide hidden navigation links and charts safely
-            document.querySelectorAll(".admin-block-section").forEach(section => {
-              section.style.display = "block";
-            });
+            document.querySelectorAll(".admin-block-section").forEach(section => { section.style.display = "block"; });
           } else {
             document.getElementById("panelTitle").innerHTML = "Customer Account Dashboard";
-            // Ensure admin zones stay hidden if toggled during a previous session
-            document.querySelectorAll(".admin-block-section").forEach(section => {
-              section.style.display = "none";
-            });
+            document.querySelectorAll(".admin-block-section").forEach(section => { section.style.display = "none"; });
           }
-
         } else {
-          // Response status was not 200 OK
-          console.warn("Server rejected token matrix validation status:", response.status);
           localStorage.clear();
           window.location.href = "login.html";
         }
       } catch (error) {
-        console.error("Dashboard server sync exception:", error);
-        
-        // Fallback to local cache to keep UI seamless if server experiences high latency
+        console.error("Graceful recovery mode launched:", error);
         const localCachedUser = localStorage.getItem("hambak_user");
         if (localCachedUser) {
           const user = JSON.parse(localCachedUser);
-          document.getElementById("userName").innerHTML = user.name || "Cached Profile";
+          document.getElementById("userName").innerHTML = user.name;
           document.getElementById("userRole").innerHTML = user.role;
           if (user.role === "admin") {
             document.querySelectorAll(".admin-block-section").forEach(s => s.style.display = "block");
           }
         } else {
-          // No backup cache data found, clear invalid session and route back safely
           localStorage.clear();
           window.location.href = "login.html";
         }
       }
     }
+
+    loadUserDashboardEngine();
+
+    document.getElementById("logoutBtn").addEventListener("click", (e) => {
+      e.preventDefault();
+      localStorage.clear();
+      window.location.href = "login.html";
+    });
   </script>
-
 </body>
-
 </html>
