@@ -1,1 +1,498 @@
-<h1>Coming Soon</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Orders | HAMBAK TECH & SERVICES</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* ==========================================================================
+       PREMIUM BRAND COLOR PALETTE (BLUE, GOLD, PEACH, PINK)
+       ========================================================================== */
+    :root {
+      --primary-blue: #0d47a1;
+      --deep-navy: #081120;
+      --brand-gold: #f5b942;
+      --soft-peach: #ffdfd3;
+      --accent-pink: #ff4081;
+      --clean-white: #ffffff;
+      --dark-card: #0f172a;
+      --input-bg: #1e293b;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--deep-navy);
+      color: var(--clean-white);
+      min-height: 100vh;
+    }
+
+    /* GLOBAL REGIONAL NAVBAR */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 8%;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .navbar .logo {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar .logo span {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--brand-gold);
+      letter-spacing: 1px;
+    }
+
+    .navbar .logo small {
+      color: var(--clean-white);
+      font-weight: 600;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--clean-white);
+      font-weight: 600;
+      margin-left: 25px;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--brand-gold);
+    }
+
+    /* MAIN CONTAINER INTERFACE */
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 60px 20px;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .dashboard-header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin: 0;
+      background: linear-gradient(135deg, var(--brand-gold), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .user-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--dark-card);
+      padding: 10px 20px;
+      border-radius: 50px;
+      border: 1px solid var(--soft-peach);
+    }
+
+    .user-badge i {
+      color: var(--brand-gold);
+    }
+
+    /* REAL-TIME STATE CARDS GRID */
+    .orders-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .order-card {
+      background: var(--dark-card);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transition: 0.3s ease;
+    }
+
+    .order-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(245, 185, 66, 0.3);
+    }
+
+    .order-info h3 {
+      margin: 0 0 8px 0;
+      font-size: 1.3rem;
+      color: var(--clean-white);
+    }
+
+    .order-info p {
+      margin: 0;
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+
+    .order-info .order-id {
+      font-family: 'Courier New', Courier, monospace;
+      color: var(--brand-gold);
+      font-weight: bold;
+    }
+
+    .order-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .meta-label {
+      font-size: 0.8rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .meta-value {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .meta-value.price {
+      color: #10b981;
+    }
+
+    /* DYNAMIC STATUS BADGES */
+    .status-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-pending { background: rgba(245, 185, 66, 0.15); color: var(--brand-gold); border: 1px solid var(--brand-gold); }
+    .status-processing { background: rgba(13, 71, 161, 0.2); color: #60a5fa; border: 1px solid #3b82f6; }
+    .status-completed { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid #10b981; }
+    .status-cancelled { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid #ef4444; }
+
+    /* ACTION BUTTON MATRIX */
+    .action-container {
+      text-align: right;
+    }
+
+    .view-btn {
+      padding: 12px 24px;
+      background: var(--primary-blue);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: 0.3s;
+    }
+
+    .view-btn:hover {
+      background: #1565c0;
+    }
+
+    /* STATE FEEDBACK SYSTEM LAYOUTS */
+    .loading-pane, .empty-pane {
+      text-align: center;
+      padding: 80px 20px;
+      background: var(--dark-card);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .loading-pane i {
+      font-size: 3rem;
+      color: var(--brand-gold);
+      margin-bottom: 20px;
+    }
+
+    .empty-pane i {
+      font-size: 4rem;
+      color: #475569;
+      margin-bottom: 20px;
+    }
+
+    .empty-pane h2 {
+      margin: 0 0 10px 0;
+      color: var(--clean-white);
+    }
+
+    .empty-pane p {
+      color: #94a3b8;
+      margin-bottom: 30px;
+    }
+
+    .browse-services-btn {
+      padding: 14px 30px;
+      background: linear-gradient(135deg, var(--primary-blue), #1565c0);
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(13, 71, 161, 0.3);
+      transition: 0.3s;
+    }
+
+    .browse-services-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    /* WHATSAPP FLOAT SYSTEM */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 60px;
+      height: 60px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.8rem;
+      color: white;
+      text-decoration: none;
+      z-index: 999;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      transition: 0.3s;
+    }
+
+    .whatsapp-float:hover { transform: scale(1.1); }
+
+    /* RESPONSIVE SCALING */
+    @media(max-width: 900px) {
+      .order-card {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .action-container {
+        text-align: left;
+        grid-column: span 2;
+      }
+      .view-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    @media(max-width: 600px) {
+      .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .order-card {
+        grid-template-columns: 1fr;
+      }
+      .action-container {
+        grid-column: span 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="navbar">
+    <div class="logo">
+      <span>HAMBAK</span>
+      <small>TECH & SERVICES</small>
+    </div>
+    <nav class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="shop.html">Shop</a>
+      <a href="games.html">Game Center</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    
+    <div class="dashboard-header">
+      <div>
+        <h1>My Service Orders</h1>
+        <p style="color: #94a3b8; margin-top: 5px;">Track your administrative prints, project transcripts, and digital requests real-time.</p>
+      </div>
+      <div class="user-badge" id="userBadge">
+        <i class="fa-solid fa-circle-user"></i>
+        <span id="userNameDisplay">Loading Customer Profile...</span>
+      </div>
+    </div>
+
+    <div id="ordersContainer">
+      <div class="loading-pane">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        <h3>Querying Hambak Cloud Database Systems...</h3>
+        <p style="color: #64748b;">Fetching deployment metrics and validation state nodes.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <a href="https://wa.me/2349155104724" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <script>
+    const BACKEND_API_BASE = "https://hambak-tech-services.onrender.com/api";
+
+    // Enforce Authentication Verification Gate
+    document.addEventListener("DOMContentLoaded", () => {
+      const activeUserToken = localStorage.getItem("hambak_token");
+      const cachedProfileData = localStorage.getItem("hambak_user");
+
+      if (!activeUserToken || !cachedProfileData) {
+        alert("Session unverified. Redirecting to Customer Login interface.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      try {
+        const userData = JSON.parse(cachedProfileData);
+        document.getElementById("userNameDisplay").innerText = userData.name || "Customer Account";
+        
+        // Load custom orders matching identity context
+        fetchCustomerOrdersHistory(activeUserToken);
+      } catch (err) {
+        console.error("Local data cache corruption error:", err);
+        window.location.href = "login.html";
+      }
+    });
+
+    /**
+     * Connects with the active cluster api to pull user order documentation indices
+     */
+    async function fetchCustomerOrdersHistory(authToken) {
+      const containerNode = document.getElementById("ordersContainer");
+
+      try {
+        const response = await fetch(`${BACKEND_API_BASE}/orders/myorders`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${authToken}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        const dataPayload = await response.json();
+
+        if (!response.ok) {
+          throw new Error(dataPayload.message || "Failed to communicate with data endpoint node.");
+        }
+
+        const ordersArray = dataPayload.orders || [];
+
+        if (ordersArray.length === 0) {
+          renderEmptyStateView();
+          return;
+        }
+
+        // Render populated list structured sequentially
+        renderOrdersListView(ordersArray);
+
+      } catch (error) {
+        console.error("Critical Orders Dashboard Exception:", error);
+        containerNode.innerHTML = `
+          <div class="empty-pane" style="border-color: var(--accent-pink);">
+            <i class="fa-solid fa-triangle-exclamation" style="color: var(--accent-pink);"></i>
+            <h2>Database Query Delay</h2>
+            <p>Could not load orders. Your pipeline connection or backend cluster instance might be cycling. Please wait a moment and try again.</p>
+            <button class="view-btn" onclick="location.reload()" style="background: var(--accent-pink);">Retry Query Connection</button>
+          </div>
+        `;
+      }
+    }
+
+    /**
+     * Renders an optimized placeholder if the user has no transaction records
+     */
+    function renderEmptyStateView() {
+      document.getElementById("ordersContainer").innerHTML = `
+        <div class="empty-pane">
+          <i class="fa-solid fa-folder-open"></i>
+          <h2>No Active Project Records found</h2>
+          <p>You haven't requested any computational services, exam print logs, or branding pipelines yet.</p>
+          <a href="services.html" class="browse-services-btn">Explore Service Directory</a>
+        </div>
+      `;
+    }
+
+    /**
+     * Maps through array elements to append visual blocks inside the container DOM
+     */
+    function renderOrdersListView(orders) {
+      const targetContainer = document.getElementById("ordersContainer");
+      let compositeHtmlOutput = '<div class="orders-grid">';
+
+      orders.forEach(orderItem => {
+        // Fallback checks for nested population
+        const serviceTitle = orderItem.service ? orderItem.service.name : "Custom Operational Project Asset";
+        const totalChargedFee = orderItem.amount ? Number(orderItem.amount).toLocaleString() : "Contact Support";
+        const orderTimestamp = orderItem.createdAt ? new Date(orderItem.createdAt).toLocaleDateString('en-NG', {
+          year: 'numeric', month: 'long', day: 'numeric'
+        }) : "Recently Transmitted";
+        
+        // Format operational workflow state
+        const currentProgressState = (orderItem.status || "pending").toLowerCase();
+
+        compositeHtmlOutput += `
+          <div class="order-card">
+            <div class="order-info">
+              <h3>${serviceTitle}</h3>
+              <p>Reference Token ID: <span class="order-id">${orderItem._id}</span></p>
+              <p style="margin-top: 4px;"><i class="fa-solid fa-calendar-day" style="font-size: 0.8rem; margin-right: 5px;"></i> ${orderTimestamp}</p>
+            </div>
+
+            <div class="order-meta">
+              <span class="meta-label">Allocation Limit</span>
+              <span class="meta-value">Qty × ${orderItem.quantity || 1}</span>
+            </div>
+
+            <div class="order-meta">
+              <span class="meta-label">Total Billing Amount</span>
+              <span class="meta-value price">₦${totalChargedFee}</span>
+            </div>
+
+            <div class="order-meta">
+              <span class="meta-label">Workflow Track State</span>
+              <div>
+                <span class="status-badge status-${currentProgressState}">${currentProgressState}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      compositeHtmlOutput += '</div>';
+      targetContainer.innerHTML = compositeHtmlOutput;
+    }
+  </script>
+
+</body>
+</html>
