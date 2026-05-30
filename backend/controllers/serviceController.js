@@ -1,117 +1,104 @@
-import mongoose from "mongoose";
+import Service from "../models/Service.js";
 
-// Simple baseline inline schema to prevent loading dependencies if not built yet
-const serviceSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  category: { type: String, required: true, enum: ["NIN", "Printing", "VTU", "Other"] },
-  price: { type: Number, required: true, default: 0 },
-  description: { type: String, default: "" },
-  isActive: { type: Boolean, default: true }
-}, { timestamps: true });
-
-const Service = mongoose.models.Service || mongoose.model("Service", serviceSchema);
-
-// @desc    Get all available services
-// @route   GET /api/services
-// @access  Public
-export const getServices = async (req, res, next) => {
+/* ==========================================================
+   SERVICES FACTORY: CONSTRUCT NEW SERVICE (ADMIN ONLY)
+   ========================================================== */
+export const createService = async (req, res) => {
   try {
-    const services = await Service.find({ isActive: true });
-    res.status(200).json({
-      success: true,
-      count: services.length,
-      services
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
+    const { name, category, description, price } = req.body;
 
-// @desc    Get a single service profile details
-// @route   GET /api/services/:id
-// @access  Public
-export const getSingleService = async (req, res, next) => {
-  try {
-    const service = await Service.findById(req.params.id);
-    if (!service) {
-      return res.status(404).json({ success: false, message: "Target service listing not found." });
-    }
-    res.status(200).json({
-      success: true,
-      service
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
-
-// @desc    Create a new ecosystem service listing
-// @route   POST /api/services
-// @access  Private/Admin
-export const createService = async (req, res, next) => {
-  try {
-    const { name, category, price, description } = req.body;
-
-    if (!name || !category || price === undefined) {
-      return res.status(400).json({ success: false, message: "Please provide service name, category, and price parameters." });
+    if (!name || !category || !description || price === undefined) {
+      return res.status(400).json({ success: false, message: "Missing explicit service definition values." });
     }
 
-    const service = await Service.create({
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : "/uploads/placeholder.png";
+
+    const serviceData = await Service.create({
       name,
       category,
+      description,
       price: Number(price),
-      description: description || ""
+      image: imagePath
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
-      message: "Service listing generated successfully inside cluster",
-      service
+      message: "New workspace service variant mapped successfully.",
+      service: serviceData
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// @desc    Update an existing service configuration
-// @route   PUT /api/services/:id
-// @access  Private/Admin
-export const updateService = async (req, res, next) => {
+/* ==========================================================
+   SERVICES FACTORY: RENDER ACTIVE SERVICES FETCH
+   ========================================================== */
+export const getServices = async (req, res) => {
   try {
-    const service = await Service.findById(req.params.id);
-    if (!service) {
-      return res.status(404).json({ success: false, message: "Target service listing not found." });
+    const catalog = await Service.find({ isActive: true }).sort({ category: 1, name: 1 });
+    
+    return res.status(200).json({
+      success: true,
+      count: catalog.length,
+      services: catalog
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+/* ==========================================================
+   SERVICES FACTORY: UPDATE SERVICE SPECS (ADMIN ONLY)
+   ========================================================== */
+export const updateService = async (req, res) => {
+  try {
+    const updateTarget = await Service.findById(req.params.id);
+
+    if (!updateTarget) {
+      return res.status(404).json({ success: false, message: "Target service catalog asset not located." });
     }
 
-    const updatedService = await Service.findByIdAndUpdate(
+    if (req.file) {
+      req.body.image = `/uploads/${req.file.filename}`;
+    }
+
+    const revisedService = await Service.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      { $set: req.body },
       { new: true, runValidators: true }
     );
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      message: "Service configurations updated successfully",
-      service: updatedService
+      message: "Service configurations updated successfully.",
+      service: revisedService
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// @desc    Delete/Deactivate a system service
-// @route   DELETE /api/services/:id
-// @access  Private/Admin
-export const deleteService = async (req, res, next) => {
+/* ==========================================================
+   SERVICES FACTORY: DELETE / ARCHIVE SERVICE (ADMIN ONLY)
+   ========================================================== */
+export const deleteService = async (req, res) => {
   try {
-    const service = await Service.findById(req.params.id);
-    if (!service) {
-      return res.status(404).json({ success: false, message: "Target service listing not found." });
+    const targetedAsset = await Service.findById(req.params.id);
+
+    if (!targetedAsset) {
+      return res.status(404).json({ success: false, message: "Target service reference not found." });
     }
 
-    await service.deleteOne();
-    res.status(200).json({ success: true, message: "Service removed cleanly from matrix database structures." });
+    // Soft delete to protect relational integrity logs down the chain
+    targetedAsset.isActive = false;
+    await targetedAsset.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Service detached and archived from the active frontend menu matrix."
+    });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
