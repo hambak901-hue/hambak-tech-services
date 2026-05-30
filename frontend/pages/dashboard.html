@@ -503,56 +503,69 @@
 
         const data = await response.json();
 
-        if (response.ok || data.success) {
-          // Sync profile fields cleanly
-          document.getElementById("userName").innerHTML = data.user.name || "Hambak Customer";
-          document.getElementById("userRole").innerHTML = data.user.role;
-          document.querySelector(".wallet-balance").innerHTML = `₦${Number(data.user.wallet || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+        // FAILSAFE VALIDATION MATRIX: Accepts standard wrappers or direct payload objects
+        if (response.ok && data) {
+          
+          // Determine if data is wrapped inside data.user or sent directly
+          const activeUser = data.user ? data.user : data;
 
-          // Keep localStorage reference accurate
-          localStorage.setItem("hambak_user", JSON.stringify(data.user));
+          // Extra security checkpoint: If no role exists in the data payload, trigger fallback
+          if (!activeUser.role) {
+            throw new Error("Invalid user profile format returned from Atlas cluster.");
+          }
+
+          // Sync profile fields cleanly to the DOM
+          document.getElementById("userName").innerHTML = activeUser.name || "Hambak Customer";
+          document.getElementById("userRole").innerHTML = activeUser.role;
+          
+          // Format wallet using fallback values if key hasn't initialized yet
+          const walletVal = activeUser.wallet !== undefined ? activeUser.wallet : 0;
+          document.querySelector(".wallet-balance").innerHTML = `₦${Number(walletVal).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+
+          // Keep localStorage reference accurate for other page actions
+          localStorage.setItem("hambak_user", JSON.stringify(activeUser));
 
           // DYNAMIC PRIVILEGE SPLITTER DISPATCHER
-          if (data.user.role === "admin") {
+          if (activeUser.role === "admin") {
             document.getElementById("panelTitle").innerHTML = "Root Admin Terminal Control";
             
-            // Unhide hidden navigation links and charts
+            // Unhide hidden navigation links and charts safely
             document.querySelectorAll(".admin-block-section").forEach(section => {
               section.style.display = "block";
             });
           } else {
             document.getElementById("panelTitle").innerHTML = "Customer Account Dashboard";
+            // Ensure admin zones stay hidden if toggled during a previous session
+            document.querySelectorAll(".admin-block-section").forEach(section => {
+              section.style.display = "none";
+            });
           }
 
         } else {
-          // If authorization token is stale, perform graceful reset
+          // Response status was not 200 OK
+          console.warn("Server rejected token matrix validation status:", response.status);
           localStorage.clear();
           window.location.href = "login.html";
         }
       } catch (error) {
         console.error("Dashboard server sync exception:", error);
+        
         // Fallback to local cache to keep UI seamless if server experiences high latency
         const localCachedUser = localStorage.getItem("hambak_user");
         if (localCachedUser) {
           const user = JSON.parse(localCachedUser);
-          document.getElementById("userName").innerHTML = user.name;
+          document.getElementById("userName").innerHTML = user.name || "Cached Profile";
           document.getElementById("userRole").innerHTML = user.role;
           if (user.role === "admin") {
             document.querySelectorAll(".admin-block-section").forEach(s => s.style.display = "block");
           }
+        } else {
+          // No backup cache data found, clear invalid session and route back safely
+          localStorage.clear();
+          window.location.href = "login.html";
         }
       }
     }
-
-    // Call user verification data loaders
-    loadUserDashboardEngine();
-
-    // Session Termination Handler
-    document.getElementById("logoutBtn").addEventListener("click", (e) => {
-      e.preventDefault();
-      localStorage.clear();
-      window.location.href = "login.html";
-    });
   </script>
 
 </body>
