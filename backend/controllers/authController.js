@@ -1,112 +1,101 @@
-import User from '../models/userModel.js';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs'; // Imported directly to compare passwords without crashing
+import User from "../models/userModel.js";
+import jwt from "jsonwebtoken";
 
-// Helper method to sign JSON Web Tokens
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || 'hambak_secret_key_2026', {
-    expiresIn: '30d',
+// Internal helper to mint tokens cleanly
+const generateTokenIdSignature = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE || "7d"
   });
 };
 
-// @desc    Register a new user profile
-// @route   POST /api/auth/register
-// @access  Public
-export const registerUser = async (req, res, next) => {
+/* ==========================================================
+   AUTHENTICATION MODULE: CLIENT REGISTRATION
+   ========================================================== */
+export const registerUser = async (req, res) => {
   try {
     const { name, username, email, phone, password } = req.body;
 
     if (!name || !username || !email || !phone || !password) {
+      return res.status(400).json({ success: false, message: "All initialization parameters are required." });
+    }
+
+    // Check for unique database entry collisions
+    const emailExists = await User.findOne({ email: email.toLowerCase() });
+    const usernameExists = await User.findOne({ username: username.toLowerCase() });
+
+    if (emailExists || usernameExists) {
       return res.status(400).json({
         success: false,
-        message: "Please fill all required inputs"
+        message: "Registration halted: Email identifier or username token is already assigned."
       });
     }
 
-    const sanitizedEmail = email.toLowerCase().trim();
-    const sanitizedUsername = username.toLowerCase().trim();
-
-    const userExists = await User.findOne({ 
-      $or: [{ email: sanitizedEmail }, { username: sanitizedUsername }] 
-    });
-    
-    if (userExists) {
-      return res.status(400).json({
-        success: false,
-        message: 'Email or Username already registered in system'
-      });
-    }
-
-    const user = await User.create({
+    const newUser = await User.create({
       name,
-      username: sanitizedUsername,
-      email: sanitizedEmail,
+      username,
+      email,
       phone,
       password,
-      role: 'user', 
-      wallet: 0.00  
+      wallet: 0.00 // Set structural wallet base defaults
     });
 
-    if (user) {
-      res.status(201).json({
-        success: true,
-        message: "Registration successful",
-        token: generateToken(user._id),
-        user: {
-          id: user._id,
-          name: user.name,
-          username: user.username,
-          email: user.email,
-          phone: user.phone,
-          role: user.role,
-          wallet: user.wallet
-        }
-      });
-    } else {
-      res.status(400).json({ success: false, message: 'Invalid registration parameters sent.' });
-    }
+    return res.status(201).json({
+      success: true,
+      message: "Ecosystem account entry established successfully.",
+      token: generateTokenIdSignature(newUser._id),
+      user: {
+        id: newUser._id,
+        name: newUser.name,
+        username: newUser.username,
+        email: newUser.email,
+        phone: newUser.phone,
+        role: newUser.role,
+        wallet: newUser.wallet
+      }
+    });
+
   } catch (error) {
-    next(error);
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// @desc    Authenticate client & get token
-// @route   POST /api/auth/login
-// @access  Public
-export const loginUser = async (req, res, next) => {
+/* ==========================================================
+   AUTHENTICATION MODULE: SYSTEM USER LOGIN
+   ========================================================== */
+export const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { loginIdentity, password } = req.body; // Allows logging in via email or username flexibly
 
-    if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Please provide email and password details"
-      });
+    if (!loginIdentity || !password) {
+      return res.status(400).json({ success: false, message: "Credentials payload tracking requires full identification parameters." });
     }
 
-    // Look up user profile directly from your Atlas cluster
-    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    // Dynamic relational lookup
+    const user = await User.findOne({
+      $or: [
+        { email: loginIdentity.toLowerCase() },
+        { username: loginIdentity.toLowerCase() }
+      ]
+    });
+
     if (!user) {
-      return res.status(401).json({ success: false, message: 'Invalid login credentials' });
+      return res.status(401).json({ success: false, message: "Invalid credentials: Entry matches no recorded context." });
     }
 
-    // DIRECT COMPARISON GATEWAY: Bypasses user.matchPassword function bugs entirely
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ success: false, message: 'Invalid login credentials' });
+    // Call unified matchPassword verification method
+    const passMatches = await user.matchPassword(password);
+    if (!passMatches) {
+      return res.status(401).json({ success: false, message: "Invalid credentials: Secure string mismatch verified." });
     }
 
     if (user.isBlocked) {
-      return res.status(403).json({
-        success: false,
-        message: "Your account is currently suspended"
-      });
+      return res.status(403).json({ success: false, message: "Authentication Denied: Profile access is suspended by management." });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      message: "Login successful",
-      token: generateToken(user._id),
+      message: "Authentication cleared. Initializing user session context.",
+      token: generateTokenIdSignature(user._id),
       user: {
         id: user._id,
         name: user.name,
@@ -117,45 +106,8 @@ export const loginUser = async (req, res, next) => {
         wallet: user.wallet
       }
     });
+
   } catch (error) {
-    next(error);
+    return res.status(500).json({ success: false, message: error.message });
   }
-};
-
-// @desc    Get current logged-in user profile parameters
-// @route   GET /api/auth/me
-// @access  Private
-export const getMyProfile = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.user._id || req.user.id).select("-password");
-
-    if (user) {
-      res.status(200).json({
-        success: true,
-        user: {
-          id: user._id,
-          name: user.name,
-          username: user.username,
-          email: user.email,
-          phone: user.phone,
-          role: user.role,
-          wallet: user.wallet
-        }
-      });
-    } else {
-      res.status(404).json({ success: false, message: 'Profile data mismatch in cluster.' });
-    }
-  } catch (error) {
-    next(error);
-  }
-};
-
-// @desc    Logout account session matrix
-// @route   GET /api/auth/logout
-// @access  Public
-export const logoutUser = async (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "Logged out cleanly from session matrices"
-  });
 };
