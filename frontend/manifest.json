@@ -1,10 +1,24 @@
-
 {
-"name":"HAMBAK TECH & SERVICES",
-"short_name":"HAMBAK",
-"start_url":"./index.html",
-"display":"standalone",
-"background_color":"#0d47a1",
-"theme_color":"#0d47a1",
-"icons":[]
+  "name": "HAMBAK TECH & SERVICES",
+  "short_name": "HAMBAK",
+  "description": "Professional Digital Solutions, Online Registration, NIN Services, and VTU Dashboard.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#081120",
+  "theme_color": "#0d47a1",
+  "icons": [
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
