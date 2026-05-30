@@ -11,7 +11,6 @@ const getAuthHeaders = () => {
 };
 
 const API = {
-  // Authentication Matrix Calls
   auth: {
     login: async (email, password) => {
       const response = await fetch(`${LIVE_API_URL}/auth/login`, {
@@ -40,7 +39,35 @@ const API = {
     }
   },
 
-  // Services Matrix Tracking
+  // NEW: PAYSTACK & WALLET TRANSACTION OPERATIONS MATRIX
+  transactions: {
+    initializeDeposit: async (amount) => {
+      const response = await fetch(`${LIVE_API_URL}/transactions/paystack/initialize`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ amount: Number(amount) })
+      });
+      return await response.json();
+    },
+
+    verifyDeposit: async (reference) => {
+      const response = await fetch(`${LIVE_API_URL}/transactions/paystack/verify`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ reference })
+      });
+      return await response.json();
+    },
+
+    getMyHistory: async () => {
+      const response = await fetch(`${LIVE_API_URL}/transactions/my`, {
+        method: "GET",
+        headers: getAuthHeaders()
+      });
+      return await response.json();
+    }
+  },
+
   services: {
     getAll: async () => {
       const response = await fetch(`${LIVE_API_URL}/services`, {
@@ -52,6 +79,6 @@ const API = {
   }
 };
 
-// Export to window execution memory spaces for login.html and dashboard.html scripts
 window.API = API;
 window.LIVE_API_URL = LIVE_API_URL;
+
