@@ -2,1040 +2,854 @@
 <html lang="en">
 
 <head>
-
-<meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
->
-
-<title>
-Blog | HAMBAK TECH & SERVICES
-</title>
-
-<link
-rel="stylesheet"
-href="../css/style.css"
->
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
->
-
-<style>
-
-/* =========================
-BLOG PAGE
-========================= */
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f5f7fb;
-color:#0f172a;
-}
-
-/* HERO */
-
-.blog-hero{
-padding:140px 8% 90px;
-background:
-linear-gradient(
-135deg,
-#081120,
-#0d47a1
-);
-color:white;
-text-align:center;
-}
-
-.blog-hero h1{
-font-size:4rem;
-margin-bottom:20px;
-}
-
-.blog-hero p{
-max-width:750px;
-margin:auto;
-line-height:1.9;
-font-size:1.2rem;
-color:#cbd5e1;
-}
-
-/* SEARCH */
-
-.search-section{
-padding:50px 8% 20px;
-}
-
-.search-box{
-background:white;
-padding:20px;
-border-radius:20px;
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-display:flex;
-gap:15px;
-flex-wrap:wrap;
-}
-
-.search-box input{
-flex:1;
-padding:16px;
-border:1px solid #ddd;
-border-radius:12px;
-outline:none;
-font-size:1rem;
-}
-
-.search-box button{
-padding:16px 30px;
-border:none;
-background:#0d47a1;
-color:white;
-border-radius:12px;
-cursor:pointer;
-font-size:1rem;
-}
-
-/* CATEGORIES */
-
-.category-section{
-padding:20px 8% 50px;
-}
-
-.category-grid{
-display:flex;
-flex-wrap:wrap;
-gap:15px;
-justify-content:center;
-}
-
-.category-btn{
-padding:12px 24px;
-background:white;
-border-radius:50px;
-text-decoration:none;
-color:#0f172a;
-box-shadow:0 5px 20px rgba(0,0,0,0.08);
-transition:0.3s;
-}
-
-.category-btn:hover{
-background:#0d47a1;
-color:white;
-}
-
-/* FEATURED */
-
-.featured-section{
-padding:30px 8% 90px;
-}
-
-.featured-card{
-background:white;
-border-radius:30px;
-overflow:hidden;
-box-shadow:0 15px 40px rgba(0,0,0,0.1);
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-}
-
-.featured-image img{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-.featured-content{
-padding:50px;
-}
-
-.featured-tag{
-display:inline-block;
-padding:8px 18px;
-background:#f5b942;
-border-radius:50px;
-font-weight:bold;
-margin-bottom:20px;
-}
-
-.featured-content h2{
-font-size:2.5rem;
-margin-bottom:20px;
-}
-
-.featured-content p{
-line-height:1.9;
-color:#475569;
-margin-bottom:30px;
-}
-
-.read-btn{
-display:inline-block;
-padding:15px 30px;
-background:#0d47a1;
-color:white;
-text-decoration:none;
-border-radius:12px;
-}
-
-/* BLOGS */
-
-.blog-section{
-padding:0 8% 90px;
-}
-
-.section-title{
-text-align:center;
-margin-bottom:60px;
-}
-
-.section-title h2{
-font-size:3rem;
-margin-bottom:15px;
-}
-
-.section-title p{
-max-width:700px;
-margin:auto;
-line-height:1.8;
-color:#555;
-}
-
-.blog-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:35px;
-}
-
-/* CARD */
-
-.blog-card{
-background:white;
-border-radius:25px;
-overflow:hidden;
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-transition:0.4s;
-}
-
-.blog-card:hover{
-transform:translateY(-10px);
-}
-
-.blog-image img{
-width:100%;
-height:230px;
-object-fit:cover;
-}
-
-.blog-content{
-padding:30px;
-}
-
-.blog-date{
-font-size:0.9rem;
-color:#64748b;
-margin-bottom:15px;
-}
-
-.blog-content h3{
-font-size:1.6rem;
-margin-bottom:15px;
-}
-
-.blog-content p{
-line-height:1.8;
-color:#555;
-margin-bottom:25px;
-}
-
-/* SIDEBAR */
-
-.extra-section{
-padding:0 8% 90px;
-}
-
-.extra-grid{
-display:grid;
-grid-template-columns:2fr 1fr;
-gap:40px;
-}
-
-.sidebar{
-display:flex;
-flex-direction:column;
-gap:30px;
-}
-
-.sidebar-card{
-background:white;
-padding:30px;
-border-radius:25px;
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-}
-
-.sidebar-card h3{
-margin-bottom:20px;
-}
-
-.sidebar-post{
-margin-bottom:20px;
-padding-bottom:20px;
-border-bottom:1px solid #eee;
-}
-
-.sidebar-post:last-child{
-border:none;
-margin-bottom:0;
-padding-bottom:0;
-}
-
-.sidebar-post p{
-margin-top:10px;
-color:#555;
-line-height:1.7;
-}
-
-/* PAGINATION */
-
-.pagination{
-display:flex;
-justify-content:center;
-gap:15px;
-margin-top:60px;
-}
-
-.pagination a{
-width:50px;
-height:50px;
-display:flex;
-justify-content:center;
-align-items:center;
-background:white;
-border-radius:12px;
-text-decoration:none;
-color:#0f172a;
-box-shadow:0 5px 20px rgba(0,0,0,0.08);
-transition:0.3s;
-}
-
-.pagination a:hover{
-background:#0d47a1;
-color:white;
-}
-
-/* ADMIN */
-
-.admin-box{
-background:
-linear-gradient(
-135deg,
-#081120,
-#0d47a1
-);
-padding:50px;
-border-radius:30px;
-color:white;
-text-align:center;
-margin-top:60px;
-}
-
-.admin-box h2{
-margin-bottom:20px;
-font-size:2.5rem;
-}
-
-.admin-box p{
-max-width:700px;
-margin:auto;
-line-height:1.8;
-margin-bottom:30px;
-color:#cbd5e1;
-}
-
-.admin-btn{
-display:inline-block;
-padding:16px 35px;
-background:#f5b942;
-color:black;
-text-decoration:none;
-border-radius:12px;
-font-weight:bold;
-}
-
-/* FOOTER */
-
-.footer{
-background:#020617;
-color:white;
-padding:70px 8% 20px;
-}
-
-.footer-content{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:40px;
-margin-bottom:40px;
-}
-
-.footer h3{
-margin-bottom:20px;
-color:#f5b942;
-}
-
-.footer p{
-line-height:1.8;
-color:#cbd5e1;
-}
-
-.footer-links a{
-display:block;
-margin-bottom:10px;
-color:#cbd5e1;
-text-decoration:none;
-}
-
-.footer-bottom{
-text-align:center;
-padding-top:20px;
-border-top:1px solid rgba(255,255,255,0.1);
-color:#94a3b8;
-}
-
-/* WHATSAPP */
-
-.whatsapp-float{
-position:fixed;
-bottom:25px;
-right:25px;
-width:60px;
-height:60px;
-background:#25d366;
-border-radius:50%;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:1.8rem;
-color:white;
-text-decoration:none;
-z-index:999;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
-}
-
-/* MOBILE */
-
-@media(max-width:900px){
-
-.extra-grid{
-grid-template-columns:1fr;
-}
-
-}
-
-@media(max-width:768px){
-
-.blog-hero h1{
-font-size:2.8rem;
-}
-
-.section-title h2,
-.featured-content h2,
-.admin-box h2{
-font-size:2.2rem;
-}
-
-}
-
-/* =========================
-AI CHAT
-========================= */
-
-.ai-chat-section{
-padding:0 8% 90px;
-}
-
-.ai-chat-box{
-background:white;
-border-radius:30px;
-overflow:hidden;
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-max-width:900px;
-margin:auto;
-}
-
-.ai-header{
-background:
-linear-gradient(
-135deg,
-#081120,
-#0d47a1
-);
-color:white;
-padding:25px;
-display:flex;
-align-items:center;
-gap:15px;
-}
-
-.ai-header i{
-font-size:2rem;
-}
-
-.chat-body{
-height:400px;
-overflow-y:auto;
-padding:25px;
-background:#f8fafc;
-display:flex;
-flex-direction:column;
-gap:20px;
-}
-
-.chat-message{
-max-width:75%;
-padding:15px 20px;
-border-radius:20px;
-line-height:1.7;
-}
-
-.chat-message.ai{
-background:white;
-align-self:flex-start;
-}
-
-.chat-message.user{
-background:#0d47a1;
-color:white;
-align-self:flex-end;
-}
-
-.chat-input{
-display:flex;
-border-top:1px solid #eee;
-}
-
-.chat-input input{
-flex:1;
-padding:18px;
-border:none;
-outline:none;
-font-size:1rem;
-}
-
-.chat-input button{
-width:80px;
-border:none;
-background:#0d47a1;
-color:white;
-font-size:1.2rem;
-cursor:pointer;
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog | HAMBAK TECH & SERVICES</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* ==========================================================================
+       GLOBAL NAVBAR UTILITIES (Sync with style.css layout)
+       ========================================================================== */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 8%;
+      background: #081120;
+      color: white;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .navbar .logo {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar .logo span {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #f5b942;
+      letter-spacing: 1px;
+    }
+
+    .navbar .logo small {
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .nav-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      margin-left: 25px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: #f5b942;
+    }
+
+    /* ==========================================================================
+       BLOG PAGE STYLES
+       ========================================================================== */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #0f172a;
+    }
+
+    /* HERO */
+    .blog-hero {
+      padding: 180px 8% 100px;
+      background: linear-gradient(135deg, #081120, #0d47a1);
+      color: white;
+      text-align: center;
+    }
+
+    .blog-hero h1 {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      font-weight: 800;
+    }
+
+    .blog-hero p {
+      max-width: 750px;
+      margin: auto;
+      line-height: 1.9;
+      font-size: 1.2rem;
+      color: #cbd5e1;
+    }
+
+    /* SEARCH */
+    .search-section {
+      padding: 50px 8% 20px;
+    }
+
+    .search-box {
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 16px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      outline: none;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    .search-box input:focus {
+      border-color: #0d47a1;
+      box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.1);
+    }
+
+    .search-box button {
+      padding: 16px 30px;
+      border: none;
+      background: #0d47a1;
+      color: white;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .search-box button:hover {
+      background: #0a3578;
+    }
+
+    /* CATEGORIES */
+    .category-section {
+      padding: 20px 8% 50px;
+    }
+
+    .category-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .category-btn {
+      padding: 12px 24px;
+      background: white;
+      border-radius: 50px;
+      text-decoration: none;
+      color: #0f172a;
+      font-weight: 600;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      transition: 0.3s;
+    }
+
+    .category-btn:hover {
+      background: #0d47a1;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* FEATURED */
+    .featured-section {
+      padding: 30px 8% 90px;
+    }
+
+    .featured-card {
+      background: white;
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+
+    .featured-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      min-height: 350px;
+    }
+
+    .featured-content {
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .featured-tag {
+      display: inline-block;
+      align-self: flex-start;
+      padding: 8px 18px;
+      background: #f5b942;
+      color: #081120;
+      border-radius: 50px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+    }
+
+    .featured-content h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .featured-content p {
+      line-height: 1.9;
+      color: #475569;
+      margin-bottom: 30px;
+    }
+
+    .read-btn {
+      display: inline-block;
+      align-self: flex-start;
+      padding: 15px 30px;
+      background: #0d47a1;
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .read-btn:hover {
+      background: #0a3578;
+      transform: translateY(-2px);
+    }
+
+    /* BLOGS POSTS */
+    .blog-section {
+      padding: 0 8% 90px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-title h2 {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      font-weight: 800;
+    }
+
+    .section-title p {
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.8;
+      color: #555;
+    }
+
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 35px;
+    }
+
+    /* BLOG CARD */
+    .blog-card {
+      background: white;
+      border-radius: 25px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      transition: 0.4s;
+    }
+
+    .blog-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .blog-image img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+    }
+
+    .blog-content {
+      padding: 30px;
+    }
+
+    .blog-date {
+      font-size: 0.9rem;
+      color: #64748b;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .blog-content h3 {
+      font-size: 1.6rem;
+      margin-bottom: 15px;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    .blog-content p {
+      line-height: 1.8;
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    /* EXTRA LAYOUT SIDEBAR */
+    .extra-section {
+      padding: 0 8% 90px;
+    }
+
+    .extra-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 40px;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .sidebar-card {
+      background: white;
+      padding: 30px;
+      border-radius: 25px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .sidebar-card h3 {
+      margin-bottom: 20px;
+      font-weight: 700;
+      border-bottom: 2px solid #f5b942;
+      padding-bottom: 8px;
+      display: inline-block;
+    }
+
+    .sidebar-post {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .sidebar-post:last-child {
+      border: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .sidebar-post strong {
+      color: #0f172a;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    .sidebar-post strong:hover {
+      color: #0d47a1;
+    }
+
+    .sidebar-post p {
+      margin-top: 10px;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .topic-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      color: #475569;
+      font-weight: 600;
+    }
+
+    .topic-item i {
+      color: #0d47a1;
+      font-size: 0.9rem;
+    }
+
+    /* PAGINATION */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 60px;
+    }
+
+    .pagination a {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: white;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #0f172a;
+      font-weight: 600;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      transition: 0.3s;
+    }
+
+    .pagination a:hover, .pagination a.active {
+      background: #0d47a1;
+      color: white;
+    }
+
+    /* ADMIN BOX */
+    .admin-box {
+      background: linear-gradient(135deg, #081120, #0d47a1);
+      padding: 50px;
+      border-radius: 30px;
+      color: white;
+      text-align: center;
+    }
+
+    .admin-box h2 {
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+      font-weight: 800;
+    }
+
+    .admin-box p {
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.8;
+      margin-bottom: 30px;
+      color: #cbd5e1;
+    }
+
+    .admin-btn {
+      display: inline-block;
+      padding: 16px 35px;
+      background: #f5b942;
+      color: #081120;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .admin-btn:hover {
+      background: #e0a736;
+      transform: scale(1.03);
+    }
+
+    /* ==========================================================================
+       AI CHAT INTERFACE
+       ========================================================================== */
+    .ai-chat-section {
+      padding: 0 8% 90px;
+    }
+
+    .ai-chat-box {
+      background: white;
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .ai-header {
+      background: linear-gradient(135deg, #081120, #0d47a1);
+      color: white;
+      padding: 25px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .ai-header h2 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .ai-header i {
+      font-size: 2.2rem;
+      color: #f5b942;
+    }
+
+    .chat-body {
+      height: 400px;
+      overflow-y: auto;
+      padding: 25px;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .chat-message {
+      max-width: 75%;
+      padding: 15px 20px;
+      border-radius: 20px;
+      line-height: 1.7;
+      font-size: 1rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    }
+
+    .chat-message.ai {
+      background: white;
+      align-self: flex-start;
+      border-top-left-radius: 5px;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+    }
+
+    .chat-message.user {
+      background: #0d47a1;
+      color: white;
+      align-self: flex-end;
+      border-top-right-radius: 5px;
+    }
+
+    .chat-message p {
+      margin: 0;
+    }
+
+    .chat-input {
+      display: flex;
+      border-top: 1px solid #e2e8f0;
+      background: white;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 20px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    .chat-input button {
+      width: 80px;
+      border: none;
+      background: #0d47a1;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .chat-input button:hover {
+      background: #0a3578;
+    }
+
+    /* FOOTER */
+    .footer {
+      background: #020617;
+      color: white;
+      padding: 70px 8% 20px;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer h3 {
+      margin-bottom: 20px;
+      color: #f5b942;
+      font-weight: 700;
+    }
+
+    .footer p {
+      line-height: 1.8;
+      color: #cbd5e1;
+    }
+
+    .footer-links a {
+      display: block;
+      margin-bottom: 10px;
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #f5b942;
+      padding-left: 5px;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+    }
+
+    /* WHATSAPP FLOAT */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 60px;
+      height: 60px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.8rem;
+      color: white;
+      text-decoration: none;
+      z-index: 999;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      transition: 0.3s;
+    }
+
+    .whatsapp-float:hover {
+      transform: scale(1.1);
+    }
+
+    /* RESPONSIVE LAYOUTS */
+    @media(max-width:900px){
+      .extra-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media(max-width:768px){
+      .navbar {
+        padding: 15px 5%;
+      }
+      .nav-links {
+        display: none;
+      }
+      .blog-hero {
+        padding: 140px 5% 70px;
+      }
+      .blog-hero h1 {
+        font-size: 2.8rem;
+      }
+      .section-title h2, .featured-content h2, .admin-box h2 {
+        font-size: 2.2rem;
+      }
+      .search-section, .category-section, .featured-section, .blog-section, .extra-section, .ai-chat-section {
+        padding-left: 5%;
+        padding-right: 5%;
+      }
+      .chat-message {
+        max-width: 85%;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-
-<header class="navbar">
-
-<div class="logo">
-
-<span>HAMBAK</span>
-
-<small>TECH & SERVICES</small>
-
-</div>
-
-<nav class="nav-links">
-
-<a href="../index.html">Home</a>
-<a href="about.html">About</a>
-<a href="services.html">Services</a>
-<a href="blog.html">Blog</a>
-<a href="contact.html">Contact</a>
-
-</nav>
-
-</header>
-
-<!-- HERO -->
-
-<section class="blog-hero">
-
-<h1>
-HAMBAK Blog System
-</h1>
-
-<p>
-Technology news, ICT tutorials, digital updates,
-business tips and educational articles from
-HAMBAK TECH & SERVICES.
-</p>
-
-</section>
-
-<!-- SEARCH -->
-
-<section class="search-section">
-
-<div class="search-box">
-
-<input
-type="text"
-placeholder="Search articles, tutorials, news..."
->
-
-<button>
-Search
-</button>
-
-</div>
-
-</section>
-
-<!-- CATEGORIES -->
-
-<section class="category-section">
-
-<div class="category-grid">
-
-<a href="#" class="category-btn">ICT</a>
-<a href="#" class="category-btn">Technology</a>
-<a href="#" class="category-btn">Web Design</a>
-<a href="#" class="category-btn">Graphics</a>
-<a href="#" class="category-btn">Business</a>
-<a href="#" class="category-btn">Education</a>
-<a href="#" class="category-btn">Tutorials</a>
-
-</div>
-
-</section>
-
-<!-- FEATURED -->
-
-<section class="featured-section">
-
-<div class="featured-card">
-
-<div class="featured-image">
-
-<img
-src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop"
-alt="featured"
->
-
-</div>
-
-<div class="featured-content">
-
-<div class="featured-tag">
-Featured Article
-</div>
-
-<h2>
-How Technology is Transforming Small Businesses
-</h2>
-
-<p>
-Discover how digital tools, online systems,
-ICT training and smart technology solutions
-are helping small businesses grow faster in Nigeria.
-</p>
-
-<a
-href="#"
-class="read-btn"
->
-Read Article
-</a>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- BLOG POSTS -->
-
-<section class="blog-section">
-
-<div class="section-title">
-
-<h2>
-Latest Articles
-</h2>
-
-<p>
-Explore tutorials, updates and professional insights.
-</p>
-
-</div>
-
-<div class="blog-grid">
-
-<!-- BLOG -->
-
-<div class="blog-card">
-
-<div class="blog-image">
-
-<img
-src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop"
-alt="blog"
->
-
-</div>
-
-<div class="blog-content">
-
-<div class="blog-date">
-July 2026
-</div>
-
-<h3>
-Beginner ICT Skills Everyone Should Learn
-</h3>
-
-<p>
-Important computer and digital skills for beginners.
-</p>
-
-<a
-href="#"
-class="read-btn"
->
-Read More
-</a>
-
-</div>
-
-</div>
-
-<!-- BLOG -->
-
-<div class="blog-card">
-
-<div class="blog-image">
-
-<img
-src="https://images.unsplash.com/photo-1556155092-490a1ba16284?q=80&w=1200&auto=format&fit=crop"
-alt="blog"
->
-
-</div>
-
-<div class="blog-content">
-
-<div class="blog-date">
-July 2026
-</div>
-
-<h3>
-Best Online Tools for Business Growth
-</h3>
-
-<p>
-Top digital tools to improve productivity and branding.
-</p>
-
-<a
-href="#"
-class="read-btn"
->
-Read More
-</a>
-
-</div>
-
-</div>
-
-<!-- BLOG -->
-
-<div class="blog-card">
-
-<div class="blog-image">
-
-<img
-src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1200&auto=format&fit=crop"
-alt="blog"
->
-
-</div>
-
-<div class="blog-content">
-
-<div class="blog-date">
-July 2026
-</div>
-
-<h3>
-Frontend Development Roadmap
-</h3>
-
-<p>
-Learn the modern frontend development journey.
-</p>
-
-<a
-href="#"
-class="read-btn"
->
-Read More
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="pagination">
-
-<a href="#">1</a>
-<a href="#">2</a>
-<a href="#">3</a>
-
-</div>
-
-</section>
-
-<!-- EXTRA -->
-
-<section class="extra-section">
-
-<div class="extra-grid">
-
-<div>
-
-<div class="admin-box">
-
-<h2>
-Admin Blog Publishing
-</h2>
-
-<p>
-Admins can publish articles, tutorials,
-news updates and announcements directly
-from the admin dashboard system.
-</p>
-
-<a
-href="#"
-class="admin-btn"
->
-Open Admin Panel
-</a>
-
-</div>
-
-</div>
-
-<!-- SIDEBAR -->
-
-<div class="sidebar">
-
-<div class="sidebar-card">
-
-<h3>
-Recent Posts
-</h3>
-
-<div class="sidebar-post">
-
-<strong>
-How to Start Learning Web Design
-</strong>
-
-<p>
-Beginner roadmap for future developers.
-</p>
-
-</div>
-
-<div class="sidebar-post">
-
-<strong>
-Benefits of ICT Training
-</strong>
-
-<p>
-Why ICT skills are important today.
-</p>
-
-</div>
-
-<div class="sidebar-post">
-
-<strong>
-Digital Business Tips
-</strong>
-
-<p>
-Grow your business using technology.
-</p>
-
-</div>
-
-</div>
-
-<div class="sidebar-card">
-
-<h3>
-Popular Topics
-</h3>
-
-<p>✔ Web Development</p>
-<p>✔ Business Branding</p>
-<p>✔ ICT Tutorials</p>
-<p>✔ VTU Systems</p>
-<p>✔ Technology News</p>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- FOOTER -->
-
-<footer class="footer">
-
-<div class="footer-content">
-
-<div>
-
-<h3>
-HAMBAK TECH & SERVICES
-</h3>
-
-<p>
-Where technology meet services.
-Professional ICT and digital media solutions.
-</p>
-
-</div>
-
-<div>
-
-<h3>
-Quick Links
-</h3>
-
-<div class="footer-links">
-
-<a href="../index.html">Home</a>
-<a href="blog.html">Blog</a>
-<a href="services.html">Services</a>
-<a href="contact.html">Contact</a>
-
-</div>
-
-</div>
-
-<div>
-
-<h3>
-Contact Info
-</h3>
-
-<p>
-09127469686
-</p>
-
-<p>
-hambak901@gmail.com
-</p>
-
-<p>
-Ibeju-Lekki, Lagos Nigeria
-</p>
-
-</div>
-
-</div>
-
-<div class="footer-bottom">
-
-© 2026 HAMBAK TECH & SERVICES
-
-</div>
-
-</footer>
-
-<!-- WHATSAPP -->
-
-<a
-href="https://wa.me/2349155104724"
-class="whatsapp-float"
->
-
-<i class="fa-brands fa-whatsapp"></i>
-
-</a>
-
-<!-- AI ASSISTANT -->
-
-<section class="ai-chat-section">
-
-<div class="ai-chat-box">
-
-<div class="ai-header">
-
-<i class="fa-solid fa-robot"></i>
-
-<h2>
-HAMBAK AI Assistant
-</h2>
-
-</div>
-
-<div
-class="chat-body"
-id="chatBody"
->
-
-<div class="chat-message ai">
-
-<p>
-Hello 👋
-Ask me anything about our services,
-training, ICT or registrations.
-</p>
-
-</div>
-
-</div>
-
-<div class="chat-input">
-
-<input
-type="text"
-id="questionInput"
-placeholder="Ask AI anything..."
->
-
-<button onclick="askAI()">
-
-<i class="fa-solid fa-paper-plane"></i>
-
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-<script src="../js/ai-blog.js"></script>
-
-
+  <header class="navbar">
+    <div class="logo">
+      <span>HAMBAK</span>
+      <small>TECH & SERVICES</small>
+    </div>
+    <nav class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="blog.html" class="active">Blog</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <section class="blog-hero">
+    <h1>HAMBAK Blog System</h1>
+    <p>
+      Technology news, ICT tutorials, digital updates, business tips, and educational articles 
+      from HAMBAK TECH & SERVICES.
+    </p>
+  </section>
+
+  <section class="search-section">
+    <div class="search-box">
+      <input type="text" placeholder="Search articles, tutorials, news...">
+      <button type="button">Search</button>
+    </div>
+  </section>
+
+  <section class="category-section">
+    <div class="category-grid">
+      <a href="#" class="category-btn">ICT</a>
+      <a href="#" class="category-btn">Technology</a>
+      <a href="#" class="category-btn">Web Design</a>
+      <a href="#" class="category-btn">Graphics</a>
+      <a href="#" class="category-btn">Business</a>
+      <a href="#" class="category-btn">Education</a>
+      <a href="#" class="category-btn">Tutorials</a>
+    </div>
+  </section>
+
+  <section class="featured-section">
+    <div class="featured-card">
+      <div class="featured-image">
+        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop" alt="featured technology analytics">
+      </div>
+      <div class="featured-content">
+        <div class="featured-tag">Featured Article</div>
+        <h2>How Technology is Transforming Small Businesses</h2>
+        <p>
+          Discover how digital tools, online systems, ICT training, and smart technology solutions 
+          are helping small businesses grow faster across Nigeria's evolving digital marketplace.
+        </p>
+        <a href="#" class="read-btn">Read Article</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="blog-section">
+    <div class="section-title">
+      <h2>Latest Articles</h2>
+      <p>Explore tutorials, updates, and professional insights.</p>
+    </div>
+    <div class="blog-grid">
+      <div class="blog-card">
+        <div class="blog-image">
+          <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop" alt="ICT skills learning interface">
+        </div>
+        <div class="blog-content">
+          <div class="blog-date">July 2026</div>
+          <h3>Beginner ICT Skills Everyone Should Learn</h3>
+          <p>Important computer literacy elements and essential digital skills for modern beginners.</p>
+          <a href="#" class="read-btn">Read More</a>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="blog-image">
+          <img src="https://images.unsplash.com/photo-1556155092-490a1ba16284?q=80&w=1200&auto=format&fit=crop" alt="online digital tools overview">
+        </div>
+        <div class="blog-content">
+          <div class="blog-date">July 2026</div>
+          <h3>Best Online Tools for Business Growth</h3>
+          <p>Top digital tools and dashboard automation structures to improve your productivity and brand tracking.</p>
+          <a href="#" class="read-btn">Read More</a>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="blog-image">
+          <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1200&auto=format&fit=crop" alt="frontend source code roadmap text">
+        </div>
+        <div class="blog-content">
+          <div class="blog-date">July 2026</div>
+          <h3>Frontend Development Roadmap</h3>
+          <p>Learn the modern frontend web development journey from basic styling arrays to full reactive components.</p>
+          <a href="#" class="read-btn">Read More</a>
+        </div>
+      </div>
+    </div>
+    <div class="pagination">
+      <a href="#" class="active">1</a>
+      <a href="#">2</a>
+      <a href="#">3</a>
+    </div>
+  </section>
+
+  <section class="extra-section">
+    <div class="extra-grid">
+      <div>
+        <div class="admin-box">
+          <h2>Admin Blog Publishing</h2>
+          <p>
+            Admins can publish articles, tutorials, news updates, and announcements directly 
+            from the centralized admin dashboard system.
+          </p>
+          <a href="#" class="admin-btn">Open Admin Panel</a>
+        </div>
+      </div>
+      <div class="sidebar">
+        <div class="sidebar-card">
+          <h3>Recent Posts</h3>
+          <div class="sidebar-post">
+            <strong>How to Start Learning Web Design</strong>
+            <p>Beginner roadmap for future full-stack developers.</p>
+          </div>
+          <div class="sidebar-post">
+            <strong>Benefits of ICT Training</strong>
+            <p>Why modern computer literacy skills are foundational today.</p>
+          </div>
+          <div class="sidebar-post">
+            <strong>Digital Business Tips</strong>
+            <p>Accelerating localized trade scaling using automation scripts.</p>
+          </div>
+        </div>
+        <div class="sidebar-card">
+          <h3>Popular Topics</h3>
+          <div class="topic-item"><i class="fa-solid fa-circle-check"></i> Web Development</div>
+          <div class="topic-item"><i class="fa-solid fa-circle-check"></i> Business Branding</div>
+          <div class="topic-item"><i class="fa-solid fa-circle-check"></i> ICT Tutorials</div>
+          <div class="topic-item"><i class="fa-solid fa-circle-check"></i> VTU Systems</div>
+          <div class="topic-item"><i class="fa-solid fa-circle-check"></i> Technology News</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ai-chat-section">
+    <div class="ai-chat-box">
+      <div class="ai-header">
+        <i class="fa-solid fa-robot"></i>
+        <h2>HAMBAK AI Assistant</h2>
+      </div>
+      <div class="chat-body" id="chatBody">
+        <div class="chat-message ai">
+          <p>Hello 👋 Ask me anything about our services, professional digital training, corporate registrations, or VTU options.</p>
+        </div>
+      </div>
+      <div class="chat-input">
+        <input type="text" id="questionInput" placeholder="Ask AI anything...">
+        <button type="button" onclick="askAI()">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div>
+        <h3>HAMBAK TECH & SERVICES</h3>
+        <p>Where technology meets services. Professional ICT and digital business solutions.</p>
+      </div>
+      <div>
+        <h3>Quick Links</h3>
+        <div class="footer-links">
+          <a href="../index.html">Home</a>
+          <a href="blog.html">Blog</a>
+          <a href="services.html">Services</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+      <div>
+        <h3>Contact Info</h3>
+        <p><i class="fa-solid fa-phone" style="color: #f5b942; margin-right: 8px;"></i> 09127469686</p>
+        <p><i class="fa-solid fa-envelope" style="color: #f5b942; margin-right: 8px;"></i> hambak901@gmail.com</p>
+        <p><i class="fa-solid fa-location-dot" style="color: #f5b942; margin-right: 8px;"></i> Ibeju-Lekki, Lagos, Nigeria</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 HAMBAK TECH & SERVICES
+    </div>
+  </footer>
+
+  <a href="https://wa.me/2349155104724" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <script src="../js/ai-blog.js"></script>
 </body>
 
 </html>
