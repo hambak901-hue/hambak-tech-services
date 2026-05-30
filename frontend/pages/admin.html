@@ -2,602 +2,357 @@
 <html lang="en">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | HAMBAK</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+    }
 
-<meta charset="UTF-8">
+    .admin-container {
+      display: flex;
+      min-height: 100vh;
+    }
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
->
+    .sidebar {
+      width: 260px;
+      background: #081120;
+      padding: 30px 20px;
+      position: fixed;
+      height: 100%;
+      box-sizing: border-box;
+    }
 
-<title>
-Admin Dashboard | HAMBAK
-</title>
+    .logo {
+      text-align: center;
+      margin-bottom: 40px;
+    }
 
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
->
+    .logo h2 {
+      color: #f5b942;
+      margin: 0;
+    }
 
-<style>
+    .logo p {
+      margin: 5px 0 0 0;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: #cbd5e1;
+    }
 
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#0f172a;
-color:white;
-}
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
 
-.admin-container{
-display:flex;
-min-height:100vh;
-}
+    .menu a {
+      text-decoration: none;
+      color: #cbd5e1;
+      padding: 14px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: 0.3s;
+    }
 
-.sidebar{
-width:260px;
-background:#081120;
-padding:30px 20px;
-position:fixed;
-height:100%;
-}
+    .menu a:hover {
+      background: #0d47a1;
+      color: white;
+    }
 
-.logo{
-text-align:center;
-margin-bottom:40px;
-}
+    .main {
+      margin-left: 260px;
+      flex: 1;
+      padding: 40px;
+    }
 
-.logo h2{
-color:#f5b942;
-}
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
 
-.menu{
-display:flex;
-flex-direction:column;
-gap:15px;
-}
+    .topbar h1 {
+      margin: 0;
+    }
 
-.menu a{
-text-decoration:none;
-color:#cbd5e1;
-padding:14px;
-border-radius:12px;
-display:flex;
-align-items:center;
-gap:12px;
-transition:0.3s;
-}
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+    }
 
-.menu a:hover{
-background:#0d47a1;
-color:white;
-}
+    .stat-card {
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
 
-.main{
-margin-left:260px;
-flex:1;
-padding:40px;
-}
+    .stat-card i {
+      font-size: 2rem;
+      color: #f5b942;
+      margin-bottom: 15px;
+    }
 
-.topbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:40px;
-flex-wrap:wrap;
-gap:20px;
-}
+    .stat-card h2 {
+      font-size: 2.5rem;
+      margin: 10px 0;
+    }
 
-.stats-grid{
-display:grid;
-grid-template-columns:
-repeat(auto-fit,minmax(250px,1fr));
-gap:25px;
-}
+    .stat-card p {
+      color: #cbd5e1;
+      margin: 0;
+    }
 
-.stat-card{
-background:#1e293b;
-padding:30px;
-border-radius:20px;
-box-shadow:
-0 10px 30px rgba(0,0,0,0.2);
-}
+    .welcome-box {
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 20px;
+      margin-bottom: 40px;
+    }
 
-.stat-card i{
-font-size:2rem;
-color:#f5b942;
-margin-bottom:15px;
-}
+    .welcome-box h2 {
+      margin-top: 0;
+    }
 
-.stat-card h2{
-font-size:2.5rem;
-margin:10px 0;
-}
+    @media(max-width: 900px) {
+      .admin-container {
+        flex-direction: column;
+      }
 
-.stat-card p{
-color:#cbd5e1;
-}
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+      }
 
-.welcome-box{
-background:#1e293b;
-padding:30px;
-border-radius:20px;
-margin-bottom:40px;
-}
-
-@media(max-width:900px){
-
-.admin-container{
-flex-direction:column;
-}
-
-.sidebar{
-position:relative;
-width:100%;
-height:auto;
-}
-
-.main{
-margin-left:0;
-}
-
-}
-
-</style>
-
+      .main {
+        margin-left: 0;
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="admin-container">
-
-<!-- SIDEBAR -->
-
-<div class="sidebar">
-
-<div class="logo">
-
-<h2>
-HAMBAK
-</h2>
-
-<p>
-ADMIN PANEL
-</p>
-
-</div>
-
-<div class="menu">
-
-<a href="admin.html">
-
-<i class="fa-solid fa-chart-line"></i>
-
-Dashboard
-
-</a>
-
-<a href="admin-services.html">
-
-<i class="fa-solid fa-briefcase"></i>
-
-Services
-
-</a>
-
-<a href="admin-users.html">
-
-<i class="fa-solid fa-users"></i>
-
-Users
-
-</a>
-
-<a href="admin-orders.html">
-
-<i class="fa-solid fa-cart-shopping"></i>
-
-Orders
-
-</a>
-
-<a href="#" id="logoutBtn">
-
-<i class="fa-solid fa-right-from-bracket"></i>
-
-Logout
-
-</a>
-
-</div>
-
-</div>
-
-<!-- MAIN -->
-
-<div class="main">
-
-<div class="topbar">
-
-<h1>
-Admin Dashboard
-</h1>
-
-<h3 id="adminName">
-Admin
-</h3>
-
-</div>
-
-<div class="welcome-box">
-
-<h2>
-Welcome Back
-</h2>
-
-<p>
-Manage your business activities,
-services, customers and orders.
-</p>
-
-</div>
-
-<div class="stats-grid">
-
-<div class="stat-card">
-
-<i class="fa-solid fa-briefcase"></i>
-
-<p>Total Services</p>
-
-<h2 id="totalServices">
-0
-</h2>
-
-</div>
-
-<div class="stat-card">
-
-<i class="fa-solid fa-users"></i>
-
-<p>Total Users</p>
-
-<h2 id="totalUsers">
-0
-</h2>
-
-</div>
-
-<div class="stat-card">
-
-<i class="fa-solid fa-cart-shopping"></i>
-
-<p>Total Orders</p>
-
-<h2 id="totalOrders">
-0
-</h2>
-
-</div>
-
-<div class="stat-card">
-
-<i class="fa-solid fa-money-bill"></i>
-
-<p>Total Revenue</p>
-
-<h2 id="totalRevenue">
-₦0
-</h2>
-
-</div>
-
-</div>
-
-<!-- QUICK ACTIONS -->
-
-<div
-style="
-margin-top:40px;
-background:#1e293b;
-padding:30px;
-border-radius:20px;
-"
->
-
-<h2>
-Quick Actions
-</h2>
-
-<div
-style="
-display:grid;
-grid-template-columns:
-repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-margin-top:25px;
-"
->
-
-<a
-href="admin-services.html"
-style="
-background:#0d47a1;
-padding:20px;
-border-radius:15px;
-text-decoration:none;
-color:white;
-text-align:center;
-"
->
-
-<i
-class="fa-solid fa-plus"
-style="font-size:2rem;"
-></i>
-
-<h3>
-Add Service
-</h3>
-
-</a>
-
-<a
-href="admin-orders.html"
-style="
-background:#2563eb;
-padding:20px;
-border-radius:15px;
-text-decoration:none;
-color:white;
-text-align:center;
-"
->
-
-<i
-class="fa-solid fa-cart-shopping"
-style="font-size:2rem;"
-></i>
-
-<h3>
-Manage Orders
-</h3>
-
-</a>
-
-<a
-href="admin-users.html"
-style="
-background:#16a34a;
-padding:20px;
-border-radius:15px;
-text-decoration:none;
-color:white;
-text-align:center;
-"
->
-
-<i
-class="fa-solid fa-users"
-style="font-size:2rem;"
-></i>
-
-<h3>
-Manage Users
-</h3>
-
-</a>
-
-</div>
-
-</div>
-
-<!-- RECENT ORDERS -->
-
-<div
-style="
-margin-top:40px;
-background:#1e293b;
-padding:30px;
-border-radius:20px;
-overflow:auto;
-"
->
-
-<h2>
-Recent Orders
-</h2>
-
-<table
-style="
-width:100%;
-border-collapse:collapse;
-margin-top:20px;
-"
->
-
-<thead>
-
-<tr>
-
-<th
-style="
-padding:15px;
-text-align:left;
-background:#0d47a1;
-"
->
-Customer
-</th>
-
-<th
-style="
-padding:15px;
-text-align:left;
-background:#0d47a1;
-"
->
-Service
-</th>
-
-<th
-style="
-padding:15px;
-text-align:left;
-background:#0d47a1;
-"
->
-Amount
-</th>
-
-<th
-style="
-padding:15px;
-text-align:left;
-background:#0d47a1;
-"
->
-Status
-</th>
-
-</tr>
-
-</thead>
-
-<tbody id="recentOrdersTable">
-
-</tbody>
-
-</table>
-
-</div>
-
-<script>
-/* =========================
-SECURITY & AUTH GUARD
-========================= */
-const user = JSON.parse(localStorage.getItem("hambak_user"));
-const token = localStorage.getItem("hambak_token");
-
-// Secure against logged-out users OR regular customers trying to view admin
-if (!user || !token || user.role !== "admin") {
-    localStorage.removeItem("hambak_user");
-    localStorage.removeItem("hambak_token");
-    window.location.href = "login.html";
-} else {
-    document.getElementById("adminName").innerHTML = user.name;
-}
-
-/* =========================
-LIVE API BASE CONFIG
-========================= */
-const BASE_URL = "https://hambak-tech-services.onrender.com/api";
-
-/* =========================
-LOAD DASHBOARD
-========================= */
-async function loadDashboard() {
-    try {
-        /* =========================
-        FETCH SERVICES
-        ========================= */
+  <div class="admin-container">
+    <div class="sidebar">
+      <div class="logo">
+        <h2>HAMBAK</h2>
+        <p>ADMIN PANEL</p>
+      </div>
+      <div class="menu">
+        <a href="admin.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        <a href="admin-services.html"><i class="fa-solid fa-briefcase"></i> Services</a>
+        <a href="admin-users.html"><i class="fa-solid fa-users"></i> Users</a>
+        <a href="admin-orders.html"><i class="fa-solid fa-cart-shopping"></i> Orders</a>
+        <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="topbar">
+        <h1>Admin Dashboard</h1>
+        <h3 id="adminName">Admin</h3>
+      </div>
+
+      <div class="welcome-box">
+        <h2>Welcome Back</h2>
+        <p>Manage your business activities, services, customers and orders seamlessly.</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <i class="fa-solid fa-briefcase"></i>
+          <p>Total Services</p>
+          <h2 id="totalServices">0</h2>
+        </div>
+        <div class="stat-card">
+          <i class="fa-solid fa-users"></i>
+          <p>Total Users</p>
+          <h2 id="totalUsers">0</h2>
+        </div>
+        <div class="stat-card">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <p>Total Orders</p>
+          <h2 id="totalOrders">0</h2>
+        </div>
+        <div class="stat-card">
+          <i class="fa-solid fa-money-bill"></i>
+          <p>Total Revenue</p>
+          <h2 id="totalRevenue">₦0</h2>
+        </div>
+      </div>
+
+      <div style="margin-top:40px; background:#1e293b; padding:30px; border-radius:20px;">
+        <h2>Quick Actions</h2>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:20px; margin-top:25px;">
+          <a href="admin-services.html" style="background:#0d47a1; padding:20px; border-radius:15px; text-decoration:none; color:white; text-align:center;">
+            <i class="fa-solid fa-plus" style="font-size:2rem; margin-bottom:10px;"></i>
+            <h3>Add Service</h3>
+          </a>
+          <a href="admin-orders.html" style="background:#2563eb; padding:20px; border-radius:15px; text-decoration:none; color:white; text-align:center;">
+            <i class="fa-solid fa-cart-shopping" style="font-size:2rem; margin-bottom:10px;"></i>
+            <h3>Manage Orders</h3>
+          </a>
+          <a href="admin-users.html" style="background:#16a34a; padding:20px; border-radius:15px; text-decoration:none; color:white; text-align:center;">
+            <i class="fa-solid fa-users" style="font-size:2rem; margin-bottom:10px;"></i>
+            <h3>Manage Users</h3>
+          </a>
+        </div>
+      </div>
+
+      <div style="margin-top:40px; background:#1e293b; padding:30px; border-radius:20px; overflow:auto;">
+        <h2>Recent Orders</h2>
+        <table style="width:100%; border-collapse:collapse; margin-top:20px;">
+          <thead>
+            <tr>
+              <th style="padding:15px; text-align:left; background:#0d47a1;">Customer</th>
+              <th style="padding:15px; text-align:left; background:#0d47a1;">Service</th>
+              <th style="padding:15px; text-align:left; background:#0d47a1;">Amount</th>
+              <th style="padding:15px; text-align:left; background:#0d47a1;">Status</th>
+            </tr>
+          </thead>
+          <tbody id="recentOrdersTable">
+            <tr>
+              <td colspan="4" style="padding:15px; text-align:center; color:#cbd5e1;">Loading live metrics stream...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================
+    SECURITY ACCESS GUARD
+    ========================= */
+    const user = JSON.parse(localStorage.getItem("hambak_user"));
+    const token = localStorage.getItem("hambak_token");
+
+    if (!user || !token || user.role !== "admin") {
+      localStorage.removeItem("hambak_user");
+      localStorage.removeItem("hambak_token");
+      alert("Unauthorized Access. Redirecting to login panel.");
+      window.location.href = "login.html";
+    } else {
+      document.getElementById("adminName").innerHTML = user.name;
+    }
+
+    /* =========================
+    PRODUCTION API ENDPOINT CONFIG
+    ========================= */
+    const BASE_URL = "https://hambak-tech-services.onrender.com/api";
+
+    /* =========================
+    LOAD LIVE METRICS STREAM
+    ========================= */
+    async function loadDashboard() {
+      try {
+        /* 1. FETCH SERVICES FROM CLUSTER */
         const servicesResponse = await fetch(`${BASE_URL}/services`);
         const servicesData = await servicesResponse.json();
         const servicesList = servicesData.services || [];
         document.getElementById("totalServices").innerHTML = servicesList.length;
 
-        /* =========================
-        FETCH USERS
-        ========================= */
+        /* 2. FETCH REGISTERED ACCOUNTS */
         const usersResponse = await fetch(`${BASE_URL}/users`, {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
+          headers: { "Authorization": `Bearer ${token}` }
         });
         const usersData = await usersResponse.json();
         const usersList = usersData.users || [];
         document.getElementById("totalUsers").innerHTML = usersList.length;
 
-        /* =========================
-        FETCH ORDERS
-        ========================= */
+        /* 3. FETCH INCOMING BUSINESS ORDERS */
         const ordersResponse = await fetch(`${BASE_URL}/orders`, {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
+          headers: { "Authorization": `Bearer ${token}` }
         });
         const ordersData = await ordersResponse.json();
         const ordersList = ordersData.orders || [];
-        
-        // Update Total Orders Counter
         document.getElementById("totalOrders").innerHTML = ordersList.length;
 
-        /* =========================
-        CALCULATE REVENUE
-        ========================= */
+        /* 4. DYNAMIC SYSTEM REVENUE EVALUATION */
         let revenue = 0;
         ordersList.forEach(order => {
-            if (order.status === "Completed" || !order.status) {
-                revenue += Number(order.amount || 0);
-            }
+          // Captures completed workflow entries cleanly
+          if (order.status?.toLowerCase() === "completed" || order.status?.toLowerCase() === "successful" || !order.status) {
+            revenue += Number(order.amount || 0);
+          }
         });
         document.getElementById("totalRevenue").innerHTML = `₦${revenue.toLocaleString()}`;
 
-        /* =========================
-        RECENT ORDERS TABLE
-        ========================= */
+        /* 5. POPULATE RECENT ORDERS GRID */
         const recentOrdersTable = document.getElementById("recentOrdersTable");
         recentOrdersTable.innerHTML = "";
 
         if (ordersList.length === 0) {
-            recentOrdersTable.innerHTML = `<tr><td colspan="4" style="padding:15px; text-align:center; color:#cbd5e1;">No orders found yet</td></tr>`;
-            return;
+          recentOrdersTable.innerHTML = `<tr><td colspan="4" style="padding:15px; text-align:center; color:#cbd5e1;">No systemic logs captured yet.</td></tr>`;
+          return;
         }
 
         ordersList
-            .slice(0, 5)
-            .forEach(order => {
-                const customerDisplay = order.customerName || (order.user ? order.user.name : "Guest User");
-                const serviceDisplay = order.serviceName || (order.service ? order.service.name : "Digital Registration");
-                
-                recentOrdersTable.innerHTML += `
-                <tr>
-                    <td style="padding:15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                        ${customerDisplay}
-                    </td>
-                    <td style="padding:15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                        ${serviceDisplay}
-                    </td>
-                    <td style="padding:15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                        ₦${Number(order.amount || 0).toLocaleString()}
-                    </td>
-                    <td style="padding:15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                        <span style="background:${order.status === 'Pending' ? '#d97706' : '#16a34a'}; padding:6px 12px; border-radius:50px; font-size:0.9rem;">
-                            ${order.status || "Completed"}
-                        </span>
-                    </td>
-                </tr>
-                `;
-            });
+          .slice(0, 5) // Stream the latest 5 orders
+          .forEach(order => {
+            const customerDisplay = order.customerName || (order.user ? order.user.name : "Guest Client");
+            const serviceDisplay = order.service ? order.service.name : "Digital Utility / Printing";
+            const orderStatus = order.status || "pending";
+            
+            // Map out badge color dynamics
+            let statusStyle = "background:#d97706;"; // Amber for pending
+            if(orderStatus.toLowerCase() === "completed" || orderStatus.toLowerCase() === "successful") {
+              statusStyle = "background:#16a34a;"; // Green
+            } else if(orderStatus.toLowerCase() === "cancelled" || orderStatus.toLowerCase() === "failed") {
+              statusStyle = "background:#dc2626;"; // Red
+            }
 
-    } catch (error) {
-        console.error("Dashboard Loading Error:", error);
+            recentOrdersTable.innerHTML += `
+              <tr>
+                <td style="padding:15px; border-bottom: 1px solid rgba(255,255,255,0.1);">${customerDisplay}</td>
+                <td style="padding:15px; border-bottom: 1px solid rgba(255,255,255,0.1);">${serviceDisplay}</td>
+                <td style="padding:15px; border-bottom: 1px solid rgba(255,255,255,0.1);">₦${Number(order.amount || 0).toLocaleString()}</td>
+                <td style="padding:15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                  <span style="${statusStyle} padding:6px 12px; border-radius:50px; font-size:0.85rem; text-transform: capitalize;">
+                    ${orderStatus}
+                  </span>
+                </td>
+              </tr>
+            `;
+          });
+
+      } catch (error) {
+        console.error("Dashboard Analytics Compilation Failure:", error);
+        const recentOrdersTable = document.getElementById("recentOrdersTable");
+        if (recentOrdersTable) {
+          recentOrdersTable.innerHTML = `<tr><td colspan="4" style="padding:15px; text-align:center; color:#dc2626;">Failed to establish live stream connections.</td></tr>`;
+        }
+      }
     }
-}
 
-/* =========================
-LOGOUT ACTION
-========================= */
-document.getElementById("logoutBtn").addEventListener("click", (e) => {
-    e.preventDefault();
-    localStorage.removeItem("hambak_user");
-    localStorage.removeItem("hambak_token");
-    window.location.href = "login.html";
-});
+    /* =========================
+    LOGOUT PROCESSOR ROUTINE
+    ========================= */
+    document.getElementById("logoutBtn").addEventListener("click", (e) => {
+      e.preventDefault();
+      localStorage.removeItem("hambak_user");
+      localStorage.removeItem("hambak_token");
+      window.location.href = "login.html";
+    });
 
-// Run metrics stream on paint
-loadDashboard();
-</script>
-  
+    // Run active data engine stream on layout paint
+    loadDashboard();
+  </script>
 </body>
 
 </html>
