@@ -1,1 +1,542 @@
-<h1>Coming Soon</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Service Dashboard | HAMBAK TECH & SERVICES</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* ==========================================================================
+       DASHBOARD ROOT & LAYOUT
+       ========================================================================== */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #0f172a;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR SYSTEM */
+    .dashboard-sidebar {
+      width: 280px;
+      background: #081120;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 100;
+      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar-brand {
+      padding: 30px;
+      background: #040a14;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-brand span {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #f5b942;
+      letter-spacing: 1px;
+    }
+
+    .sidebar-brand small {
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      color: white;
+      font-weight: bold;
+      margin-top: 2px;
+    }
+
+    .sidebar-menu {
+      padding: 25px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 14px 20px;
+      color: #cbd5e1;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 12px;
+      transition: 0.3s;
+    }
+
+    .sidebar-link:hover, .sidebar-link.active {
+      background: #0d47a1;
+      color: white;
+    }
+
+    /* MAIN CONTAINER INTERFACE */
+    .dashboard-container {
+      margin-left: 280px;
+      flex: 1;
+      padding: 50px 5%;
+      box-sizing: border-box;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 20px;
+    }
+
+    .dashboard-header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    .user-profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: white;
+      padding: 8px 20px;
+      border-radius: 50px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      font-weight: 600;
+    }
+
+    .user-profile-badge i {
+      color: #0d47a1;
+    }
+
+    /* EDIT SERVICE MANAGEMENT CONTAINER */
+    .edit-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .management-panel, .form-panel {
+      background: white;
+      border-radius: 25px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      padding: 35px;
+      box-sizing: border-box;
+    }
+
+    .panel-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 0;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #f5b942;
+      padding-bottom: 8px;
+      display: inline-block;
+    }
+
+    /* SERVICE SELECTION LIST */
+    .service-selection-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .selection-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #334155;
+      transition: 0.3s;
+    }
+
+    .selection-item:hover, .selection-item.selected {
+      border-color: #0d47a1;
+      background: rgba(13, 71, 161, 0.04);
+      color: #0d47a1;
+    }
+
+    .selection-item i {
+      font-size: 0.9rem;
+    }
+
+    /* SYSTEM FORMS STRUCTURING */
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #334155;
+      font-size: 0.95rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      outline: none;
+      font-size: 1rem;
+      background: #f8fafc;
+      color: #0f172a;
+      box-sizing: border-box;
+      transition: 0.3s;
+    }
+
+    .form-control:focus {
+      border-color: #0d47a1;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(13, 71, 161, 0.08);
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 140px;
+      font-family: inherit;
+    }
+
+    .input-addon-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-addon-wrapper .addon-icon {
+      position: absolute;
+      left: 16px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .input-addon-wrapper .addon-control {
+      padding-left: 45px;
+    }
+
+    /* ACTION UTILITIES BUTTONS */
+    .action-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 15px;
+      margin-top: 35px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 25px;
+    }
+
+    .btn {
+      padding: 14px 30px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e1;
+    }
+
+    .btn-primary {
+      background: #0d47a1;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0a3578;
+    }
+
+    /* STATUS RESPONSE NOTIFICATIONS */
+    .status-toast {
+      padding: 15px 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-toast.success {
+      background: #ecfdf5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+      display: flex;
+    }
+
+    .status-toast.error {
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fca5a5;
+      display: flex;
+    }
+
+    /* RESPONSIVE BREAKPOINTS */
+    @media(max-width: 1024px) {
+      .edit-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media(max-width: 768px) {
+      .dashboard-sidebar {
+        display: none;
+      }
+      .dashboard-container {
+        margin-left: 0;
+        padding: 30px 4%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <aside class="dashboard-sidebar">
+    <div class="sidebar-brand">
+      <span>HAMBAK</span>
+      <small>TECH & SERVICES</small>
+    </div>
+    <nav class="sidebar-menu">
+      <a href="admin-dashboard.html" class="sidebar-link">
+        <i class="fa-solid fa-chart-pie"></i> Main Panel
+      </a>
+      <a href="edit-service.html" class="sidebar-link active">
+        <i class="fa-solid fa-pen-to-square"></i> Edit Services
+      </a>
+      <a href="manage-blog.html" class="sidebar-link">
+        <i class="fa-solid fa-newspaper"></i> Manage Blog
+      </a>
+      <a href="../index.html" class="sidebar-link">
+        <i class="fa-solid fa-globe"></i> Live Platform
+      </a>
+    </nav>
+  </aside>
+
+  <main class="dashboard-container">
+    
+    <header class="dashboard-header">
+      <h1>Edit Service Portal</h1>
+      <div class="user-profile-badge">
+        <i class="fa-solid fa-circle-user"></i>
+        <span>Administrator</span>
+      </div>
+    </header>
+
+    <div class="edit-grid">
+      
+      <section class="management-panel">
+        <h2 class="panel-title">Active Services</h2>
+        <div class="service-selection-list" id="servicesContainer">
+          <div class="selection-item selected" onclick="loadServiceData('web-development')">
+            <span>Web Development</span>
+            <i class="fa-solid fa-chevron-right"></i>
+          </div>
+          <div class="selection-item" onclick="loadServiceData('graphics-branding')">
+            <span>Graphics & Branding</span>
+            <i class="fa-solid fa-chevron-right"></i>
+          </div>
+          <div class="selection-item" onclick="loadServiceData('ict-training')">
+            <span>ICT Training</span>
+            <i class="fa-solid fa-chevron-right"></i>
+          </div>
+          <div class="selection-item" onclick="loadServiceData('vtu-operations')">
+            <span>VTU Portal Systems</span>
+            <i class="fa-solid fa-chevron-right"></i>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-panel">
+        <h2 class="panel-title" id="formPanelTitle">Modify Configuration: Web Development</h2>
+        
+        <div id="statusToast" class="status-toast" role="alert"></div>
+
+        <form id="editServiceForm" onsubmit="handleServiceUpdate(event)">
+          <input type="hidden" id="serviceId" value="web-development">
+
+          <div class="form-group">
+            <label for="serviceTitle">Service Name / Title</label>
+            <input type="text" id="serviceTitle" class="form-control" value="Web Development & Cloud Databases" required>
+          </div>
+
+          <div class="form-group">
+            <label for="serviceCategory">System Pipeline Category</label>
+            <select id="serviceCategory" class="form-control">
+              <option value="development" selected>Software Development & Programming</option>
+              <option value="creative">Creative Arts & Brand Identity</option>
+              <option value="educational">Educational & Corporate Training</option>
+              <option value="telecoms">Telecoms & Utility Automation</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="servicePrice">Base Execution Pricing Rate (NGN)</label>
+            <div class="input-addon-wrapper">
+              <span class="addon-icon">₦</span>
+              <input type="number" id="servicePrice" class="form-control addon-control" value="150000" min="0" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="serviceDescription">Public Platform Description Block</label>
+            <textarea id="serviceDescription" class="form-control" required>Deploying robust full-stack web applications, dynamic database integrations using Node.js and MongoDB frameworks, and specialized automated responsive business administration system panels.</textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="serviceStatus">Operational Availability Status</label>
+            <select id="serviceStatus" class="form-control">
+              <option value="active" selected>Active & Displayed Publicly</option>
+              <option value="maintenance">Under Temporary Configuration Adjustments</option>
+              <option value="disabled">Archive / Disable Completely</option>
+            </select>
+          </div>
+
+          <div class="action-row">
+            <button type="button" class="btn btn-secondary" onclick="resetFormState()">Cancel Modifications</button>
+            <button type="submit" class="btn btn-primary">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Push Configuration Updates
+            </button>
+          </div>
+        </form>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    // In-memory data repository mimicking operational dynamic system parameters
+    const mockServicesDatabase = {
+      'web-development': {
+        title: "Web Development & Cloud Databases",
+        category: "development",
+        price: "150000",
+        description: "Deploying robust full-stack web applications, dynamic database integrations using Node.js and MongoDB frameworks, and specialized automated responsive business administration system panels.",
+        status: "active"
+      },
+      'graphics-branding': {
+        title: "Graphics Design & Corporate Branding",
+        category: "creative",
+        price: "35000",
+        description: "Professional multi-format business identity creation, including structural logos, crisp business presentation banners, promotional flyers, and responsive layout vector redesign templates using blue, gold, peach, and pink palettes.",
+        status: "active"
+      },
+      'ict-training': {
+        title: "ICT Educational Training Foundations",
+        category: "educational",
+        price: "50000",
+        description: "Comprehensive computational technology training courses spanning backend logic construction arrays, systems architecture tracking, spreadsheet engine formula design, and structural hardware engineering mechanics.",
+        status: "active"
+      },
+      'vtu-operations': {
+        title: "VTU Portal Systems Operations",
+        category: "telecoms",
+        price: "75000",
+        description: "Developing automated Virtual Top-Up utility interfaces for programmatic automated high-speed network recharging data streams, utility billing paths, and automated ledger operations tracking.",
+        status: "active"
+      }
+    };
+
+    /**
+     * Updates form inputs based on selected active profile context mapping
+     * @param {string} key Target profile lookup identification value
+     */
+    function loadServiceData(key) {
+      // Toggle CSS visual indicators on menu select tracking
+      const items = document.querySelectorAll('.selection-item');
+      items.forEach(el => el.classList.remove('selected'));
+      
+      // Select appropriate element tracking matching trigger index
+      const activeElement = event.currentTarget;
+      if (activeElement) activeElement.classList.add('selected');
+
+      const data = mockServicesDatabase[key];
+      if (!data) return;
+
+      // Map dynamic array objects directly to interactive input components
+      document.getElementById('serviceId').value = key;
+      document.getElementById('serviceTitle').value = data.title;
+      document.getElementById('serviceCategory').value = data.category;
+      document.getElementById('servicePrice').value = data.price;
+      document.getElementById('serviceDescription').value = data.description;
+      document.getElementById('serviceStatus').value = data.status;
+
+      document.getElementById('formPanelTitle').innerText = `Modify Configuration: ${data.title.split('&')[0].split('|')[0].trim()}`;
+      clearToastNotification();
+    }
+
+    /**
+     * Executes context modifications updates pushing changes back to configuration profile memory
+     * @param {Event} event Explicit system form event capture pipeline object
+     */
+    function handleServiceUpdate(event) {
+      event.preventDefault();
+      
+      const targetId = document.getElementById('serviceId').value;
+      const toastElement = document.getElementById('statusToast');
+
+      // Sync user data changes to in-memory database layout structure
+      if (mockServicesDatabase[targetId]) {
+        mockServicesDatabase[targetId].title = document.getElementById('serviceTitle').value;
+        mockServicesDatabase[targetId].category = document.getElementById('serviceCategory').value;
+        mockServicesDatabase[targetId].price = document.getElementById('servicePrice').value;
+        mockServicesDatabase[targetId].description = document.getElementById('serviceDescription').value;
+        mockServicesDatabase[targetId].status = document.getElementById('serviceStatus').value;
+      }
+
+      // Render confirmation messaging
+      toastElement.className = "status-toast success";
+      toastElement.innerHTML = `<i class="fa-solid fa-circle-check"></i> Configuration parameters for "${mockServicesDatabase[targetId].title}" committed successfully to the cloud server array pipeline database.`;
+      
+      // Auto-update display menu tracking link changes if needed
+      const runningSelectionItem = document.querySelector('.selection-item.selected span');
+      if (runningSelectionItem) {
+        runningSelectionItem.innerText = document.getElementById('serviceTitle').value.split('&')[0].split('|')[0].trim();
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetFormState() {
+      const workingKeyId = document.getElementById('serviceId').value;
+      loadServiceData(workingKeyId);
+    }
+
+    function clearToastNotification() {
+      const toastElement = document.getElementById('statusToast');
+      toastElement.className = "status-toast";
+      toastElement.innerHTML = "";
+    }
+  </script>
+</body>
+
+</html>
