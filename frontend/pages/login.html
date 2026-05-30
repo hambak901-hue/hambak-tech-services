@@ -2,876 +2,494 @@
 <html lang="en">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | HAMBAK TECH & SERVICES</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* =========================
+    LOGIN PAGE
+    ========================= */
+    * {
+      box-sizing: border-box;
+    }
 
-<meta charset="UTF-8">
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #081120;
+    }
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
->
+    /* =========================
+    NAVBAR
+    ========================= */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 8%;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
 
-<title>
-Login | HAMBAK TECH & SERVICES
-</title>
+    .logo {
+      display: flex;
+      flex-direction: column;
+    }
 
-<link
-rel="stylesheet"
-href="../css/style.css"
->
+    .logo span {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #f5b942;
+    }
 
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
->
+    .logo small {
+      color: white;
+      font-weight: bold;
+    }
 
-<style>
+    .nav-links {
+      display: flex;
+      gap: 30px;
+    }
 
-/* =========================
-LOGIN PAGE
-========================= */
+    .nav-links a {
+      text-decoration: none;
+      color: white;
+      font-weight: 600;
+      transition: 0.3s;
+    }
 
-*{
-box-sizing:border-box;
-}
+    .nav-links a:hover {
+      color: #f5b942;
+    }
 
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#081120;
-}
+    /* =========================
+    AUTH SECTION
+    ========================= */
+    .auth-section {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 8%;
+      background: linear-gradient(135deg, #081120, #0d47a1);
+    }
 
-/* =========================
-NAVBAR
-========================= */
+    .auth-container {
+      width: 100%;
+      max-width: 500px;
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
 
-.navbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 8%;
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(10px);
-position:sticky;
-top:0;
-z-index:1000;
-}
+    .auth-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
 
-.logo{
-display:flex;
-flex-direction:column;
-}
+    .auth-header h1 {
+      font-size: 2.5rem;
+      color: #0f172a;
+      margin-bottom: 10px;
+    }
 
-.logo span{
-font-size:2rem;
-font-weight:bold;
-color:#f5b942;
-}
+    .auth-header p {
+      color: #555;
+    }
 
-.logo small{
-color:white;
-font-weight:bold;
-}
+    /* =========================
+    FORM
+    ========================= */
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
 
-.nav-links{
-display:flex;
-gap:30px;
-}
+    .input-group {
+      position: relative;
+    }
 
-.nav-links a{
-text-decoration:none;
-color:white;
-font-weight:600;
-transition:0.3s;
-}
+    .input-group i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #888;
+    }
 
-.nav-links a:hover{
-color:#f5b942;
-}
+    .input-group input {
+      width: 100%;
+      padding: 15px 45px 15px 45px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.3s;
+    }
 
-/* =========================
-AUTH SECTION
-========================= */
+    .input-group input:focus {
+      border-color:#0d47a1;
+    }
 
-.auth-section{
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-padding:60px 8%;
-background:linear-gradient(
-135deg,
-#081120,
-#0d47a1
-);
-}
+    .auth-btn {
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      background: #0d47a1;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      font-weight: bold;
+    }
 
-.auth-container{
-width:100%;
-max-width:500px;
-background:white;
-padding:40px;
-border-radius:20px;
-box-shadow:0 15px 40px rgba(0,0,0,0.2);
-}
+    .auth-btn:hover {
+      background: #1565c0;
+    }
 
-.auth-header{
-text-align:center;
-margin-bottom:30px;
-}
+    .auth-switch {
+      text-align: center;
+      margin-top: 20px;
+      color: #555;
+    }
 
-.auth-header h1{
-font-size:2.5rem;
-color:#0f172a;
-margin-bottom:10px;
-}
+    .auth-switch span {
+      color: #0d47a1;
+      cursor: pointer;
+      font-weight: 600;
+    }
 
-.auth-header p{
-color:#555;
-}
+    /* =========================
+    FORGOT PASSWORD
+    ========================= */
+    .forgot-password {
+      text-align: right;
+      margin-top: -10px;
+    }
 
-/* =========================
-FORM
-========================= */
+    .forgot-password a {
+      color: #0d47a1;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
 
-.auth-form{
-display:flex;
-flex-direction:column;
-gap:20px;
-}
+    .forgot-password a:hover {
+      text-decoration: underline;
+    }
 
-.input-group{
-position:relative;
-}
+    /* =========================
+    DEMO INFO
+    ========================= */
+    .demo-info {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f1f5f9;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      color: #475569;
+      line-height: 1.8;
+    }
 
-.input-group i{
-position:absolute;
-left:15px;
-top:50%;
-transform:translateY(-50%);
-color:#888;
-}
+    /* =========================
+    WHATSAPP
+    ========================= */
+    .whatsapp-float {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      bottom: 25px;
+      right: 25px;
+      background: #25d366;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
 
-.input-group input{
-width:100%;
-padding:15px 45px 15px 45px;
-border:1px solid #ddd;
-border-radius:10px;
-font-size:1rem;
-outline:none;
-transition:0.3s;
-}
+    /* =========================
+    MOBILE RESPONSIVENESS
+    ========================= */
+    @media(max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 20px;
+      }
 
-.input-group input:focus{
-border-color:#0d47a1;
-}
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+      }
 
-.auth-btn{
-padding:15px;
-border:none;
-border-radius:10px;
-background:#0d47a1;
-color:white;
-font-size:1rem;
-cursor:pointer;
-transition:0.3s;
-font-weight:bold;
-}
+      .auth-container {
+        padding: 30px 20px;
+      }
 
-.auth-btn:hover{
-background:#1565c0;
-}
-
-.auth-switch{
-text-align:center;
-margin-top:20px;
-color:#555;
-}
-
-.auth-switch span{
-color:#0d47a1;
-cursor:pointer;
-font-weight:600;
-}
-
-/* =========================
-FORGOT PASSWORD
-========================= */
-
-.forgot-password{
-text-align:right;
-margin-top:-10px;
-}
-
-.forgot-password a{
-color:#0d47a1;
-text-decoration:none;
-font-weight:bold;
-font-size:0.95rem;
-}
-
-.forgot-password a:hover{
-text-decoration:underline;
-}
-
-/* =========================
-DEMO INFO
-========================= */
-
-.demo-info{
-margin-top:30px;
-padding:20px;
-background:#f1f5f9;
-border-radius:10px;
-font-size:0.95rem;
-color:#475569;
-line-height:1.8;
-}
-
-/* =========================
-WHATSAPP
-========================= */
-
-.whatsapp-float{
-position:fixed;
-width:60px;
-height:60px;
-bottom:25px;
-right:25px;
-background:#25d366;
-color:white;
-border-radius:50%;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:2rem;
-text-decoration:none;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
-z-index:1000;
-}
-
-/* =========================
-MOBILE
-========================= */
-
-@media(max-width:768px){
-
-.navbar{
-flex-direction:column;
-gap:20px;
-}
-
-.nav-links{
-flex-wrap:wrap;
-justify-content:center;
-gap:15px;
-}
-
-.auth-container{
-padding:30px 20px;
-}
-
-.auth-header h1{
-font-size:2rem;
-}
-
-}
-
-</style>
-
+      .auth-header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- =========================
-NAVBAR
-========================= -->
-
-<header class="navbar">
-
-<div class="logo">
-
-<span>HAMBAK</span>
-
-<small>TECH & SERVICES</small>
-
-</div>
-
-<nav class="nav-links">
-
-<a href="../index.html">Home</a>
-
-<a href="services.html">
-Services
-</a>
-
-<a href="shop.html">
-Shop
-</a>
-
-<a href="contact.html">
-Contact
-</a>
-
-</nav>
-
-</header>
-
-<!-- =========================
-AUTH SECTION
-========================= -->
-
-<section class="auth-section">
-
-<div class="auth-container">
-
-<!-- HEADER -->
-
-<div class="auth-header">
-
-<h1 id="formTitle">
-Customer Login
-</h1>
-
-<p>
-Access your dashboard & services
-</p>
-
-</div>
-
-<!-- FORM -->
-
-<form
-class="auth-form"
-id="authForm"
->
-
-<!-- NAME -->
-
-<div
-class="input-group"
-id="nameWrapper"
-style="display:none"
->
-
-<i class="fa-solid fa-user"></i>
-
-<input
-type="text"
-placeholder="Full Name"
-id="nameField"
->
-
-</div>
-
-<!-- USERNAME -->
-
-<div
-class="input-group"
-id="usernameWrapper"
-style="display:none"
->
-
-<i class="fa-solid fa-at"></i>
-
-<input
-type="text"
-placeholder="Username"
-id="usernameField"
->
-
-</div>
-
-<!-- PHONE -->
-
-<div
-class="input-group"
-id="phoneWrapper"
-style="display:none"
->
-
-<i class="fa-solid fa-phone"></i>
-
-<input
-type="tel"
-placeholder="Phone Number"
-id="phoneField"
->
-
-</div>
-
-<!-- EMAIL -->
-
-<div class="input-group">
-
-<i class="fa-solid fa-envelope"></i>
-
-<input
-type="email"
-placeholder="Email Address"
-id="emailField"
-required
->
-
-</div>
-
-<!-- PASSWORD -->
-
-<div class="input-group">
-
-<i class="fa-solid fa-lock"></i>
-
-<input
-type="password"
-placeholder="Password"
-id="passwordField"
-required
->
-
-<span
-id="togglePassword"
-style="
-position:absolute;
-right:15px;
-top:50%;
-transform:translateY(-50%);
-cursor:pointer;
-color:#888;
-"
->
-
-<i class="fa-solid fa-eye"></i>
-
-</span>
-
-</div>
-
-<!-- FORGOT PASSWORD -->
-
-<div class="forgot-password">
-
-<a href="forgot-password.html">
-Forgot Password?
-</a>
-
-</div>
-
-<!-- BUTTON -->
-
-<button
-type="submit"
-class="auth-btn"
-id="submitBtn"
->
-
-Login
-
-</button>
-
-</form>
-
-<!-- SWITCH -->
-
-<div class="auth-switch">
-
-<span id="toggleForm">
-Create New Account
-</span>
-
-</div>
-
-<!-- DEMO -->
-
-<div class="demo-info">
-
-<strong>Demo Features:</strong>
-
-<br><br>
-
-✔ Customer Login UI  
-✔ Registration UI  
-✔ Forgot Password System  
-✔ JWT Authentication  
-✔ MongoDB Connected  
-✔ Admin Login Supported  
-✔ Dashboard Authentication  
-
-</div>
-
-</div>
-
-</section>
-
-<!-- =========================
-WHATSAPP
-========================= -->
-
-<a
-href="https://wa.me/2349155104724"
-class="whatsapp-float"
->
-
-<i class="fa-brands fa-whatsapp"></i>
-
-</a>
-
-<!-- =========================
-API FILE
-========================= -->
-
-<script src="../js/api.js"></script>
-
-<!-- =========================
-SCRIPT
-========================= -->
-
-<script>
-
-/* =========================
-ELEMENTS
-========================= */
-
-const authForm =
-document.getElementById(
-"authForm"
-);
-
-const toggleForm =
-document.getElementById(
-"toggleForm"
-);
-
-const formTitle =
-document.getElementById(
-"formTitle"
-);
-
-const submitBtn =
-document.getElementById(
-"submitBtn"
-);
-
-const nameWrapper =
-document.getElementById(
-"nameWrapper"
-);
-
-const usernameWrapper =
-document.getElementById(
-"usernameWrapper"
-);
-
-const phoneWrapper =
-document.getElementById(
-"phoneWrapper"
-);
-
-const nameField =
-document.getElementById(
-"nameField"
-);
-
-const usernameField =
-document.getElementById(
-"usernameField"
-);
-
-const phoneField =
-document.getElementById(
-"phoneField"
-);
-
-const emailField =
-document.getElementById(
-"emailField"
-);
-
-const passwordField =
-document.getElementById(
-"passwordField"
-);
-
-const togglePassword =
-document.getElementById(
-"togglePassword"
-);
-
-/* =========================
-PASSWORD TOGGLE
-========================= */
-
-togglePassword.addEventListener(
-"click",
-()=>{
-
-if(passwordField.type === "password"){
-
-passwordField.type =
-"text";
-
-togglePassword.innerHTML =
-'<i class="fa-solid fa-eye-slash"></i>';
-
-}else{
-
-passwordField.type =
-"password";
-
-togglePassword.innerHTML =
-'<i class="fa-solid fa-eye"></i>';
-
-}
-
-}
-);
-
-/* =========================
-MODE
-========================= */
-
-let loginMode = true;
-
-/* =========================
-TOGGLE LOGIN / REGISTER
-========================= */
-
-toggleForm.addEventListener(
-"click",
-()=>{
-
-loginMode = !loginMode;
-
-if(loginMode){
-
-formTitle.innerHTML =
-"Customer Login";
-
-submitBtn.innerHTML =
-"Login";
-
-toggleForm.innerHTML =
-"Create New Account";
-
-nameWrapper.style.display =
-"none";
-
-usernameWrapper.style.display =
-"none";
-
-phoneWrapper.style.display =
-"none";
-
-}else{
-
-formTitle.innerHTML =
-"Create Account";
-
-submitBtn.innerHTML =
-"Register";
-
-toggleForm.innerHTML =
-"Already Have Account?";
-
-nameWrapper.style.display =
-"block";
-
-usernameWrapper.style.display =
-"block";
-
-phoneWrapper.style.display =
-"block";
-
-}
-
-}
-);
-
-/* =========================
-FORM SUBMIT
-========================= */
-
-authForm.addEventListener(
-"submit",
-async (e)=>{
-
-e.preventDefault();
-
-/* =========================
-REGISTER
-========================= */
-
-if(!loginMode){
-
-if(
-!nameField.value.trim() ||
-!usernameField.value.trim() ||
-!phoneField.value.trim() ||
-!emailField.value.trim() ||
-!passwordField.value.trim()
-){
-
-alert(
-"Please fill all fields"
-);
-
-return;
-
-}
-
-const userData = {
-
-name:
-nameField.value.trim(),
-
-username:
-usernameField.value.trim(),
-
-email:
-emailField.value.trim(),
-
-phone:
-phoneField.value.trim(),
-
-password:
-passwordField.value.trim()
-
-};
-
-submitBtn.disabled = true;
-
-submitBtn.innerHTML =
-"Registering...";
-
-try{
-
-const data =
-await registerUser(userData);
-
-if(data.success){
-
-alert(
-"Registration Successful"
-);
-
-window.location.href =
-"login.html";
-
-}else{
-
-alert(
-data.message ||
-"Registration failed"
-);
-
-}
-
-}catch(error){
-
-console.log(error);
-
-alert(
-"Registration failed"
-);
-
-}
-
-submitBtn.disabled = false;
-
-submitBtn.innerHTML =
-"Register";
-
-}
-
-/* =========================
-LOGIN
-========================= */
-
-else{
-
-const loginData = {
-
-email:
-emailField.value.trim(),
-
-password:
-passwordField.value.trim()
-
-};
-
-submitBtn.disabled = true;
-
-submitBtn.innerHTML =
-"Logging in...";
-
-try{
-
-const data =
-await loginUser(loginData);
-
-console.log(data);
-
-if(data.success){
-
-alert(
-"Login Successful"
-);
-
-/* SAVE USER */
-
-localStorage.setItem(
-"hambak_user",
-JSON.stringify(data.user)
-);
-
-localStorage.setItem(
-"hambak_token",
-data.token
-);
-
-/* REDIRECT */
-
-if(data.user.role === "admin"){
-
-window.location.href =
-"admin.html";
-
-}else{
-
-window.location.href =
-"dashboard.html";
-
-}
-
-}else{
-
-alert(
-data.message ||
-"Login failed"
-);
-
-}
-
-}catch(error){
-
-console.log(error);
-
-alert(
-"Login failed"
-);
-
-}
-
-submitBtn.disabled = false;
-
-submitBtn.innerHTML =
-"Login";
-
-}
-
-}
-);
-
-</script>
-
+  <header class="navbar">
+    <div class="logo">
+      <span>HAMBAK</span>
+      <small>TECH & SERVICES</small>
+    </div>
+    <nav class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="shop.html">Shop</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <section class="auth-section">
+    <div class="auth-container">
+      
+      <div class="auth-header">
+        <h1 id="formTitle">Customer Login</h1>
+        <p>Access your dashboard & services</p>
+      </div>
+
+      <form class="auth-form" id="authForm">
+        
+        <div class="input-group" id="nameWrapper" style="display:none">
+          <i class="fa-solid fa-user"></i>
+          <input type="text" placeholder="Full Name" id="nameField">
+        </div>
+
+        <div class="input-group" id="usernameWrapper" style="display:none">
+          <i class="fa-solid fa-at"></i>
+          <input type="text" placeholder="Username" id="usernameField">
+        </div>
+
+        <div class="input-group" id="phoneWrapper" style="display:none">
+          <i class="fa-solid fa-phone"></i>
+          <input type="tel" placeholder="Phone Number" id="phoneField">
+        </div>
+
+        <div class="input-group">
+          <i class="fa-solid fa-envelope"></i>
+          <input type="email" placeholder="Email Address" id="emailField" required>
+        </div>
+
+        <div class="input-group">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" placeholder="Password" id="passwordField" required>
+          <span id="togglePassword" style="position:absolute; right:15px; top:50%; transform:translateY(-50%); cursor:pointer; color:#888;">
+            <i class="fa-solid fa-eye"></i>
+          </span>
+        </div>
+
+        <div class="forgot-password" id="forgotPasswordWrapper">
+          <a href="forgot-password.html">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="auth-btn" id="submitBtn">Login</button>
+      </form>
+
+      <div class="auth-switch">
+        <span id="toggleForm">Create New Account</span>
+      </div>
+
+      <div class="demo-info">
+        <strong>System Integrity Map:</strong><br><br>
+        ✔ Customer Login UI<br>
+        ✔ Registration UI<br>
+        ✔ Forgot Password System<br>
+        ✔ JWT Authentication Ecosystem<br>
+        ✔ Live Production Database Sync<br>
+        ✔ Role-Based Routing Control Matrix
+      </div>
+
+    </div>
+  </section>
+
+  <a href="https://wa.me/2349155104724" class="whatsapp-float">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <script>
+    /* =========================
+    DOM ELEMENT SELECTION
+    ========================= */
+    const authForm = document.getElementById("authForm");
+    const toggleForm = document.getElementById("toggleForm");
+    const formTitle = document.getElementById("formTitle");
+    const submitBtn = document.getElementById("submitBtn");
+    const forgotPasswordWrapper = document.getElementById("forgotPasswordWrapper");
+
+    const nameWrapper = document.getElementById("nameWrapper");
+    const usernameWrapper = document.getElementById("usernameWrapper");
+    const phoneWrapper = document.getElementById("phoneWrapper");
+
+    const nameField = document.getElementById("nameField");
+    const usernameField = document.getElementById("usernameField");
+    const phoneField = document.getElementById("phoneField");
+    const emailField = document.getElementById("emailField");
+    const passwordField = document.getElementById("passwordField");
+    const togglePassword = document.getElementById("togglePassword");
+
+    /* =========================
+    PRODUCTION ROUTE API CONFIG
+    ========================= */
+    const BASE_URL = "https://hambak-tech-services.onrender.com/api";
+
+    /* =========================
+    VISIBILITY PASS ENGINE
+    ========================= */
+    togglePassword.addEventListener("click", () => {
+      if (passwordField.type === "password") {
+        passwordField.type = "text";
+        togglePassword.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+      } else {
+        passwordField.type = "password";
+        togglePassword.innerHTML = '<i class="fa-solid fa-eye"></i>';
+      }
+    });
+
+    /* =========================
+    INTERACTION STATE CONFIG
+    ========================= */
+    let loginMode = true;
+
+    toggleForm.addEventListener("click", () => {
+      loginMode = !loginMode;
+      authForm.reset(); // Clear data states on form flip
+
+      if (loginMode) {
+        formTitle.innerHTML = "Customer Login";
+        submitBtn.innerHTML = "Login";
+        toggleForm.innerHTML = "Create New Account";
+        forgotPasswordWrapper.style.display = "block";
+        nameWrapper.style.display = "none";
+        usernameWrapper.style.display = "none";
+        phoneWrapper.style.display = "none";
+      } else {
+        formTitle.innerHTML = "Create Account";
+        submitBtn.innerHTML = "Register";
+        toggleForm.innerHTML = "Already Have Account?";
+        forgotPasswordWrapper.style.display = "none";
+        nameWrapper.style.display = "block";
+        usernameWrapper.style.display = "block";
+        phoneWrapper.style.display = "block";
+      }
+    });
+
+    /* =========================
+    FORM TRANSACTIONS HANDLING
+    ========================= */
+    authForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = emailField.value.trim();
+      const password = passwordField.value;
+
+      /* =========================
+      WORKFLOW EXECUTION: REGISTER
+      ========================= */
+      if (!loginMode) {
+        const name = nameField.value.trim();
+        const username = usernameField.value.trim();
+        const phone = phoneField.value.trim();
+
+        if (!name || !username || !phone || !email || !password) {
+          alert("Please fill all required inputs parameters.");
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "Registering...";
+
+        try {
+          const response = await fetch(`${BASE_URL}/auth/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, username, email, phone, password })
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            alert("Registration Successful! Switching to login view.");
+            toggleForm.click(); // Programmatically switches view mode smoothly back to login
+          } else {
+            alert(data.message || "Registration sequence failed.");
+          }
+        } catch (error) {
+          console.error("Registration Engine Error:", error);
+          alert("Network connection error during registration.");
+        }
+
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = "Register";
+      }
+
+      /* =========================
+      WORKFLOW EXECUTION: LOGIN
+      ========================= */
+      else {
+        if (!email || !password) {
+          alert("Please provide valid login details.");
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "Logging in...";
+
+        try {
+          const response = await fetch(`${BASE_URL}/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            // Commit user data structures directly to cache storage matching dashboard guards
+            localStorage.setItem("hambak_user", JSON.stringify(data.user));
+            localStorage.setItem("hambak_token", data.token);
+
+            alert("Login Successful!");
+
+            // Role-Based Router Management System
+            if (data.user.role === "admin") {
+              window.location.href = "admin.html";
+            } else {
+              window.location.href = "dashboard.html";
+            }
+          } else {
+            alert(data.message || "Invalid authentication credentials.");
+          }
+        } catch (error) {
+          console.error("Login Engine Error:", error);
+          alert("Server failed to respond. Please verify connection metrics.");
+        }
+
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = "Login";
+      }
+    });
+  </script>
 </body>
 
 </html>
