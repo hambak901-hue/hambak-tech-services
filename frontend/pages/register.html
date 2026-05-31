@@ -2,923 +2,699 @@
 <html lang="en">
 
 <head>
-
-<meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
->
-
-<title>
-Register | HAMBAK TECH & SERVICES
-</title>
-
-<link
-rel="stylesheet"
-href="../css/style.css"
->
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
->
-
-<style>
-
-/* =========================
-REGISTER PAGE
-========================= */
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:
-linear-gradient(
-135deg,
-#020617,
-#0d47a1
-);
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-padding:40px 20px;
-}
-
-/* CONTAINER */
-
-.register-container{
-width:100%;
-max-width:1200px;
-background:white;
-border-radius:35px;
-overflow:hidden;
-display:grid;
-grid-template-columns:1fr 1fr;
-box-shadow:0 20px 60px rgba(0,0,0,0.3);
-}
-
-/* LEFT */
-
-.register-left{
-padding:70px 60px;
-background:
-linear-gradient(
-135deg,
-#081120,
-#0d47a1
-);
-color:white;
-display:flex;
-flex-direction:column;
-justify-content:center;
-}
-
-.register-left h1{
-font-size:4rem;
-margin-bottom:25px;
-line-height:1.2;
-}
-
-.register-left p{
-line-height:1.9;
-font-size:1.1rem;
-color:#cbd5e1;
-margin-bottom:35px;
-}
-
-.left-features{
-display:flex;
-flex-direction:column;
-gap:20px;
-}
-
-.feature-item{
-display:flex;
-align-items:center;
-gap:15px;
-font-size:1rem;
-}
-
-.feature-item i{
-width:50px;
-height:50px;
-background:rgba(255,255,255,0.1);
-border-radius:50%;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:1.2rem;
-}
-
-/* RIGHT */
-
-.register-right{
-padding:70px 60px;
-overflow-y:auto;
-}
-
-.form-header{
-margin-bottom:40px;
-}
-
-.form-header h2{
-font-size:3rem;
-margin-bottom:15px;
-color:#0f172a;
-}
-
-.form-header p{
-line-height:1.8;
-color:#64748b;
-}
-
-/* FORM */
-
-.register-form{
-display:flex;
-flex-direction:column;
-gap:22px;
-}
-
-.form-group{
-display:flex;
-flex-direction:column;
-gap:10px;
-}
-
-.form-group label{
-font-weight:bold;
-color:#0f172a;
-}
-
-.input-box{
-position:relative;
-}
-
-.input-box input,
-.input-box select{
-width:100%;
-padding:16px 18px;
-padding-left:50px;
-border:1px solid #ddd;
-border-radius:14px;
-outline:none;
-font-size:1rem;
-box-sizing:border-box;
-transition:0.3s;
-}
-
-.input-box input:focus,
-.input-box select:focus{
-border-color:#0d47a1;
-}
-
-.input-box i{
-position:absolute;
-left:18px;
-top:50%;
-transform:translateY(-50%);
-color:#64748b;
-}
-
-/* PASSWORD TOGGLE */
-
-.password-toggle{
-position:absolute;
-right:18px;
-top:50%;
-transform:translateY(-50%);
-cursor:pointer;
-color:#64748b;
-}
-
-/* UPLOAD */
-
-.upload-box{
-border:2px dashed #0d47a1;
-padding:25px;
-border-radius:18px;
-text-align:center;
-background:#f8fafc;
-}
-
-.upload-box i{
-font-size:2rem;
-color:#0d47a1;
-margin-bottom:15px;
-}
-
-.upload-box p{
-margin-bottom:15px;
-color:#555;
-}
-
-/* CHECKBOX */
-
-.checkbox-group{
-display:flex;
-align-items:flex-start;
-gap:12px;
-font-size:0.95rem;
-line-height:1.7;
-color:#555;
-}
-
-.checkbox-group input{
-margin-top:4px;
-}
-
-/* BUTTON */
-
-.register-btn{
-padding:18px;
-background:#0d47a1;
-color:white;
-border:none;
-border-radius:14px;
-font-size:1rem;
-font-weight:bold;
-cursor:pointer;
-transition:0.3s;
-}
-
-.register-btn:hover{
-background:#1565c0;
-}
-
-/* SOCIAL */
-
-.social-login{
-margin-top:30px;
-}
-
-.social-login p{
-text-align:center;
-margin-bottom:20px;
-color:#64748b;
-}
-
-.social-buttons{
-display:flex;
-gap:15px;
-flex-wrap:wrap;
-}
-
-.social-btn{
-flex:1;
-min-width:140px;
-padding:15px;
-border:none;
-border-radius:14px;
-cursor:pointer;
-font-size:1rem;
-font-weight:bold;
-display:flex;
-justify-content:center;
-align-items:center;
-gap:10px;
-transition:0.3s;
-}
-
-.google-btn{
-background:#ea4335;
-color:white;
-}
-
-.facebook-btn{
-background:#1877f2;
-color:white;
-}
-
-.github-btn{
-background:#111827;
-color:white;
-}
-
-/* LOGIN LINK */
-
-.login-link{
-text-align:center;
-margin-top:30px;
-color:#555;
-}
-
-.login-link a{
-color:#0d47a1;
-text-decoration:none;
-font-weight:bold;
-}
-
-/* MOBILE */
-
-@media(max-width:950px){
-
-.register-container{
-grid-template-columns:1fr;
-}
-
-.register-left{
-display:none;
-}
-
-}
-
-@media(max-width:768px){
-
-.register-right{
-padding:50px 25px;
-}
-
-.form-header h2{
-font-size:2.2rem;
-}
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | HAMBAK TECH & SERVICES</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* ==========================================================================
+       PREMIUM BRAND COLOR PALETTE (BLUE, GOLD, PEACH, PINK)
+       ========================================================================== */
+    :root {
+      --primary-blue: #0d47a1;
+      --deep-navy: #081120;
+      --brand-gold: #f5b942;
+      --soft-peach: #ffdfd3;
+      --accent-pink: #ff4081;
+      --clean-white: #ffffff;
+      --dark-card: #0f172a;
+      --input-bg: #1e293b;
+      --border-glow: rgba(245, 185, 66, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--deep-navy), #040812);
+      color: var(--clean-white);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    /* FULL ECOSYSTEM LAYOUT CONTAINER */
+    .register-container {
+      width: 100%;
+      max-width: 1200px;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 32px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    /* BRAND INFRASTRUCTURE DISPLAY (LEFT) */
+    .register-left {
+      padding: 60px;
+      background: linear-gradient(135deg, rgba(8, 17, 32, 0.9), rgba(13, 71, 161, 0.4)), 
+                  radial-gradient(circle at top left, var(--accent-pink), transparent 70%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .register-left h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 25px;
+      line-height: 1.15;
+      background: linear-gradient(135deg, var(--clean-white), var(--soft-peach));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .register-left p {
+      line-height: 1.8;
+      font-size: 1.1rem;
+      color: #94a3b8;
+      margin-bottom: 40px;
+    }
+
+    .left-features {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 1.05rem;
+      color: #cbd5e1;
+    }
+
+    .feature-item i {
+      width: 52px;
+      height: 52px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.25rem;
+      color: var(--brand-gold);
+    }
+
+    /* FORM CAPTURE CONTROLS (RIGHT) */
+    .register-right {
+      padding: 60px;
+      background: var(--dark-card);
+      overflow-y: auto;
+    }
+
+    .form-header {
+      margin-bottom: 35px;
+    }
+
+    .form-header h2 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--brand-gold), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .form-header p {
+      line-height: 1.6;
+      color: #94a3b8;
+    }
+
+    /* INTERACTIVE FORMS MODULES */
+    .register-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      color: #cbd5e1;
+      font-size: 0.9rem;
+    }
+
+    .input-box {
+      position: relative;
+    }
+
+    .input-box input, .input-box select {
+      width: 100%;
+      padding: 16px 18px 16px 52px;
+      background: var(--input-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      outline: none;
+      font-size: 1rem;
+      color: var(--clean-white);
+      box-sizing: border-box;
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .input-box select {
+      appearance: none;
+      cursor: pointer;
+    }
+
+    /* Input Focus Styling */
+    .input-box input:focus, .input-box select:focus {
+      border-color: var(--brand-gold);
+      box-shadow: 0 0 0 3px var(--border-glow);
+      background: rgba(30, 41, 59, 0.8);
+    }
+
+    .input-box i {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #64748b;
+      font-size: 1.1rem;
+      transition: 0.3s;
+    }
+
+    .input-box input:focus ~ i, .input-box select:focus ~ i {
+      color: var(--brand-gold);
+    }
+
+    /* PASSWORD ACCESSIBILITY TOGGLE */
+    .password-toggle {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #64748b;
+      z-index: 10;
+      padding: 5px;
+      transition: 0.2s;
+    }
+
+    .password-toggle:hover {
+      color: var(--clean-white);
+    }
+
+    /* TRANSLUCENT DRAG & DROP ZONE */
+    .upload-box {
+      border: 2px dashed rgba(245, 185, 66, 0.3);
+      padding: 22px;
+      border-radius: 16px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.01);
+      position: relative;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .upload-box:hover {
+      border-color: var(--brand-gold);
+      background: rgba(245, 185, 66, 0.03);
+    }
+
+    .upload-box i {
+      font-size: 1.8rem;
+      color: var(--brand-gold);
+      margin-bottom: 10px;
+    }
+
+    .upload-box p {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+
+    .upload-box input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    /* COMPLIANCE CHECKBOX INTERFACE */
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #94a3b8;
+      margin-top: 5px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      accent-color: var(--primary-blue);
+      margin-top: 3px;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    /* CORE TRANSACTION TRIGGER BUTTON */
+    .register-btn {
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary-blue), #1565c0);
+      color: var(--clean-white);
+      border: none;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(13, 71, 161, 0.3);
+      transition: 0.3s ease;
+    }
+
+    .register-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 25px rgba(13, 71, 161, 0.5);
+    }
+
+    /* STATUS FEEDBACK INJECTOR PANEL */
+    .message-banner {
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .message-banner.error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid #ef4444;
+      color: #f87171;
+      display: block;
+    }
+
+    .message-banner.success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid #10b981;
+      color: #34d399;
+      display: block;
+    }
+
+    /* FEDERATED THIRD-PARTY PORTALS */
+    .social-login {
+      margin-top: 25px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 25px;
+    }
+
+    .social-login p {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    .social-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .social-btn {
+      flex: 1;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--clean-white);
+      transition: 0.2s ease;
+    }
+
+    .social-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .social-btn i {
+      font-size: 1.1rem;
+    }
+
+    .google-btn i { color: #ea4335; }
+    .facebook-btn i { color: #1877f2; }
+    .github-btn i { color: var(--clean-white); }
+
+    /* REDIRECTION ANCHOR LINK */
+    .login-link {
+      text-align: center;
+      margin-top: 35px;
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+
+    .login-link a {
+      color: var(--brand-gold);
+      text-decoration: none;
+      font-weight: 700;
+      margin-left: 5px;
+      transition: 0.2s;
+    }
+
+    .login-link a:hover {
+      color: var(--accent-pink);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* CONTAINER RESPONSIVENESS OVERRIDES */
+    @media(max-width: 950px) {
+      .register-container { grid-template-columns: 1fr; max-width: 600px; }
+      .register-left { display: none; }
+    }
+    @media(max-width: 768px) {
+      body { padding: 20px 10px; }
+      .register-right { padding: 40px 20px; }
+      .form-header h2 { font-size: 2.1rem; }
+      .social-buttons { flex-direction: column; }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="register-container">
-
-<!-- LEFT SIDE -->
-
-<div class="register-left">
-
-<h1>
-Join HAMBAK TECH & SERVICES
-</h1>
-
-<p>
-Create your professional account to access
-digital services, ICT training, VTU, online
-registrations, dashboards and business solutions.
-</p>
-
-<div class="left-features">
-
-<div class="feature-item">
-
-<i class="fa-solid fa-user-shield"></i>
-
-<span>
-Secure Authentication System
-</span>
-
-</div>
-
-<div class="feature-item">
-
-<i class="fa-solid fa-chart-line"></i>
-
-<span>
-Advanced Customer Dashboard
-</span>
-
-</div>
-
-<div class="feature-item">
-
-<i class="fa-solid fa-wallet"></i>
-
-<span>
-Wallet & Payment Management
-</span>
-
-</div>
-
-<div class="feature-item">
-
-<i class="fa-solid fa-graduation-cap"></i>
-
-<span>
-Training & ICT Learning Access
-</span>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- RIGHT SIDE -->
-
-<div class="register-right">
-
-<div class="form-header">
-
-<h2>
-Create Account
-</h2>
-
-<p>
-Fill in your details to register your account.
-</p>
-
-</div>
-
-<form class="register-form" id="registerForm">
-
-<!-- FULL NAME -->
-
-<div class="form-group">
-
-<label>
-Full Name
-</label>
-
-<div class="input-box">
-
-<i class="fa-solid fa-user"></i>
-
-<input
-type="text"
-id="name"
-name="name"
-placeholder="Enter full name"
-required
->
-
-</div>
-
-</div>
-
-<!-- USERNAME -->
-
-<div class="form-group">
-
-<label>
-Username
-</label>
-
-<div class="input-box">
-
-<i class="fa-solid fa-at"></i>
-
-<input
-type="text"
-id="username"
-name="username"
-placeholder="Choose username"
-required
->
-
-</div>
-
-</div>
-
-<!-- EMAIL -->
-
-<div class="form-group">
-
-<label>
-Email Address
-</label>
-
-<div class="input-box">
-
-<i class="fa-solid fa-envelope"></i>
-
-<input
-type="email"
-id="email"
-name="email"
-placeholder="Enter email address"
-required
->
-
-</div>
-
-</div>
-
-<!-- PHONE -->
-
-<div class="form-group">
-
-<label>
-Phone Number
-</label>
-
-<div class="input-box">
-
-<i class="fa-solid fa-phone"></i>
-
-<input
-type="tel"
-id="phone"
-name="phone"
-placeholder="Enter phone number"
-required
->
-
-</div>
-
-</div>
-
-<!-- ROLE -->
-
-<div class="form-group">
-
-<label>
-Select Role
-</label>
-
-<div class="input-box">
-
-<i class="fa-solid fa-user-tag"></i>
-
-<select
-id="role"
-name="role"
-required
->
-
-<option value="">
-Choose account type
-</option>
-
-<option value="user">
-Customer
-</option>
-
-<option value="student">
-Student
-</option>
-
-<option value="admin">
-Admin
-</option>
-
-</select>
-
-</div>
-
-</div>
-
-<!-- PASSWORD -->
-
-<div class="form-group">
-
-<label>
-Password
-</label>
-
-<div class="input-box">
-
-<i class="fa-solid fa-lock"></i>
-
-<input
-type="password"
-id="password"
-name="password"
-placeholder="Create password"
-required
->
-
-<span
-class="password-toggle"
-onclick="togglePassword('password', this)"
->
-
-<i class="fa-solid fa-eye"></i>
-
-</span>
-
-</div>
-
-</div>
-
-<!-- CONFIRM PASSWORD -->
-
-<div class="form-group">
-
-<label>
-Confirm Password
-</label>
-
-<div class="input-box">
-
-<i class="fa-solid fa-lock"></i>
-
-<input
-type="password"
-id="confirmPassword"
-name="confirmPassword"
-placeholder="Confirm password"
-required
->
-
-<span
-class="password-toggle"
-onclick="togglePassword('confirmPassword', this)"
->
-
-<i class="fa-solid fa-eye"></i>
-
-</span>
-
-</div>
-
-</div>
-
-<!-- UPLOAD -->
-
-<div class="form-group">
-
-<label>
-Profile Upload
-</label>
-
-<div class="upload-box">
-
-<i class="fa-solid fa-cloud-arrow-up"></i>
-
-<p>
-Upload profile picture
-</p>
-
-<input type="file">
-
-</div>
-
-</div>
-
-<!-- TERMS -->
-
-<div class="checkbox-group">
-
-<input
-type="checkbox"
-required
->
-
-<span>
-I agree to the Terms & Conditions and Privacy Policy
-of HAMBAK TECH & SERVICES.
-</span>
-
-</div>
-
-<div id="messageBox"></div>
-
-<!-- BUTTON -->
-
-<button
-type="submit"
-class="register-btn"
->
-
-Create Account
-
-</button>
-
-</form>
-
-<!-- SOCIAL -->
-
-<div class="social-login">
-
-<p>
-Or register with
-</p>
-
-<div class="social-buttons">
-
-<button class="social-btn google-btn">
-
-<i class="fa-brands fa-google"></i>
-Google
-
-</button>
-
-<button class="social-btn facebook-btn">
-
-<i class="fa-brands fa-facebook-f"></i>
-Facebook
-
-</button>
-
-<button class="social-btn github-btn">
-
-<i class="fa-brands fa-github"></i>
-GitHub
-
-</button>
-
-</div>
-
-</div>
-
-<!-- LOGIN -->
-
-<div class="login-link">
-
-Already have an account?
-
-<a href="login.html">
-Login Here
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-<script>
-
-/* =========================
-PASSWORD TOGGLE
-========================= */
-
-function togglePassword(id, element){
-
-const input =
-document.getElementById(id);
-
-const icon =
-element.querySelector("i");
-
-if(input.type === "password"){
-
-input.type = "text";
-
-icon.classList.remove("fa-eye");
-
-icon.classList.add("fa-eye-slash");
-
-}else{
-
-input.type = "password";
-
-icon.classList.remove("fa-eye-slash");
-
-icon.classList.add("fa-eye");
-
-}
-
-}
-
-/* =========================
-REGISTER FORM
-========================= */
-
-const registerForm =
-document.getElementById("registerForm");
-
-const messageBox =
-document.getElementById("messageBox");
-
-registerForm.addEventListener(
-"submit",
-async (e)=>{
-
-e.preventDefault();
-
-/* GET VALUES */
-
-const name =
-document.getElementById("name").value;
-
-const username =
-document.getElementById("username").value;
-
-const email =
-document.getElementById("email").value;
-
-const phone =
-document.getElementById("phone").value;
-
-const role =
-document.getElementById("role").value;
-
-const password =
-document.getElementById("password").value;
-
-const confirmPassword =
-document.getElementById("confirmPassword").value;
-
-/* PASSWORD CHECK */
-
-if(password !== confirmPassword){
-
-messageBox.innerHTML = `
-<p style="
-color:red;
-margin-bottom:15px;
-font-weight:bold;
-">
-Passwords do not match
-</p>
-`;
-
-return;
-
-}
-
-/* SEND TO BACKEND */
-
-try{
-
-const response =
-await fetch(
-"http://localhost:5000/api/auth/register",
-{
-
-method:"POST",
-
-headers:{
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-
-name,
-username,
-email,
-phone,
-role,
-password
-
-})
-
-}
-
-);
-
-const data =
-await response.json();
-
-/* ERROR */
-
-if(!data.success){
-
-messageBox.innerHTML = `
-<p style="
-color:red;
-margin-bottom:15px;
-font-weight:bold;
-">
-${data.message}
-</p>
-`;
-
-return;
-
-}
-
-/* SUCCESS */
-
-messageBox.innerHTML = `
-<p style="
-color:green;
-margin-bottom:15px;
-font-weight:bold;
-">
-Registration Successful
-</p>
-`;
-
-/* SAVE TOKEN */
-
-localStorage.setItem(
-"token",
-data.token
-);
-
-/* REDIRECT */
-
-setTimeout(()=>{
-
-window.location.href =
-"login.html";
-
-},2000);
-
-}catch(error){
-
-messageBox.innerHTML = `
-<p style="
-color:red;
-margin-bottom:15px;
-font-weight:bold;
-">
-Server Error
-</p>
-`;
-
-console.log(error);
-
-}
-
-});
-
-</script>
-
+  <div class="register-container">
+
+    <!-- LEFT SIDE - VALUE INFRASTRUCTURE FRAMEWORK -->
+    <div class="register-left">
+      <h1>Join HAMBAK TECH & SERVICES</h1>
+      <p>Create your singular user token to access automated billing trackers, secure VTU channels, custom branding configurations, and active computer science training structures.</p>
+
+      <div class="left-features">
+        <div class="feature-item">
+          <i class="fa-solid fa-user-shield"></i>
+          <span>Secure Identity Matrix Authentication</span>
+        </div>
+        <div class="feature-item">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Integrated Real-Time Order Management</span>
+        </div>
+        <div class="feature-item">
+          <i class="fa-solid fa-wallet"></i>
+          <span>Automated Wallet Infrastructure</span>
+        </div>
+        <div class="feature-item">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Advanced ICT Framework Curriculum Access</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE - TRANSACTION FORM CAPTURE CONTROLS -->
+    <div class="register-right">
+      <div class="form-header">
+        <h2>Create Account</h2>
+        <p>Establish unified credentials across our cloud network infrastructure components.</p>
+      </div>
+
+      <form class="register-form" id="registerForm" novalidate>
+        
+        <!-- FULL NAME -->
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <div class="input-box">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="name" name="name" placeholder="Enter first and last name" required>
+          </div>
+        </div>
+
+        <!-- USERNAME -->
+        <div class="form-group">
+          <label for="username">System Username</label>
+          <div class="input-box">
+            <i class="fa-solid fa-at"></i>
+            <input type="text" id="username" name="username" placeholder="Choose unique alias" required>
+          </div>
+        </div>
+
+        <!-- EMAIL -->
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <div class="input-box">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="email" name="email" placeholder="e.g. client@domain.com" required>
+          </div>
+        </div>
+
+        <!-- PHONE -->
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <div class="input-box">
+            <i class="fa-solid fa-phone"></i>
+            <input type="tel" id="phone" name="phone" placeholder="e.g. 09127469686" required>
+          </div>
+        </div>
+
+        <!-- ROLE CLUSTER SELECT -->
+        <div class="form-group">
+          <label for="role">Account Security Role</label>
+          <div class="input-box">
+            <i class="fa-solid fa-user-tag"></i>
+            <select id="role" name="role" required>
+              <option value="" disabled selected>Select account classification layer...</option>
+              <option value="user">General Customer (VTU / Printing Operations)</option>
+              <option value="student">Enrolled Trainee (ICT & Computer Science Track)</option>
+              <option value="admin">Ecosystem Administrator</option>
+            </select>
+            <i class="fa-solid fa-chevron-down" style="left: auto; right: 20px; pointer-events: none;"></i>
+          </div>
+        </div>
+
+        <!-- PASSWORD -->
+        <div class="form-group">
+          <label for="password">Password Token</label>
+          <div class="input-box">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="password" name="password" placeholder="Create strong passphrase" required>
+            <span class="password-toggle" onclick="togglePasswordVisibility('password', this)">
+              <i class="fa-solid fa-eye"></i>
+            </span>
+          </div>
+        </div>
+
+        <!-- CONFIRM PASSWORD -->
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password Verification</label>
+          <div class="input-box">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter passphrase" required>
+            <span class="password-toggle" onclick="togglePasswordVisibility('confirmPassword', this)">
+              <i class="fa-solid fa-eye"></i>
+            </span>
+          </div>
+        </div>
+
+        <!-- FILE PROFILE DROPZONE -->
+        <div class="form-group">
+          <label>Profile Avatar Asset (Optional)</label>
+          <div class="upload-box">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <p id="uploadStatusText">Drag files or click to upload avatar PNG/JPG</p>
+            <input type="file" id="avatarFile" name="avatarFile" accept="image/*" onchange="updateUploadBoxStatus(this)">
+          </div>
+        </div>
+
+        <!-- COMPLIANCE BOX -->
+        <div class="checkbox-group">
+          <input type="checkbox" id="termsCheckbox" required>
+          <label for="termsCheckbox">
+            I verify authorization and agree to the operational Terms &amp; Conditions and data protection principles of HAMBAK TECH &amp; SERVICES.
+          </label>
+        </div>
+
+        <!-- CORE RUNTIME FEEDBACK MATRIX COMPONENT -->
+        <div id="messageBanner" class="message-banner"></div>
+
+        <!-- BUTTON TRIGGER -->
+        <button type="submit" class="register-btn">Establish Ecosystem Identity</button>
+      </form>
+
+      <!-- SOCIAL IDENTITY FEDERATION INTERFACES -->
+      <div class="social-login">
+        <p>Or instantiate workspace using federated paths</p>
+        <div class="social-buttons">
+          <button type="button" class="social-btn google-btn">
+            <i class="fa-brands fa-google"></i> Google Token
+          </button>
+          <button type="button" class="social-btn facebook-btn">
+            <i class="fa-brands fa-facebook-f"></i> Facebook Key
+          </button>
+          <button type="button" class="social-btn github-btn">
+            <i class="fa-brands fa-github"></i> GitHub Core
+          </button>
+        </div>
+      </div>
+
+      <!-- REDIRECTION INTER-PAGE CONNECTIONS -->
+      <div class="login-link">
+        Already registered inside the ecosystem? <a href="login.html">Execute Secure Login</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COMPONENT LOGIC SCRIPT RUNTIME ARCHITECTURE -->
+  <script>
+    /**
+     * Intercepts input type state transformations to toggle visual masking
+     */
+    function togglePasswordVisibility(targetInputId, controllerElement) {
+      const fieldInstance = document.getElementById(targetInputId);
+      const iconInstance = controllerElement.querySelector("i");
+
+      if (fieldInstance.type === "password") {
+        fieldInstance.type = "text";
+        iconInstance.classList.replace("fa-eye", "fa-eye-slash");
+      } else {
+        fieldInstance.type = "password";
+        iconInstance.classList.replace("fa-eye-slash", "fa-eye");
+      }
+    }
+
+    /**
+     * Visual tracking update hook for local file staging events
+     */
+    function updateUploadBoxStatus(inputField) {
+      const indicatorText = document.getElementById("uploadStatusText");
+      if (inputField.files && inputField.files[0]) {
+        indicatorText.innerText = `Asset Staged: ${inputField.files[0].name}`;
+        indicatorText.style.color = "var(--brand-gold)";
+      } else {
+        indicatorText.innerText = "Drag files or click to upload avatar PNG/JPG";
+        indicatorText.style.color = "#cbd5e1";
+      }
+    }
+
+    /**
+     * Dispatched intercept handler managing payload aggregation and upstream ingestion loops
+     */
+    const formElement = document.getElementById("registerForm");
+    const communicationBanner = document.getElementById("messageBanner");
+
+    formElement.addEventListener("submit", async (submissionEvent) => {
+      submissionEvent.preventDefault();
+
+      // Clear existing UI alert banners
+      communicationBanner.className = "message-banner";
+      communicationBanner.innerText = "";
+
+      /* ACQUIRE FIELD MATRIX VALUE SCOPES */
+      const name = document.getElementById("name").value.trim();
+      const username = document.getElementById("username").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const role = document.getElementById("role").value;
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const termsAccepted = document.getElementById("termsCheckbox").checked;
+
+      /* NATIVE FORM COMPLETENESS RULE VALIDATION */
+      if (!name || !username || !email || !phone || !role || !password) {
+        communicationBanner.innerText = "Error: All mandatory infrastructure fields must be populated.";
+        communicationBanner.classList.add("error");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        communicationBanner.innerText = "Security Conflict: Token keys do not match verification outputs.";
+        communicationBanner.classList.add("error");
+        return;
+      }
+
+      if (!termsAccepted) {
+        communicationBanner.innerText = "Authorization Blocked: You must sign and accept our network usage policies.";
+        communicationBanner.classList.add("error");
+        return;
+      }
+
+      /* BUILD FORM ENVELOPE ENCAPSULATION */
+      try {
+        // Absolute local routing context avoiding external cross-domain port bindings
+        const executionPipelineRoute = "/api/auth/register";
+
+        const dispatchPayload = {
+          name,
+          username,
+          email,
+          phone,
+          role,
+          password
+        };
+
+        const serverTransportStream = await fetch(executionPipelineRoute, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(dispatchPayload)
+        });
+
+        const processingResultData = await serverTransportStream.json();
+
+        /* VALIDATE TRANSACTION RESPONSE METRICS */
+        if (!serverTransportStream.ok || !processingResultData.success) {
+          communicationBanner.innerText = `Registration Failure: ${processingResultData.message || "Invalid field parameters configuration."}`;
+          communicationBanner.classList.add("error");
+          return;
+        }
+
+        /* SUCCESS LEDGER TRANSACTION LOG COMMITTED */
+        communicationBanner.innerText = "Ecosystem Token Staged Successfully. Mapping environment context profiles...";
+        communicationBanner.classList.add("success");
+
+        // Commit standard cryptographically generated identity web tokens to browser state memory
+        if (processingResultData.token) {
+          localStorage.setItem("token", processingResultData.token);
+        }
+
+        /* DISPATCH INTER-PAGE ROUTING DESTINATION REDIRECTS DEPENDING ON ACCOUNT METRIC CLASSIFICATIONS */
+        setTimeout(() => {
+          if (role === "admin") {
+            window.location.href = "admin.html";
+          } else if (role === "student") {
+            window.location.href = "dashboard.html?context=training";
+          } else {
+            window.location.href = "login.html";
+          }
+        }, 1800);
+
+      } catch (externalNetworkFaultError) {
+        communicationBanner.innerText = "Fatal Infrastructure Defect: Upstream processing server cluster returned an unhandled communications fault.";
+        communicationBanner.classList.add("error");
+        console.error("Transport Fault Framework Trace Log:", externalNetworkFaultError);
+      }
+    });
+  </script>
 </body>
 
 </html>
