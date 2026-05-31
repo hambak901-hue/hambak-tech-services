@@ -2,812 +2,866 @@
 <html lang="en">
 
 <head>
-
-<meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
->
-
-<title>
-Online Registration | HAMBAK TECH & SERVICES
-</title>
-
-<link
-rel="stylesheet"
-href="../css/style.css"
->
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
->
-
-<style>
-
-/* =========================
-REGISTRATION PORTAL
-========================= */
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f5f7fb;
-color:#0f172a;
-}
-
-/* HERO */
-
-.registration-hero{
-padding:140px 8% 90px;
-background:
-linear-gradient(
-135deg,
-#081120,
-#0d47a1
-);
-color:white;
-text-align:center;
-}
-
-.registration-hero h1{
-font-size:4rem;
-margin-bottom:20px;
-}
-
-.registration-hero p{
-max-width:760px;
-margin:auto;
-line-height:1.9;
-font-size:1.2rem;
-color:#cbd5e1;
-}
-
-/* SECTION */
-
-.section{
-padding:90px 8%;
-}
-
-.section-title{
-text-align:center;
-margin-bottom:60px;
-}
-
-.section-title h2{
-font-size:3rem;
-margin-bottom:15px;
-}
-
-.section-title p{
-max-width:700px;
-margin:auto;
-line-height:1.8;
-color:#555;
-}
-
-/* GRID */
-
-.registration-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:35px;
-}
-
-/* CARD */
-
-.registration-card{
-background:white;
-padding:35px;
-border-radius:25px;
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-transition:0.4s;
-}
-
-.registration-card:hover{
-transform:translateY(-10px);
-}
-
-.registration-icon{
-width:90px;
-height:90px;
-background:#0d47a1;
-border-radius:50%;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:2rem;
-color:white;
-margin-bottom:25px;
-}
-
-.registration-card h3{
-font-size:1.7rem;
-margin-bottom:20px;
-}
-
-.registration-card p{
-line-height:1.8;
-color:#555;
-margin-bottom:25px;
-}
-
-/* FORM */
-
-.reg-form{
-display:flex;
-flex-direction:column;
-gap:18px;
-}
-
-.reg-form input,
-.reg-form select,
-.reg-form textarea{
-padding:15px;
-border:1px solid #ddd;
-border-radius:12px;
-outline:none;
-font-size:1rem;
-}
-
-.reg-form textarea{
-resize:none;
-height:120px;
-}
-
-.upload-box{
-padding:20px;
-border:2px dashed #0d47a1;
-border-radius:15px;
-text-align:center;
-background:#f8fafc;
-}
-
-.reg-btn{
-padding:16px;
-border:none;
-background:#0d47a1;
-color:white;
-border-radius:12px;
-cursor:pointer;
-font-size:1rem;
-transition:0.3s;
-}
-
-.reg-btn:hover{
-background:#1565c0;
-}
-
-/* STATUS */
-
-.status-section{
-padding:0 8% 90px;
-}
-
-.status-box{
-background:white;
-padding:50px;
-border-radius:30px;
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-text-align:center;
-}
-
-.status-box h2{
-font-size:2.5rem;
-margin-bottom:20px;
-}
-
-.status-box p{
-max-width:700px;
-margin:auto;
-line-height:1.8;
-color:#555;
-margin-bottom:35px;
-}
-
-.status-form{
-display:flex;
-gap:15px;
-flex-wrap:wrap;
-justify-content:center;
-}
-
-.status-form input{
-padding:16px;
-width:320px;
-border:1px solid #ddd;
-border-radius:12px;
-outline:none;
-}
-
-/* TABLE */
-
-.table-section{
-padding:0 8% 90px;
-}
-
-.table-box{
-background:white;
-padding:35px;
-border-radius:25px;
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-overflow:auto;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-table th,
-table td{
-padding:16px;
-text-align:left;
-border-bottom:1px solid #eee;
-}
-
-table th{
-background:#0d47a1;
-color:white;
-}
-
-/* PAYMENT */
-
-.payment-section{
-padding:0 8% 90px;
-}
-
-.payment-card{
-background:
-linear-gradient(
-135deg,
-#081120,
-#0d47a1
-);
-padding:60px;
-border-radius:30px;
-color:white;
-text-align:center;
-}
-
-.payment-card h2{
-font-size:3rem;
-margin-bottom:20px;
-}
-
-.payment-card p{
-max-width:700px;
-margin:auto;
-line-height:1.8;
-margin-bottom:35px;
-color:#cbd5e1;
-}
-
-.payment-btn{
-display:inline-block;
-padding:16px 35px;
-background:#f5b942;
-color:black;
-text-decoration:none;
-border-radius:12px;
-font-weight:bold;
-}
-
-/* FOOTER */
-
-.footer{
-background:#020617;
-color:white;
-padding:70px 8% 20px;
-}
-
-.footer-content{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:40px;
-margin-bottom:40px;
-}
-
-.footer h3{
-margin-bottom:20px;
-color:#f5b942;
-}
-
-.footer p{
-line-height:1.8;
-color:#cbd5e1;
-}
-
-.footer-links a{
-display:block;
-margin-bottom:10px;
-color:#cbd5e1;
-text-decoration:none;
-}
-
-.footer-bottom{
-text-align:center;
-padding-top:20px;
-border-top:1px solid rgba(255,255,255,0.1);
-color:#94a3b8;
-}
-
-/* WHATSAPP */
-
-.whatsapp-float{
-position:fixed;
-bottom:25px;
-right:25px;
-width:60px;
-height:60px;
-background:#25d366;
-border-radius:50%;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:1.8rem;
-color:white;
-text-decoration:none;
-z-index:999;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
-}
-
-/* MOBILE */
-
-@media(max-width:768px){
-
-.registration-hero h1{
-font-size:2.8rem;
-}
-
-.section-title h2,
-.status-box h2,
-.payment-card h2{
-font-size:2.2rem;
-}
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Registration | HAMBAK TECH & SERVICES</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* ==========================================================================
+       PREMIUM BRAND COLOR PALETTE (BLUE, GOLD, PEACH, PINK)
+       ========================================================================== */
+    :root {
+      --primary-blue: #0d47a1;
+      --deep-navy: #081120;
+      --brand-gold: #f5b942;
+      --soft-peach: #ffdfd3;
+      --accent-pink: #ff4081;
+      --clean-white: #ffffff;
+      --dark-card: #0f172a;
+      --input-bg: #1e293b;
+      --border-glow: rgba(245, 185, 66, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--deep-navy), #040812);
+      color: var(--clean-white);
+      line-height: 1.6;
+    }
+
+    /* GLOBAL HEADER & NAVIGATION OVERRIDES */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 8%;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo span {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--clean-white);
+    }
+
+    .logo small {
+      font-size: 0.75rem;
+      color: var(--brand-gold);
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+
+    .nav-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      margin-left: 25px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--brand-gold);
+    }
+
+    /* HERO PROFILE FRAMEWORK */
+    .registration-hero {
+      padding: 120px 8% 80px;
+      background: linear-gradient(135deg, rgba(8, 17, 32, 0.95), rgba(13, 71, 161, 0.3)), 
+                  radial-gradient(circle at top right, var(--accent-pink), transparent 60%);
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .registration-hero h1 {
+      font-size: 3.8rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--clean-white), var(--soft-peach));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .registration-hero p {
+      max-width: 760px;
+      margin: auto;
+      font-size: 1.15rem;
+      color: #94a3b8;
+      line-height: 1.8;
+    }
+
+    /* MAIN CONTAINER INTERFACES */
+    .section {
+      padding: 80px 8%;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-title h2 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, var(--brand-gold), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-title p {
+      max-width: 700px;
+      margin: auto;
+      color: #cbd5e1;
+    }
+
+    /* CARD STRUCTURES & FORMS */
+    .registration-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 30px;
+    }
+
+    .registration-card {
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 40px 30px;
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .registration-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(245, 185, 66, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .registration-icon {
+      width: 70px;
+      height: 70px;
+      background: rgba(13, 71, 161, 0.2);
+      border: 1px solid rgba(13, 71, 161, 0.4);
+      border-radius: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.8rem;
+      color: var(--brand-gold);
+      margin-bottom: 25px;
+    }
+
+    .registration-card h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--clean-white);
+    }
+
+    .registration-card > p {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      margin-bottom: 25px;
+      flex-grow: 1;
+    }
+
+    /* REUSABLE INPUT SUB-COMPONENTS */
+    .reg-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+
+    .reg-form input, .reg-form select, .reg-form textarea {
+      width: 100%;
+      padding: 14px;
+      background: var(--input-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      outline: none;
+      font-size: 0.95rem;
+      color: var(--clean-white);
+      transition: 0.3s ease;
+    }
+
+    .reg-form input:focus, .reg-form select:focus, .reg-form textarea:focus {
+      border-color: var(--brand-gold);
+      box-shadow: 0 0 0 3px var(--border-glow);
+      background: rgba(30, 41, 59, 0.9);
+    }
+
+    .reg-form select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 16px;
+      padding-right: 40px;
+    }
+
+    .reg-form textarea {
+      resize: none;
+      height: 100px;
+    }
+
+    /* DIGITAL DRAG & DROP FILE INFRASTRUCTURE */
+    .upload-box {
+      border: 2px dashed rgba(245, 185, 66, 0.25);
+      padding: 18px;
+      border-radius: 12px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.01);
+      position: relative;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .upload-box:hover {
+      border-color: var(--brand-gold);
+      background: rgba(245, 185, 66, 0.03);
+    }
+
+    .upload-box i {
+      font-size: 1.5rem;
+      color: var(--brand-gold);
+      margin-bottom: 8px;
+    }
+
+    .upload-box p {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+    }
+
+    .upload-box input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    /* ACTION BUTTON MATRIX TRIGGER */
+    .reg-btn {
+      padding: 15px;
+      border: none;
+      background: linear-gradient(135deg, var(--primary-blue), #1565c0);
+      color: var(--clean-white);
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 700;
+      box-shadow: 0 5px 15px rgba(13, 71, 161, 0.3);
+      transition: 0.3s;
+    }
+
+    .reg-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(13, 71, 161, 0.5);
+    }
+
+    /* APPLICATION STATE TRACKING ARCHITECTURE */
+    .status-section {
+      padding: 0 8% 60px;
+    }
+
+    .status-box {
+      background: var(--dark-card);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 50px 40px;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      text-align: center;
+    }
+
+    .status-box h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      color: var(--clean-white);
+    }
+
+    .status-box p {
+      max-width: 650px;
+      margin: auto;
+      color: #94a3b8;
+      margin-bottom: 30px;
+    }
+
+    .status-form {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 600px;
+      margin: 0 auto 20px;
+    }
+
+    .status-form input {
+      padding: 16px;
+      flex: 1;
+      min-width: 280px;
+      background: var(--input-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      outline: none;
+      color: var(--clean-white);
+      font-size: 1rem;
+    }
+
+    .status-form input:focus {
+      border-color: var(--brand-gold);
+    }
+
+    /* MESSAGING NOTIFICATION BANNER */
+    .tracking-banner {
+      max-width: 600px;
+      margin: 15px auto 0;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: none;
+    }
+    .tracking-banner.info { display: block; background: rgba(13, 71, 161, 0.2); border: 1px solid var(--primary-blue); color: #93c5fd; }
+    .tracking-banner.error { display: block; background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #f87171; }
+
+    /* REAL-TIME LEDGER DATA DATA-TABLES */
+    .table-section {
+      padding: 0 8% 80px;
+    }
+
+    .table-box {
+      background: var(--dark-card);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 35px;
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      overflow-x: auto;
+    }
+
+    .table-box h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+      color: var(--clean-white);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    table th, table td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    table th {
+      background: rgba(13, 71, 161, 0.3);
+      color: var(--brand-gold);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+    }
+
+    table td {
+      color: #cbd5e1;
+    }
+
+    /* BADGE COMPONENT LABELS */
+    .badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .badge.pending { background: rgba(245, 185, 66, 0.15); color: var(--brand-gold); border: 1px solid rgba(245, 185, 66, 0.3); }
+    .badge.approved { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge.processing { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+
+    /* FINANCIAL PROCESSING CARD MODALITY */
+    .payment-section {
+      padding: 0 8% 80px;
+    }
+
+    .payment-card {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(8, 17, 32, 0.9)), 
+                  radial-gradient(circle at bottom center, var(--primary-blue), transparent 70%);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 60px 40px;
+      border-radius: 28px;
+      color: var(--clean-white);
+      text-align: center;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+    }
+
+    .payment-card h2 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+    }
+
+    .payment-card p {
+      max-width: 650px;
+      margin: auto;
+      line-height: 1.7;
+      margin-bottom: 30px;
+      color: #94a3b8;
+    }
+
+    .payment-btn {
+      display: inline-block;
+      padding: 16px 40px;
+      background: var(--brand-gold);
+      color: var(--dark-card);
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 700;
+      box-shadow: 0 5px 15px rgba(245, 185, 66, 0.3);
+      transition: 0.3s;
+    }
+
+    .payment-btn:hover {
+      background: var(--clean-white);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(255, 255, 255, 0.2);
+    }
+
+    /* SYSTEMS ECOSYSTEM FOOTER MODULE */
+    .footer {
+      background: #020617;
+      color: #94a3b8;
+      padding: 60px 8% 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer h3 {
+      margin-bottom: 20px;
+      color: var(--brand-gold);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .footer p {
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .footer-links a {
+      display: block;
+      margin-bottom: 12px;
+      color: #cbd5e1;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-pink);
+      padding-left: 5px;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+
+    /* FLOATING EMERGENCY TELEMETRY CONNECTION */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.9rem;
+      color: var(--clean-white);
+      text-decoration: none;
+      z-index: 999;
+      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+      transition: 0.3s ease;
+    }
+
+    .whatsapp-float:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 30px rgba(37, 211, 102, 0.5);
+    }
+
+    /* INTERFACE BREAKPOINT RESPONSIVENESS OVERRIDES */
+    @media(max-width: 768px) {
+      .navbar { flex-direction: column; gap: 15px; text-align: center; }
+      .nav-links a { margin: 0 10px; font-size: 0.9rem; }
+      .registration-hero h1 { font-size: 2.6rem; }
+      .section-title h2, .status-box h2, .payment-card h2 { font-size: 2rem; }
+      .section { padding: 50px 5%; }
+      .status-section, .table-section, .payment-section { padding: 0 5% 50px; }
+      .status-form input { width: 100%; }
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-
-<header class="navbar">
-
-<div class="logo">
-
-<span>HAMBAK</span>
-
-<small>TECH & SERVICES</small>
-
-</div>
-
-<nav class="nav-links">
-
-<a href="../index.html">Home</a>
-<a href="services.html">Services</a>
-<a href="registration.html">Registration</a>
-<a href="contact.html">Contact</a>
-
-</nav>
-
-</header>
-
-<!-- HERO -->
-
-<section class="registration-hero">
-
-<h1>
-Online Registration Portal
-</h1>
-
-<p>
-Professional registration services for WAEC,
-JAMB, NECO, NYSC and other educational
-and government-related applications.
-</p>
-
-</section>
-
-<!-- REGISTRATION SERVICES -->
-
-<section class="section">
-
-<div class="section-title">
-
-<h2>
-Registration Services
-</h2>
-
-<p>
-Secure online registration and application processing.
-</p>
-
-</div>
-
-<div class="registration-grid">
-
-<!-- WAEC -->
-
-<div class="registration-card">
-
-<div class="registration-icon">
-<i class="fa-solid fa-graduation-cap"></i>
-</div>
-
-<h3>
-WAEC Registration
-</h3>
-
-<p>
-Apply and upload your documents for WAEC registration.
-</p>
-
-<form class="reg-form">
-
-<input
-type="text"
-placeholder="Full Name"
->
-
-<input
-type="email"
-placeholder="Email Address"
->
-
-<input
-type="tel"
-placeholder="Phone Number"
->
-
-<div class="upload-box">
-
-<i class="fa-solid fa-upload"></i>
-
-<p>
-Upload Passport Photo
-</p>
-
-<input type="file">
-
-</div>
-
-<button
-type="submit"
-class="reg-btn"
->
-
-Submit Registration
-
-</button>
-
-</form>
-
-</div>
-
-<!-- JAMB -->
-
-<div class="registration-card">
-
-<div class="registration-icon">
-<i class="fa-solid fa-book"></i>
-</div>
-
-<h3>
-JAMB Registration
-</h3>
-
-<p>
-Register for JAMB examination and upload required details.
-</p>
-
-<form class="reg-form">
-
-<input
-type="text"
-placeholder="Full Name"
->
-
-<select>
-
-<option>Select Institution Type</option>
-<option>University</option>
-<option>Polytechnic</option>
-<option>College of Education</option>
-
-</select>
-
-<textarea
-placeholder="Preferred Course / Institution"
-></textarea>
-
-<div class="upload-box">
-
-<i class="fa-solid fa-file-arrow-up"></i>
-
-<p>
-Upload Documents
-</p>
-
-<input type="file">
-
-</div>
-
-<button
-type="submit"
-class="reg-btn"
->
-
-Submit Registration
-
-</button>
-
-</form>
-
-</div>
-
-<!-- NYSC -->
-
-<div class="registration-card">
-
-<div class="registration-icon">
-<i class="fa-solid fa-id-card"></i>
-</div>
-
-<h3>
-NYSC Registration
-</h3>
-
-<p>
-NYSC registration support and document processing.
-</p>
-
-<form class="reg-form">
-
-<input
-type="text"
-placeholder="Full Name"
->
-
-<input
-type="text"
-placeholder="Institution"
->
-
-<input
-type="text"
-placeholder="Matric Number"
->
-
-<div class="upload-box">
-
-<i class="fa-solid fa-cloud-arrow-up"></i>
-
-<p>
-Upload Required Files
-</p>
-
-<input type="file">
-
-</div>
-
-<button
-type="submit"
-class="reg-btn"
->
-
-Submit Registration
-
-</button>
-
-</form>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- STATUS CHECK -->
-
-<section class="status-section">
-
-<div class="status-box">
-
-<h2>
-Track Registration Status
-</h2>
-
-<p>
-Enter your registration ID to check your application progress.
-</p>
-
-<form class="status-form">
-
-<input
-type="text"
-placeholder="Enter Registration ID"
->
-
-<button
-type="submit"
-class="reg-btn"
->
-
-Check Status
-
-</button>
-
-</form>
-
-</div>
-
-</section>
-
-<!-- RECENT APPLICATIONS -->
-
-<section class="table-section">
-
-<div class="table-box">
-
-<h2>
-Recent Applications
-</h2>
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Application</th>
-<th>Applicant</th>
-<th>Status</th>
-<th>Date</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-<tr>
-<td>WAEC</td>
-<td>Applicant One</td>
-<td>Pending</td>
-<td>July 2026</td>
-</tr>
-
-<tr>
-<td>JAMB</td>
-<td>Applicant Two</td>
-<td>Approved</td>
-<td>July 2026</td>
-</tr>
-
-<tr>
-<td>NYSC</td>
-<td>Applicant Three</td>
-<td>Processing</td>
-<td>July 2026</td>
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
-
-</section>
-
-<!-- PAYMENT -->
-
-<section class="payment-section">
-
-<div class="payment-card">
-
-<h2>
-Online Payment System
-</h2>
-
-<p>
-Secure online payment integration for registration fees,
-application processing and digital services.
-</p>
-
-<a
-href="#"
-class="payment-btn"
->
-Proceed To Payment
-</a>
-
-</div>
-
-</section>
-
-<!-- FOOTER -->
-
-<footer class="footer">
-
-<div class="footer-content">
-
-<div>
-
-<h3>
-HAMBAK TECH & SERVICES
-</h3>
-
-<p>
-Where technology meet services.
-Professional online registration and digital solutions.
-</p>
-
-</div>
-
-<div>
-
-<h3>
-Quick Links
-</h3>
-
-<div class="footer-links">
-
-<a href="../index.html">Home</a>
-<a href="registration.html">Registration</a>
-<a href="services.html">Services</a>
-<a href="contact.html">Contact</a>
-
-</div>
-
-</div>
-
-<div>
-
-<h3>
-Contact Info
-</h3>
-
-<p>
-09127469686
-</p>
-
-<p>
-hambak901@gmail.com
-</p>
-
-<p>
-Ibeju-Lekki, Lagos Nigeria
-</p>
-
-</div>
-
-</div>
-
-<div class="footer-bottom">
-
-© 2026 HAMBAK TECH & SERVICES
-
-</div>
-
-</footer>
-
-<!-- WHATSAPP -->
-
-<a
-href="https://wa.me/2349155104724"
-class="whatsapp-float"
->
-
-<i class="fa-brands fa-whatsapp"></i>
-
-</a>
-
+  <!-- GLOBAL APPLICATION ECOSYSTEM NAVBAR -->
+  <header class="navbar">
+    <div class="logo">
+      <span>HAMBAK</span>
+      <small>TECH & SERVICES</small>
+    </div>
+    <nav class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="registration.html" class="active">Registration</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <!-- DATA HERO COMPONENT PROFILE ENTRY -->
+  <section class="registration-hero">
+    <h1>Online Registration Portal</h1>
+    <p>Secure encryption and direct terminal processing pipelines for WAEC, JAMB, NECO, NYSC, and strategic governmental identification verification modules inside Nigeria.</p>
+  </section>
+
+  <!-- CORE TRANSACTION REGISTRATION LOG INTERFACES -->
+  <section class="section">
+    <div class="section-title">
+      <h2>Registration Services</h2>
+      <p>Select your infrastructure tracking application lane below, populate metadata profiles, and commit directly to processing.</p>
+    </div>
+
+    <div class="registration-grid">
+
+      <!-- WAEC OPERATIONS PIPELINE -->
+      <div class="registration-card">
+        <div class="registration-icon">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <h3>WAEC Registration</h3>
+        <p>Staging platform for senior school certificate identification captures and bio-data profiles processing.</p>
+        
+        <form class="reg-form" id="waecForm" onsubmit="handleFormSubmission(event, 'WAEC')">
+          <div class="form-group">
+            <label>Full Applicant Name</label>
+            <input type="text" name="applicantName" placeholder="Firstname Middlename Surname" required>
+          </div>
+          <div class="form-group">
+            <label>Email Tracking Node</label>
+            <input type="email" name="applicantEmail" placeholder="applicant@domain.com" required>
+          </div>
+          <div class="form-group">
+            <label>Active Telephone Line</label>
+            <input type="tel" name="applicantPhone" placeholder="e.g. 09012345678" required>
+          </div>
+          <div class="form-group">
+            <label>Passport Asset Photo</label>
+            <div class="upload-box">
+              <i class="fa-solid fa-upload"></i>
+              <p>Staging Upload Passport (Max 2MB)</p>
+              <input type="file" name="passportFile" accept="image/*" required onchange="captureFileState(this)">
+            </div>
+          </div>
+          <button type="submit" class="reg-btn">Submit Registration Layer</button>
+        </form>
+      </div>
+
+      <!-- JAMB OPERATIONS PIPELINE -->
+      <div class="registration-card">
+        <div class="registration-icon">
+          <i class="fa-solid fa-book"></i>
+        </div>
+        <h3>JAMB Registration</h3>
+        <p>Direct profiling metrics pipeline context for unified tertiary matriculation evaluations processing lanes.</p>
+        
+        <form class="reg-form" id="jambForm" onsubmit="handleFormSubmission(event, 'JAMB')">
+          <div class="form-group">
+            <label>Full Applicant Name</label>
+            <input type="text" name="applicantName" placeholder="Firstname Middlename Surname" required>
+          </div>
+          <div class="form-group">
+            <label>Preferred Institution Tier</label>
+            <select name="institutionType" required>
+              <option value="" disabled selected>Select destination class context...</option>
+              <option value="University">Federal / State University Track</option>
+              <option value="Polytechnic">Polytechnic / Technology Institution</option>
+              <option value="College">Advanced College of Education</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Course Designations & Preferred Choices</label>
+            <textarea name="courseChoices" placeholder="1. Course - University Context&#10;2. Course - Polytechnic Context" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>O-Level Result Aggregates</label>
+            <div class="upload-box">
+              <i class="fa-solid fa-file-arrow-up"></i>
+              <p>Stage Verification PDF File</p>
+              <input type="file" name="resultsFile" accept=".pdf,image/*" required onchange="captureFileState(this)">
+            </div>
+          </div>
+          <button type="submit" class="reg-btn">Submit Registration Layer</button>
+        </form>
+      </div>
+
+      <!-- NYSC OPERATIONS PIPELINE -->
+      <div class="registration-card">
+        <div class="registration-icon">
+          <i class="fa-solid fa-id-card"></i>
+        </div>
+        <h3>NYSC Mobilization</h3>
+        <p>Direct administrative system tracking pipelines for graduated student mobilization processing structures.</p>
+        
+        <form class="reg-form" id="nyscForm" onsubmit="handleFormSubmission(event, 'NYSC')">
+          <div class="form-group">
+            <label>Full Graduate Name</label>
+            <input type="text" name="applicantName" placeholder="Firstname Middlename Surname" required>
+          </div>
+          <div class="form-group">
+            <label>Graduating Institution Name</label>
+            <input type="text" name="institutionName" placeholder="Enter Graduate University" required>
+          </div>
+          <div class="form-group">
+            <label>System Matriculation Key</label>
+            <input type="text" name="matricNumber" placeholder="e.g. RUN/CMP/20/0042" required>
+          </div>
+          <div class="form-group">
+            <label>Mobilization Documents Bundle</label>
+            <div class="upload-box">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <p>Stage Statement of Result ZIP/PDF</p>
+              <input type="file" name="bundleFile" accept=".pdf,.zip" required onchange="captureFileState(this)">
+            </div>
+          </div>
+          <button type="submit" class="reg-btn">Submit Registration Layer</button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- LIVE METRIC STATUS ASYNC COMPONENT LOGIC SINK -->
+  <section class="status-section">
+    <div class="status-box">
+      <h2>Track Registration Status</h2>
+      <p>Enter your system-allocated global unique tracker identifier tokens below to compile current staging state parameters.</p>
+      
+      <form class="status-form" id="trackingForm" onsubmit="executeTrackingEvaluation(event)">
+        <input type="text" id="trackerInput" placeholder="Enter Reference Token (e.g., REG-2026-9541)" required>
+        <button type="submit" class="reg-btn">Query System Ledgers</button>
+      </form>
+
+      <div id="trackingFeedback" class="tracking-banner"></div>
+    </div>
+  </section>
+
+  <!-- COMPILATION LOG COMPONENT TABLE -->
+  <section class="table-section">
+    <div class="table-box">
+      <h2>Ecosystem Registration Log Logs</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Application Category</th>
+            <th>Applicant Token Identity</th>
+            <th>Verification State</th>
+            <th>System Ledger Timestamp</th>
+          </tr>
+        </thead>
+        <tbody id="ledgerTableBody">
+          <tr>
+            <td>WAEC Identification</td>
+            <td>Aisha Hambak</td>
+            <td><span class="badge pending">Pending</span></td>
+            <td>May 2026</td>
+          </tr>
+          <tr>
+            <td>JAMB Core Matrix</td>
+            <td>Fatimoh Alake</td>
+            <td><span class="badge approved">Approved</span></td>
+            <td>April 2026</td>
+          </tr>
+          <tr>
+            <td>NYSC Mobilization Unit</td>
+            <td>Rahmon Seriki</td>
+            <td><span class="badge processing">Processing</span></td>
+            <td>March 2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- TRANSACTION GATEWAY GATEWAY HOOK -->
+  <section class="payment-section">
+    <div class="payment-card">
+      <h2>Online Fee Payment Gateway</h2>
+      <p>Authorize operational fees and direct application processing costs securely using integrated financial channels.</p>
+      <a href="#" class="payment-btn" onclick="alert('Initializing secure transactional gateway bridge configuration Context...'); return false;">
+        Proceed To Secure Billing
+      </a>
+    </div>
+  </section>
+
+  <!-- ECOSYSTEM PLATFORM FOOTER UTILITIES -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div>
+        <h3>HAMBAK TECH & SERVICES</h3>
+        <p>Operational technology architectures coupled directly with business solution frameworks. Ensuring elite digital processing workflows.</p>
+      </div>
+      <div>
+        <h3>Quick Access Nodes</h3>
+        <div class="footer-links">
+          <a href="../index.html">Home Ecosystem</a>
+          <a href="registration.html">Registration Portal</a>
+          <a href="services.html">Digital Services</a>
+          <a href="contact.html">Support Core</a>
+        </div>
+      </div>
+      <div>
+        <h3>Ecosystem Core Interfaces</h3>
+        <p style="margin-bottom: 8px;"><i class="fa-solid fa-phone" style="color: var(--brand-gold); margin-right: 8px;"></i> 09127469686</p>
+        <p style="margin-bottom: 8px;"><i class="fa-solid fa-envelope" style="color: var(--brand-gold); margin-right: 8px;"></i> hambak901@gmail.com</p>
+        <p><i class="fa-solid fa-location-dot" style="color: var(--brand-gold); margin-right: 8px;"></i> Ibeju-Lekki, Lagos Nigeria</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 HAMBAK TECH & SERVICES. All System Core Matrices Committed.
+    </div>
+  </footer>
+
+  <!-- FLOATING CALL-TO-ACTION EMERGENCY INTERRUPT -->
+  <a href="https://wa.me/2349127469686" class="whatsapp-float" aria-label="Connect to technical engineering channels">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <!-- COMPONENT LOGIC SYSTEM SCRIPT RUNTIME -->
+  <script>
+    /**
+     * Updates visual placeholder context parameters upon asset upload interaction hooks
+     */
+    function captureFileState(fileInputInstance) {
+      const parentUploadContainer = fileInputInstance.closest('.upload-box');
+      const designTextLabel = parentUploadContainer.querySelector('p');
+      
+      if (fileInputInstance.files && fileInputInstance.files[0]) {
+        designTextLabel.innerText = `Asset Committed: ${fileInputInstance.files[0].name}`;
+        designTextLabel.style.color = "var(--brand-gold)";
+      } else {
+        designTextLabel.innerText = "Stage Verification File Context";
+        designTextLabel.style.color = "#cbd5e1";
+      }
+    }
+
+    /**
+     * Intercepts standard application setups to emulate edge routing data state mutations
+     */
+    function handleFormSubmission(formEventInstance, trackCategoryName) {
+      formEventInstance.preventDefault();
+      
+      const formDOMReference = formEventInstance.target;
+      const applicantNameValue = formDOMReference.querySelector('input[name="applicantName"]').value;
+      
+      // Compute cryptographic-looking mock infrastructure routing tracking context tokens
+      const generatedTokenIndex = `REG-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+      
+      // Inject transaction into runtime table element storage
+      const tableBody = document.getElementById('ledgerTableBody');
+      const newlyMintedRow = document.createElement('tr');
+      
+      newlyMintedRow.innerHTML = `
+        <td>${trackCategoryName} Routing</td>
+        <td>${applicantNameValue} (${generatedTokenIndex})</td>
+        <td><span class="badge processing">Processing</span></td>
+        <td>May 2026</td>
+      `;
+      
+      // Append row logs directly to table head context index boundaries
+      tableBody.insertBefore(newlyMintedRow, tableBody.firstChild);
+      
+      alert(`Success: Staging pipeline instantiated for ${trackCategoryName}.\nYour operational routing context verification token key is: ${generatedTokenIndex}\nKeep this safe for telemetry query lookups.`);
+      formDOMReference.reset();
+      
+      // Reset upload display labels explicitly
+      const uploadLabel = formDOMReference.querySelector('.upload-box p');
+      if (uploadLabel) uploadLabel.innerText = "Stage Verification File Context";
+    }
+
+    /**
+     * Evaluates active text entries in order to assert transaction lifecycle execution paths
+     */
+    function executeTrackingEvaluation(trackingSubmissionEvent) {
+      trackingSubmissionEvent.preventDefault();
+      
+      const stringTokenValue = document.getElementById('trackerInput').value.trim();
+      const visualBannerFeedbackNode = document.getElementById('trackingFeedback');
+      
+      visualBannerFeedbackNode.className = "tracking-banner";
+      
+      if (stringTokenValue.toUpperCase().includes('REG-2026')) {
+        visualBannerFeedbackNode.innerText = `System Ledger Hit: Transaction ${stringTokenValue} verified inside active pipeline blocks. Current lifecycle configuration state: [PROCESSING_STAGE_ALPHA].`;
+        visualBannerFeedbackNode.classList.add('info');
+      } else {
+        visualBannerFeedbackNode.innerText = `Routing Fault: Token ${stringTokenValue} failed verification bounds across upstream data architectures. Verify structure entries and re-execute query.`;
+        visualBannerFeedbackNode.classList.add('error');
+      }
+    }
+  </script>
 </body>
 
 </html>
