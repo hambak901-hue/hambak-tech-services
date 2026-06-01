@@ -2,847 +2,739 @@
 <html lang="en">
 
 <head>
-
-<meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
->
-
-<title>
-VTU Center | HAMBAK TECH & SERVICES
-</title>
-
-<link
-rel="stylesheet"
-href="../css/style.css"
->
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
->
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<style>
-
-/* =========================
-VTU CENTER
-========================= */
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f5f7fb;
-}
-
-/* HERO */
-
-.vtu-hero{
-padding:140px 8% 90px;
-background:
-linear-gradient(
-135deg,
-#081120,
-#0d47a1
-);
-color:white;
-text-align:center;
-}
-
-.vtu-hero h1{
-font-size:4rem;
-margin-bottom:20px;
-}
-
-.vtu-hero p{
-max-width:750px;
-margin:auto;
-line-height:1.9;
-font-size:1.2rem;
-color:#cbd5e1;
-}
-
-/* WALLET */
-
-.wallet-section{
-padding:70px 8% 30px;
-}
-
-.wallet-card{
-background:linear-gradient(
-135deg,
-#0d47a1,
-#1565c0
-);
-padding:40px;
-border-radius:30px;
-color:white;
-box-shadow:0 15px 40px rgba(0,0,0,0.15);
-display:flex;
-justify-content:space-between;
-align-items:center;
-flex-wrap:wrap;
-gap:30px;
-}
-
-.wallet-balance h2{
-font-size:3rem;
-margin:15px 0;
-}
-
-.wallet-actions{
-display:flex;
-gap:15px;
-flex-wrap:wrap;
-}
-
-.wallet-actions button{
-padding:14px 28px;
-border:none;
-border-radius:12px;
-cursor:pointer;
-font-weight:bold;
-}
-
-.deposit-btn{
-background:#f5b942;
-}
-
-.transfer-btn{
-background:white;
-}
-
-/* SERVICES */
-
-.service-section{
-padding:70px 8%;
-}
-
-.section-title{
-text-align:center;
-margin-bottom:60px;
-}
-
-.section-title h2{
-font-size:3rem;
-margin-bottom:15px;
-color:#0f172a;
-}
-
-.section-title p{
-max-width:700px;
-margin:auto;
-line-height:1.8;
-color:#555;
-}
-
-.service-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:35px;
-}
-
-/* CARD */
-
-.service-card{
-background:white;
-padding:35px;
-border-radius:25px;
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-transition:0.4s;
-}
-
-.service-card:hover{
-transform:translateY(-10px);
-}
-
-.service-icon{
-width:90px;
-height:90px;
-background:#0d47a1;
-border-radius:50%;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:2rem;
-color:white;
-margin-bottom:25px;
-}
-
-.service-card h3{
-margin-bottom:20px;
-font-size:1.7rem;
-color:#0f172a;
-}
-
-.service-card p{
-line-height:1.8;
-color:#555;
-margin-bottom:25px;
-}
-
-/* FORM */
-
-.vtu-form{
-display:flex;
-flex-direction:column;
-gap:18px;
-}
-
-.vtu-form select,
-.vtu-form input{
-padding:15px;
-border:1px solid #ddd;
-border-radius:12px;
-outline:none;
-font-size:1rem;
-}
-
-.vtu-btn{
-padding:15px;
-background:#0d47a1;
-color:white;
-border:none;
-border-radius:12px;
-cursor:pointer;
-font-size:1rem;
-transition:0.3s;
-}
-
-.vtu-btn:hover{
-background:#1565c0;
-}
-
-/* CHART */
-
-.chart-section{
-padding:30px 8% 90px;
-}
-
-.chart-card{
-background:white;
-padding:30px;
-border-radius:25px;
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-}
-
-/* TRANSACTIONS */
-
-.transaction-section{
-padding:0 8% 90px;
-}
-
-.transaction-box{
-background:white;
-padding:30px;
-border-radius:25px;
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-overflow:auto;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-table th,
-table td{
-padding:15px;
-text-align:left;
-border-bottom:1px solid #eee;
-}
-
-table th{
-background:#0d47a1;
-color:white;
-}
-
-/* FOOTER */
-
-.footer{
-background:#020617;
-color:white;
-padding:70px 8% 20px;
-}
-
-.footer-content{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:40px;
-margin-bottom:40px;
-}
-
-.footer h3{
-margin-bottom:20px;
-color:#f5b942;
-}
-
-.footer p{
-line-height:1.8;
-color:#cbd5e1;
-}
-
-.footer-links a{
-display:block;
-margin-bottom:10px;
-color:#cbd5e1;
-text-decoration:none;
-}
-
-.footer-bottom{
-text-align:center;
-padding-top:20px;
-border-top:1px solid rgba(255,255,255,0.1);
-color:#94a3b8;
-}
-
-/* WHATSAPP */
-
-.whatsapp-float{
-position:fixed;
-bottom:25px;
-right:25px;
-width:60px;
-height:60px;
-background:#25d366;
-border-radius:50%;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:1.8rem;
-color:white;
-text-decoration:none;
-z-index:999;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
-}
-
-/* MOBILE */
-
-@media(max-width:768px){
-
-.vtu-hero h1{
-font-size:2.8rem;
-}
-
-.section-title h2{
-font-size:2.2rem;
-}
-
-.wallet-balance h2{
-font-size:2.2rem;
-}
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VTU Center | HAMBAK TECH & SERVICES</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* ==========================================================================
+       PREMIUM BRAND COLOR PALETTE & GLASSMORPHIC DESIGN SYSTEM
+       ========================================================================== */
+    :root {
+      --primary-blue: #0d47a1;
+      --deep-navy: #081120;
+      --brand-gold: #f5b942;
+      --soft-peach: #ffdfd3;
+      --accent-pink: #ff4081;
+      --clean-white: #ffffff;
+      --dark-card: rgba(15, 23, 42, 0.65);
+      --input-bg: #1e293b;
+      --status-success: #10b981;
+      --status-pending: #f5b942;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--deep-navy), #040812);
+      color: var(--clean-white);
+      line-height: 1.6;
+    }
+
+    /* GLOBAL SYSTEM NAVBAR */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 8%;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo span {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--clean-white);
+    }
+
+    .logo small {
+      font-size: 0.75rem;
+      color: var(--brand-gold);
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+
+    .nav-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      margin-left: 25px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--brand-gold);
+    }
+
+    /* VTU HERO COMPONENT */
+    .vtu-hero {
+      padding: 140px 8% 60px;
+      text-align: center;
+    }
+
+    .vtu-hero h1 {
+      font-size: 3.8rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--clean-white), var(--brand-gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .vtu-hero p {
+      max-width: 750px;
+      margin: auto;
+      line-height: 1.9;
+      font-size: 1.15rem;
+      color: #cbd5e1;
+    }
+
+    /* PREMIUM LEDGER WALLET HOVER DECK */
+    .wallet-section {
+      padding: 40px 8% 20px;
+    }
+
+    .wallet-card {
+      background: linear-gradient(135deg, rgba(13, 71, 161, 0.4), rgba(21, 101, 192, 0.15));
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 40px;
+      border-radius: 24px;
+      color: var(--clean-white);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .wallet-balance p {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #94a3b8;
+    }
+
+    .wallet-balance h2 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      margin: 10px 0;
+      color: var(--brand-gold);
+    }
+
+    .wallet-balance small {
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
+    .wallet-actions {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .wallet-actions button {
+      padding: 14px 32px;
+      border: none;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .deposit-btn {
+      background: linear-gradient(135deg, var(--brand-gold), #e0a534);
+      color: var(--deep-navy);
+      box-shadow: 0 4px 15px rgba(245, 185, 66, 0.2);
+    }
+
+    .deposit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(245, 185, 66, 0.35);
+    }
+
+    .transfer-btn {
+      background: var(--input-bg);
+      color: var(--clean-white);
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .transfer-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-2px);
+    }
+
+    /* GATEWAY MANAGEMENT GRID */
+    .service-section {
+      padding: 70px 8%;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-title h2 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      color: var(--clean-white);
+    }
+
+    .section-title p {
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.8;
+      color: #94a3b8;
+      font-size: 1.05rem;
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 35px;
+    }
+
+    /* PROCESSING ENGINE CARDS */
+    .service-card {
+      background: var(--dark-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 40px 35px;
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+      transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .service-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(245, 185, 66, 0.25);
+    }
+
+    .service-icon {
+      width: 76px;
+      height: 76px;
+      background: rgba(13, 71, 161, 0.2);
+      border: 1px solid rgba(13, 71, 161, 0.4);
+      border-radius: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.8rem;
+      color: var(--brand-gold);
+      margin-bottom: 25px;
+    }
+
+    .service-card h3 {
+      margin-bottom: 12px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--clean-white);
+    }
+
+    .service-card p {
+      line-height: 1.7;
+      color: #94a3b8;
+      margin-bottom: 25px;
+      font-size: 0.95rem;
+    }
+
+    /* INTEGRATED FORM MATRIX */
+    .vtu-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .vtu-form select,
+    .vtu-form input {
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      background: var(--input-bg);
+      color: var(--clean-white);
+      outline: none;
+      font-size: 0.95rem;
+      transition: 0.3s;
+    }
+
+    .vtu-form select:focus,
+    .vtu-form input:focus {
+      border-color: var(--brand-gold);
+    }
+
+    .vtu-form option {
+      background: #1e293b;
+      color: var(--clean-white);
+    }
+
+    .vtu-btn {
+      padding: 15px;
+      background: linear-gradient(135deg, var(--primary-blue), #1565c0);
+      color: var(--clean-white);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: 0.3s ease;
+      box-shadow: 0 4px 12px rgba(13, 71, 161, 0.3);
+    }
+
+    .vtu-btn:hover {
+      box-shadow: 0 6px 18px rgba(13, 71, 161, 0.5);
+    }
+
+    /* METRIC ANALYTICS MODULE */
+    .chart-section {
+      padding: 30px 8% 60px;
+    }
+
+    .chart-card {
+      background: var(--dark-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 35px;
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    .chart-card h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+      color: var(--clean-white);
+    }
+
+    /* REAL-TIME AUDIT LOGS DISPLAY */
+    .transaction-section {
+      padding: 0 8% 90px;
+    }
+
+    .transaction-box {
+      background: var(--dark-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 35px;
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      overflow-x: auto;
+    }
+
+    .transaction-box h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+      color: var(--clean-white);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+
+    table th,
+    table td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.95rem;
+    }
+
+    table th {
+      background: rgba(13, 71, 161, 0.3);
+      color: var(--brand-gold);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    table td {
+      color: #cbd5e1;
+    }
+
+    /* STATUS BADGE CORES */
+    .status-text {
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+
+    .status-text.success {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--status-success);
+    }
+
+    .status-text.pending {
+      background: rgba(245, 185, 66, 0.15);
+      color: var(--status-pending);
+    }
+
+    /* ECOSYSTEM FOOTER MODULE */
+    .footer {
+      background: #020617;
+      color: #94a3b8;
+      padding: 70px 8% 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer h3 {
+      margin-bottom: 20px;
+      color: var(--brand-gold);
+      font-size: 1.15rem;
+    }
+
+    .footer p {
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+
+    .footer-links a {
+      display: block;
+      margin-bottom: 12px;
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-pink);
+      padding-left: 5px;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      color: #64748b;
+      font-size: 0.85rem;
+    }
+
+    /* FLOATING CONNECTIVITY WIDGET */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.9rem;
+      color: var(--clean-white);
+      text-decoration: none;
+      z-index: 999;
+      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+      transition: 0.3s ease;
+    }
+
+    .whatsapp-float:hover {
+      transform: scale(1.1);
+    }
+
+    @media(max-width: 768px) {
+      .navbar { flex-direction: column; gap: 15px; }
+      .vtu-hero { padding: 120px 5% 40px; }
+      .vtu-hero h1 { font-size: 2.5rem; }
+      .section-title h2, .wallet-balance h2 { font-size: 2rem; }
+      .wallet-card { padding: 30px; text-align: center; justify-content: center; }
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-
-<header class="navbar">
-
-<div class="logo">
-
-<span>HAMBAK</span>
-
-<small>TECH & SERVICES</small>
-
-</div>
-
-<nav class="nav-links">
-
-<a href="../index.html">Home</a>
-<a href="services.html">Services</a>
-<a href="shop.html">Shop</a>
-<a href="vtu.html">VTU</a>
-<a href="contact.html">Contact</a>
-
-</nav>
-
-</header>
-
-<!-- HERO -->
-
-<section class="vtu-hero">
-
-<h1>
-VTU & Recharge Center
-</h1>
-
-<p>
-Fast and secure airtime recharge,
-data subscription, cable TV and electricity payment services.
-</p>
-
-</section>
-
-<!-- WALLET -->
-
-<section class="wallet-section">
-
-<div class="wallet-card">
-
-<div class="wallet-balance">
-
-<p>
-Wallet Balance
-</p>
-
-<h2>
-₦85,000
-</h2>
-
-<small>
-Updated just now
-</small>
-
-</div>
-
-<div class="wallet-actions">
-
-<button class="deposit-btn">
-Deposit Funds
-</button>
-
-<button class="transfer-btn">
-Transfer
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- SERVICES -->
-
-<section class="service-section">
-
-<div class="section-title">
-
-<h2>
-Recharge Services
-</h2>
-
-<p>
-Quick and affordable digital payment services.
-</p>
-
-</div>
-
-<div class="service-grid">
-
-<!-- AIRTIME -->
-
-<div class="service-card">
-
-<div class="service-icon">
-<i class="fa-solid fa-phone"></i>
-</div>
-
-<h3>
-Airtime Recharge
-</h3>
-
-<p>
-Buy airtime instantly for all networks.
-</p>
-
-<form class="vtu-form">
-
-<select>
-
-<option>Select Network</option>
-<option>MTN</option>
-<option>Airtel</option>
-<option>GLO</option>
-<option>9mobile</option>
-
-</select>
-
-<input
-type="tel"
-placeholder="Phone Number"
->
-
-<input
-type="number"
-placeholder="Amount"
->
-
-<button
-type="submit"
-class="vtu-btn"
->
-
-Buy Airtime
-
-</button>
-
-</form>
-
-</div>
-
-<!-- DATA -->
-
-<div class="service-card">
-
-<div class="service-icon">
-<i class="fa-solid fa-wifi"></i>
-</div>
-
-<h3>
-Data Subscription
-</h3>
-
-<p>
-Affordable internet data subscription plans.
-</p>
-
-<form class="vtu-form">
-
-<select>
-
-<option>Select Network</option>
-<option>MTN</option>
-<option>Airtel</option>
-<option>GLO</option>
-<option>9mobile</option>
-
-</select>
-
-<select>
-
-<option>Select Plan</option>
-<option>500MB</option>
-<option>1GB</option>
-<option>2GB</option>
-<option>5GB</option>
-
-</select>
-
-<input
-type="tel"
-placeholder="Phone Number"
->
-
-<button
-type="submit"
-class="vtu-btn"
->
-
-Buy Data
-
-</button>
-
-</form>
-
-</div>
-
-<!-- ELECTRICITY -->
-
-<div class="service-card">
-
-<div class="service-icon">
-<i class="fa-solid fa-bolt"></i>
-</div>
-
-<h3>
-Electricity Payment
-</h3>
-
-<p>
-Pay electricity bills securely online.
-</p>
-
-<form class="vtu-form">
-
-<select>
-
-<option>Select Disco</option>
-<option>IKEDC</option>
-<option>EKEDC</option>
-<option>AEDC</option>
-
-</select>
-
-<input
-type="text"
-placeholder="Meter Number"
->
-
-<input
-type="number"
-placeholder="Amount"
->
-
-<button
-type="submit"
-class="vtu-btn"
->
-
-Pay Bill
-
-</button>
-
-</form>
-
-</div>
-
-<!-- CABLE -->
-
-<div class="service-card">
-
-<div class="service-icon">
-<i class="fa-solid fa-tv"></i>
-</div>
-
-<h3>
-Cable TV Subscription
-</h3>
-
-<p>
-Renew cable TV subscriptions instantly.
-</p>
-
-<form class="vtu-form">
-
-<select>
-
-<option>Select Provider</option>
-<option>DStv</option>
-<option>GOtv</option>
-<option>Startimes</option>
-
-</select>
-
-<input
-type="text"
-placeholder="Smart Card Number"
->
-
-<select>
-
-<option>Select Package</option>
-<option>Basic</option>
-<option>Premium</option>
-
-</select>
-
-<button
-type="submit"
-class="vtu-btn"
->
-
-Subscribe
-
-</button>
-
-</form>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- CHART -->
-
-<section class="chart-section">
-
-<div class="chart-card">
-
-<h2>
-Monthly Transactions
-</h2>
-
-<canvas id="transactionChart"></canvas>
-
-</div>
-
-</section>
-
-<!-- TRANSACTIONS -->
-
-<section class="transaction-section">
-
-<div class="transaction-box">
-
-<h2>
-Recent Transactions
-</h2>
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Service</th>
-<th>Network</th>
-<th>Amount</th>
-<th>Status</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-<tr>
-<td>Airtime</td>
-<td>MTN</td>
-<td>₦1000</td>
-<td>Successful</td>
-</tr>
-
-<tr>
-<td>Data</td>
-<td>Airtel</td>
-<td>₦2500</td>
-<td>Successful</td>
-</tr>
-
-<tr>
-<td>Electricity</td>
-<td>IKEDC</td>
-<td>₦5000</td>
-<td>Pending</td>
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
-
-</section>
-
-<!-- FOOTER -->
-
-<footer class="footer">
-
-<div class="footer-content">
-
-<div>
-
-<h3>
-HAMBAK TECH & SERVICES
-</h3>
-
-<p>
-Where technology meet services.
-Professional VTU and digital payment solutions.
-</p>
-
-</div>
-
-<div>
-
-<h3>
-Quick Links
-</h3>
-
-<div class="footer-links">
-
-<a href="../index.html">Home</a>
-<a href="services.html">Services</a>
-<a href="vtu.html">VTU</a>
-<a href="contact.html">Contact</a>
-
-</div>
-
-</div>
-
-<div>
-
-<h3>
-Contact Info
-</h3>
-
-<p>
-09127469686
-</p>
-
-<p>
-hambak901@gmail.com
-</p>
-
-<p>
-Ibeju-Lekki, Lagos Nigeria
-</p>
-
-</div>
-
-</div>
-
-<div class="footer-bottom">
-
-© 2026 HAMBAK TECH & SERVICES
-
-</div>
-
-</footer>
-
-<!-- WHATSAPP -->
-
-<a
-href="https://wa.me/2349155104724"
-class="whatsapp-float"
->
-
-<i class="fa-brands fa-whatsapp"></i>
-
-</a>
-
-<!-- CHART -->
-
-<script>
-
-new Chart(
-document.getElementById("transactionChart"),
-{
-type:"line",
-
-data:{
-labels:[
-"Jan",
-"Feb",
-"Mar",
-"Apr",
-"May",
-"Jun"
-],
-
-datasets:[{
-
-label:"Transactions",
-
-data:[
-120,
-190,
-300,
-250,
-420,
-500
-],
-
-borderWidth:3,
-tension:0.4
-
-}]
-}
-
-});
-
-</script>
-
+  <!-- GLOBAL SYSTEM NAVBAR -->
+  <header class="navbar">
+    <div class="logo">
+      <span>HAMBAK</span>
+      <small>TECH & SERVICES</small>
+    </div>
+    <nav class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="shop.html">Shop</a>
+      <a href="vtu.html" class="active">VTU</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <!-- HERO PANEL -->
+  <section class="vtu-hero">
+    <h1>VTU & Recharge Center</h1>
+    <p>Fast and secure airtime distribution, multi-band data subscriptions, utility bills, and instant smart-card activations.</p>
+  </section>
+
+  <!-- USER LEDGER PROFILE -->
+  <section class="wallet-section">
+    <div class="wallet-card">
+      <div class="wallet-balance">
+        <p>Wallet Balance</p>
+        <h2>₦85,000</h2>
+        <small>System sync trace active • updated just now</small>
+      </div>
+      <div class="wallet-actions">
+        <button class="deposit-btn" onclick="alert('Redirecting to secure gateway routing node...')">Deposit Funds</button>
+        <button class="transfer-btn" onclick="alert('Initializing secure peer-to-peer balance transfer staging...')">Transfer</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES STAGING HUB -->
+  <section class="service-section">
+    <div class="section-title">
+      <h2>Recharge Services</h2>
+      <p>Automated real-time distribution engine across national infrastructure systems.</p>
+    </div>
+
+    <div class="service-grid">
+
+      <!-- SERVICE CORE: AIRTIME -->
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-phone"></i></div>
+        <h3>Airtime Recharge</h3>
+        <p>Buy airtime instantly for all networks.</p>
+        <form class="vtu-form" onsubmit="event.preventDefault(); alert('Airtime processing pipeline initialized.');">
+          <select required>
+            <option value="">Select Network Matrix...</option>
+            <option>MTN</option>
+            <option>Airtel</option>
+            <option>GLO</option>
+            <option>9mobile</option>
+          </select>
+          <input type="tel" placeholder="Target Phone Number" required>
+          <input type="number" placeholder="Amount (₦)" min="50" required>
+          <button type="submit" class="vtu-btn">Execute Airtime Dispense</button>
+        </form>
+      </div>
+
+      <!-- SERVICE CORE: DATA -->
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-wifi"></i></div>
+        <h3>Data Subscription</h3>
+        <p>Affordable internet data subscription plans.</p>
+        <form class="vtu-form" onsubmit="event.preventDefault(); alert('Data pipeline allocation active.');">
+          <select required>
+            <option value="">Select Carrier...</option>
+            <option>MTN</option>
+            <option>Airtel</option>
+            <option>GLO</option>
+            <option>9mobile</option>
+          </select>
+          <select required>
+            <option value="">Select Plan Allocation...</option>
+            <option>500MB (SME Data)</option>
+            <option>1GB (Giga-Share Bundle)</option>
+            <option>2GB (Corporate Data Tier)</option>
+            <option>5GB (Heavy Operational Bundle)</option>
+          </select>
+          <input type="tel" placeholder="Target Phone Number" required>
+          <button type="submit" class="vtu-btn">Provision Data Plan</button>
+        </form>
+      </div>
+
+      <!-- SERVICE CORE: ELECTRICITY -->
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-bolt"></i></div>
+        <h3>Electricity Payment</h3>
+        <p>Pay electricity bills securely online.</p>
+        <form class="vtu-form" onsubmit="event.preventDefault(); alert('Token generator staging initiated.');">
+          <select required>
+            <option value="">Select Utility Disco...</option>
+            <option>IKEDC (Ikeja Electric)</option>
+            <option>EKEDC (Eko Electric)</option>
+            <option>AEDC (Abuja Electric)</option>
+          </select>
+          <input type="text" placeholder="Meter Account Number" required>
+          <input type="number" placeholder="Amount (₦)" min="1000" required>
+          <button type="submit" class="vtu-btn">Recharge Power Token</button>
+        </form>
+      </div>
+
+      <!-- SERVICE CORE: CABLE -->
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-tv"></i></div>
+        <h3>Cable TV Subscription</h3>
+        <p>Renew cable TV subscriptions instantly.</p>
+        <form class="vtu-form" onsubmit="event.preventDefault(); alert('Cable terminal authentication ongoing.');">
+          <select required>
+            <option value="">Select Service Provider...</option>
+            <option>DStv</option>
+            <option>GOtv</option>
+            <option>Startimes</option>
+          </select>
+          <input type="text" placeholder="Smart Card / IUC Number" required>
+          <select required>
+            <option value="">Select Package Tier...</option>
+            <option>Basic / Small Pack Suite</option>
+            <option>Premium / Enterprise Max Access</option>
+          </select>
+          <button type="submit" class="vtu-btn">Authorize Subscription</button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ANALYTICS MONITOR MATRIX -->
+  <section class="chart-section">
+    <div class="chart-card">
+      <h2>Transaction Flow Analytics</h2>
+      <canvas id="transactionChart"></canvas>
+    </div>
+  </section>
+
+  <!-- AUDIT LOG TABLE -->
+  <section class="transaction-section">
+    <div class="transaction-box">
+      <h2>Recent System Event Logs</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Service Type</th>
+            <th>Network Node</th>
+            <th>Value Metric</th>
+            <th>Gateway Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Airtime Dispatch</td>
+            <td>MTN</td>
+            <td>₦1,000</td>
+            <td><span class="status-text success">Successful</span></td>
+          </tr>
+          <tr>
+            <td>Data Allocation</td>
+            <td>Airtel</td>
+            <td>₦2,500</td>
+            <td><span class="status-text success">Successful</span></td>
+          </tr>
+          <tr>
+            <td>Grid Power Bill</td>
+            <td>IKEDC</td>
+            <td>₦5,000</td>
+            <td><span class="status-text pending">Pending Processing</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SYSTEMS FOOTER CONTAINER -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div>
+        <h3>HAMBAK TECH & SERVICES</h3>
+        <p>Where corporate technical systems balance perfectly with agile service deployment pipelines.</p>
+      </div>
+      <div>
+        <h3>Quick Navigation</h3>
+        <div class="footer-links">
+          <a href="../index.html">Home Ecosystem</a>
+          <a href="services.html">Services Catalog</a>
+          <a href="shop.html">Digital Shop</a>
+          <a href="vtu.html">VTU Portal</a>
+          <a href="contact.html">Support Desk</a>
+        </div>
+      </div>
+      <div>
+        <h3>Contact Coordinates</h3>
+        <p style="margin-bottom: 8px;"><i class="fa-solid fa-phone" style="color: var(--brand-gold); margin-right: 8px;"></i> 09127469686</p>
+        <p style="margin-bottom: 8px;"><i class="fa-solid fa-envelope" style="color: var(--brand-gold); margin-right: 8px;"></i> hambak901@gmail.com</p>
+        <p><i class="fa-solid fa-location-dot" style="color: var(--brand-gold); margin-right: 8px;"></i> Ibeju-Lekki, Lagos Nigeria</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 HAMBAK TECH & SERVICES. All Cryptographic Transaction Pipelines Live.
+    </div>
+  </footer>
+
+  <!-- FLOATING COMMUNICATION LINK -->
+  <a href="https://wa.me/2349127469686" class="whatsapp-float" aria-label="Direct Link to WhatsApp Support Matrix">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <!-- HIGH-PERFORMANCE DATA VISUALIZATION GRAPH -->
+  <script>
+    const executionContext = document.getElementById("transactionChart").getContext("2d");
+    
+    // Create soft, glowing gradient lines for dark mode metrics
+    const blueGradientNode = executionContext.createLinearGradient(0, 0, 0, 400);
+    blueGradientNode.addColorStop(0, 'rgba(245, 185, 66, 0.4)');
+    blueGradientNode.addColorStop(1, 'rgba(13, 71, 161, 0.0)');
+
+    new Chart(executionContext, {
+      type: "line",
+      data: {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        datasets: [{
+          label: "Dispensed Actions (Volume Node)",
+          data: [120, 190, 300, 250, 420, 500],
+          borderColor: "#f5b942",
+          borderWidth: 3,
+          backgroundColor: blueGradientNode,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: "#0d47a1",
+          pointBorderColor: "#f5b942",
+          pointHoverRadius: 7
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: {
+              color: '#cbd5e1',
+              font: { family: 'Segoe UI', size: 12 }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: { color: '#94a3b8' }
+          },
+          y: {
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: { color: '#94a3b8' }
+          }
+        }
+      }
+    });
+  </script>
 </body>
 
 </html>
