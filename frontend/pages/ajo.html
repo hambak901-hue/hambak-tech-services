@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajo Contribution Scheme | HAMBAK TECH & SERVICES</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* ==========================================================================
+       HAMBAK BRAND DESIGN SYSTEM & GLASSMORPHIC INTERFACE
+       ========================================================================== */
+    :root {
+      --primary-blue: #0d47a1;
+      --deep-navy: #081120;
+      --brand-gold: #f5b942;
+      --soft-peach: #ffdfd3;
+      --accent-pink: #ff4081;
+      --clean-white: #ffffff;
+      --dark-card: rgba(15, 23, 42, 0.65);
+      --input-bg: #1e293b;
+      --status-success: #10b981;
+      --status-pending: #f5b942;
+      --status-danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--deep-navy), #040812);
+      color: var(--clean-white);
+      line-height: 1.6;
+    }
+
+    /* SYSTEM NAVBAR */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 8%;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo span {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--clean-white);
+    }
+
+    .logo small {
+      font-size: 0.75rem;
+      color: var(--brand-gold);
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+
+    .nav-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      margin-left: 25px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--brand-gold);
+    }
+
+    /* HERO PROFILE */
+    .ajo-hero {
+      padding: 130px 8% 50px;
+      text-align: center;
+    }
+
+    .ajo-hero h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--clean-white), var(--brand-gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .ajo-hero p {
+      max-width: 800px;
+      margin: auto;
+      line-height: 1.8;
+      font-size: 1.15rem;
+      color: #cbd5e1;
+    }
+
+    /* SYSTEM MATRIX TABS */
+    .portal-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      padding: 20px 8%;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 14px 28px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: #cbd5e1;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .tab-btn:hover, .tab-btn.active {
+      background: linear-gradient(135deg, var(--primary-blue), #1565c0);
+      color: var(--clean-white);
+      border-color: var(--brand-gold);
+      box-shadow: 0 4px 15px rgba(13, 71, 161, 0.4);
+    }
+
+    .portal-panel {
+      display: none;
+      padding: 30px 8% 80px;
+    }
+
+    .portal-panel.active {
+      display: block;
+    }
+
+    /* STRUCTURE INFOGRAPHIC TILES */
+    .tier-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .tier-card {
+      background: var(--dark-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .tier-card:hover {
+      border-color: var(--brand-gold);
+      transform: translateY(-5px);
+    }
+
+    .tier-card h3 {
+      color: var(--brand-gold);
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+
+    .tier-card .price {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: var(--clean-white);
+    }
+
+    /* REGISTRATION MATRIX FORM */
+    .form-container {
+      background: var(--dark-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 40px;
+      border-radius: 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .input-group label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+
+    .input-group input, .input-group select, .input-group textarea {
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      background: var(--input-bg);
+      color: var(--clean-white);
+      outline: none;
+      font-size: 0.95rem;
+    }
+
+    .input-group input:focus, .input-group select:focus {
+      border-color: var(--brand-gold);
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .checkbox-group input {
+      margin-top: 5px;
+    }
+
+    .checkbox-group label {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    .checkbox-group a {
+      color: var(--brand-gold);
+      text-decoration: none;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--brand-gold), #e0a534);
+      color: var(--deep-navy);
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .submit-btn:hover {
+      box-shadow: 0 5px 20px rgba(245, 185, 66, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* GRID TRACKER & SUMMARY BLOCKS */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .stat-box {
+      background: rgba(13, 71, 161, 0.15);
+      border: 1px solid rgba(13, 71, 161, 0.3);
+      padding: 25px;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .stat-box p {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      color: #94a3b8;
+      letter-spacing: 1px;
+    }
+
+    .stat-box h2 {
+      font-size: 2rem;
+      color: var(--clean-white);
+      margin-top: 5px;
+    }
+
+    .stat-box h2.gold-txt {
+      color: var(--brand-gold);
+    }
+
+    /* DATA TABLE LAYOUTS */
+    .table-container {
+      background: var(--dark-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 20px;
+      overflow-x: auto;
+      margin-bottom: 30px;
+    }
+
+    .table-container h3 {
+      margin-bottom: 20px;
+      font-size: 1.3rem;
+      color: var(--clean-white);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+    }
+
+    table th, table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.95rem;
+    }
+
+    table th {
+      background: rgba(13, 71, 161, 0.3);
+      color: var(--brand-gold);
+    }
+
+    table td {
+      color: #cbd5e1;
+    }
+
+    /* BADGES */
+    .badge {
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+
+    .badge.success { background: rgba(16, 185, 129, 0.15); color: var(--status-success); }
+    .badge.pending { background: rgba(245, 185, 66, 0.15); color: var(--status-pending); }
+    .badge.danger { background: rgba(239, 68, 68, 0.15); color: var(--status-danger); }
+
+    /* ACTION BUTTON LINES */
+    .action-btn-suite {
+      display: flex;
+      gap: 10px;
+    }
+
+    .mini-btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .mini-btn.approve { background: var(--status-success); color: var(--deep-navy); }
+    .mini-btn.remind { background: var(--status-pending); color: var(--deep-navy); }
+
+    /* COMPLIANCE WARNING NOTICE */
+    .legal-notice {
+      background: rgba(245, 185, 66, 0.08);
+      border: 1px solid rgba(245, 185, 66, 0.2);
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 30px;
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+    }
+
+    .legal-notice i {
+      color: var(--brand-gold);
+      font-size: 1.4rem;
+      margin-top: 3px;
+    }
+
+    .legal-notice p {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
+    /* WHATSAPP FLOAT */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.9rem;
+      color: var(--clean-white);
+      text-decoration: none;
+      z-index: 999;
+      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+    }
+
+    /* FOOTER */
+    .footer {
+      background: #020617;
+      color: #94a3b8;
+      padding: 70px 8% 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer h3 {
+      margin-bottom: 20px;
+      color: var(--brand-gold);
+    }
+
+    .footer-links a {
+      display: block;
+      margin-bottom: 12px;
+      color: #cbd5e1;
+      text-decoration: none;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      color: #64748b;
+      font-size: 0.85rem;
+    }
+
+    @media(max-width: 768px) {
+      .navbar { flex-direction: column; gap: 15px; }
+      .ajo-hero h1 { font-size: 2.4rem; }
+      .form-container { padding: 25px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">
+      <span>HAMBAK</span>
+      <small>TECH & SERVICES</small>
+    </div>
+    <nav class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="shop.html">Shop</a>
+      <a href="vtu.html">VTU</a>
+      <a href="ajo.html" class="active">Ajo Scheme</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <!-- HERO COMPONENT -->
+  <section class="ajo-hero">
+    <h1>Ajo Contribution Portal</h1>
+    <p>A structured, secure, and legally transparent rotating community contribution platform managed securely by HAMBAK TECH & SERVICES.</p>
+  </section>
+
+  <!-- TAB SWITCH CONTROLLERS -->
+  <div class="portal-tabs">
+    <button class="tab-btn active" onclick="switchPortalTab(event, 'overview-tab')"><i class="fa-solid fa-layer-group"></i> Scheme Structures</button>
+    <button class="tab-btn" onclick="switchPortalTab(event, 'register-tab')"><i class="fa-solid fa-user-plus"></i> Online Registration</button>
+    <button class="tab-btn" onclick="switchPortalTab(event, 'member-tab')"><i class="fa-solid fa-chart-pie"></i> Member Dashboard</button>
+    <button class="tab-btn" onclick="switchPortalTab(event, 'admin-tab')"><i class="fa-solid fa-shield-halved"></i> Admin Control Matrix</button>
+  </div>
+
+  <!-- PANEL 1: STRUCTURE OVERVIEW -->
+  <div id="overview-tab" class="portal-panel active">
+    <div class="section-title" style="text-align: center; margin-bottom: 40px;">
+      <h2 style="font-size: 2.2rem; margin-bottom: 10px;">Membership Contribution Tiers</h2>
+      <p style="color: #94a3b8;">Select your preferred slot capacity. Every single operational group converges to an ecosystem standard base rate of ₦100,000 monthly value per slot.</p>
+    </div>
+
+    <div class="tier-grid">
+      <div class="tier-card">
+        <h3>Category A: Individual</h3>
+        <div class="price">₦100,000 <span style="font-size: 1rem; color:#94a3b8;">/mo</span></div>
+        <p style="font-size: 0.9rem; color: #cbd5e1; margin-top: 10px;">Full individual ownership of 1 execution slot. Receives complete single payout pool.</p>
+      </div>
+      <div class="tier-card">
+        <h3>Category B: 2-Person Partnership</h3>
+        <div class="price">₦50,000 <span style="font-size: 1rem; color:#94a3b8;">/mo per head</span></div>
+        <p style="font-size: 0.9rem; color: #cbd5e1; margin-top: 10px;">Two partners split one payment track. Total slot value yields ₦100,000 monthly.</p>
+      </div>
+      <div class="tier-card">
+        <h3>Category C: 4-Person Partnership</h3>
+        <div class="price">₦25,000 <span style="font-size: 1rem; color:#94a3b8;">/mo per head</span></div>
+        <p style="font-size: 0.9rem; color: #cbd5e1; margin-top: 10px;">Four grouped partners combine funds to back a single active collection stream.</p>
+      </div>
+      <div class="tier-card">
+        <h3>Category D/E: Corporate & Workers</h3>
+        <div class="price">Custom Tier</div>
+        <p style="font-size: 0.9rem; color: #cbd5e1; margin-top: 10px;">Tailored for specialized trade associations, public services, and verified civil servants.</p>
+      </div>
+    </div>
+
+    <div class="table-container" style="max-width: 900px; margin: 0 auto;">
+      <h3>Standard Operational Blueprint (10-Month Rotation Run)</h3>
+      <table style="min-width: auto;">
+        <thead>
+          <tr>
+            <th>Metric Param</th>
+            <th>Value Baseline Configuration</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Target Group Matrix Capacity</td><td>10 Active Slots per Pool Sequence</td></tr>
+          <tr><td>Baseline Allocation Payment</td><td>₦100,000 per month / slot</td></tr>
+          <tr><td>Total Aggregated Monthly Pool</td><td><strong>₦1,000,000 Liquid Value</strong></td></tr>
+          <tr><td>Rotational Timeline Span</td><td>10 Calendar Months Group Life Cycle</td></tr>
+          <tr><td>Payout Cycle Frequency</td><td>1 Beneficiary selected every single month via scheduled draw</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PANEL 2: ONLINE REGISTRATION -->
+  <div id="register-tab" class="portal-panel">
+    <div class="form-container">
+      <h3 style="font-size: 1.5rem; margin-bottom: 25px; color: var(--brand-gold);"><i class="fa-solid fa-id-card"></i> Member Verification & Integration Form</h3>
+      <form onsubmit="event.preventDefault(); alert('Registration payload successfully validated and submitted to Hambak Admin Core.');">
+        
+        <h4 style="color: #cbd5e1; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px;">1. Personal Coordinates</h4>
+        <div class="form-grid">
+          <div class="input-group">
+            <label>Full Legal Name</label>
+            <input type="text" placeholder="Surname Firstname" required>
+          </div>
+          <div class="input-group">
+            <label>Phone Line Connection</label>
+            <input type="tel" placeholder="08012345678" required>
+          </div>
+          <div class="input-group">
+            <label>Email Address</label>
+            <input type="email" placeholder="name@example.com" required>
+          </div>
+        </div>
+
+        <div class="form-grid" style="grid-template-columns: 2fr 1fr;">
+          <div class="input-group">
+            <label>Residential Physical Address</label>
+            <input type="text" placeholder="Full street layout state coordinates" required>
+          </div>
+          <div class="input-group">
+            <label>Target Membership Track</label>
+            <select required>
+              <option value="">Choose Category...</option>
+              <option>Category A - Individual (₦100,000/mo)</option>
+              <option>Category B - 2-Partner (₦50,000/mo)</option>
+              <option>Category C - 4-Partner (₦25,000/mo)</option>
+              <option>Category D - Traders/Business</option>
+              <option>Category E - Civil Servant/Workers</option>
+            </select>
+          </div>
+        </div>
+
+        <h4 style="color: #cbd5e1; margin-top: 25px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px;">2. Regulatory Verification & Support Links</h4>
+        <div class="form-grid">
+          <div class="input-group">
+            <label>Identification Document Type</label>
+            <select required>
+              <option value="NIN">National Identification Number (NIN)</option>
+              <option value="Voter">Voter's Card</option>
+              <option value="Driver">Driver's License</option>
+              <option value="Passport">International Passport</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>ID Document Reference Number</label>
+            <input type="text" placeholder="Enter number sequence" required>
+          </div>
+          <div class="input-group">
+            <label>Passport Photograph Upload</label>
+            <input type="file" accept="image/*" required>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="input-group">
+            <label>Guarantor Full Identity Name</label>
+            <input type="text" placeholder="Guarantor Name" required>
+          </div>
+          <div class="input-group">
+            <label>Guarantor Verified Contact Number</label>
+            <input type="tel" placeholder="Guarantor Phone" required>
+          </div>
+          <div class="input-group">
+            <label>Next of Kin Identity Info</label>
+            <input type="text" placeholder="Next of Kin Name & Link" required>
+          </div>
+        </div>
+
+        <div class="checkbox-group">
+          <input type="checkbox" id="legal-terms-check" required>
+          <label for="legal-terms-check">I explicitly execute legal assent to the <a href="#">Ajo Participation Agreement</a>, group liability statutes, mandatory 5th-day submission deadlines, and risk disclosures governed under standard statutory provisions.</label>
+        </div>
+
+        <button type="submit" class="submit-btn">Transmit Registration Payload</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- PANEL 3: MEMBER DASHBOARD -->
+  <div id="member-tab" class="portal-panel">
+    <div class="stats-row">
+      <div class="stat-box">
+        <p>Allocated Cluster Group</p>
+        <h2 class="gold-txt">Group B-10</h2>
+      </div>
+      <div class="stat-box">
+        <p>Personal Total Deposited</p>
+        <h2>₦400,000</h2>
+      </div>
+      <div class="stat-box">
+        <p>Current Rotation Month</p>
+        <h2>Month 4 /10</h2>
+      </div>
+      <div class="stat-box">
+        <p>Target Scheduled Payout</p>
+        <h2 style="color: var(--status-success);">Month 7</h2>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <h3>Personal Statement & Verification Receipt Logs</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Value Tracking Date</th>
+            <th>Receipt Voucher Block</th>
+            <th>Amount Contributed</th>
+            <th>Process Verification Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>May 04, 2026</td><td>TXN-AJO-99210</td><td>₦100,000</td><td><span class="badge success">Settled & Receipted</span></td></tr>
+          <tr><td>Apr 03, 2026</td><td>TXN-AJO-88124</td><td>₦100,000</td><td><span class="badge success">Settled & Receipted</span></td></tr>
+          <tr><td>Mar 05, 2026</td><td>TXN-AJO-77109</td><td>₦100,000</td><td><span class="badge success">Settled & Receipted</span></td></tr>
+          <tr><td>Feb 02, 2026</td><td>TXN-AJO-66190</td><td>₦100,000</td><td><span class="badge success">Settled & Receipted</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CHART LINK -->
+    <div class="table-container" style="background: rgba(15, 23, 42, 0.45);">
+      <h3 style="margin-bottom: 15px;">Ecosystem Group Collection Flow Graph</h3>
+      <canvas id="ajoPoolChart" style="max-height: 280px;"></canvas>
+    </div>
+  </div>
+
+  <!-- PANEL 4: ADMIN DASHBOARD CONTROL -->
+  <div id="admin-tab" class="portal-panel">
+    <div style="margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+      <h3 style="font-size: 1.5rem; color: var(--brand-gold);"><i class="fa-solid fa-gears"></i> Core System Administrative Matrix</h3>
+      <span class="badge" style="background: rgba(255, 64, 129, 0.2); color: var(--accent-pink); padding: 8px 15px; border-radius: 8px;">Secured Operator Authentication Active</span>
+    </div>
+
+    <div class="table-container">
+      <h3>Pending Registration Validation Verification Pipeline</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Target Applicant Identity</th>
+            <th>Contact Channel</th>
+            <th>Selected Tier Category</th>
+            <th>Uploaded Verification Dossier</th>
+            <th>System Operator Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Adegoke Gbadamosi</td>
+            <td>08034561122</td>
+            <td>Category A (Individual)</td>
+            <td><a href="#" style="color: var(--brand-gold); text-decoration: none;"><i class="fa-solid fa-file-pdf"></i> NIN_Doc.pdf</a></td>
+            <td>
+              <div class="action-btn-suite">
+                <button class="mini-btn approve" onclick="alert('Applicant ledger entry approved.')">Verify</button>
+                <button class="mini-btn remind" style="background:#475569; color:white;">Decline</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-container">
+      <h3>Active Rotation Beneficiary Assignment Schedule</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Cycle Month Code</th>
+            <th>Assigned Collection Target Beneficiary</th>
+            <th>Value Volume Pool Amount</th>
+            <th>Distribution Status Block</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Month 1 (Jan)</td><td>Chidi Okafor</td><td>₦1,000,000</td><td><span class="badge success">Disbursed Complete</span></td></tr>
+          <tr><td>Month 2 (Feb)</td><td>Fatima Musa</td><td>₦1,000,000</td><td><span class="badge success">Disbursed Complete</span></td></tr>
+          <tr><td>Month 3 (Mar)</td><td>Olumide Awosika</td><td>₦1,000,000</td><td><span class="badge success">Disbursed Complete</span></td></tr>
+          <tr><td><strong>Month 4 (Current)</strong></td><td><strong>Amara Obi</strong></td><td><strong>₦1,000,000</strong></td><td><span class="badge pending">Pending Draw Verification</span></td></tr>
+          <tr><td>Month 5 (Jun)</td><td>Staged Pool Queue Selection</td><td>₦1,000,000</td><td><span class="badge" style="background:rgba(255,255,255,0.1); color:#94a3b8;">Locked</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-container">
+      <h3>Defaulter Tracking Matrix & Risk Warning System</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Defaulting Member Account Identity</th>
+            <th>Arrears Volume Balance</th>
+            <th>Consecutive Delinquency Count</th>
+            <th>Enforcement Warning Level</th>
+            <th>Direct Enforcement Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Tunde Jinadu (Group A-4)</td>
+            <td style="color: var(--status-danger); font-weight:700;">₦100,000</td>
+            <td>1 Month Late</td>
+            <td><span class="badge pending">Level 1 Alert Triggered</span></td>
+            <td><button class="mini-btn remind" onclick="alert('Automated warning broadcast triggered to Member and assigned Guarantor channel.')"><i class="fa-solid fa-bell"></i> Issue Demand Notice</button></td>
+          </tr>
+          <tr>
+            <td>Ibrahim Yusuf (Group C-2)</td>
+            <td style="color: var(--status-danger); font-weight:700;">₦25,000</td>
+            <td>2 Months Late</td>
+            <td><span class="badge danger">Level 2 Suspension Risk</span></td>
+            <td><button class="mini-btn remind" style="background: var(--status-danger); color: white;" onclick="alert('Staging system suspension protocols.')"><i class="fa-solid fa-triangle-exclamation"></i> Enforce Legal Hold</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- REGULATORY NOTICE BOARD BLOCK -->
+    <div class="legal-notice">
+      <i class="fa-solid fa-scale-balanced"></i>
+      <div>
+        <strong style="color: var(--brand-gold); display: block; margin-bottom: 5px;">Regulatory Governance Compliance Framework Note</strong>
+        <p>Before expanding this operation to general public access, ensure all explicit consumer participant agreements are finalized, and appropriate legal council is retained to evaluate cooperative laws, rotating savings club regulations, and tracking frameworks. The Excel ledger backup framework acts as the master mirror data layer alongside this platform architecture.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHATSAPP SUPPORT FLOAT CHANNEL -->
+  <a href="https://wa.me/2349127469686" class="whatsapp-float" aria-label="Connect directly to official Hambak Service Channel" target="_blank">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <!-- GENERAL SYSTEM FOOTER -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div>
+        <h3>HAMBAK TECH & SERVICES</h3>
+        <p>Where corporate technical systems balance perfectly with agile service deployment pipelines.</p>
+      </div>
+      <div>
+        <h3>Ecosystem Navigation</h3>
+        <div class="footer-links">
+          <a href="../index.html">Home Ecosystem</a>
+          <a href="services.html">Services Catalog</a>
+          <a href="shop.html">Digital Shop</a>
+          <a href="vtu.html">VTU Portal</a>
+          <a href="ajo.html">Ajo Portal Matrix</a>
+        </div>
+      </div>
+      <div>
+        <h3>Contact Coordinates</h3>
+        <p style="margin-bottom: 8px;"><i class="fa-solid fa-phone" style="color: var(--brand-gold); margin-right: 8px;"></i> 09127469686</p>
+        <p style="margin-bottom: 8px;"><i class="fa-solid fa-envelope" style="color: var(--brand-gold); margin-right: 8px;"></i> hambak901@gmail.com</p>
+        <p><i class="fa-solid fa-location-dot" style="color: var(--brand-gold); margin-right: 8px;"></i> Ibeju-Lekki, Lagos Nigeria</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 HAMBAK TECH & SERVICES. Secure Financial Rotation Technology Engine Live.
+    </div>
+  </footer>
+
+  <!-- DYNAMIC ENGINE CORE JAVASCRIPT JS -->
+  <script>
+    // Tab Controller Interface Matrix Engine Switching
+    function switchPortalTab(event, activeTabId) {
+      const panelNodes = document.querySelectorAll('.portal-panel');
+      const tabButtonNodes = document.querySelectorAll('.tab-btn');
+
+      panelNodes.forEach(panel => panel.classList.remove('active'));
+      tabButtonNodes.forEach(button => button.classList.remove('active'));
+
+      document.getElementById(activeTabId).classList.add('active');
+      event.currentTarget.classList.add('active');
+
+      if(activeTabId === 'member-tab') {
+        initializeAjoAnalyticsChart();
+      }
+    }
+
+    // Charting Framework Integration Initialization Engine
+    let chartInstanceReference = null;
+    function initializeAjoAnalyticsChart() {
+      const ctxNode = document.getElementById("ajoPoolChart");
+      if (!ctxNode) return;
+      
+      // Prevent double generation binding tracks
+      if (chartInstanceReference !== null) {
+        chartInstanceReference.destroy();
+      }
+
+      const renderingContext = ctxNode.getContext("2d");
+      const linearGradientTrack = renderingContext.createLinearGradient(0, 0, 0, 250);
+      linearGradientTrack.addColorStop(0, 'rgba(13, 71, 161, 0.4)');
+      linearGradientTrack.addColorStop(1, 'rgba(13, 71, 161, 0.0)');
+
+      chartInstanceReference = new Chart(renderingContext, {
+        type: "line",
+        data: {
+          labels: ["Month 1", "Month 2", "Month 3", "Month 4", "Month 5", "Month 6", "Month 7", "Month 8", "Month 9", "Month 10"],
+          datasets: [{
+            label: "Total Pool Capital Velocity Staged (Millions ₦)",
+            data: [1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            borderColor: "#f5b942",
+            borderWidth: 3,
+            backgroundColor: linearGradientTrack,
+            fill: true,
+            tension: 0.3,
+            pointBackgroundColor: "#0d47a1"
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#cbd5e1' } } },
+          scales: {
+            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>
