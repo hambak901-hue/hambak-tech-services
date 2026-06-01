@@ -146,3 +146,40 @@ export const updateOrderStatus = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+/* ==========================================================
+   ORDER MATRIX: FETCH ALL SYSTEM ORDERS (ADMIN ONLY)
+   ========================================================== */
+export const getOrders = async (req, res) => {
+  try {
+    const allOrders = await Order.find({})
+      .populate("user", "name email")
+      .populate("service", "name category price")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      count: allOrders.length,
+      orders: allOrders
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+/* ==========================================================
+   ORDER MATRIX: REMOVE/DELETE ORDER REFERENCE (ADMIN ONLY)
+   ========================================================== */
+export const deleteOrder = async (req, res) => {
+  try {
+    const targetOrder = await Order.findById(req.params.id);
+    if (!targetOrder) {
+      return res.status(404).json({ success: false, message: "Target order parameter reference not found." });
+    }
+
+    await targetOrder.deleteOne();
+    return res.status(200).json({ success: true, message: "Order records systematically purged." });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
