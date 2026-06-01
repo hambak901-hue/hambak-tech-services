@@ -111,3 +111,37 @@ export const loginUser = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+/* ==========================================================
+   AUTHENTICATION MODULE: GET CURRENT USER PROFILE
+   ========================================================== */
+export const getMyProfile = async (req, res) => {
+  try {
+    // req.user is loaded dynamically inside the protect middleware
+    const user = await User.findById(req.user._id).select("-password");
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User context not found." });
+    }
+
+    return res.status(200).json({
+      success: true,
+      user
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+/* ==========================================================
+   AUTHENTICATION MODULE: LOGOUT USER
+   ========================================================== */
+export const logoutUser = async (req, res) => {
+  try {
+    return res.status(200).json({
+      success: true,
+      message: "Session terminated safely. User successfully logged out."
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
