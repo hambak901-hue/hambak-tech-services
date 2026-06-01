@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shop | HAMBAK TECH & SERVICES</title>
+  <title>Services | HAMBAK TECH & SERVICES</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     /* ==========================================================================
-       PREMIUM BRAND COLOR PALETTE & GLASSMORPHIC DESIGN SYSTEM
+       PREMIUM BRAND COLOR PALETTE (BLUE, GOLD, PEACH, PINK)
        ========================================================================== */
     :root {
       --primary-blue: #0d47a1;
@@ -18,8 +18,9 @@
       --soft-peach: #ffdfd3;
       --accent-pink: #ff4081;
       --clean-white: #ffffff;
-      --dark-card: rgba(15, 23, 42, 0.65);
+      --dark-card: #0f172a;
       --input-bg: #1e293b;
+      --border-glow: rgba(245, 185, 66, 0.2);
     }
 
     * {
@@ -35,7 +36,7 @@
       line-height: 1.6;
     }
 
-    /* GLOBAL SYSTEM NAVBAR */
+    /* GLOBAL ECOSYSTEM NAVBAR OVERRIDES */
     .navbar {
       display: flex;
       justify-content: space-between;
@@ -81,174 +82,221 @@
       color: var(--brand-gold);
     }
 
-    /* SHOP HUB SECTION LAYOUT */
-    .shop-section {
+    /* SERVICES HERO BRAND PROFILE ENTRY */
+    .services-hero {
       padding: 120px 8% 80px;
-      min-height: 100vh;
-    }
-
-    .shop-title {
+      background: linear-gradient(135deg, rgba(8, 17, 32, 0.95), rgba(13, 71, 161, 0.3)), 
+                  radial-gradient(circle at top center, var(--accent-pink), transparent 60%);
       text-align: center;
-      margin-bottom: 50px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .shop-title h1 {
-      font-size: 3.2rem;
+    .services-hero h1 {
+      font-size: 3.8rem;
       font-weight: 800;
-      margin-bottom: 15px;
-      background: linear-gradient(135deg, var(--clean-white), var(--brand-gold));
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--clean-white), var(--soft-peach));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .shop-title p {
+    .services-hero p {
+      max-width: 750px;
+      margin: auto;
+      font-size: 1.15rem;
+      color: #94a3b8;
+      line-height: 1.8;
+    }
+
+    /* SERVICE DISPLAY SYSTEM GRID */
+    .services-section {
+      padding: 80px 8%;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 55px;
+    }
+
+    .section-title h2 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, var(--brand-gold), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-title p {
       color: #cbd5e1;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
     }
 
-    /* FILTER AND SEARCH ENGINES */
-    .shop-search {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 50px;
-    }
-
-    .shop-search input {
-      width: 100%;
-      max-width: 600px;
-      padding: 16px 25px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: var(--input-bg);
-      color: var(--clean-white);
-      border-radius: 50px;
-      font-size: 1rem;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-      outline: none;
-      transition: 0.3s;
-    }
-
-    .shop-search input:focus {
-      border-color: var(--brand-gold);
-      box-shadow: 0 10px 25px rgba(245, 185, 66, 0.15);
-    }
-
-    /* GRID ARCHITECTURE */
-    .shop-grid {
+    .services-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 30px;
     }
 
-    /* PRODUCT GLASS CARDS */
-    .product-card {
-      background: var(--dark-card);
+    /* CARD BLOCK STRUCTURAL PACKAGES */
+    .service-card {
+      background: rgba(15, 23, 42, 0.65);
       backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 35px 30px;
+      padding: 40px 30px;
       border-radius: 24px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
       transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       flex-direction: column;
+      position: relative;
+      overflow: hidden;
     }
 
-    .product-card:hover {
+    .service-card:hover {
       transform: translateY(-10px);
-      border-color: rgba(245, 185, 66, 0.25);
+      border-color: rgba(245, 185, 66, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     }
 
-    .product-icon {
-      width: 76px;
-      height: 76px;
+    .service-icon {
+      width: 72px;
+      height: 72px;
       background: rgba(13, 71, 161, 0.2);
       border: 1px solid rgba(13, 71, 161, 0.4);
-      border-radius: 18px;
+      border-radius: 16px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.8rem;
+      font-size: 1.75rem;
       color: var(--brand-gold);
       margin-bottom: 25px;
     }
 
-    .product-card h3 {
-      font-size: 1.45rem;
+    .service-card h3 {
+      font-size: 1.5rem;
       font-weight: 700;
+      margin-bottom: 12px;
       color: var(--clean-white);
-      margin-bottom: 10px;
     }
 
-    .product-card p {
+    .service-card p {
       color: #94a3b8;
       font-size: 0.95rem;
+      line-height: 1.7;
       margin-bottom: 20px;
     }
 
-    /* DROPDOWN SELECT STYLING */
-    .dropdown-select {
-      width: 100%;
+    .service-list {
+      list-style: none;
+      margin-bottom: 25px;
+      flex-grow: 1;
+    }
+
+    .service-list li {
+      margin-bottom: 10px;
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .service-list li::before {
+      content: "\f00c";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      color: var(--accent-pink);
+      font-size: 0.8rem;
+    }
+
+    /* BRAND FINANCIAL PILLS */
+    .price-tag {
+      display: inline-block;
+      align-self: flex-start;
+      padding: 6px 16px;
+      background: rgba(245, 185, 66, 0.12);
+      border: 1px solid rgba(245, 185, 66, 0.3);
+      color: var(--brand-gold);
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .service-btn {
+      display: block;
+      text-align: center;
       padding: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      background: var(--input-bg);
+      background: linear-gradient(135deg, var(--primary-blue), #1565c0);
       color: var(--clean-white);
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 700;
       font-size: 0.95rem;
-      margin-bottom: 20px;
-      outline: none;
-      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(13, 71, 161, 0.3);
+      transition: 0.3s ease;
+    }
+
+    .service-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(13, 71, 161, 0.5);
+    }
+
+    /* DIRECT ASSISTANCE INTERRUPT BANNER (CTA) */
+    .cta-section {
+      padding: 90px 8%;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(8, 17, 32, 0.9)), 
+                  radial-gradient(circle at bottom center, var(--primary-blue), transparent 70%);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+    }
+
+    .cta-section p {
+      max-width: 650px;
+      margin: auto;
+      line-height: 1.7;
+      color: #94a3b8;
+      margin-bottom: 30px;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      padding: 16px 40px;
+      background: var(--brand-gold);
+      color: var(--dark-card);
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 700;
+      box-shadow: 0 5px 15px rgba(245, 185, 66, 0.3);
       transition: 0.3s;
     }
 
-    .dropdown-select:focus {
-      border-color: var(--primary-blue);
+    .cta-btn:hover {
+      background: var(--clean-white);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(255, 255, 255, 0.2);
     }
 
-    .dropdown-select option {
-      background: #1e293b;
-      color: var(--clean-white);
-    }
-
-    /* TELEMETRY FINANCIAL MESSAGING */
-    .dynamic-price {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--brand-gold);
-      margin-bottom: 25px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .cart-btn {
-      width: 100%;
-      padding: 15px;
-      border: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--primary-blue), #1565c0);
-      color: var(--clean-white);
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.3s ease;
-      box-shadow: 0 4px 12px rgba(13, 71, 161, 0.3);
-    }
-
-    .cart-btn:hover {
-      box-shadow: 0 6px 18px rgba(13, 71, 161, 0.5);
-      transform: translateY(-1px);
-    }
-
-    /* ECOSYSTEM FOOTER MODULE */
+    /* SYSTEMS ECOSYSTEM FOOTER MODULE */
     .footer {
       background: #020617;
       color: #94a3b8;
-      padding: 70px 8% 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 60px 8% 20px;
     }
 
     .footer-content {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 40px;
       margin-bottom: 40px;
     }
@@ -257,10 +305,11 @@
       margin-bottom: 20px;
       color: var(--brand-gold);
       font-size: 1.15rem;
+      font-weight: 700;
     }
 
     .footer p {
-      line-height: 1.8;
+      line-height: 1.7;
       font-size: 0.95rem;
     }
 
@@ -269,6 +318,7 @@
       margin-bottom: 12px;
       color: #cbd5e1;
       text-decoration: none;
+      font-size: 0.95rem;
       transition: 0.2s;
     }
 
@@ -281,11 +331,11 @@
       text-align: center;
       padding-top: 20px;
       border-top: 1px solid rgba(255, 255, 255, 0.05);
-      color: #64748b;
       font-size: 0.85rem;
+      color: #64748b;
     }
 
-    /* FLOATING CONNECTIVITY WIDGET */
+    /* FLOATING EMERGENCY TELEMETRY CONNECTION */
     .whatsapp-float {
       position: fixed;
       bottom: 30px;
@@ -309,17 +359,19 @@
       transform: scale(1.1);
     }
 
+    /* RESPONSIVENESS OVERRIDES */
     @media(max-width: 768px) {
-      .navbar { flex-direction: column; gap: 15px; }
-      .shop-section { padding: 100px 5% 60px; }
-      .shop-title h1 { font-size: 2.4rem; }
+      .navbar { flex-direction: column; gap: 15px; text-align: center; }
+      .nav-links a { margin: 0 10px; font-size: 0.9rem; }
+      .services-hero h1 { font-size: 2.5rem; }
+      .section-title h2, .cta-section h2 { font-size: 2rem; }
+      .services-section { padding: 50px 5%; }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- NAVIGATION STRUCT -->
   <header class="navbar">
     <div class="logo">
       <span>HAMBAK</span>
@@ -327,169 +379,125 @@
     </div>
     <nav class="nav-links">
       <a href="../index.html">Home</a>
-      <a href="services.html">Services</a>
+      <a href="services.html" class="active">Services</a>
       <a href="registration.html">Registration</a>
-      <a href="shop.html" class="active">Shop</a>
+      <a href="shop.html">Shop</a>
       <a href="contact.html">Contact</a>
+      <a href="login.html">Login</a>
     </nav>
   </header>
 
-  <!-- MAIN MERCHANDISE HUD -->
-  <section class="shop-section">
-    <div class="shop-title">
-      <h1>Digital Shop</h1>
-      <p>Configure your target parameters and select live transaction variants.</p>
+  <section class="services-hero">
+    <h1>Our Professional Services</h1>
+    <p>HAMBAK TECH & SERVICES provides top-tier corporate ICT architectures, online registration processing, high-volume graphic branding, automated VTU portals, and computer science training structures.</p>
+  </section>
+
+  <section class="services-section">
+    <div class="section-title">
+      <h2>What We Offer</h2>
+      <p>Reliable technology workflows engineered precisely for individuals, business systems, and academic trainees.</p>
     </div>
 
-    <!-- REAL-TIME FILTER REGISTRY -->
-    <div class="shop-search">
-      <input type="text" placeholder="Filter node catalogs (e.g., NIN, WAEC, Design)..." id="shopSearch">
-    </div>
+    <div class="services-grid" id="servicesGrid">
 
-    <!-- CATALOG GRID TARGET SYSTEM -->
-    <div class="shop-grid">
-
-      <!-- CATEGORY 1: NIN -->
-      <div class="product-card" data-category="nin">
-        <div class="product-icon"><i class="fa-solid fa-id-card"></i></div>
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-id-card"></i></div>
         <h3>NIN Services</h3>
-        <p>Biometric processing modifications and credential verification pipelines.</p>
-        <select class="dropdown-select">
-          <option value="" data-name="">Choose Service Option...</option>
-          <option value="3000" data-name="NIN Enrolment">NIN Enrolment — ₦3,000</option>
-          <option value="2000" data-name="NIN Modification">NIN Modification — ₦2,000</option>
-          <option value="1000" data-name="NIN Reprint">NIN Reprint — ₦1,000</option>
-          <option value="1500" data-name="NIN Validation">NIN Validation — ₦1,500</option>
-          <option value="1000" data-name="Tracking ID Lookup">Tracking ID — ₦1,000</option>
-        </select>
-        <div class="dynamic-price">Price: ₦0</div>
-        <button class="cart-btn">Proceed to Booking</button>
+        <p>Rapid deployment and management systems for National Identification biometric validations.</p>
+        <ul class="service-list">
+          <li>New Data Enrolment Capture</li>
+          <li>System Modification & Modification</li>
+          <li>Loss Recovery & Card Reprint</li>
+          <li>Ecosystem Integration & Validation</li>
+        </ul>
+        <div class="price-tag">Starting ₦1,000</div>
+        <a href="shop.html?category=nin" class="service-btn">Book Verification Service</a>
       </div>
 
-      <!-- CATEGORY 2: PRINTING -->
-      <div class="product-card" data-category="printing">
-        <div class="product-icon"><i class="fa-solid fa-print"></i></div>
-        <h3>Printing Services</h3>
-        <p>High-volume commercial document output configurations.</p>
-        <select class="dropdown-select">
-          <option value="" data-name="">Choose Document Option...</option>
-          <option value="100" data-name="Black & White Printing">Black & White Copying — ₦100</option>
-          <option value="300" data-name="Color Printing">Color High-Impact Print — ₦300</option>
-          <option value="100" data-name="Photocopy Asset">Photocopy Matrix — ₦100</option>
-          <option value="500" data-name="Thermal Lamination">Thermal Lamination — ₦500</option>
-          <option value="1000" data-name="Passport Photograph Array">Passport Photograph (Set) — ₦1,000</option>
-          <option value="1500" data-name="Typing and Layout Formulation">Typing & Layout Composition — ₦1,500</option>
-        </select>
-        <div class="dynamic-price">Price: ₦0</div>
-        <button class="cart-btn">Proceed to Booking</button>
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-print"></i></div>
+        <h3>Printing & Photocopy</h3>
+        <p>High-resolution document copying, secure print servers, and automated lamination lanes.</p>
+        <ul class="service-list">
+          <li>Monochrome Laser Printing</li>
+          <li>High-Impact Color Production</li>
+          <li>Fast Bulk Document Photocopy</li>
+          <li>Thermal Asset Lamination</li>
+        </ul>
+        <div class="price-tag">Starting ₦100</div>
+        <a href="shop.html?category=printing" class="service-btn">Place Copy Order</a>
       </div>
 
-      <!-- CATEGORY 3: REGISTRATION -->
-      <div class="product-card" data-category="registration">
-        <div class="product-icon"><i class="fa-solid fa-file-pen"></i></div>
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-file-pen"></i></div>
         <h3>Online Registration</h3>
-        <p>Institutional entry logging and academic database uploads.</p>
-        <select class="dropdown-select">
-          <option value="" data-name="">Choose Examination Node...</option>
-          <option value="5000" data-name="WAEC Registration Portal">WAEC Profile Registration — ₦5,000</option>
-          <option value="5000" data-name="JAMB Registration Portal">JAMB Profile Registration — ₦5,000</option>
-          <option value="5000" data-name="NECO Registration Portal">NECO Profile Registration — ₦5,000</option>
-          <option value="5000" data-name="GCE Portal Staging">GCE Profile Registration — ₦5,000</option>
-          <option value="3000" data-name="NYSC Callup Management">NYSC Mobilization Unit — ₦3,000</option>
-          <option value="1000" data-name="Result PIN Validation">Result Checking PIN Service — ₦1,000</option>
-        </select>
-        <div class="dynamic-price">Price: ₦0</div>
-        <button class="cart-btn">Proceed to Booking</button>
+        <p>Direct enrollment pipelines for regional academic, testing, and governmental identification boards.</p>
+        <ul class="service-list">
+          <li>WAEC Portal Staging</li>
+          <li>JAMB Core Processing</li>
+          <li>NECO / GCE Access Nodes</li>
+          <li>NYSC Mobilization Unit</li>
+        </ul>
+        <div class="price-tag">Starting ₦3,000</div>
+        <a href="registration.html" class="service-btn">Launch Portal Terminal</a>
       </div>
 
-      <!-- CATEGORY 4: POS -->
-      <div class="product-card" data-category="pos">
-        <div class="product-icon"><i class="fa-solid fa-money-bill-transfer"></i></div>
-        <h3>POS Agency Services</h3>
-        <p>Secured micro-financial liquidity processing actions.</p>
-        <select class="dropdown-select">
-          <option value="" data-name="">Choose Agent Action...</option>
-          <option value="100" data-name="POS Withdrawal Processing">POS Liquid Capital Withdrawal — ₦100</option>
-          <option value="50" data-name="POS Outbound Routing">POS Outbound Bank Transfer — ₦50</option>
-          <option value="0" data-name="Direct Terminal Deposit">Direct Operational Deposit — FREE</option>
-        </select>
-        <div class="dynamic-price">Price: ₦0</div>
-        <button class="cart-btn">Proceed to Booking</button>
-      </div>
-
-      <!-- CATEGORY 5: GRAPHICS -->
-      <div class="product-card" data-category="graphics">
-        <div class="product-icon"><i class="fa-solid fa-palette"></i></div>
-        <h3>Graphics Design</h3>
-        <p>Bespoke visual communication architecture & vector layouts.</p>
-        <select class="dropdown-select">
-          <option value="" data-name="">Choose Design Blueprint...</option>
-          <option value="5000" data-name="Bespoke Flyer Design">Bespoke Flyer Design — ₦5,000</option>
-          <option value="7000" data-name="Large Scale Banner Layout">Large-Scale Vector Banner — ₦7,000</option>
-          <option value="3000" data-name="Corporate Business Card Suite">Corporate Business Card Suite — ₦3,000</option>
-          <option value="5000" data-name="Sublimation Plastic ID Asset">Sublimation Plastic ID Badge — ₦5,000</option>
-        </select>
-        <div class="dynamic-price">Price: ₦0</div>
-        <button class="cart-btn">Proceed to Booking</button>
-      </div>
-
-      <!-- CATEGORY 6: TRAINING -->
-      <div class="product-card" data-category="training">
-        <div class="product-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-        <h3>ICT Training Tracks</h3>
-        <p>Structural technical courses covering system configuration profiles.</p>
-        <select class="dropdown-select">
-          <option value="" data-name="">Choose Syllabus Path...</option>
-          <option value="15000" data-name="Basic ICT Suite Core">Basic Computer Operations Core — ₦15,000</option>
-          <option value="30000" data-name="Advanced Infrastructure Track">Advanced Application Logic Suite — ₦30,000</option>
-          <option value="5000" data-name="Monthly Bootcamp Subscription">Monthly Intensive Continuous Access — ₦5,000</option>
-          <option value="3000" data-name="After School Academic Staging">After School Guided Logic Staging — ₦3,000</option>
-        </select>
-        <div class="dynamic-price">Price: ₦0</div>
-        <button class="cart-btn">Proceed to Booking</button>
-      </div>
-
-      <!-- CATEGORY 7: VTU -->
-      <div class="product-card" data-category="vtu">
-        <div class="product-icon"><i class="fa-solid fa-sim-card"></i></div>
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-sim-card"></i></div>
         <h3>VTU Airtime & Data</h3>
-        <p>Instant automated API distribution across telecommunication bands.</p>
-        <select class="dropdown-select">
-          <option value="" data-name="">Choose Network Package...</option>
-          <option value="100" data-name="MTN Network Vending">MTN Core Telecom Link — ₦100</option>
-          <option value="500" data-name="Airtel Telecom Link">Airtel Telecom Link — ₦500</option>
-          <option value="1000" data-name="Glo Cellular Base">Glo Cellular Base Node — ₦1,000</option>
-          <option value="2000" data-name="9mobile Carrier Path">9mobile Carrier Path — ₦2,000</option>
-        </select>
-        <div class="dynamic-price">Price: ₦0</div>
-        <button class="cart-btn">Proceed to Booking</button>
+        <p>Instant automated API dispersal for all major network operators inside Nigeria.</p>
+        <ul class="service-list">
+          <li>MTN / Airtel Instant Vending</li>
+          <li>Glo / 9mobile Virtual Airtime</li>
+          <li>SME & Corporate High-Volume Data</li>
+          <li>Automated Utility Transactions</li>
+        </ul>
+        <div class="price-tag">Starting ₦100</div>
+        <a href="shop.html?category=vtu" class="service-btn">Recharge Terminal</a>
       </div>
 
-      <!-- CATEGORY 8: CYBER CAFE INTERNET -->
-      <div class="product-card" data-category="internet">
-        <div class="product-icon"><i class="fa-solid fa-wifi"></i></div>
-        <h3>Internet Cafe Module</h3>
-        <p>Local station link routing, micro utilities, and infrastructure processing assistance.</p>
-        <select class="dropdown-select">
-          <option value="" data-name="">Choose Utility Node...</option>
-          <option value="300" data-name="High-Speed Terminal Access">Terminal Access Link (Hourly) — ₦300</option>
-          <option value="500" data-name="Hardware Power Cell Charge">Hardware Power Cell Regeneration — ₦500</option>
-          <option value="1000" data-name="Biometric Profile Image Generation">Biometric Identification Frame Shoot — ₦1,000</option>
-          <option value="2000" data-name="Administrative Systems Setup">Property / Form Verification Processing — ₦2,000</option>
-        </select>
-        <div class="dynamic-price">Price: ₦0</div>
-        <button class="cart-btn">Proceed to Booking</button>
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-palette"></i></div>
+        <h3>Graphics & Brand Design</h3>
+        <p>Creative design asset compilation ensuring strong visibility vectors across media frameworks.</p>
+        <ul class="service-list">
+          <li>Flyer & Event Production</li>
+          <li>Large-Scale Banner Rendering</li>
+          <li>Corporate Stationery Profiles</li>
+          <li>Plastic ID Badge Compositing</li>
+        </ul>
+        <div class="price-tag">Starting ₦3,000</div>
+        <a href="shop.html?category=graphics" class="service-btn">Order Visual Assets</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+        <h3>ICT Training Tracks</h3>
+        <p>Practical curricula focused on foundational logic, business automation, and developer engineering tracks.</p>
+        <ul class="service-list">
+          <li>Basic Computer Productivity</li>
+          <li>Spreadsheet & Business Analytics</li>
+          <li>After-School Supplementary Tracks</li>
+          <li>Comprehensive Monthly Bootcamps</li>
+        </ul>
+        <div class="price-tag">Starting ₦5,000</div>
+        <a href="shop.html?category=training" class="service-btn">Enroll In Track</a>
       </div>
 
     </div>
   </section>
 
-  <!-- SYSTEMS FOOTER CONTAINER -->
+  <section class="cta-section">
+    <h2>Need Professional Custom Integration?</h2>
+    <p>Our team builds specialized business workflows tailored precisely for enterprises, schools, and administrators.</p>
+    <a href="contact.html" class="cta-btn">Connect With Support Core</a>
+  </section>
+
   <footer class="footer">
     <div class="footer-content">
       <div>
         <h3>HAMBAK TECH & SERVICES</h3>
-        <p>Where corporate technical systems balance perfectly with agile service deployment pipelines.</p>
+        <p>Where elite engineering principles map directly to real-world solution frameworks. Streamlining transactions across Lagos and beyond.</p>
       </div>
       <div>
         <h3>Quick Navigation</h3>
@@ -502,103 +510,80 @@
         </div>
       </div>
       <div>
-        <h3>Contact Coordinates</h3>
+        <h3>Ecosystem Core Interfaces</h3>
         <p style="margin-bottom: 8px;"><i class="fa-solid fa-phone" style="color: var(--brand-gold); margin-right: 8px;"></i> 09127469686</p>
         <p style="margin-bottom: 8px;"><i class="fa-solid fa-envelope" style="color: var(--brand-gold); margin-right: 8px;"></i> hambak901@gmail.com</p>
         <p><i class="fa-solid fa-location-dot" style="color: var(--brand-gold); margin-right: 8px;"></i> Ibeju-Lekki, Lagos Nigeria</p>
       </div>
     </div>
     <div class="footer-bottom">
-      &copy; 2026 HAMBAK TECH & SERVICES. All System Records Preserved.
+      &copy; 2026 HAMBAK TECH & SERVICES. All Operational Rights Confirmed.
     </div>
   </footer>
 
-  <!-- FLOATING COMMUNICATION LINK -->
-  <a href="https://wa.me/2349127469686" class="whatsapp-float" aria-label="Direct Link to WhatsApp Support Matrix">
+  <a href="https://wa.me/2349127469686" class="whatsapp-float" aria-label="Connect directly to technical support reps">
     <i class="fa-brands fa-whatsapp"></i>
   </a>
 
-  <!-- INTEGRATED OPERATIONAL SCRIPT LOGIC -->
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      
-      // --- DYNAMIC PRICE TRACKER SYSTEM ---
-      const dropdownSelectNodes = document.querySelectorAll(".dropdown-select");
+    async function loadDynamicServices() {
+      const servicesContainer = document.getElementById("servicesGrid");
+      const identityToken = localStorage.getItem("token");
 
-      dropdownSelectNodes.forEach(selectElement => {
-        selectElement.addEventListener("change", () => {
-          const priceContainerNode = selectElement.parentElement.querySelector(".dynamic-price");
-          const evaluationValue = selectElement.value;
-
-          if (evaluationValue && evaluationValue !== "") {
-            priceContainerNode.innerHTML = `Price: ₦${Number(evaluationValue).toLocaleString()}`;
-          } else {
-            priceContainerNode.innerHTML = "Price: ₦0";
-          }
-        });
-      });
-
-      // --- LIVE DATA CATALOG FILTER SYSTEM ---
-      const searchInputElement = document.getElementById("shopSearch");
-
-      searchInputElement.addEventListener("input", () => {
-        const queryTerm = searchInputElement.value.toLowerCase().trim();
-        const catalogCards = document.querySelectorAll(".product-card");
-
-        catalogCards.forEach(cardNode => {
-          const cardTextContent = cardNode.textContent.toLowerCase();
-          
-          if (cardTextContent.includes(queryTerm)) {
-            cardNode.style.display = "flex";
-          } else {
-            cardNode.style.display = "none";
-          }
-        });
-      });
-
-      // --- ROUTING LINK REDIRECT STRATEGY ---
-      const orderActionButtons = document.querySelectorAll(".cart-btn");
-
-      orderActionButtons.forEach(buttonElement => {
-        buttonElement.addEventListener("click", () => {
-          const parentCardNode = buttonElement.parentElement;
-          const selectorObject = parentCardNode.querySelector(".dropdown-select");
-          const chosenOption = selectorObject.options[selectorObject.selectedIndex];
-          
-          const rawPriceValue = selectorObject.value;
-          const specificServiceName = chosenOption.getAttribute("data-name");
-          const parentCategoryName = parentCardNode.querySelector("h3").textContent;
-
-          if (!rawPriceValue || rawPriceValue === "") {
-            alert("System Alert: Please isolate and select a specific service sub-option before initiating transaction pipelines.");
-            return;
-          }
-
-          // Generate target routing url configuration parameters smoothly
-          const cleanServiceName = encodeURIComponent(specificServiceName || parentCategoryName);
-          const transmissionUrl = `order-service.html?service=${cleanServiceName}&cost=${rawPriceValue}`;
-          
-          // Re-route framework thread to processing form page
-          window.location.href = transmissionUrl;
-        });
-      });
-
-      // --- URL TARGET PARAMETER CATEGORY LISTENER ---
-      const activeUrlQuery = window.location.search;
-      const URLParameterHandler = new URLSearchParams(activeUrlQuery);
-      const passedInboundCategory = URLParameterHandler.get("category");
-
-      if (passedInboundCategory) {
-        const matchingTargetCard = document.querySelector(`.product-card[data-category="${passedInboundCategory.toLowerCase()}"]`);
-        if (matchingTargetCard) {
-          setTimeout(() => {
-            matchingTargetCard.scrollIntoView({ behavior: "smooth", block: "center" });
-            matchingTargetCard.style.border = "2px solid var(--brand-gold)";
-            matchingTargetCard.style.boxShadow = "0 0 30px rgba(245, 185, 66, 0.3)";
-          }, 400);
-        }
+      // Stop processing early if no authentication token is active
+      if (!identityToken) {
+        console.warn("Telemetry Status Notice: Guest context logged. Dynamic server catalogs are currently locked. Displaying baseline system products.");
+        return;
       }
-    });
+
+      try {
+        const queryPipelineUrl = "/api/orders";
+        const fetchStreamResponse = await fetch(queryPipelineUrl, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${identityToken}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        // Ensure the stream is alive before parsing json structures
+        if (!fetchStreamResponse.ok) {
+          throw new Error(`Upstream Ingestion Failure: Target returned server code ${fetchStreamResponse.status}`);
+        }
+
+        const aggregatedResultData = await fetchStreamResponse.json();
+
+        // Safety assertion verification for property paths existence
+        if (aggregatedResultData && aggregatedResultData.services && aggregatedResultData.services.length > 0) {
+          aggregatedResultData.services.forEach(item => {
+            const parsedCardWrapper = document.createElement("div");
+            parsedCardWrapper.className = "service-card";
+
+            const graphicBannerAsset = item.image 
+              ? `<img src="${item.image.startsWith('http') ? '' : '/api'}${item.image}" style="width:100%; height:200px; object-fit:cover; border-radius:14px; margin-bottom:20px; border: 1px solid rgba(255,255,255,0.05);">` 
+              : "";
+
+            parsedCardWrapper.innerHTML = `
+              ${graphicBannerAsset}
+              <div class="service-icon">
+                <i class="fa-solid fa-briefcase"></i>
+              </div>
+              <h3>${item.name}</h3>
+              <p>${item.description || "Custom server catalog asset resource item deployed into network infrastructure parameters."}</p>
+              <div class="price-tag">₦${Number(item.price).toLocaleString()}</div>
+              <a href="shop.html?id=${item._id}" class="service-btn">Instantiate Order Node</a>
+            `;
+
+            servicesContainer.insertBefore(parsedCardWrapper, servicesContainer.firstChild);
+          });
+        }
+      } catch (runtimeInfrastructuralFault) {
+        console.error("Critical Sync Failure Trace log inside loadDynamicServices:", runtimeInfrastructuralFault);
+      }
+    }
+
+    // Initialize application catalog evaluation loop on window construction
+    document.addEventListener("DOMContentLoaded", loadDynamicServices);
   </script>
 </body>
 
