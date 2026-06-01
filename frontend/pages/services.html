@@ -2,768 +2,589 @@
 <html lang="en">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services | HAMBAK TECH & SERVICES</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* ==========================================================================
+       PREMIUM BRAND COLOR PALETTE (BLUE, GOLD, PEACH, PINK)
+       ========================================================================== */
+    :root {
+      --primary-blue: #0d47a1;
+      --deep-navy: #081120;
+      --brand-gold: #f5b942;
+      --soft-peach: #ffdfd3;
+      --accent-pink: #ff4081;
+      --clean-white: #ffffff;
+      --dark-card: #0f172a;
+      --input-bg: #1e293b;
+      --border-glow: rgba(245, 185, 66, 0.2);
+    }
 
-<meta charset="UTF-8">
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
->
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--deep-navy), #040812);
+      color: var(--clean-white);
+      line-height: 1.6;
+    }
 
-<title>
-Services | HAMBAK TECH & SERVICES
-</title>
+    /* GLOBAL ECOSYSTEM NAVBAR OVERRIDES */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 8%;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
 
-<link
-rel="stylesheet"
-href="../css/style.css"
->
+    .logo {
+      display: flex;
+      flex-direction: column;
+    }
 
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
->
+    .logo span {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--clean-white);
+    }
 
-<style>
+    .logo small {
+      font-size: 0.75rem;
+      color: var(--brand-gold);
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
 
-/* =========================
-SERVICES PAGE
-========================= */
+    .nav-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      margin-left: 25px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: 0.3s;
+    }
 
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f5f7fb;
-}
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--brand-gold);
+    }
 
-/* HERO */
+    /* SERVICES HERO BRAND PROFILE ENTRY */
+    .services-hero {
+      padding: 120px 8% 80px;
+      background: linear-gradient(135deg, rgba(8, 17, 32, 0.95), rgba(13, 71, 161, 0.3)), 
+                  radial-gradient(circle at top center, var(--accent-pink), transparent 60%);
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
 
-.services-hero{
-padding:140px 8% 80px;
-background:
-linear-gradient(
-135deg,
-#081120,
-#0d47a1
-);
-color:white;
-text-align:center;
-}
+    .services-hero h1 {
+      font-size: 3.8rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--clean-white), var(--soft-peach));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-.services-hero h1{
-font-size:4rem;
-margin-bottom:20px;
-}
+    .services-hero p {
+      max-width: 750px;
+      margin: auto;
+      font-size: 1.15rem;
+      color: #94a3b8;
+      line-height: 1.8;
+    }
 
-.services-hero p{
-font-size:1.2rem;
-max-width:700px;
-margin:auto;
-line-height:1.8;
-color:#cbd5e1;
-}
+    /* SERVICE DISPLAY SYSTEM GRID */
+    .services-section {
+      padding: 80px 8%;
+    }
 
-/* SERVICES */
+    .section-title {
+      text-align: center;
+      margin-bottom: 55px;
+    }
 
-.services-section{
-padding:80px 8%;
-}
+    .section-title h2 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, var(--brand-gold), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-.section-title{
-text-align:center;
-margin-bottom:60px;
-}
+    .section-title p {
+      color: #cbd5e1;
+      font-size: 1.05rem;
+    }
 
-.section-title h2{
-font-size:3rem;
-margin-bottom:15px;
-color:#0f172a;
-}
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
 
-.section-title p{
-color:#555;
-font-size:1.1rem;
-}
+    /* CARD BLOCK STRUCTURAL PACKAGES */
+    .service-card {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 40px 30px;
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
 
-.services-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:30px;
-}
+    .service-card:hover {
+      transform: translateY(-10px);
+      border-color: rgba(245, 185, 66, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
 
-/* CARD */
+    .service-icon {
+      width: 72px;
+      height: 72px;
+      background: rgba(13, 71, 161, 0.2);
+      border: 1px solid rgba(13, 71, 161, 0.4);
+      border-radius: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.75rem;
+      color: var(--brand-gold);
+      margin-bottom: 25px;
+    }
 
-.service-card{
-background:white;
-padding:35px;
-border-radius:25px;
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-transition:0.4s;
-position:relative;
-overflow:hidden;
-}
+    .service-card h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--clean-white);
+    }
 
-.service-card:hover{
-transform:translateY(-12px);
-}
+    .service-card p {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
 
-.service-icon{
-width:90px;
-height:90px;
-border-radius:50%;
-background:#0d47a1;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:2rem;
-color:white;
-margin-bottom:25px;
-}
+    .service-list {
+      list-style: none;
+      margin-bottom: 25px;
+      flex-grow: 1;
+    }
 
-.service-card h3{
-margin-bottom:15px;
-font-size:1.6rem;
-color:#0f172a;
-}
+    .service-list li {
+      margin-bottom: 10px;
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-.service-card p{
-line-height:1.8;
-color:#555;
-margin-bottom:25px;
-}
+    .service-list li::before {
+      content: "\f00c";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      color: var(--accent-pink);
+      font-size: 0.8rem;
+    }
 
-.service-list{
-margin-bottom:25px;
-}
+    /* BRAND FINANCIAL PILLS */
+    .price-tag {
+      display: inline-block;
+      align-self: flex-start;
+      padding: 6px 16px;
+      background: rgba(245, 185, 66, 0.12);
+      border: 1px solid rgba(245, 185, 66, 0.3);
+      color: var(--brand-gold);
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
 
-.service-list li{
-margin-bottom:10px;
-color:#334155;
-}
+    .service-btn {
+      display: block;
+      text-align: center;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary-blue), #1565c0);
+      color: var(--clean-white);
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      box-shadow: 0 5px 15px rgba(13, 71, 161, 0.3);
+      transition: 0.3s ease;
+    }
 
-.price-tag{
-display:inline-block;
-padding:10px 20px;
-background:#f5b942;
-border-radius:50px;
-font-weight:bold;
-margin-bottom:20px;
-}
+    .service-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(13, 71, 161, 0.5);
+    }
 
-.service-btn{
-display:inline-block;
-padding:14px 30px;
-background:#0d47a1;
-color:white;
-text-decoration:none;
-border-radius:12px;
-transition:0.3s;
-}
+    /* DIRECT ASSISTANCE INTERRUPT BANNER (CTA) */
+    .cta-section {
+      padding: 90px 8%;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(8, 17, 32, 0.9)), 
+                  radial-gradient(circle at bottom center, var(--primary-blue), transparent 70%);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+    }
 
-.service-btn:hover{
-background:#1565c0;
-}
+    .cta-section h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+    }
 
-/* CTA */
+    .cta-section p {
+      max-width: 650px;
+      margin: auto;
+      line-height: 1.7;
+      color: #94a3b8;
+      margin-bottom: 30px;
+    }
 
-.cta-section{
-padding:100px 8%;
-background:#081120;
-text-align:center;
-color:white;
-}
+    .cta-btn {
+      display: inline-block;
+      padding: 16px 40px;
+      background: var(--brand-gold);
+      color: var(--dark-card);
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 700;
+      box-shadow: 0 5px 15px rgba(245, 185, 66, 0.3);
+      transition: 0.3s;
+    }
 
-.cta-section h2{
-font-size:3rem;
-margin-bottom:20px;
-}
+    .cta-btn:hover {
+      background: var(--clean-white);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(255, 255, 255, 0.2);
+    }
 
-.cta-section p{
-max-width:700px;
-margin:auto;
-line-height:1.8;
-color:#cbd5e1;
-margin-bottom:40px;
-}
+    /* SYSTEMS ECOSYSTEM FOOTER MODULE */
+    .footer {
+      background: #020617;
+      color: #94a3b8;
+      padding: 60px 8% 20px;
+    }
 
-.cta-btn{
-display:inline-block;
-padding:16px 35px;
-background:#f5b942;
-color:black;
-text-decoration:none;
-border-radius:12px;
-font-weight:bold;
-}
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
 
-/* FOOTER */
+    .footer h3 {
+      margin-bottom: 20px;
+      color: var(--brand-gold);
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
 
-.footer{
-background:#020617;
-color:white;
-padding:70px 8% 20px;
-}
+    .footer p {
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
 
-.footer-content{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:40px;
-margin-bottom:40px;
-}
+    .footer-links a {
+      display: block;
+      margin-bottom: 12px;
+      color: #cbd5e1;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: 0.2s;
+    }
 
-.footer h3{
-margin-bottom:20px;
-color:#f5b942;
-}
+    .footer-links a:hover {
+      color: var(--accent-pink);
+      padding-left: 5px;
+    }
 
-.footer p{
-line-height:1.8;
-color:#cbd5e1;
-}
+    .footer-bottom {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.85rem;
+      color: #64748b;
+    }
 
-.footer-links a{
-display:block;
-margin-bottom:10px;
-color:#cbd5e1;
-text-decoration:none;
-}
+    /* FLOATING EMERGENCY TELEMETRY CONNECTION */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.9rem;
+      color: var(--clean-white);
+      text-decoration: none;
+      z-index: 999;
+      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+      transition: 0.3s ease;
+    }
 
-.footer-bottom{
-text-align:center;
-padding-top:20px;
-border-top:1px solid rgba(255,255,255,0.1);
-color:#94a3b8;
-}
+    .whatsapp-float:hover {
+      transform: scale(1.1);
+    }
 
-/* WHATSAPP */
-
-.whatsapp-float{
-position:fixed;
-bottom:25px;
-right:25px;
-width:60px;
-height:60px;
-background:#25d366;
-border-radius:50%;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:1.8rem;
-color:white;
-text-decoration:none;
-z-index:999;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
-}
-
-/* MOBILE */
-
-@media(max-width:768px){
-
-.services-hero h1{
-font-size:2.7rem;
-}
-
-.section-title h2{
-font-size:2.2rem;
-}
-
-.cta-section h2{
-font-size:2.2rem;
-}
-
-}
-
-</style>
-
+    /* RESPONSIVENESS OVERRIDES */
+    @media(max-width: 768px) {
+      .navbar { flex-direction: column; gap: 15px; text-align: center; }
+      .nav-links a { margin: 0 10px; font-size: 0.9rem; }
+      .services-hero h1 { font-size: 2.5rem; }
+      .section-title h2, .cta-section h2 { font-size: 2rem; }
+      .services-section { padding: 50px 5%; }
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-
-<header class="navbar">
-
-<div class="logo">
-
-<span>HAMBAK</span>
-
-<small>TECH & SERVICES</small>
-
-</div>
-
-<nav class="nav-links">
-
-<a href="../index.html">Home</a>
-<a href="services.html">Services</a>
-<a href="shop.html">Shop</a>
-<a href="contact.html">Contact</a>
-<a href="login.html">Login</a>
-
-</nav>
-
-</header>
-
-<!-- HERO -->
-
-<section class="services-hero">
-
-<h1>
-Our Professional Services
-</h1>
-
-<p>
-HAMBAK TECH & SERVICES provides reliable
-ICT solutions, registrations, VTU services,
-printing, graphics design, training and
-digital business support in Nigeria.
-</p>
-
-</section>
-
-
-<!-- SERVICES -->
-
-<section class="services-section">
-
-<div class="section-title">
-
-<h2>
-What We Offer
-</h2>
-
-<p>
-Professional technology and business services
-for students, businesses and individuals.
-</p>
-
-</div>
-
-<!-- DYNAMIC SERVICES -->
-
-<div
-class="services-grid"
-id="servicesGrid"
->
-
-<!-- STATIC SERVICES -->
-
-<!-- NIN -->
-
-<div class="service-card">
-
-<div class="service-icon">
-<i class="fa-solid fa-id-card"></i>
-</div>
-
-<h3>NIN Services</h3>
-
-<p>
-Fast and reliable National Identification services.
-</p>
-
-<ul class="service-list">
-
-<li>NIN Enrolment</li>
-<li>NIN Modification</li>
-<li>NIN Reprint</li>
-<li>NIN Validation</li>
-<li>Tracking ID</li>
-
-</ul>
-
-<div class="price-tag">
-Starting ₦1000
-</div>
-
-<br>
-
-<a href="shop.html" class="service-btn">
-Book Service
-</a>
-
-</div>
-
-<!-- PRINTING -->
-
-<div class="service-card">
-
-<div class="service-icon">
-<i class="fa-solid fa-print"></i>
-</div>
-
-<h3>Printing & Photocopy</h3>
-
-<p>
-High-quality printing and document services.
-</p>
-
-<ul class="service-list">
-
-<li>Black & White Printing</li>
-<li>Color Printing</li>
-<li>Photocopy</li>
-<li>Lamination</li>
-<li>Typing & Printing</li>
-
-</ul>
-
-<div class="price-tag">
-Starting ₦100
-</div>
-
-<br>
-
-<a href="shop.html" class="service-btn">
-Book Service
-</a>
-
-</div>
-
-<!-- REGISTRATION -->
-
-<div class="service-card">
-
-<div class="service-icon">
-<i class="fa-solid fa-file-pen"></i>
-</div>
-
-<h3>Online Registration</h3>
-
-<p>
-Professional registration support services.
-</p>
-
-<ul class="service-list">
-
-<li>WAEC Registration</li>
-<li>JAMB Registration</li>
-<li>NECO Registration</li>
-<li>GCE Registration</li>
-<li>NYSC Registration</li>
-
-</ul>
-
-<div class="price-tag">
-Starting ₦3000
-</div>
-
-<br>
-
-<a href="order-service.html?id=${service._id}" class="service-btn">
-Register Now
-</a>
-
-</div>
-
-<!-- VTU -->
-
-<div class="service-card">
-
-<div class="service-icon">
-<i class="fa-solid fa-sim-card"></i>
-</div>
-
-<h3>VTU & Recharge</h3>
-
-<p>
-Affordable VTU airtime and data services.
-</p>
-
-<ul class="service-list">
-
-<li>MTN Recharge</li>
-<li>Airtel Recharge</li>
-<li>GLO Recharge</li>
-<li>9mobile Recharge</li>
-<li>Data Subscription</li>
-
-</ul>
-
-<div class="price-tag">
-Starting ₦100
-</div>
-
-<br>
-
-<a href="shop.html" class="service-btn">
-Recharge Now
-</a>
-
-</div>
-
-<!-- GRAPHICS -->
-
-<div class="service-card">
-
-<div class="service-icon">
-<i class="fa-solid fa-palette"></i>
-</div>
-
-<h3>Graphics Design</h3>
-
-<p>
-Creative branding and design solutions.
-</p>
-
-<ul class="service-list">
-
-<li>Flyer Design</li>
-<li>Banner Design</li>
-<li>Business Cards</li>
-<li>Plastic ID Cards</li>
-
-</ul>
-
-<div class="price-tag">
-Starting ₦3000
-</div>
-
-<br>
-
-<a href="shop.html" class="service-btn">
-Order Design
-</a>
-
-</div>
-
-<!-- TRAINING -->
-
-<div class="service-card">
-
-<div class="service-icon">
-<i class="fa-solid fa-graduation-cap"></i>
-</div>
-
-<h3>ICT Training</h3>
-
-<p>
-Practical ICT and digital skills training.
-</p>
-
-<ul class="service-list">
-
-<li>Basic ICT</li>
-<li>Advanced ICT</li>
-<li>After School Lessons</li>
-<li>Monthly Training</li>
-
-</ul>
-
-<div class="price-tag">
-Starting ₦5000
-</div>
-
-<br>
-
-<a href="shop.html" class="service-btn">
-Start Learning
-</a>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- CTA -->
-
-<section class="cta-section">
-
-<h2>
-Need Professional Assistance?
-</h2>
-
-<p>
-We provide fast, reliable and affordable
-technology services for students,
-businesses and individuals.
-</p>
-
-<a
-href="contact.html"
-class="cta-btn"
->
-Contact Us
-</a>
-
-</section>
-
-<!-- FOOTER -->
-
-<footer class="footer">
-
-<div class="footer-content">
-
-<div>
-
-<h3>
-HAMBAK TECH & SERVICES
-</h3>
-
-<p>
-Where technology meet services.
-Reliable ICT and digital business solutions.
-</p>
-
-</div>
-
-<div>
-
-<h3>
-Quick Links
-</h3>
-
-<div class="footer-links">
-
-<a href="../index.html">Home</a>
-<a href="services.html">Services</a>
-<a href="shop.html">Shop</a>
-<a href="contact.html">Contact</a>
-
-</div>
-
-</div>
-
-<div>
-
-<h3>
-Contact
-</h3>
-
-<p>
-09127469686
-</p>
-
-<p>
-hambak901@gmail.com
-</p>
-
-<p>
-Ibeju-Lekki, Lagos Nigeria
-</p>
-
-</div>
-
-</div>
-
-<div class="footer-bottom">
-
-© 2026 HAMBAK TECH & SERVICES
-
-</div>
-
-</footer>
-
-<!-- WHATSAPP -->
-
-<a
-href="https://wa.me/2349155104724"
-class="whatsapp-float"
->
-
-<i class="fa-brands fa-whatsapp"></i>
-
-</a>
-
-<script>
-
-async function loadServices(){
-
-try{
-
-const ordersResponse =
-await fetch(
-"http://localhost:5000/api/orders",
-{
-headers:{
-Authorization:
-`Bearer ${token}`
-}
-}
-);
-
-const data =
-await response.json();
-
-const servicesGrid =
-document.getElementById(
-"servicesGrid"
-);
-
-/* DYNAMIC SERVICES */
-
-data.services.forEach(service=>{
-
-servicesGrid.innerHTML += `
-
-<div class="service-card">
-
-${
-service.image
-?
-
-`<img
-src="http://localhost:5000${service.image}"
-style="
-width:100%;
-height:220px;
-object-fit:cover;
-border-radius:15px;
-margin-bottom:20px;
-"
->`
-
-:
-
-""
-
-}
-
-<div class="service-icon">
-
-<i class="fa-solid fa-briefcase"></i>
-
-</div>
-
-<h3>${service.name}</h3>
-
-<p>${service.description}</p>
-
-<div class="price-tag">
-
-₦${service.price}
-
-</div>
-
-<br>
-
-<a
-href="order-service.html?id=${service._id}"
-class="service-btn"
->
-
-Book Service
-
-</a>
-
-</div>
-
-`;
-
-});
-
-}catch(error){
-
-console.log(error);
-
-}
-
-}
-
-loadServices();
-
-</script>
-
+  <header class="navbar">
+    <div class="logo">
+      <span>HAMBAK</span>
+      <small>TECH & SERVICES</small>
+    </div>
+    <nav class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="services.html" class="active">Services</a>
+      <a href="registration.html">Registration</a>
+      <a href="shop.html">Shop</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </header>
+
+  <section class="services-hero">
+    <h1>Our Professional Services</h1>
+    <p>HAMBAK TECH & SERVICES provides top-tier corporate ICT architectures, online registration processing, high-volume graphic branding, automated VTU portals, and computer science training structures.</p>
+  </section>
+
+  <section class="services-section">
+    <div class="section-title">
+      <h2>What We Offer</h2>
+      <p>Reliable technology workflows engineered precisely for individuals, business systems, and academic trainees.</p>
+    </div>
+
+    <div class="services-grid" id="servicesGrid">
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-id-card"></i></div>
+        <h3>NIN Services</h3>
+        <p>Rapid deployment and management systems for National Identification biometric validations.</p>
+        <ul class="service-list">
+          <li>New Data Enrolment Capture</li>
+          <li>System Modification & Modification</li>
+          <li>Loss Recovery & Card Reprint</li>
+          <li>Ecosystem Integration & Validation</li>
+        </ul>
+        <div class="price-tag">Starting ₦1,000</div>
+        <a href="shop.html?category=nin" class="service-btn">Book Verification Service</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-print"></i></div>
+        <h3>Printing & Photocopy</h3>
+        <p>High-resolution document copying, secure print servers, and automated lamination lanes.</p>
+        <ul class="service-list">
+          <li>Monochrome Laser Printing</li>
+          <li>High-Impact Color Production</li>
+          <li>Fast Bulk Document Photocopy</li>
+          <li>Thermal Asset Lamination</li>
+        </ul>
+        <div class="price-tag">Starting ₦100</div>
+        <a href="shop.html?category=printing" class="service-btn">Place Copy Order</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-file-pen"></i></div>
+        <h3>Online Registration</h3>
+        <p>Direct enrollment pipelines for regional academic, testing, and governmental identification boards.</p>
+        <ul class="service-list">
+          <li>WAEC Portal Staging</li>
+          <li>JAMB Core Processing</li>
+          <li>NECO / GCE Access Nodes</li>
+          <li>NYSC Mobilization Unit</li>
+        </ul>
+        <div class="price-tag">Starting ₦3,000</div>
+        <a href="registration.html" class="service-btn">Launch Portal Terminal</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-sim-card"></i></div>
+        <h3>VTU Airtime & Data</h3>
+        <p>Instant automated API dispersal for all major network operators inside Nigeria.</p>
+        <ul class="service-list">
+          <li>MTN / Airtel Instant Vending</li>
+          <li>Glo / 9mobile Virtual Airtime</li>
+          <li>SME & Corporate High-Volume Data</li>
+          <li>Automated Utility Transactions</li>
+        </ul>
+        <div class="price-tag">Starting ₦100</div>
+        <a href="shop.html?category=vtu" class="service-btn">Recharge Terminal</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-palette"></i></div>
+        <h3>Graphics & Brand Design</h3>
+        <p>Creative design asset compilation ensuring strong visibility vectors across media frameworks.</p>
+        <ul class="service-list">
+          <li>Flyer & Event Production</li>
+          <li>Large-Scale Banner Rendering</li>
+          <li>Corporate Stationery Profiles</li>
+          <li>Plastic ID Badge Compositing</li>
+        </ul>
+        <div class="price-tag">Starting ₦3,000</div>
+        <a href="shop.html?category=graphics" class="service-btn">Order Visual Assets</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+        <h3>ICT Training Tracks</h3>
+        <p>Practical curricula focused on foundational logic, business automation, and developer engineering tracks.</p>
+        <ul class="service-list">
+          <li>Basic Computer Productivity</li>
+          <li>Spreadsheet & Business Analytics</li>
+          <li>After-School Supplementary Tracks</li>
+          <li>Comprehensive Monthly Bootcamps</li>
+        </ul>
+        <div class="price-tag">Starting ₦5,000</div>
+        <a href="shop.html?category=training" class="service-btn">Enroll In Track</a>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Need Professional Custom Integration?</h2>
+    <p>Our team builds specialized business workflows tailored precisely for enterprises, schools, and administrators.</p>
+    <a href="contact.html" class="cta-btn">Connect With Support Core</a>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div>
+        <h3>HAMBAK TECH & SERVICES</h3>
+        <p>Where elite engineering principles map directly to real-world solution frameworks. Streamlining transactions across Lagos and beyond.</p>
+      </div>
+      <div>
+        <h3>Quick Navigation</h3>
+        <div class="footer-links">
+          <a href="../index.html">Home Ecosystem</a>
+          <a href="services.html">Services Catalog</a>
+          <a href="registration.html">Registration Portal</a>
+          <a href="shop.html">Digital Shop</a>
+          <a href="contact.html">Support Desk</a>
+        </div>
+      </div>
+      <div>
+        <h3>Ecosystem Core Interfaces</h3>
+        <p style="margin-bottom: 8px;"><i class="fa-solid fa-phone" style="color: var(--brand-gold); margin-right: 8px;"></i> 09127469686</p>
+        <p style="margin-bottom: 8px;"><i class="fa-solid fa-envelope" style="color: var(--brand-gold); margin-right: 8px;"></i> hambak901@gmail.com</p>
+        <p><i class="fa-solid fa-location-dot" style="color: var(--brand-gold); margin-right: 8px;"></i> Ibeju-Lekki, Lagos Nigeria</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 HAMBAK TECH & SERVICES. All Operational Rights Confirmed.
+    </div>
+  </footer>
+
+  <a href="https://wa.me/2349127469686" class="whatsapp-float" aria-label="Connect directly to technical support reps">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <script>
+    async function loadDynamicServices() {
+      const servicesContainer = document.getElementById("servicesGrid");
+      const identityToken = localStorage.getItem("token");
+
+      // Stop processing early if no authentication token is active
+      if (!identityToken) {
+        console.warn("Telemetry Status Notice: Guest context logged. Dynamic server catalogs are currently locked. Displaying baseline system products.");
+        return;
+      }
+
+      try {
+        const queryPipelineUrl = "/api/orders";
+        const fetchStreamResponse = await fetch(queryPipelineUrl, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${identityToken}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        // Ensure the stream is alive before parsing json structures
+        if (!fetchStreamResponse.ok) {
+          throw new Error(`Upstream Ingestion Failure: Target returned server code ${fetchStreamResponse.status}`);
+        }
+
+        const aggregatedResultData = await fetchStreamResponse.json();
+
+        // Safety assertion verification for property paths existence
+        if (aggregatedResultData && aggregatedResultData.services && aggregatedResultData.services.length > 0) {
+          aggregatedResultData.services.forEach(item => {
+            const parsedCardWrapper = document.createElement("div");
+            parsedCardWrapper.className = "service-card";
+
+            const graphicBannerAsset = item.image 
+              ? `<img src="${item.image.startsWith('http') ? '' : '/api'}${item.image}" style="width:100%; height:200px; object-fit:cover; border-radius:14px; margin-bottom:20px; border: 1px solid rgba(255,255,255,0.05);">` 
+              : "";
+
+            parsedCardWrapper.innerHTML = `
+              ${graphicBannerAsset}
+              <div class="service-icon">
+                <i class="fa-solid fa-briefcase"></i>
+              </div>
+              <h3>${item.name}</h3>
+              <p>${item.description || "Custom server catalog asset resource item deployed into network infrastructure parameters."}</p>
+              <div class="price-tag">₦${Number(item.price).toLocaleString()}</div>
+              <a href="shop.html?id=${item._id}" class="service-btn">Instantiate Order Node</a>
+            `;
+
+            servicesContainer.insertBefore(parsedCardWrapper, servicesContainer.firstChild);
+          });
+        }
+      } catch (runtimeInfrastructuralFault) {
+        console.error("Critical Sync Failure Trace log inside loadDynamicServices:", runtimeInfrastructuralFault);
+      }
+    }
+
+    // Initialize application catalog evaluation loop on window construction
+    document.addEventListener("DOMContentLoaded", loadDynamicServices);
+  </script>
 </body>
 
 </html>
