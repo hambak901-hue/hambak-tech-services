@@ -1,5 +1,6 @@
 import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
+import sendEmail from "../utils/sendEmail.js"; // FIXED: Added your email utility import here
 
 // Internal helper to mint tokens cleanly
 const generateTokenIdSignature = (id) => {
@@ -145,3 +146,101 @@ export const logoutUser = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+/* ==========================================================
+   AUTHENTICATION MODULE: FORGOT PASSWORD (GENERATES OTP)
+   ========================================================== */
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ success: false, message: "Email parameters require validation input." });
+    }
+
+    // Find user matching normalized lowercase identifier strings
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      return res.status(404).json({ success: false, message: "No registered context matching this identifier." });
+    }
+
+    // 1. Generate a premium 4-digit numeric code
+    const verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
+
+    // 2. Map verification properties onto your existing database User profile scheme
+    user.resetPasswordToken = verificationCode;
+    user.resetPasswordExpire = Date.now() + 10 * 60 * 1000; // Code window valid for 10 minutes
+    await user.save();
+
+    // 3. Premium Brand Interface Layout structure (Blue, Gold, Peach, Pink)
+    const htmlTemplate = `
+      <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 500px; margin: 0 auto; border: 2px solid #ffdfd3; border-radius: 24px; padding: 35px; background-color: #081120; color: #ffffff; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+        <h2 style="color: #f5b942; margin-top: 0; font-size: 1.6rem; letter-spacing: 1px; border-bottom: 1px solid rgba(255,223,211,0.1); padding-bottom: 15px;">HAMBAK TECH & SERVICES</h2>
+        <p style="font-size: 1.05rem; line-height: 1.6; color: #cbd5e1; margin: 25px 0;">You requested a secure verification code to reset your profile password. Use the unique authentication token sequence below:</p>
+        <div style="margin: 35px 0;">
+          <span style="font-size: 2.4rem; font-weight: 800; letter-spacing: 8px; color: #ff4081; background-color: #ffffff; padding: 12px 30px; border-radius: 14px; display: inline-block; box-shadow: 0 4px 15px rgba(255,64,129,0.2); border: 1px solid #ffdfd3;">${verificationCode}</span>
+        </div>
+        <p style="font-size: 0.85rem; color: #ffdfd3; opacity: 0.8; margin-bottom: 0;">This code is valid for 10 minutes. If you did not request this verification loop, please ignore this email safely.</p>
+      </div>
+    `;
+
+    // 4. Fire email packet through your verified Gmail Nodemailer server transporter
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: "Security Verification Code — Access Reset Link",
+        html: htmlTemplate,
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: "Security token generated and dispatched successfully. Check inbox folders."
+      });
+
+    } catch (emailError) {
+      // Emergency rollback code clean if SMTP breaks
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save();
+
+      console.error("Mail server error:", emailError);
+      return res.status(500).json({ success: false, message: "Email dispatch failed. Service transport configurations offline." });
+    }
+
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+/* ==========================================================
+   AUTHENTICATION MODULE: VERIFY TOKEN CODE (VALIDATES OTP)
+   ========================================================== */
+export const verifyToken = async (req, res) => {
+  try {
+    const { email, token } = req.body;
+
+    if (!email || !token) {
+      return res.status(400).json({ success: false, message: "Email and token sequence keys required." });
+    }
+
+    const user = await User.findOne({
+      email: email.toLowerCase(),
+      resetPasswordToken: token,
+      resetPasswordExpire: { $gt: Date.now() } // Assures token has not expired
+    });
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: "Invalid verification code or security window expired." });
+    }
+
+    // Success response if code matches
+    return res.status(200).json({
+      success: true,
+      message: "Token credentials clear. Verification sequence complete."
+    });
+
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+        
