@@ -42,6 +42,15 @@ const userSchema = new mongoose.Schema({
   isBlocked: {
     type: Boolean,
     default: false
+  },
+  // FIXED: Explicit properties mapped to handle password tokens without schema rejection
+  resetPasswordToken: {
+    type: String,
+    default: undefined
+  },
+  resetPasswordExpire: {
+    type: Date,
+    default: undefined
   }
 }, {
   timestamps: true
@@ -61,7 +70,7 @@ userSchema.pre('save', async function (next) {
   }
 });
 
-// MATCHING METHOD FOR LOGIN (Ensures user.matchPassword functions perfectly)
+// MATCHING METHOD FOR LOGIN
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
@@ -74,3 +83,4 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
 // Safe conditional compilation guard against OverwriteModelErrors
 const User = mongoose.models.User || mongoose.model('User', userSchema);
 export default User;
+  
