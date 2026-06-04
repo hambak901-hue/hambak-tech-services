@@ -16,15 +16,14 @@ const sendEmail = async (options) => {
 
   // 2. Map structural message configurations into standard mail parameters
   const mailOptions = {
-    from: process.env.EMAIL_FROM,
+    from: process.env.EMAIL_FROM || `"HAMBAK TECH" <${process.env.EMAIL_USER}>`,
     to: options.email,
     subject: options.subject,
     html: options.html,
   };
 
-  // 3. Dispatch the constructed payload package across secure transport lanes
-  await transporter.sendMail(mailOptions);
+  // 3. FIXED: Explicitly return the tracking promise to prevent runtime execution freezes
+  return await transporter.sendMail(mailOptions);
 };
 
 export default sendEmail;
-    
