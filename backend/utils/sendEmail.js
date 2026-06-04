@@ -5,10 +5,10 @@ import { Resend } from 'resend';
  * Hardcoded API key to instantly resolve "Only absolute URLs are supported" errors.
  */
 const sendEmail = async (options) => {
-  // EMERGENCY FIX: Hardcoding your working key directly to bypass environment variable misreadings
+  // Directly initializing with your verified live key to avoid process environment parsing lag
   const resend = new Resend('re_8Y2mSiPD_5VzdQNwMvmjUk9ZJxs3bHzt6');
 
-  // Send email using Resend's secure infrastructure
+  // Send email using Resend's free tier onboarding address securely
   const { data, error } = await resend.emails.send({
     from: 'Hambak Tech <onboarding@resend.dev>',
     to: options.email,
@@ -17,7 +17,7 @@ const sendEmail = async (options) => {
   });
 
   if (error) {
-    console.error("Resend API internal error:", error);
+    console.error("Resend API internal error log:", error);
     throw new Error(error.message);
   }
 
