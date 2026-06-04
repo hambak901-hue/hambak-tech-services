@@ -20,7 +20,6 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ success: false, message: "All initialization parameters are required." });
     }
 
-    // Check for unique database entry collisions
     const emailExists = await User.findOne({ email: email.toLowerCase() });
     const usernameExists = await User.findOne({ username: username.toLowerCase() });
 
@@ -160,16 +159,12 @@ export const forgotPassword = async (req, res) => {
       return res.status(404).json({ success: false, message: "No registered context matching this identifier." });
     }
 
-    // 1. Generate unique 4-digit token
     const verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
 
-    // 2. Map parameters securely onto Mongoose schema layout
     user.resetPasswordToken = verificationCode;
     user.resetPasswordExpire = Date.now() + 10 * 60 * 1000; 
-    
     await user.save();
 
-    // 3. Premium Brand HTML template layout
     const htmlTemplate = `
       <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 500px; margin: 0 auto; border: 2px solid #ffdfd3; border-radius: 24px; padding: 35px; background-color: #081120; color: #ffffff; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
         <h2 style="color: #f5b942; margin-top: 0; font-size: 1.6rem; letter-spacing: 1px; border-bottom: 1px solid rgba(255,223,211,0.1); padding-bottom: 15px;">HAMBAK TECH & SERVICES</h2>
@@ -181,7 +176,6 @@ export const forgotPassword = async (req, res) => {
       </div>
     `;
 
-    // 4. Fire packet tracking via promise channel
     try {
       await sendEmail({
         email: user.email,
@@ -195,7 +189,6 @@ export const forgotPassword = async (req, res) => {
       });
 
     } catch (emailError) {
-      // Automatic state rollback on email engine failure
       user.resetPasswordToken = undefined;
       user.resetPasswordExpire = undefined;
       await user.save();
@@ -208,8 +201,7 @@ export const forgotPassword = async (req, res) => {
     }
 
   } catch (error) {
-    console.error("Critical fallback system failure:", error);
-    return res.status(500).json({ success: false, message: `Server error instance: ${error.message}` });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -239,6 +231,45 @@ export const verifyToken = async (req, res) => {
       message: "Token credentials clear. Verification sequence complete."
     });
 
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+/* ==========================================================
+   AUTHENTICATION MODULE: EXECUTE PASSWORD OVERWRITE
+   ========================================================== */
+export const resetPassword = async (req, res) => {
+  try {
+    const { email, token, newPassword } = req.body;
+
+    if (!email || !token || !newPassword) {
+      return res.status(400).json({ success: false, message: "All submission payload elements are required." });
+    }
+
+    const user = await User.findOne({
+      email: email.toLowerCase(),
+      resetPasswordToken: token,
+      resetPasswordExpire: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: "Authorization expired. Please re-initiate forgot password track." });
+    }
+
+    // Set new plain-text password (our userSchema pre-save middleware hashes this automatically)
+    user.password = newPassword;
+    
+    // Clear token storage keys completely
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Security credential update complete. New password state compiled successfully."
+    });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }
