@@ -128,7 +128,7 @@
       transform: translateY(-2px);
     }
 
-    /* HERO SHOWCASE SECTION WITH TRANSPARENT IMAGE LAYER */
+    /* HERO SHOWCASE SECTION WITH MASTER TRANSPARENT BACKGROUND */
     .hero-showcase {
       padding: 120px 8% 80px;
       display: flex;
@@ -136,6 +136,8 @@
       gap: 50px;
       min-height: 85vh;
       position: relative;
+      background: linear-gradient(135deg, rgba(8, 11, 24, 0.92) 20%, rgba(13, 71, 161, 0.85) 70%, rgba(8, 11, 24, 0.95)), url('office.jpeg') no-repeat center center/cover;
+      background-attachment: scroll;
     }
 
     .hero-content {
@@ -221,17 +223,18 @@
       position: relative;
     }
 
-    /* HIGH END GLASS FRAME UTILIZING TRANSPARENT office.jpeg */
+    /* HIGH END GLASS FRAME UTILIZING TRANSLUCENT GLASS OVER MASTER BACKGROUND */
     .corporate-frame {
       width: 100%;
       max-width: 500px;
       height: 420px;
-      background: linear-gradient(135deg, rgba(8, 17, 32, 0.85), rgba(13, 71, 161, 0.75)), url('office.jpeg') no-repeat center/cover;
-      border: 2px solid rgba(255, 255, 255, 0.15);
+      background: rgba(15, 23, 42, 0.65);
+      border: 2px solid rgba(255, 255, 255, 0.12);
       border-radius: 24px;
       padding: 30px;
-      backdrop-filter: blur(4px);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 0 30px rgba(255,255,255,0.05);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 30px rgba(255,255,255,0.02);
       position: relative;
       display: flex;
       flex-direction: column;
