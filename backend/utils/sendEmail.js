@@ -5,24 +5,27 @@ import nodemailer from "nodemailer";
  * @param {Object} options - Message details containing email target, subject line, and HTML template.
  */
 const sendEmail = async (options) => {
-  // 1. Establish a unified SMTP transport lane using the correct lowercase service string
+  // 1. Establish an explicit connection over Port 587 to bypass cloud firewalls
   const transporter = nodemailer.createTransport({
-    service: "gmail", 
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // Must be false for port 587
+    requireTLS: true, // Forces secure upgrade protocols
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      user: "hambak901@gmail.com",
+      pass: "ehsncrwamomthyfj",
     },
   });
 
-  // 2. Map structural message configurations into standard mail parameters
+  // 2. Cleanly format the sender string inline to guarantee no syntax truncation occurs
   const mailOptions = {
-    from: process.env.EMAIL_FROM || `"HAMBAK TECH" <${process.env.EMAIL_USER}>`,
+    from: '"Hambak Tech & Services" <hambak901@gmail.com>',
     to: options.email,
     subject: options.subject,
     html: options.html,
   };
 
-  // 3. FIXED: Explicitly return the tracking promise to prevent runtime execution freezes
+  // 3. Dispatch payload package and return execution promise to the controller
   return await transporter.sendMail(mailOptions);
 };
 
