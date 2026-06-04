@@ -1,12 +1,12 @@
 import express from 'express';
-// FIXED: Added forgotPassword and verifyToken to the controller imports list
 import { 
   registerUser, 
   loginUser, 
   getMyProfile, 
   logoutUser,
   forgotPassword,
-  verifyToken
+  verifyToken,
+  resetPassword
 } from '../controllers/authController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -17,8 +17,9 @@ router.post('/login', loginUser);
 router.get('/me', protect, getMyProfile);
 router.get('/logout', logoutUser);
 
-// FIXED: Added endpoints to map frontend token requests securely
+// Password recovery pipeline channels
 router.post('/forgot-password', forgotPassword);
 router.post('/verify-token', verifyToken);
+router.post('/reset-password', resetPassword);
 
 export default router;
