@@ -1,125 +1,172 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
-
-// Define a safe inline Schema structure to ensure strict data validation
-const serviceSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  category: { type: String, required: true },
-  subServices: [String],
-  status: { type: String, default: "active" }, // active, coming-soon
-  basePrice: { type: Number, default: 0 }
-}, { timestamps: true });
-
-// Fallback to avoid model compilation collisions
-const Service = mongoose.models.Service || mongoose.model("Service", serviceSchema);
+import Service from "./models/Service.js";
 
 dotenv.config();
 
 const servicesData = [
-  // 1. ICT & Technology Services
   {
     title: "Computer Training & ICT Education",
-    category: "ICT & Technology",
-    subServices: ["Basic Computer Training", "Advanced Computer Training", "ICT Certificate Courses", "Microsoft Word/Excel/PowerPoint", "Digital Skills Training", "Computer Appreciation for Beginners"]
+    category: "ICT Training Services",
+    status: "active",
+    pricing: [
+      { item: "Basic Computer Training (1 Month)", priceDisplay: "25,000" },
+      { item: "Advanced Computer Training (2 Months)", priceDisplay: "45,000" },
+      { item: "Microsoft Word Training", priceDisplay: "15,000" },
+      { item: "Microsoft Excel Training", priceDisplay: "20,000" },
+      { item: "Microsoft PowerPoint Training", priceDisplay: "15,000" },
+      { item: "Internet & Email Training", priceDisplay: "10,000" },
+      { item: "Complete ICT Certificate Course", priceDisplay: "75,000" },
+      { item: "One-on-One Training", priceDisplay: "10,000 per session" }
+    ]
   },
   {
     title: "Website Development",
-    category: "ICT & Technology",
-    subServices: ["Business Website Design", "E-commerce Development", "Personal Portfolio Websites", "School & Religious Institution Portals", "Website Maintenance & Redesign"]
+    category: "Website Development",
+    status: "active",
+    pricing: [
+      { item: "Landing Page Website", priceDisplay: "80,000 - 150,000" },
+      { item: "Business Website", priceDisplay: "200,000 - 400,000" },
+      { item: "School Website", priceDisplay: "300,000 - 600,000" },
+      { item: "E-commerce Website", priceDisplay: "500,000 - 1,500,000" },
+      { item: "Website Redesign", priceDisplay: "100,000 - 300,000" },
+      { item: "Annual Website Maintenance", priceDisplay: "100,000+" }
+    ]
   },
   {
     title: "Graphic Design Services",
-    category: "ICT & Technology",
-    subServices: ["Logo Design", "Business Card & Flyer Design", "Banner & Poster Layouts", "Certificate Design", "Company Branding Materials"]
-  },
-  {
-    title: "Software & Digital Solutions",
-    category: "ICT & Technology",
-    subServices: ["Business Management Systems", "School Management Systems", "Inventory Trackers", "Customer Management Systems", "Database Solutions"]
+    category: "Graphic Design",
+    status: "active",
+    pricing: [
+      { item: "Logo Design", priceDisplay: "15,000 - 50,000" },
+      { item: "Business Card Design", priceDisplay: "10,000" },
+      { item: "Flyer Design", priceDisplay: "15,000" },
+      { item: "Banner Design", priceDisplay: "20,000" },
+      { item: "Poster Design", priceDisplay: "15,000" },
+      { item: "Certificate Design", priceDisplay: "10,000" },
+      { item: "Social Media Design", priceDisplay: "5,000 per design" }
+    ]
   },
   {
     title: "Computer Services & Hardware Engineering",
-    category: "ICT & Technology",
-    subServices: ["Computer & Software Installation", "System Troubleshooting & Maintenance", "Virus Removal", "Data Backup & Recovery", "Hardware Upgrades"]
-  },
-
-  // 2. Business Support Services
-  {
-    title: "Business Registration & Documentation",
-    category: "Business Support",
-    subServices: ["Business Name Registration Assistance", "Company Documentation", "Business Proposal & Profile Creation", "Company Portfolio Design", "Contract Documentation"]
+    category: "Computer Services",
+    status: "active",
+    pricing: [
+      { item: "Software Installation", priceDisplay: "5,000 - 15,000" },
+      { item: "Windows Installation", priceDisplay: "10,000 - 20,000" },
+      { item: "Virus Removal", priceDisplay: "5,000 - 15,000" },
+      { item: "System Maintenance", priceDisplay: "10,000 - 30,000" },
+      { item: "Data Recovery", priceDisplay: "20,000 - 100,000" },
+      { item: "Computer Upgrade", priceDisplay: "Inspection Required" }
+    ]
   },
   {
     title: "Printing & Documentation Services",
-    category: "Business Support",
-    subServices: ["Document Typing & Formatting", "Premium Printing & Photocopying", "Scanning & Lamination", "Spiral Binding", "Academic Project Work Preparation"]
+    category: "Printing & Documentation",
+    status: "active",
+    pricing: [
+      { item: "Typing (per page)", priceDisplay: "300 - 1,000" },
+      { item: "Black & White Printing", priceDisplay: "100 per page" },
+      { item: "Colour Printing", priceDisplay: "300 - 500 per page" },
+      { item: "Photocopy", priceDisplay: "50 - 100 per page" },
+      { item: "Scanning", priceDisplay: "200 per page" },
+      { item: "Lamination", priceDisplay: "500 - 2,000" },
+      { item: "Spiral Binding", priceDisplay: "1,500 - 5,000" }
+    ]
   },
   {
-    title: "CV & Professional Documents",
-    category: "Business Support",
-    subServices: ["CV & Resume Writing", "Cover Letter Writing", "Application Letters", "Professional Corporate Profiles"]
-  },
-
-  // 3. Financial & Agency Services
-  {
-    title: "VTU Services",
-    category: "Financial & Agency",
-    subServices: ["Airtime Purchase", "Data Subscription", "Electricity Bill Payment", "Cable TV Subscription", "Exam PIN Sales (WAEC/NECO)"]
-  },
-  {
-    title: "POS & Payment Services",
-    category: "Financial & Agency",
-    subServices: ["Cash Withdrawal & Deposit", "Fund Transfers", "Utility Bill Payments", "Agency Banking Operations"]
+    title: "Business Registration & Documentation",
+    category: "Business Documentation",
+    status: "active",
+    pricing: [
+      { item: "CV Writing", priceDisplay: "5,000 - 15,000" },
+      { item: "Cover Letter", priceDisplay: "3,000 - 5,000" },
+      { item: "Business Plan", priceDisplay: "50,000 - 300,000" },
+      { item: "Business Proposal", priceDisplay: "30,000 - 150,000" },
+      { item: "Company Profile", priceDisplay: "30,000 - 100,000" }
+    ]
   },
   {
-    title: "Cooperative & Savings Management",
-    category: "Financial & Agency",
-    subServices: ["Ajo/Ososu Savings Scheme Automation", "Cooperative Savings Management", "Financial Contribution Programs", "Group Savings Administration"]
-  },
-
-  // 4. Digital Marketing Services
-  {
-    title: "Online Marketing & Advertising",
+    title: "Online Marketing & Advertising Setup",
     category: "Digital Marketing",
-    subServices: ["Social Media Management", "Business Promotion & Growth", "Facebook & Instagram Marketing", "WhatsApp Business Ecosystem Setup", "Brand Awareness Campaigns"]
+    status: "active",
+    pricing: [
+      { item: "Social Media Setup", priceDisplay: "15,000" },
+      { item: "Monthly Social Media Management", priceDisplay: "50,000 - 200,000" },
+      { item: "Facebook Advertising Setup", priceDisplay: "20,000" },
+      { item: "WhatsApp Business Setup", priceDisplay: "10,000" },
+      { item: "Digital Marketing Consultation", priceDisplay: "20,000 per session" }
+    ]
   },
   {
-    title: "Content Creation",
-    category: "Digital Marketing",
-    subServices: ["Business Content Writing", "Product Descriptions", "Social Media Copywriting", "Promotional Materials"]
+    title: "ICT Consultancy Infrastructure",
+    category: "ICT Consultancy",
+    status: "active",
+    pricing: [
+      { item: "ICT Consultation", priceDisplay: "20,000/hr" },
+      { item: "Business Digital Setup", priceDisplay: "100,000+" },
+      { item: "School ICT Setup", priceDisplay: "Based on Project" },
+      { item: "Company ICT Setup", priceDisplay: "Based on Project" }
+    ]
   },
-
-  // 5. Consultancy Services
   {
-    title: "ICT Consultancy",
-    category: "Consultancy",
-    subServices: ["Technology Advisory", "Business Digital Transformation", "ICT Setup for Schools & Businesses", "Digital Strategy Planning"]
+    title: "VTU Automated Operations",
+    category: "VTU Services",
+    status: "active",
+    pricing: [
+      { item: "Airtime Purchase", priceDisplay: "Standard Rate" },
+      { item: "Data Subscription", priceDisplay: "Standard Rate" },
+      { item: "Electricity Bill Payment", priceDisplay: "₦100 - ₦500 Service Charge" },
+      { item: "Cable TV Subscription", priceDisplay: "₦100 - ₦500 Service Charge" },
+      { item: "Exam PIN Sales", priceDisplay: "Market Rate" }
+    ]
   },
   {
-    title: "Business Consultancy",
-    category: "Consultancy",
-    subServices: ["Startup Guidance", "Business Development & Planning", "Digital Business Setup", "Business Process Improvement"]
+    title: "POS Agency Terminal Operations",
+    category: "POS Services",
+    status: "active",
+    pricing: [
+      { item: "₦1,000 - ₦5,000 Transaction Fee", priceDisplay: "₦100" },
+      { item: "₦6,000 - ₦10,000 Transaction Fee", priceDisplay: "₦200" },
+      { item: "₦11,000 - ₦20,000 Transaction Fee", priceDisplay: "₦300" },
+      { item: "₦21,000 - ₦50,000 Transaction Fee", priceDisplay: "₦500" },
+      { item: "Above ₦50,000 Transaction Fee", priceDisplay: "1%" }
+    ]
   },
-
-  // 6. Future Services (Flagged as coming-soon)
+  {
+    title: "Ajo & Cooperative Management Systems",
+    category: "Ajo / Cooperative Management",
+    status: "active",
+    pricing: [
+      { item: "Daily Savings Collection", priceDisplay: "Negotiable" },
+      { item: "Monthly Cooperative Management", priceDisplay: "5% - 10% Admin Fee" },
+      { item: "Group Savings Administration", priceDisplay: "Negotiable" }
+    ]
+  },
   {
     title: "Wallet & Fintech Platform",
-    category: "Future Tech",
+    category: "Future Services",
     status: "coming-soon",
-    subServices: ["Digital Wallet Services", "Wallet Funding & Internal Transfers", "Transaction History Tracking", "Digital Payments"]
+    pricing: [
+      { item: "Digital Core Infrastructure Engine", priceDisplay: "Coming Soon" }
+    ]
   },
   {
     title: "E-Learning Platform",
-    category: "Future Tech",
+    category: "Future Services",
     status: "coming-soon",
-    subServices: ["Online Courses", "Video Training Modules", "Student Performance Dashboards", "Digital Certificate Issuance"]
+    pricing: [
+      { item: "Online Knowledge Portal Ecosystem", priceDisplay: "Coming Soon" }
+    ]
   },
   {
     title: "Analytics & Reporting Engine",
-    category: "Future Tech",
+    category: "Future Services",
     status: "coming-soon",
-    subServices: ["Business Intelligence Analytics", "Customer Behavior Analytics", "Sales Performance Reports"]
+    pricing: [
+      { item: "Deep Metrics Ledger Framework", priceDisplay: "Coming Soon" }
+    ]
   }
 ];
 
@@ -127,19 +174,18 @@ const importData = async () => {
   try {
     await connectDB();
     
-    // Clear out existing sample placeholder records safely
+    // Wipe clean old mismatch schemas safely
     await Service.deleteMany();
     
-    // Insert the 18 clean Hambak operational data structures
+    // Insert new clean structures
     await Service.insertMany(servicesData);
     
-    console.log("🏆 HAMBAK ENTERPRISE SERVICE CORES REGISTERED IN MONGO CLUSTER SUCCESSFULLY!");
+    console.log("🏆 HAMBAK DATA MATRIX SEEDED TO MONGO SUCCESSFULLY!");
     process.exit();
   } catch (error) {
-    console.error(`Error with data ingestion layout: ${error.message}`);
+    console.error(`❌ Data ingestion stopped: ${error.message}`);
     process.exit(1);
   }
 };
 
 importData();
-                  
