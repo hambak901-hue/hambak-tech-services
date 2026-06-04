@@ -3,8 +3,13 @@ import mongoose from "mongoose";
 /* ==========================================================
    ECOSYSTEM CORE SERVICE LISTING SCHEMA
    ========================================================== */
+const pricingItemSchema = new mongoose.Schema({
+  item: { type: String, required: true },
+  priceDisplay: { type: String, required: true }
+});
+
 const serviceSchema = new mongoose.Schema({
-  name: {
+  title: {
     type: String,
     required: true,
     trim: true
@@ -12,27 +17,27 @@ const serviceSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ["Printing", "NIN", "VTU", "Training", "Registration", "Design", "General"],
-    default: "General"
+    enum: [
+      "ICT Training Services", 
+      "Website Development", 
+      "Graphic Design", 
+      "Computer Services", 
+      "Printing & Documentation", 
+      "Business Documentation", 
+      "Digital Marketing", 
+      "ICT Consultancy", 
+      "VTU Services", 
+      "POS Services", 
+      "Ajo / Cooperative Management", 
+      "Future Services"
+    ]
   },
-  description: {
+  status: {
     type: String,
-    required: true
+    enum: ["active", "coming-soon"],
+    default: "active"
   },
-  price: {
-    type: Number,
-    required: true,
-    default: 0
-  },
-  image: {
-    type: String,
-    required: true,
-    default: "/uploads/placeholder.png"
-  },
-  isActive: {
-    type: Boolean,
-    default: true
-  }
+  pricing: [pricingItemSchema] // Embedded sub-items with their corresponding rates
 }, {
   timestamps: true
 });
