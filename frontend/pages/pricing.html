@@ -106,7 +106,7 @@
 
     /* WORKSPACE CONTENT SECTIONS */
     .section {
-      padding: 40px 8% 80px;
+      padding: 40px 8% 60px;
     }
 
     .section-title {
@@ -127,51 +127,17 @@
       color: #94a3b8;
     }
 
-    /* BILLING STRATEGY TOGGLE SWITCH */
-    .toggle-wrapper {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 50px;
-    }
-
-    .toggle-box {
-      background: var(--dark-card);
-      padding: 8px;
-      border-radius: 50px;
-      display: flex;
-      gap: 5px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .toggle-btn {
-      padding: 12px 28px;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: #94a3b8;
-      background: transparent;
-      transition: 0.3s ease;
-    }
-
-    .toggle-btn.active {
-      background: linear-gradient(135deg, var(--primary-blue), #1565c0);
-      color: var(--clean-white);
-      box-shadow: 0 4px 15px rgba(13, 71, 161, 0.4);
-    }
-
     /* SUBSCRIPTION GRID MATRIX */
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 35px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
     }
 
     /* PACKAGE DISPLAY CARDS */
     .price-card {
       background: var(--dark-card);
-      padding: 50px 35px;
+      padding: 40px 30px;
       border-radius: 24px;
       border: 1px solid rgba(255, 255, 255, 0.05);
       position: relative;
@@ -205,52 +171,39 @@
     }
 
     .price-icon {
-      width: 80px;
-      height: 80px;
+      width: 70px;
+      height: 70px;
       background: rgba(13, 71, 161, 0.15);
       border: 1px solid rgba(13, 71, 161, 0.3);
       border-radius: 20px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 2rem;
+      font-size: 1.8rem;
       color: var(--brand-gold);
       margin-bottom: 25px;
     }
 
     .price-card h3 {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       margin-bottom: 15px;
       font-weight: 800;
     }
 
     .price {
-      font-size: 3rem;
+      font-size: 2.5rem;
       font-weight: 800;
       color: var(--clean-white);
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       display: flex;
       align-items: baseline;
       gap: 5px;
     }
 
-    .price small {
-      font-size: 1rem;
-      color: #94a3b8;
-      font-weight: 500;
-    }
-
-    .price-description {
-      line-height: 1.8;
-      color: #cbd5e1;
-      margin-bottom: 30px;
-      font-size: 0.95rem;
-    }
-
     .price-features {
       list-style: none;
       padding: 0;
-      margin: 0 0 40px 0;
+      margin: 0 0 30px 0;
       display: flex;
       flex-direction: column;
       gap: 15px;
@@ -288,18 +241,43 @@
       transform: scale(1.02);
     }
 
-    /* DIRECT DATA MATRIX TABLE */
+    /* DIRECT DATA MATRIX TABLES & CATEGORY CARDS */
     .table-section {
       padding: 0 8% 80px;
     }
 
+    .services-container {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
     .table-box {
       background: var(--dark-card);
-      padding: 35px;
+      padding: 30px;
       border-radius: 24px;
       border: 1px solid rgba(255, 255, 255, 0.05);
-      overflow-x: auto;
       box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .table-box h3 {
+      font-size: 1.4rem;
+      color: var(--brand-gold);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 10px;
+    }
+
+    .category-badge {
+      font-size: 0.8rem;
+      background: rgba(13, 71, 161, 0.3);
+      color: #cbd5e1;
+      padding: 4px 12px;
+      border-radius: 50px;
+      border: 1px solid rgba(13, 71, 161, 0.5);
     }
 
     table {
@@ -309,17 +287,17 @@
     }
 
     table th, table td {
-      padding: 18px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 1rem;
+      padding: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      font-size: 0.95rem;
     }
 
     table th {
-      background: rgba(13, 71, 161, 0.2);
+      background: rgba(13, 71, 161, 0.1);
       color: var(--brand-gold);
       font-weight: 700;
       text-transform: uppercase;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       letter-spacing: 0.5px;
     }
 
@@ -336,11 +314,20 @@
       display: inline-block;
       padding: 4px 12px;
       border-radius: 50px;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
+    }
+
+    .status-badge.active {
       background: rgba(34, 197, 94, 0.15);
       color: #4ade80;
       border: 1px solid #22c55e;
+    }
+
+    .status-badge.coming-soon {
+      background: rgba(245, 185, 66, 0.15);
+      color: var(--brand-gold);
+      border: 1px solid var(--brand-gold);
     }
 
     /* CALL-TO-ACTION CARD BLOCK */
@@ -430,6 +417,10 @@
       padding-left: 5px;
     }
 
+    .footer-content p {
+      color: #cbd5e1;
+    }
+
     .footer-bottom {
       text-align: center;
       padding-top: 30px;
@@ -496,142 +487,29 @@
     <p>Flexible packages and standard service fees structured to provide students, businesses, and professionals with optimized value channels.</p>
   </section>
 
+  <!-- DYNAMIC SYSTEM BUNDLES SECTION -->
   <section class="section">
     <div class="section-title">
-      <h2>Select Workspace Subscription Plan</h2>
-      <p>Unlock dedicated priority infrastructure support, continuous VTU access pathways, and business service packages.</p>
+      <h2>Recommended Website & Business Packages</h2>
+      <p>Unlock structured solutions bundles combining elite web architecture, dynamic brand components, and specialized technical operations setup.</p>
     </div>
 
-    <div class="toggle-wrapper">
-      <div class="toggle-box">
-        <button class="toggle-btn active" id="btnMonthly" onclick="toggleBillingCycle('monthly')">Monthly</button>
-        <button class="toggle-btn" id="btnYearly" onclick="toggleBillingCycle('yearly')">Yearly (Save 10%)</button>
-      </div>
-    </div>
-
-    <div class="pricing-grid">
-      <div class="price-card">
-        <div class="price-icon"><i class="fa-solid fa-user"></i></div>
-        <h3>Basic Plan</h3>
-        <div class="price">
-          <span id="priceBasic">₦5,000</span>
-          <small id="durationBasic">/month</small>
-        </div>
-        <p class="price-description">Perfect baseline plan for individual internet usage and student resource optimization setups.</p>
-        <ul class="price-features">
-          <li><i class="fa-solid fa-circle-check"></i> Standard Document Printing Access</li>
-          <li><i class="fa-solid fa-circle-check"></i> Cyber Cafe Terminal Browsing</li>
-          <li><i class="fa-solid fa-circle-check"></i> General IT Diagnostics</li>
-          <li><i class="fa-solid fa-circle-check"></i> Basic Email Support Support Channels</li>
-        </ul>
-        <a href="contact.html?plan=basic" class="price-btn">Activate Plan</a>
-      </div>
-
-      <div class="price-card popular">
-        <div class="popular-badge">POPULAR</div>
-        <div class="price-icon"><i class="fa-solid fa-briefcase"></i></div>
-        <h3>Professional Plan</h3>
-        <div class="price">
-          <span id="pricePro">₦15,000</span>
-          <small id="durationPro">/month</small>
-        </div>
-        <p class="price-description">Advanced operations framework matching active business operators and digital trainees.</p>
-        <ul class="price-features">
-          <li><i class="fa-solid fa-circle-check"></i> Advanced ICT Training Track Enrollment</li>
-          <li><i class="fa-solid fa-circle-check"></i> Integrated VTU Automation Dashboards</li>
-          <li><i class="fa-solid fa-circle-check"></i> Institutional Online Form Configurations</li>
-          <li><i class="fa-solid fa-circle-check"></i> Priority Processing Queues</li>
-        </ul>
-        <a href="contact.html?plan=professional" class="price-btn">Activate Plan</a>
-      </div>
-
-      <div class="price-card">
-        <div class="price-icon"><i class="fa-solid fa-building"></i></div>
-        <h3>Enterprise Plan</h3>
-        <div class="price">
-          <span id="priceEnterprise">₦50,000</span>
-          <small id="durationEnterprise">/month</small>
-        </div>
-        <p class="price-description">Full high-capacity package designed for large corporate entities or institutional setups.</p>
-        <ul class="price-features">
-          <li><i class="fa-solid fa-circle-check"></i> Comprehensive Workspace Configurations</li>
-          <li><i class="fa-solid fa-circle-check"></i> PanCafe Pro Terminal Infrastructure</li>
-          <li><i class="fa-solid fa-circle-check"></i> Advanced Transaction Ledger Analytics</li>
-          <li><i class="fa-solid fa-circle-check"></i> Dedicated Operational Manager Assign</li>
-        </ul>
-        <a href="contact.html?plan=enterprise" class="price-btn">Activate Plan</a>
-      </div>
+    <div class="pricing-grid" id="packages-grid">
+      <!-- Loaded dynamically via fetch request -->
+      <p style="text-align: center; color: #94a3b8; grid-column: 1/-1;">Syncing active operational bundles from cluster database...</p>
     </div>
   </section>
 
+  <!-- DYNAMIC DETAILED SERVICES SECTIONS -->
   <section class="table-section">
     <div class="section-title">
       <h2>Itemized Service Rate Sheets</h2>
-      <p>Direct unit-cost metrics for administrative tasks, enrollment modifying procedures, and high-quality prints.</p>
+      <p>Direct unit-cost metrics for ICT training paths, complex document management procedures, and agency automation assets.</p>
     </div>
 
-    <div class="table-box">
-      <table>
-        <thead>
-          <tr>
-            <th>Service Target Layer</th>
-            <th>Standard Unit Price</th>
-            <th>Operational Cluster Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>National Identification Number (NIN) Enrollment</td>
-            <td>₦2,000</td>
-            <td><span class="status-badge">Available</span></td>
-          </tr>
-          <tr>
-            <td>NIN Modification & Data Updates</td>
-            <td>₦3,500</td>
-            <td><span class="status-badge">Available</span></td>
-          </tr>
-          <tr>
-            <td>WAEC Institutional Form Registration</td>
-            <td>₦25,000</td>
-            <td><span class="status-badge">Available</span></td>
-          </tr>
-          <tr>
-            <td>JAMB Entry Profile Registration</td>
-            <td>₦8,000</td>
-            <td><span class="status-badge">Available</span></td>
-          </tr>
-          <tr>
-            <td>Standard Printing (Mono Black & White)</td>
-            <td>₦50 / Page</td>
-            <td><span class="status-badge">Available</span></td>
-          </tr>
-          <tr>
-            <td>Premium Color Printing Matrix Copies</td>
-            <td>₦200 / Page</td>
-            <td><span class="status-badge">Available</span></td>
-          </tr>
-          <tr>
-            <td>High-Resolution Passport Photograph Sets</td>
-            <td>₦1,500</td>
-            <td><span class="status-badge">Available</span></td>
-          </tr>
-          <tr>
-            <td>Professional ICT Training Block Sessions</td>
-            <td>₦15,000</td>
-            <td><span class="status-badge">Active</span></td>
-          </tr>
-          <tr>
-            <td>POS Financial Cash Out/Withdrawals</td>
-            <td>Standard Provider Charges Apply</td>
-            <td><span class="status-badge">Available</span></td>
-          </tr>
-          <tr>
-            <td>High-Speed Terminal Internet Browsing Allocation</td>
-            <td>₦300 / Hour</td>
-            <td><span class="status-badge">Available</span></td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="services-container" id="services-catalog">
+      <!-- Loaded dynamically via fetch request -->
+      <p style="text-align: center; color: #94a3b8;">Syncing complete enterprise rate matrix...</p>
     </div>
   </section>
 
@@ -674,46 +552,124 @@
     <i class="fa-brands fa-whatsapp"></i>
   </a>
 
+  <!-- REWRITTEN SYSTEM SYNC ENGINE SCRIPT -->
   <script>
-    /**
-     * Toggles subscription fee values using cost reduction percentages
-     */
-    function toggleBillingCycle(targetCycle) {
-      const btnMonthly = document.getElementById("btnMonthly");
-      const btnYearly = document.getElementById("btnYearly");
+    document.addEventListener("DOMContentLoaded", () => {
+      fetchHambakPackages();
+      fetchHambakServices();
+    });
 
-      const priceBasic = document.getElementById("priceBasic");
-      const pricePro = document.getElementById("pricePro");
-      const priceEnterprise = document.getElementById("priceEnterprise");
+    // Fetches systemic business bundles dynamically from backend database
+    async function fetchHambakPackages() {
+      try {
+        const res = await fetch("/api/services/packages");
+        if (!res.ok) throw new Error("Network collection access failed");
+        const packages = await res.json();
+        
+        const grid = document.getElementById("packages-grid");
+        grid.innerHTML = "";
 
-      const durationBasic = document.getElementById("durationBasic");
-      const durationPro = document.getElementById("durationPro");
-      const durationEnterprise = document.getElementById("durationEnterprise");
+        // Designate specific profile layout icon shapes based on bundle classification names
+        const iconMap = {
+          "Starter Package": "fa-user",
+          "Business Growth Package": "fa-briefcase",
+          "Premium Digital Package": "fa-gem",
+          "Enterprise Package": "fa-building"
+        };
 
-      if (targetCycle === 'yearly') {
-        btnMonthly.classList.remove("active");
-        btnYearly.classList.add("active");
+        packages.forEach((pkg, index) => {
+          const isPopular = pkg.packageName === "Business Growth Package";
+          const iconClass = iconMap[pkg.packageName] || "fa-cubes";
+          const featuresList = pkg.features.map(f => `<li><i class="fa-solid fa-circle-check"></i> ${f}</li>`).join("");
+          
+          // Formats numbers cleanly if numeric values are provided
+          const cleanPrice = isNaN(pkg.price.replace(/,/g, '')) ? pkg.price : `₦${Number(pkg.price.replace(/,/g, '')).toLocaleString()}`;
 
-        // Calculate and apply 10% discount on 12-month packages
-        priceBasic.innerText = "₦54,000";
-        pricePro.innerText = "₦162,000";
-        priceEnterprise.innerText = "₦540,000";
+          grid.innerHTML += `
+            <div class="price-card ${isPopular ? 'popular' : ''}">
+              ${isPopular ? '<div class="popular-badge">POPULAR</div>' : ''}
+              <div class="price-icon"><i class="fa-solid ${iconClass}"></i></div>
+              <h3>${pkg.packageName}</h3>
+              <div class="price">
+                <span>${cleanPrice.startsWith('₦') || cleanPrice.toLowerCase().includes('quote') ? cleanPrice : '₦' + cleanPrice}</span>
+              </div>
+              <p class="price-description">Strategic bundle configured directly for business growth optimization targets.</p>
+              <ul class="price-features">${featuresList}</ul>
+              <a href="contact.html?package=${encodeURIComponent(pkg.packageName)}" class="price-btn">Secure Package</a>
+            </div>
+          `;
+        });
+      } catch (err) {
+        console.error("Error connecting with structural configuration array:", err);
+        document.getElementById("packages-grid").innerHTML = `
+          <p style="text-align: center; color: var(--accent-pink); grid-column: 1/-1;">
+            <i class="fa-solid fa-triangle-exclamation"></i> Cluster data unreachable. Please refresh or check connection.
+          </p>`;
+      }
+    }
 
-        durationBasic.innerText = "/year";
-        durationPro.innerText = "/year";
-        durationEnterprise.innerText = "/year";
-      } else {
-        btnYearly.classList.remove("active");
-        btnMonthly.classList.add("active");
+    // Fetches and organizes all 18 core services dynamically into distinct administrative tables
+    async function fetchHambakServices() {
+      try {
+        const res = await fetch("/api/services");
+        if (!res.ok) throw new Error("Services cluster read failed");
+        const services = await res.json();
 
-        // Revert to baseline monthly values
-        priceBasic.innerText = "₦5,000";
-        pricePro.innerText = "₦15,000";
-        priceEnterprise.innerText = "₦50,000";
+        const catalog = document.getElementById("services-catalog");
+        catalog.innerHTML = "";
 
-        durationBasic.innerText = "/month";
-        durationPro.innerText = "/month";
-        durationEnterprise.innerText = "/month";
+        services.forEach(srv => {
+          const tableRows = srv.pricing.map(p => {
+            // Evaluates and applies native currency string format layers safely
+            let formattedPrice = p.priceDisplay;
+            if (!isNaN(formattedPrice.replace(/,/g, '')) && formattedPrice.trim() !== "") {
+              formattedPrice = "₦" + Number(formattedPrice.replace(/,/g, '')).toLocaleString();
+            } else if (!formattedPrice.includes("₦") && !formattedPrice.toLowerCase().includes("rate") && !formattedPrice.toLowerCase().includes("charge") && !formattedPrice.toLowerCase().includes("required") && !formattedPrice.toLowerCase().includes("quote") && !formattedPrice.toLowerCase().includes("soon") && !formattedPrice.includes("%")) {
+              formattedPrice = "₦" + formattedPrice;
+            }
+
+            return `
+              <tr>
+                <td>${p.item}</td>
+                <td style="font-weight: 700; color: var(--clean-white);">${formattedPrice}</td>
+                <td>
+                  <span class="status-badge ${srv.status === 'coming-soon' ? 'coming-soon' : 'active'}">
+                    ${srv.status === 'coming-soon' ? 'Coming Soon' : 'Available'}
+                  </span>
+                </td>
+              </tr>
+            `;
+          }).join("");
+
+          catalog.innerHTML += `
+            <div class="table-box">
+              <h3>
+                <span>${srv.title}</span>
+                <span class="category-badge">${srv.category}</span>
+              </h3>
+              <div style="overflow-x: auto;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Service Target Component</th>
+                      <th>Standard Fees / Rates</th>
+                      <th>Operational Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${tableRows}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `;
+        });
+      } catch (err) {
+        console.error("Error mapping itemized services structure:", err);
+        document.getElementById("services-catalog").innerHTML = `
+          <p style="text-align: center; color: var(--accent-pink); padding: 20px;">
+            <i class="fa-solid fa-triangle-exclamation"></i> Unable to populate live itemized lists. Please try again.
+          </p>`;
       }
     }
   </script>
