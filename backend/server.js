@@ -66,6 +66,16 @@ app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
 
 /* =========================
+FALLBACK ROUTING FOR REFRESHES
+========================= */
+// Serves the base index page if a clean web route is entered directly into the browser address bar
+app.get("*", (req, res, next) => {
+  // If the request path contains "/api", pass it down directly to avoid intercepting server operations
+  if (req.url.startsWith('/api')) return next();
+  res.sendFile(path.resolve(process.cwd(), "..", "frontend", "index.html"));
+});
+
+/* =========================
 404 ROUTE
 ========================= */
 app.use((req, res) => {
@@ -81,3 +91,4 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+        
