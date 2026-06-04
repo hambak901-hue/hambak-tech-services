@@ -171,7 +171,7 @@
 
         <div class="input-group">
           <i class="fa-solid fa-envelope"></i>
-          <input type="email" placeholder="Email Address" id="emailField" name="email" autocomplete="email" required>
+          <input type="email" placeholder="Email Address or Username" id="emailField" name="email" autocomplete="email" required>
         </div>
 
         <div class="input-group">
@@ -194,7 +194,7 @@
       </div>
 
       <div class="info-badge">
-        <strong>Ecosystem Status:</strong> Verified Connection Cluster Live. Ready for auto-fill optimizations.
+        <strong>Ecosystem Status:</strong> Verified Connection Cluster Live. Ready for launch.
       </div>
 
     </div>
@@ -225,10 +225,8 @@
 
     const BASE_URL = "https://hambak-tech-services.onrender.com/api";
 
-    // View State Control Flag
     let loginMode = true;
 
-    // Password Visibility Engine
     togglePassword.addEventListener("click", () => {
       if (passwordField.type === "password") {
         passwordField.type = "text";
@@ -239,7 +237,6 @@
       }
     });
 
-    // View Swapper Interface Layout Controller
     toggleForm.addEventListener("click", () => {
       loginMode = !loginMode;
       
@@ -253,7 +250,7 @@
         usernameWrapper.style.display = "none";
         phoneWrapper.style.display = "none";
         
-        // Remove Required attributes for clean switching
+        emailField.placeholder = "Email Address or Username";
         nameField.removeAttribute("required");
         usernameField.removeAttribute("required");
         phoneField.removeAttribute("required");
@@ -269,7 +266,7 @@
         usernameWrapper.style.display = "block";
         phoneWrapper.style.display = "block";
         
-        // Add HTML validation dynamic rules
+        emailField.placeholder = "Email Address";
         nameField.setAttribute("required", "true");
         usernameField.setAttribute("required", "true");
         phoneField.setAttribute("required", "true");
@@ -278,11 +275,10 @@
       }
     });
 
-    // Processing Form Submission Event Handler
     authForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const email = emailField.value.trim();
+      const inputIdentityValue = emailField.value.trim();
       const password = passwordField.value;
 
       // PIPELINE WORKFLOW: USER REGISTRATION
@@ -291,7 +287,7 @@
         const username = usernameField.value.trim();
         const phone = phoneField.value.trim();
 
-        if (!name || !username || !phone || !email || !password) {
+        if (!name || !username || !phone || !inputIdentityValue || !password) {
           alert("Please clear all input parameter fields completely.");
           return;
         }
@@ -303,22 +299,19 @@
           const response = await fetch(`${BASE_URL}/auth/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, username, email, phone, password })
+            body: JSON.stringify({ name, username, email: inputIdentityValue, phone, password })
           });
 
           const data = await response.json();
 
           if (response.ok || data.success) {
             alert("Registration Successful!");
-            
-            // AUTOMATIC AUTO-FILL CONFIGURATION MATRIX: 
             loginMode = false; 
             toggleForm.click(); 
-            
-            emailField.value = email;
+            emailField.value = inputIdentityValue;
             passwordField.value = password;
           } else {
-            alert("Registration Unsuccessful: " + (data.message || "Invalid criteria setup details."));
+            alert("Registration Unsuccessful: " + (data.message || "Invalid setup metrics."));
           }
         } catch (error) {
           console.error("Critical Registry Interface Exception:", error);
@@ -331,7 +324,7 @@
 
       // PIPELINE WORKFLOW: USER SECURITY ACCESS LOGIN
       else {
-        if (!email || !password) {
+        if (!inputIdentityValue || !password) {
           alert("Please fill your registered credential matrix values.");
           return;
         }
@@ -343,7 +336,7 @@
           const response = await fetch(`${BASE_URL}/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ loginIdentity: inputIdentityValue, password }) // <-- FIXED FOR LAUNCH
           });
 
           const data = await response.json();
@@ -354,7 +347,6 @@
 
             alert("Access Granted! Proceeding to Dashboard Area.");
 
-            // Dynamic Dashboard Workspace Directory Routing Matrix
             if (data.user && data.user.role === "admin") {
               window.location.href = "admin.html";
             } else {
