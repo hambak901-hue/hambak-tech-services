@@ -1,6 +1,6 @@
 import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
-import sendEmail from "../utils/sendEmail.js"; // FIXED: Added your email utility import here
+import sendEmail from "../utils/sendEmail.js";
 
 // Internal helper to mint tokens cleanly
 const generateTokenIdSignature = (id) => {
@@ -37,7 +37,7 @@ export const registerUser = async (req, res) => {
       email,
       phone,
       password,
-      wallet: 0.00 // Set structural wallet base defaults
+      wallet: 0.00
     });
 
     return res.status(201).json({
@@ -65,13 +65,12 @@ export const registerUser = async (req, res) => {
    ========================================================== */
 export const loginUser = async (req, res) => {
   try {
-    const { loginIdentity, password } = req.body; // Allows logging in via email or username flexibly
+    const { loginIdentity, password } = req.body;
 
     if (!loginIdentity || !password) {
       return res.status(400).json({ success: false, message: "Credentials payload tracking requires full identification parameters." });
     }
 
-    // Dynamic relational lookup
     const user = await User.findOne({
       $or: [
         { email: loginIdentity.toLowerCase() },
@@ -83,7 +82,6 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ success: false, message: "Invalid credentials: Entry matches no recorded context." });
     }
 
-    // Call unified matchPassword verification method
     const passMatches = await user.matchPassword(password);
     if (!passMatches) {
       return res.status(401).json({ success: false, message: "Invalid credentials: Secure string mismatch verified." });
@@ -118,7 +116,6 @@ export const loginUser = async (req, res) => {
    ========================================================== */
 export const getMyProfile = async (req, res) => {
   try {
-    // req.user is loaded dynamically inside the protect middleware
     const user = await User.findById(req.user._id).select("-password");
     if (!user) {
       return res.status(404).json({ success: false, message: "User context not found." });
@@ -158,21 +155,21 @@ export const forgotPassword = async (req, res) => {
       return res.status(400).json({ success: false, message: "Email parameters require validation input." });
     }
 
-    // Find user matching normalized lowercase identifier strings
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
       return res.status(404).json({ success: false, message: "No registered context matching this identifier." });
     }
 
-    // 1. Generate a premium 4-digit numeric code
+    // 1. Generate unique 4-digit token
     const verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
 
-    // 2. Map verification properties onto your existing database User profile scheme
+    // 2. Map parameters securely onto Mongoose schema layout
     user.resetPasswordToken = verificationCode;
-    user.resetPasswordExpire = Date.now() + 10 * 60 * 1000; // Code window valid for 10 minutes
+    user.resetPasswordExpire = Date.now() + 10 * 60 * 1000; 
+    
     await user.save();
 
-    // 3. Premium Brand Interface Layout structure (Blue, Gold, Peach, Pink)
+    // 3. Premium Brand HTML template layout
     const htmlTemplate = `
       <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 500px; margin: 0 auto; border: 2px solid #ffdfd3; border-radius: 24px; padding: 35px; background-color: #081120; color: #ffffff; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
         <h2 style="color: #f5b942; margin-top: 0; font-size: 1.6rem; letter-spacing: 1px; border-bottom: 1px solid rgba(255,223,211,0.1); padding-bottom: 15px;">HAMBAK TECH & SERVICES</h2>
@@ -184,7 +181,7 @@ export const forgotPassword = async (req, res) => {
       </div>
     `;
 
-    // 4. Fire email packet through your verified Gmail Nodemailer server transporter
+    // 4. Fire packet tracking via promise channel
     try {
       await sendEmail({
         email: user.email,
@@ -198,17 +195,21 @@ export const forgotPassword = async (req, res) => {
       });
 
     } catch (emailError) {
-      // Emergency rollback code clean if SMTP breaks
+      // Automatic state rollback on email engine failure
       user.resetPasswordToken = undefined;
       user.resetPasswordExpire = undefined;
       await user.save();
 
-      console.error("Mail server error:", emailError);
-      return res.status(500).json({ success: false, message: "Email dispatch failed. Service transport configurations offline." });
+      console.error("Mail server error log:", emailError);
+      return res.status(500).json({ 
+        success: false, 
+        message: `Email transmission failed: ${emailError.message || "Service transport offline."}` 
+      });
     }
 
   } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    console.error("Critical fallback system failure:", error);
+    return res.status(500).json({ success: false, message: `Server error instance: ${error.message}` });
   }
 };
 
@@ -226,14 +227,13 @@ export const verifyToken = async (req, res) => {
     const user = await User.findOne({
       email: email.toLowerCase(),
       resetPasswordToken: token,
-      resetPasswordExpire: { $gt: Date.now() } // Assures token has not expired
+      resetPasswordExpire: { $gt: Date.now() }
     });
 
     if (!user) {
       return res.status(400).json({ success: false, message: "Invalid verification code or security window expired." });
     }
 
-    // Success response if code matches
     return res.status(200).json({
       success: true,
       message: "Token credentials clear. Verification sequence complete."
@@ -243,4 +243,4 @@ export const verifyToken = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
-        
+      
