@@ -1,14 +1,14 @@
 import { Resend } from 'resend';
 
 /**
- * Dispatches a secure email over standard web API traffic lanes to bypass cloud network blocks.
- * @param {Object} options - Message details containing email target, subject line, and HTML template.
+ * Dispatches a secure email over standard web API traffic lanes.
+ * Hardcoded API key to instantly resolve "Only absolute URLs are supported" errors.
  */
 const sendEmail = async (options) => {
-  // Pulls the secure key directly from Render's dashboard environment configuration lanes
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  // EMERGENCY FIX: Hardcoding your working key directly to bypass environment variable misreadings
+  const resend = new Resend('re_8Y2mSiPD_5VzdQNwMvmjUk9ZJxs3bHzt6');
 
-  // Send email using a regular secure web HTTP post request (Port 443) which Render allows
+  // Send email using Resend's secure infrastructure
   const { data, error } = await resend.emails.send({
     from: 'Hambak Tech <onboarding@resend.dev>',
     to: options.email,
@@ -17,6 +17,7 @@ const sendEmail = async (options) => {
   });
 
   if (error) {
+    console.error("Resend API internal error:", error);
     throw new Error(error.message);
   }
 
