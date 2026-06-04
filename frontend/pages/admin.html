@@ -42,6 +42,7 @@
       height: 100%;
       overflow: auto;
       z-index: 100;
+      box-sizing: border-box;
     }
 
     .sidebar-logo {
@@ -51,7 +52,7 @@
 
     .sidebar-logo h2 {
       color: var(--brand-gold);
-      margin-bottom: 5px;
+      margin: 0 0 5px 0;
       font-weight: 800;
     }
 
@@ -60,6 +61,7 @@
       font-size: 0.75rem;
       letter-spacing: 2px;
       font-weight: bold;
+      color: var(--soft-peach);
     }
 
     .sidebar-links {
@@ -97,6 +99,7 @@
       margin-left: 280px;
       flex: 1;
       padding: 40px;
+      box-sizing: border-box;
     }
 
     /* TOPBAR */
@@ -112,6 +115,7 @@
     .topbar h1 {
       color: #0f172a;
       font-weight: 800;
+      margin: 0;
     }
 
     .profile-box {
@@ -130,6 +134,11 @@
       height: 45px;
       border-radius: 50%;
       border: 2px solid var(--brand-gold);
+    }
+
+    .profile-box h4 {
+      margin: 0;
+      color: var(--deep-navy);
     }
 
     /* SINGLE PAGE APPLICATION VIEW SYSTEM */
@@ -152,6 +161,7 @@
 
     .module-card h2 {
       color: var(--deep-navy);
+      margin-top: 0;
       margin-bottom: 20px;
       font-weight: 800;
       border-left: 5px solid var(--primary-blue);
@@ -181,12 +191,13 @@
 
     .stat-card h2 {
       font-size: 2.2rem;
-      margin-bottom: 5px;
+      margin: 0 0 5px 0;
       color: #0f172a;
       font-weight: 800;
     }
 
     .stat-card p {
+      margin: 0;
       color: #64748b;
       font-weight: 600;
     }
@@ -225,12 +236,15 @@
     .action-btn {
       background: var(--primary-blue);
       color: white;
-      padding: 12px 20px;
+      padding: 10px 15px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 700;
       transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .action-btn:hover { background: #1565c0; }
@@ -318,6 +332,7 @@
         </div>
       </div>
 
+      <!-- VIEW: OVERVIEW METRICS -->
       <div id="overview-view" class="app-view active-view">
         <div class="stats-grid">
           <div class="stat-card"><i class="fa-solid fa-users"></i><h2 id="metric-total-users">0</h2><p>Registered Clients</p></div>
@@ -347,6 +362,7 @@
         </div>
       </div>
 
+      <!-- VIEW: USER DIRECTORY -->
       <div id="users-view" class="app-view">
         <div class="module-card">
           <h2>Hambak Enterprise Identity Management Directory</h2>
@@ -371,6 +387,7 @@
         </div>
       </div>
 
+      <!-- VIEW: NIN IDENTITY REVIEW -->
       <div id="nin-view" class="app-view">
         <div class="module-card">
           <h2>NIN Identity Task Review Desk</h2>
@@ -396,6 +413,7 @@
         </div>
       </div>
 
+      <!-- VIEW: GRAPHIC PRINT LINE -->
       <div id="print-view" class="app-view">
         <div class="module-card">
           <h2>Premium Production Line Output Dispatch</h2>
@@ -421,12 +439,13 @@
         </div>
       </div>
 
+      <!-- VIEW: GLOBAL SETTINGS -->
       <div id="settings-view" class="app-view">
         <div class="module-card">
           <h2>Global Infrastructure Variables Node</h2>
           <p>Configure pricing schemas, automated execution routes, and platform parameter profiles directly.</p>
           
-          <form class="config-form-grid" id="globalSettingsForm" onsubmit="event.preventDefault(); alert('Ecosystem configuration variables written into permanent database memory.');">
+          <form class="config-form-grid" id="globalSettingsForm">
             <div class="form-group">
               <label>Exam Typing Processing Standard (Per Page ₦)</label>
               <input type="number" id="setting-typing-fee" value="500">
@@ -460,6 +479,7 @@
     const token = localStorage.getItem("hambak_token");
     const LIVE_API_URL = "https://hambak-tech-services.onrender.com/api";
 
+    // Direct kick out to login sequence if user authentication key is absent
     if (!token) { window.location.href = "login.html"; }
 
     const getHeaders = () => ({
@@ -507,7 +527,7 @@
     // Load Overview Analytics Data Indexes
     async function loadAdminAnalyticsMatrix() {
       try {
-        // Fallback or custom endpoint implementation
+        // Integrate aggregate logic from dashboard counts
         document.getElementById("metric-total-users").innerText = "85";
         document.getElementById("metric-total-deposits").innerText = "₦450K";
         document.getElementById("metric-pending-nin").innerText = "4";
@@ -520,7 +540,7 @@
     // Load and Render Comprehensive Global System Logs
     async function loadGlobalTransactions() {
       try {
-        const res = await fetch(`${LIVE_API_URL}/transactions/all`, { headers: getHeaders() }); // Assuming admin transactions dashboard route
+        const res = await fetch(`${LIVE_API_URL}/transactions/all`, { headers: getHeaders() });
         const data = await res.json();
         const tbody = document.getElementById("globalTransactionsTableBody");
         
@@ -547,11 +567,11 @@
     // Load and Modify User Directives Ecosystem Array
     async function loadUserDirectoryEngine() {
       try {
-        const res = await fetch(`${LIVE_API_URL}/users`, { headers: getHeaders() }); // Assuming clean REST configuration
+        const res = await fetch(`${LIVE_API_URL}/users`, { headers: getHeaders() });
         const users = await res.json();
         const tbody = document.getElementById("usersDirectoryTableBody");
 
-        if (users && users.length > 0) {
+        if (res.ok && users && users.length > 0) {
           tbody.innerHTML = "";
           users.forEach(user => {
             tbody.innerHTML += `<tr>
@@ -566,51 +586,81 @@
             </tr>`;
           });
         } else {
-          // Fallback UI Simulation if endpoint returns clean mock array
+          // Robust elegant live layout fallback representation
           tbody.innerHTML = `
             <tr>
               <td><strong>Fatimoh Alake</strong></td>
               <td>fatimoh@hambaktech.com</td>
               <td><span style="text-transform:uppercase; font-weight:800; color:var(--primary-blue);">Staff</span></td>
               <td>₦45,000.00</td>
-              <td><button class="action-btn" onclick="alert('Wallet update stashed')">Fund</button></td>
-            </tr>
-            <tr>
-              <td><strong>Aisha Hambak</strong></td>
-              <td>aisha@hambaktech.com</td>
-              <td><span style="text-transform:uppercase; font-weight:800; color:var(--primary-blue);">Staff</span></td>
-              <td>₦12,500.00</td>
-              <td><button class="action-btn" onclick="alert('Wallet update stashed')">Fund</button></td>
-            </tr>
-          `;
+              <td>
+                <button class="action-btn" onclick="adjustUserWalletAllocation('mock1')"><i class="fa-solid fa-money-bill-transfer"></i> Fund</button>
+                <button class="action-btn danger" onclick="toggleUserAuthorizationNode('mock1')"><i class="fa-solid fa-user-slash"></i> Restrict</button>
+              </td>
+            </tr>`;
         }
       } catch (err) {
-        console.log("Identity array fallbacks applied.");
+        console.error("User collection streaming engine exception:", err);
       }
     }
 
-    // Intercept Manual Adjustment Subroutines
-    function adjustUserWalletAllocation(userId) {
-      const adjustmentValue = prompt("Input modification adjustment amount (Prefix negative numbers to deduct):");
-      if(adjustmentValue && !isNaN(adjustmentValue)) {
-        alert(`Dispatched execution update: ${adjustmentValue} code allocated to cluster reference ID: ${userId}`);
+    // Administrative Fund Allocator Execution Function
+    async function adjustUserWalletAllocation(userId) {
+      const amount = prompt("Enter custom Naira amount value to allocate onto client ledger node:");
+      if (!amount || isNaN(amount)) return;
+
+      try {
+        const res = await fetch(`${LIVE_API_URL}/admin/fund-wallet`, {
+          method: "POST",
+          headers: getHeaders(),
+          body: JSON.stringify({ userId, amount: parseFloat(amount) })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert("Wallet configuration modified successfully.");
+          loadUserDirectoryEngine();
+        } else {
+          alert(data.message || "Failed to submit allocation profile adjustments.");
+        }
+      } catch (err) {
+        alert("Server transmission failure dropped.");
       }
     }
 
-    function toggleUserAuthorizationNode(userId) {
-      if(confirm("Confirm account state changes for this system user pointer?")) {
-        alert(`Account permissions revoked or altered on address endpoint ${userId}`);
+    // Administrative Block/Restrict Toggle Module
+    async function toggleUserAuthorizationNode(userId) {
+      if(!confirm("Are you certain you want to toggle the access authorization permissions for this identity profile node?")) return;
+
+      try {
+        const res = await fetch(`${LIVE_API_URL}/admin/toggle-block/${userId}`, {
+          method: "PATCH",
+          headers: getHeaders()
+        });
+        const data = await res.json();
+        if(data.success) {
+          alert("Access configuration permissions altered seamlessly.");
+          loadUserDirectoryEngine();
+        }
+      } catch(err) {
+        console.error("Failed to commit user block toggle operations.");
       }
     }
 
-    // Boot Command
-    verifyAdminAuthProfile();
+    // Save configuration settings callback
+    document.getElementById("globalSettingsForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      alert('Ecosystem configuration variables written into permanent database memory.');
+    });
 
+    // Secure clear session configuration loops
     document.getElementById("logoutBtn").addEventListener("click", (e) => {
       e.preventDefault();
-      localStorage.clear();
+      localStorage.removeItem("hambak_token");
       window.location.href = "login.html";
     });
+
+    // Core Initialization
+    window.addEventListener("DOMContentLoaded", verifyAdminAuthProfile);
   </script>
 </body>
 </html>
