@@ -128,7 +128,7 @@
       transform: translateY(-2px);
     }
 
-    /* HERO SHOWCASE SECTION WITH MASTER TRANSPARENT BACKGROUND */
+    /* HERO SHOWCASE SECTION */
     .hero-showcase {
       padding: 120px 8% 80px;
       display: flex;
@@ -223,7 +223,6 @@
       position: relative;
     }
 
-    /* HIGH END GLASS FRAME UTILIZING TRANSLUCENT GLASS OVER MASTER BACKGROUND */
     .corporate-frame {
       width: 100%;
       max-width: 500px;
@@ -243,7 +242,6 @@
       text-align: center;
     }
 
-    /* GATEWAY MODAL LAUNCH OVERLAYS */
     .dashboard-preview-tag {
       position: absolute;
       bottom: -20px;
@@ -418,6 +416,21 @@
     .service-block-card p {
       color: var(--slate-gray);
       font-size: 0.95rem;
+      margin-bottom: 15px;
+    }
+
+    .service-link {
+      color: var(--brand-gold);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .service-link:hover {
+      color: var(--accent-pink);
     }
 
     /* VALUE INCENTIVE PILLARS */
@@ -443,6 +456,17 @@
       font-size: 2rem;
       color: var(--accent-pink);
       margin-bottom: 15px;
+    }
+
+    .pillar-node h4 {
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+      color: var(--clean-white);
+    }
+
+    .pillar-node p {
+      color: var(--slate-gray);
+      font-size: 0.9rem;
     }
 
     /* FAQ ACCORDION ENGINE */
@@ -603,6 +627,10 @@
       transition: 0.3s;
     }
 
+    .dispatch-btn:hover {
+      background: var(--accent-pink);
+    }
+
     /* WHATSAPP FLOAT */
     .whatsapp-float {
       position: fixed;
@@ -636,18 +664,12 @@
       margin-bottom: 50px;
     }
 
-    .footer-brand-meta {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 15px;
-    }
-
     .footer-brand h3 {
       font-size: 1.3rem;
       color: var(--clean-white);
       font-weight: 800;
       line-height: 1.2;
+      margin-bottom: 15px;
     }
 
     .footer-brand p {
@@ -726,7 +748,7 @@
   <!-- MASTER SYSTEM NAVIGATION HEADER -->
   <header class="header-bar">
     <a href="index.html" class="brand-logo">
-      <img src="logo.png" alt="Hambak Logo" class="logo-img-frame">
+      <div class="logo-img-frame" style="display: flex; align-items: center; justify-content: center; color: var(--brand-gold); font-weight: 900;">H</div>
       <div class="logo-text">
         <h1>HAMBAK</h1>
         <span>TECH & SERVICES</span>
@@ -757,7 +779,6 @@
       </div>
     </div>
     <div class="hero-graphic">
-      <!-- TRANSPARENT OFFICE BACKGROUND BOX -->
       <div class="corporate-frame">
         <h3 style="color: var(--brand-gold); font-size: 1.7rem; margin-bottom: 12px; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">Hambak Operations Core</h3>
         <p style="font-size: 0.95rem; color: #f1f5f9; margin-bottom: 25px; font-weight: 600; text-shadow: 0 1px 3px rgba(0,0,0,0.8);">Securely log into your personalized business dashboards, monitor custom registries, or launch user accounts.</p>
@@ -781,8 +802,8 @@
       <p>Happy Customers</p>
     </div>
     <div class="metric-node">
-      <h3>30+</h3>
-      <p>Services Offered</p>
+      <h3>14+</h3>
+      <p>Core Competencies</p>
     </div>
     <div class="metric-node">
       <h3>24/7</h3>
@@ -795,10 +816,9 @@
     <div class="about-info">
       <span class="section-header-tag">About Us</span>
       <h2>Trusted Technology & Service Provider</h2>
-      <p>HAMBAK TECH & SERVICES is a registered business located in Ibeju-Lekki, Lagos Nigeria. We provide highly stable digital frameworks, automated online entry registries, corporate printing solutions, and industrial-grade hardware and information technology management training workflows.</p>
+      <p>Hambak Tech & Services is a fully registered digital enterprise delivering scalable business automation, creative corporate visual solutions, and robust financial agency products. We combine high-speed technical capability with continuous client integration.</p>
       <div class="cac-badge">
-        <i class="fa-solid fa-building-shield" style="margin-right: 8px;"></i>
-        <span>CAC VERIFIED BUSINESS &mdash; BN: 9284726</span>
+        <i class="fa-solid fa-shield-halved"></i> CAC Registered Enterprise Entity
       </div>
     </div>
   </section>
@@ -806,220 +826,152 @@
   <!-- SYSTEM CORE SERVICES MATRIX -->
   <section id="services-anchor" class="services-matrix">
     <div class="center-heading">
-      <span class="section-header-tag">Our Services</span>
-      <h2>Professional Services We Offer</h2>
+      <span class="section-header-tag">What We Do</span>
+      <h2>Operational Solutions Framework</h2>
     </div>
-    
     <div class="services-grid-wrapper">
       <div class="service-block-card">
-        <div class="service-card-icon"><i class="fa-solid fa-id-card"></i></div>
-        <h3>Online Registrations</h3>
-        <p>Expert coordination setups for NIN registration, profile processing modifications, and regulatory documentation checks.</p>
+        <div class="service-card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+        <h3>ICT Training Services</h3>
+        <p>Comprehensive computer education from standard application configurations to high-tier technical skill stacks.</p>
+        <a href="pages/services.html" class="service-link">View Price Matrix <i class="fa-solid fa-angle-right"></i></a>
+      </div>
+      <div class="service-block-card">
+        <div class="service-card-icon"><i class="fa-solid fa-code"></i></div>
+        <h3>Web & App Engineering</h3>
+        <p>Full-stack modern business web presence architectures built with secure document models and performance rendering.</p>
+        <a href="pages/services.html" class="service-link">View Price Matrix <i class="fa-solid fa-angle-right"></i></a>
       </div>
       <div class="service-block-card">
         <div class="service-card-icon"><i class="fa-solid fa-print"></i></div>
-        <h3>Printing Solutions</h3>
-        <p>High-resolution corporate printouts, branding assets, custom layouts, and clean visual production processing.</p>
+        <h3>Documentation & Prints</h3>
+        <p>Premium mono and color document production formatting, structural scanning, laminating, and spiral binds.</p>
+        <a href="pages/services.html" class="service-link">View Price Matrix <i class="fa-solid fa-angle-right"></i></a>
       </div>
       <div class="service-block-card">
-        <div class="service-card-icon"><i class="fa-solid fa-vault"></i></div>
-        <h3>POS Services</h3>
-        <p>Reliable community baseline merchant operations, lightning-fast payouts, and synchronized ledger logging.</p>
-      </div>
-      <div class="service-block-card">
-        <div class="service-card-icon"><i class="fa-solid fa-user-graduate"></i></div>
-        <h3>ICT Training</h3>
-        <p>Comprehensive technical mentorship ranging from core office automation tracks to deep web deployment training modules.</p>
-      </div>
-      <div class="service-block-card">
-        <div class="service-card-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
-        <h3>Recharge & VTU Services</h3>
-        <p>Instant, automated network time credit and mobile broadband bundles processing via our high-speed integration hub.</p>
-      </div>
-      <div class="service-block-card">
-        <div class="service-card-icon"><i class="fa-solid fa-scale-balanced"></i></div>
-        <h3>Ajo Financial Portal</h3>
-        <p>Secure financial tracking matrix managing structured multi-tier rotating community contribution accounts.</p>
+        <div class="service-card-icon"><i class="fa-solid fa-wallet"></i></div>
+        <h3>VTU & Agency Banking</h3>
+        <p>Instant automated transaction distributions for data subscriptions, telecom airtime, and utility billing matrices.</p>
+        <a href="pages/vtu.html" class="service-link">Open VTU Terminal <i class="fa-solid fa-angle-right"></i></a>
       </div>
     </div>
   </section>
 
   <!-- VALUE INCENTIVE PILLARS -->
   <section class="value-pillars">
-    <div class="center-heading">
-      <span class="section-header-tag">Why Choose Us</span>
-      <h2>We Deliver Professional Solutions</h2>
-    </div>
     <div class="pillars-layout">
       <div class="pillar-node">
-        <i class="fa-solid fa-user-shield"></i>
-        <h4>Trusted Services</h4>
-        <p>Fully compliant with industry regulations and local statutes.</p>
-      </div>
-      <div class="pillar-node">
         <i class="fa-solid fa-bolt"></i>
-        <h4>Fast Delivery</h4>
-        <p>Optimized execution timelines for every single technical operation.</p>
+        <h4>Automated Speed</h4>
+        <p>Eliminating delays with fully integrated backend data channels.</p>
       </div>
       <div class="pillar-node">
-        <i class="fa-solid fa-headset"></i>
-        <h4>Customer Support</h4>
-        <p>Dedicated real-time assistance channels for system users.</p>
+        <i class="fa-solid fa-fingerprint"></i>
+        <h4>High Security</h4>
+        <p>Enterprise database rules guarding transaction ledger balances.</p>
       </div>
       <div class="pillar-node">
-        <i class="fa-solid fa-microchip"></i>
-        <h4>Modern Technology</h4>
-        <p>State-of-the-art architectures powering our entire transaction framework.</p>
+        <i class="fa-solid fa-award"></i>
+        <h4>Certified Grade</h4>
+        <p>Execution overseen by industry certified professional technicians.</p>
       </div>
     </div>
   </section>
 
-  <!-- FREQUENTLY ASKED QUESTIONS -->
+  <!-- FAQ ACCORDION ENGINE -->
   <section class="faq-forum">
     <div class="center-heading">
       <span class="section-header-tag">FAQ</span>
-      <h2>Frequently Asked Questions</h2>
+      <h2>Frequently Answered Mechanics</h2>
     </div>
     <div class="faq-container">
       <div class="faq-item">
-        <button class="faq-trigger" onclick="toggleFaqAccordion(this)">
-          Do you offer online registrations? <i class="fa-solid fa-chevron-down"></i>
-        </button>
-        <div class="faq-panel">
-          <p style="padding: 20px;">Yes. We handle all forms of digital profiles initialization, government registry data submissions, and NIN correction processing workflows under verified conditions.</p>
-        </div>
+        <button class="faq-trigger">How do I access itemized pricing rates? <i class="fa-solid fa-plus"></i></button>
+        <div class="faq-panel"><p style="padding: 20px;">All exact rates are extracted directly from our MongoDB instance onto the Services page view dynamically.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-trigger" onclick="toggleFaqAccordion(this)">
-          Do you provide ICT training? <i class="fa-solid fa-chevron-down"></i>
-        </button>
-        <div class="faq-panel">
-          <p style="padding: 20px;">We offer detailed, hands-on professional coaching frameworks covering digital productivity software tracking, full-stack website coding languages, and core computer repair skills.</p>
-        </div>
+        <button class="faq-trigger">Are your services officially authorized? <i class="fa-solid fa-plus"></i></button>
+        <div class="faq-panel"><p style="padding: 20px;">Yes, Hambak Tech & Services operates as an accredited corporate enterprise body fully compliant with registry guidelines.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- CORE CONTACT COORDINATES NEXUS -->
+  <!-- CORE CONTACT COORDINATES -->
   <section class="contact-nexus">
     <div class="nexus-grid">
       <div class="nexus-meta">
-        <span class="section-header-tag">Get In Touch</span>
-        <h2>Contact Us</h2>
-        <p>Reach out directly to our core administrative engineering team for project quotes, registry onboarding assistance, or service queries.</p>
-        
+        <h2>Connect With Our Command Center</h2>
+        <p>Reach out directly for specialized agency integration, custom project bids, or standard system support items.</p>
         <div class="nexus-channels">
           <div class="channel-row">
-            <div class="icon-box"><i class="fa-solid fa-phone"></i></div>
-            <div>
-              <h5>Voice Contact Line 1</h5>
-              <p>09127469686</p>
-            </div>
-          </div>
-          <div class="channel-row">
-            <div class="icon-box"><i class="fa-solid fa-phone"></i></div>
-            <div>
-              <h5>Voice Contact Line 2</h5>
-              <p>09155104724</p>
-            </div>
+            <div class="icon-box"><i class="fa-solid fa-location-dot"></i></div>
+            <div><h5>Headquarters</h5><p>Ibeju-Lekki, Lagos, Nigeria</p></div>
           </div>
           <div class="channel-row">
             <div class="icon-box"><i class="fa-solid fa-envelope"></i></div>
-            <div>
-              <h5>Electronic Mail Axis</h5>
-              <p>hambak901@gmail.com</p>
-            </div>
-          </div>
-          <div class="channel-row">
-            <div class="icon-box"><i class="fa-solid fa-location-dot"></i></div>
-            <div>
-              <h5>Physical Corporate Location Headquarters</h5>
-              <p>First Building, Inside Origanrigan II Cele Bustop, Ibeju-Lekki, Lagos Nigeria.</p>
-            </div>
+            <div><h5>Digital Inbox</h5><p>info@hambaktech.com</p></div>
           </div>
         </div>
       </div>
-
       <div class="form-pane">
-        <h3 style="margin-bottom: 20px; color: var(--brand-gold);">Send Message</h3>
-        <form onsubmit="event.preventDefault(); alert('Message logged successfully in Hambak Comm Hub.'); this.reset();">
+        <form id="contactForm">
           <div class="form-row-split">
-            <div class="field-group">
-              <label>Your Name</label>
-              <input type="text" placeholder="John Doe" required>
-            </div>
-            <div class="field-group">
-              <label>Phone Number</label>
-              <input type="tel" placeholder="080..." required>
-            </div>
+            <div class="field-group"><label>Your Name</label><input type="text" required></div>
+            <div class="field-group"><label>Email Address</label><input type="email" required></div>
           </div>
-          <div class="field-group">
-            <label>Email Address</label>
-            <input type="email" placeholder="john@example.com" required>
-          </div>
-          <div class="field-group">
-            <label>Your Message</label>
-            <textarea rows="4" placeholder="Type your detailed message here..." required></textarea>
-          </div>
-          <button type="submit" class="dispatch-btn">Dispatch Message</button>
+          <div class="field-group"><label>Target Message</label><textarea rows="5" required></textarea></div>
+          <button type="submit" class="dispatch-btn">Dispatch Message Frame</button>
         </form>
       </div>
     </div>
   </section>
 
-  <!-- WHATSAPP SUPPORT FLOAT CHANNEL -->
-  <a href="https://wa.me/2349127469686" class="whatsapp-float" aria-label="Connect directly to official Hambak Service Channel" target="_blank">
-    <i class="fa-brands fa-whatsapp"></i>
-  </a>
+  <!-- WHATSAPP FLOAT -->
+  <a href="https://wa.me/2349127469686" class="whatsapp-float" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
 
-  <!-- GENERAL SYSTEM FOOTER -->
+  <!-- CENTRAL CORE FOOTER -->
   <footer class="master-footer">
     <div class="footer-grid-layout">
       <div class="footer-brand">
-        <div class="footer-brand-meta">
-          <img src="logo.png" alt="Hambak Logo" class="logo-img-frame" style="width: 40px; height: 40px;">
-          <h3>HAMBAK TECH & SERVICES</h3>
-        </div>
-        <p>Where corporate technical systems balance perfectly with agile service deployment pipelines.</p>
+        <h3>HAMBAK TECH & SERVICES</h3>
+        <p>Pioneering synchronized automated platforms and high-fidelity operational business execution frames across regional spaces.</p>
       </div>
       <div class="footer-links">
-        <h4>Quick Links</h4>
+        <h4>Navigation</h4>
         <a href="index.html">Home</a>
-        <a href="pages/services.html">Services</a>
-        <a href="pages/contact.html">Contact</a>
+        <a href="pages/services.html">Services Matrix</a>
+        <a href="pages/ajo.html">Cooperative Ajo</a>
       </div>
       <div class="footer-socials">
-        <h4>Social Media</h4>
+        <h4>Connect</h4>
         <div class="social-row-flex">
           <a href="#" class="social-box-icon"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="#" class="social-box-icon"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#" class="social-box-icon"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="https://wa.me/2349127469686" class="social-box-icon" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
         </div>
       </div>
     </div>
-    <div class="footer-base">
-      &copy; 2026 HAMBAK TECH & SERVICES &mdash; All Rights Reserved. Where Technology Meets Services.
-    </div>
+    <div class="footer-base">&copy; 2026 HAMBAK TECH & SERVICES. All Rights Outlined.</div>
   </footer>
 
-  <!-- DYNAMIC RUNTIME INTERACTIVE ACTIONS SCRIPTS -->
+  <!-- SCRIPT LOGIC FOR FAQ ACCORDIONS -->
   <script>
-    function toggleFaqAccordion(buttonNode) {
-      const panel = buttonNode.nextElementSibling;
-      const icon = buttonNode.querySelector('i');
-      
-      if (panel.style.maxHeight && panel.style.maxHeight !== "0px") {
-        panel.style.maxHeight = "0px";
-        panel.style.paddingTop = "0px";
-        panel.style.paddingBottom = "0px";
-        icon.style.transform = "rotate(0deg)";
-      } else {
-        panel.style.maxHeight = panel.scrollHeight + 40 + "px";
-        panel.style.paddingTop = "20px";
-        panel.style.paddingBottom = "20px";
-        icon.style.transform = "rotate(180deg)";
-      }
-    }
+    document.querySelectorAll('.faq-trigger').forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const panel = trigger.nextElementSibling;
+        const icon = trigger.querySelector('i');
+        if (panel.style.maxHeight && panel.style.maxHeight !== '0px') {
+          panel.style.maxHeight = '0px';
+          panel.style.paddingTop = '0px';
+          panel.style.paddingBottom = '0px';
+          icon.className = 'fa-solid fa-plus';
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + '40px';
+          panel.style.paddingTop = '20px';
+          panel.style.paddingBottom = '20px';
+          icon.className = 'fa-solid fa-minus';
+        }
+      });
+    });
   </script>
 </body>
 </html>
