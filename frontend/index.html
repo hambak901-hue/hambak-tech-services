@@ -256,8 +256,9 @@
       padding: 40px;
     }
 
+    /* FIXED: Made background overlays transparent to display office image across full layout without boxing */
     .slide-item.has-bg {
-      background: linear-gradient(to bottom, rgba(8, 17, 32, 0.75), rgba(8, 17, 32, 0.9)), url('office.jpeg') no-repeat center center/cover;
+      background: linear-gradient(to bottom, rgba(8, 17, 32, 0.4), rgba(8, 17, 32, 0.55)), url('office.jpeg') no-repeat center center/cover;
     }
 
     .slide-item.has-logo-bg {
@@ -820,15 +821,16 @@
         <span>TECH & SERVICES</span>
       </div>
     </a>
+    <!-- FIXED: Pointed navigation headers to their respective custom pages directly -->
     <ul class="nav-menu">
       <li><a href="./index.html" class="active">Home</a></li>
-      <li><a href="./pages/services.html">About</a></li>
+      <li><a href="./pages/about.html">About</a></li>
       <li><a href="./pages/services.html">Services</a></li>
       <li><a href="./pages/shop.html">Shop</a></li>
-      <li><a href="./pages/services.html">Pricing</a></li>
-      <li><a href="./pages/services.html">Blog</a></li>
-      <li><a href="./pages/services.html">Training</a></li>
-      <li><a href="./pages/services.html">Games</a></li>
+      <li><a href="./pages/pricing.html">Pricing</a></li>
+      <li><a href="./pages/blog.html">Blog</a></li>
+      <li><a href="./pages/training.html">Training</a></li>
+      <li><a href="./pages/games.html">Games</a></li>
       <li><a href="./pages/vtu.html">VTU</a></li>
       <li><a href="./pages/contact.html">Contact</a></li>
     </ul>
@@ -1057,10 +1059,13 @@
         </div>
         <p>Where Technology Meets Services. Pioneering synchronized automated platforms and high-fidelity operational business execution frames across regional spaces.</p>
       </div>
+      <!-- FIXED: Linked footer navigation links directly to separate destination files -->
       <div class="footer-links">
         <h4>Quick Links</h4>
         <a href="./index.html">Home</a>
+        <a href="./pages/about.html">About Us</a>
         <a href="./pages/services.html">Services</a>
+        <a href="./pages/pricing.html">Pricing Structure</a>
         <a href="#contact-nexus">Contact</a>
       </div>
       <div class="footer-socials">
@@ -1131,7 +1136,7 @@
         `System Timestamp: ${new Date().toISOString()}`
       );
       
-      window.location.href = `mailto:${secureEmailRecipient}?subject=${subjectLine}&body=${emailBodyText}`;
+      window.location.href = `mailto:${secureEmailRecipient}?subject=${subjectLine}?body=${emailBodyText}`;
     });
   </script>
 </body>
