@@ -2,8 +2,8 @@ const chatBody = document.getElementById("chatBody");
 const questionInput = document.getElementById("questionInput");
 const sendBtn = document.getElementById("sendBtn");
 
-// Toggle this variable to true later when your backend ChatGPT integration route is live!
-const USE_LIVE_CHATGPT_API = false; 
+// Turned on to route queries directly to your Render live backend engine
+const USE_LIVE_CHATGPT_API = true; 
 
 async function askAI() {
   const question = questionInput.value.trim();
@@ -18,12 +18,20 @@ async function askAI() {
     let responseText = "";
 
     if (USE_LIVE_CHATGPT_API) {
-      // Future bridge to connect your backend OpenAI/ChatGPT route
+      // Pull token dynamically to protect backend endpoints from scrapers
+      const token = localStorage.getItem("hambak_token");
+      
       const apiResponse = await fetch("https://hambak-tech-services.onrender.com/api/ai/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          ...(token && { "Authorization": `Bearer ${token}` })
+        },
         body: JSON.stringify({ question })
       });
+      
+      if (!apiResponse.ok) throw new Error(`Server responded with status: ${apiResponse.status}`);
+      
       const apiData = await apiResponse.json();
       responseText = apiData.reply;
     } else {
@@ -37,7 +45,7 @@ async function askAI() {
   } catch (error) {
     console.error("AI Assistant Error:", error);
     removeTyping();
-    addMessage("Connection error. Please check your internet connection.", "ai");
+    addMessage("Connection error or server timeout. Please try again shortly.", "ai");
   }
 }
 
