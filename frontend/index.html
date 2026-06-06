@@ -633,16 +633,17 @@
       font-weight: 600;
     }
 
-    .field-group input, .field-group textarea {
+    .field-group input, .field-group select, .field-group textarea {
       padding: 14px;
       background: #1e293b;
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 10px;
       color: var(--clean-white);
       outline: none;
+      width: 100%;
     }
 
-    .field-group input:focus, .field-group textarea:focus {
+    .field-group input:focus, .field-group select:focus, .field-group textarea:focus {
       border-color: var(--brand-gold);
     }
 
@@ -656,6 +657,10 @@
       font-weight: 700;
       cursor: pointer;
       transition: 0.3s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
     }
 
     .dispatch-btn:hover {
@@ -681,7 +686,7 @@
       box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
     }
 
-    /* CENTRAL CORE FOOTER */
+    /* CENTRAL CORE FOOTER styling */
     .master-footer {
       background: #020617;
       padding: 80px 8% 30px;
@@ -695,17 +700,48 @@
       margin-bottom: 50px;
     }
 
+    .footer-brand-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .footer-logo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-logo-img {
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+      border: 1.5px solid var(--brand-gold);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2px;
+    }
+
     .footer-brand h3 {
       font-size: 1.3rem;
       color: var(--clean-white);
       font-weight: 800;
       line-height: 1.2;
-      margin-bottom: 15px;
     }
 
-    .footer-brand p {
+    .footer-brand span {
+      font-size: 0.7rem;
+      color: var(--brand-gold);
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .footer-brand-wrapper p {
       color: var(--slate-gray);
       max-width: 350px;
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
 
     .footer-links h4, .footer-socials h4 {
@@ -776,7 +812,6 @@
 </head>
 <body>
 
-  <!-- MASTER SYSTEM NAVIGATION HEADER -->
   <header class="header-bar">
     <a href="./index.html" class="brand-logo">
       <img src="logo.png" alt="Hambak Logo" class="logo-img-frame">
@@ -800,7 +835,6 @@
     <a href="./pages/login.html" class="portal-access-btn"><i class="fa-solid fa-right-to-bracket"></i> Dashboard Login</a>
   </header>
 
-  <!-- HERO SHOWCASE PROFILE COMPONENT WITH SLIDING VIEWS -->
   <section class="hero-showcase">
     <div class="hero-content">
       <div class="hero-badge">
@@ -816,13 +850,11 @@
     <div class="hero-graphic">
       <div class="corporate-slider-frame">
         <div class="slider-track" id="sliderTrack">
-          <!-- Slide 1: Office View Details -->
           <div class="slide-item has-bg">
             <h3 style="color: var(--brand-gold); font-size: 1.7rem; margin-bottom: 12px; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">Hambak Operations Core</h3>
             <p style="font-size: 0.95rem; color: #f1f5f9; margin-bottom: 25px; font-weight: 600; text-shadow: 0 1px 3px rgba(0,0,0,0.8);">Securely log into your personalized business dashboards, monitor custom registries, or launch user accounts.</p>
             <a href="./pages/login.html" class="portal-access-btn" style="padding: 14px 28px; font-size: 0.95rem;">Access Central Portal Gateway</a>
           </div>
-          <!-- Slide 2: Corporate Logo Display -->
           <div class="slide-item has-logo-bg">
             <img src="logo.png" alt="Hambak Logo Large" class="slide-logo-display">
             <h3 style="color: var(--brand-gold); font-size: 1.6rem; margin-bottom: 8px; font-weight: 800;">Where Technology Meets Services</h3>
@@ -841,7 +873,6 @@
     </div>
   </section>
 
-  <!-- INFOGRAPHIC METRICS RIBBON LAYER -->
   <section class="metrics-ribbon">
     <div class="metric-node">
       <h3>1000+</h3>
@@ -857,7 +888,6 @@
     </div>
   </section>
 
-  <!-- ABOUT COMPANY PROFILE SECTION -->
   <section class="about-profile">
     <div class="about-info">
       <span class="section-header-tag">About Us</span>
@@ -869,7 +899,6 @@
     </div>
   </section>
 
-  <!-- SYSTEM CORE SERVICES MATRIX -->
   <section id="services-anchor" class="services-matrix">
     <div class="center-heading">
       <span class="section-header-tag">Our Services</span>
@@ -915,7 +944,6 @@
     </div>
   </section>
 
-  <!-- VALUE INCENTIVE PILLARS -->
   <section class="value-pillars">
     <div class="center-heading">
       <span class="section-header-tag">Why Choose Us</span>
@@ -945,7 +973,6 @@
     </div>
   </section>
 
-  <!-- FAQ ACCORDION ENGINE -->
   <section class="faq-forum">
     <div class="center-heading">
       <span class="section-header-tag">FAQ</span>
@@ -963,16 +990,15 @@
     </div>
   </section>
 
-  <!-- CORE CONTACT COORDINATES -->
-  <section class="contact-nexus">
+  <section id="contact-nexus" class="contact-nexus">
     <div class="center-heading">
       <span class="section-header-tag">Contact Us</span>
       <h2>Connect With Our Center</h2>
     </div>
     <div class="nexus-grid">
       <div class="nexus-meta">
-        <h2>Send Message</h2>
-        <p>Reach out directly for specialized agency integration, custom project bids, or standard system support items.</p>
+        <h2>Place an Order or Demand</h2>
+        <p>Fill out the workspace dispatch panel. Submitting your details compiles an instantaneous order profile ready for our administration to process worldwide.</p>
         <div class="nexus-channels">
           <div class="channel-row">
             <div class="icon-box"><i class="fa-solid fa-phone"></i></div>
@@ -995,24 +1021,40 @@
       <div class="form-pane">
         <form id="contactForm">
           <div class="form-row-split">
-            <div class="field-group"><label>Your Name</label><input type="text" required></div>
-            <div class="field-group"><label>Email Address</label><input type="email" required></div>
+            <div class="field-group"><label>Your Name</label><input type="text" id="formName" required placeholder="Full Name"></div>
+            <div class="field-group"><label>Email Address</label><input type="email" id="formEmail" required placeholder="name@domain.com"></div>
           </div>
-          <div class="field-group"><label>Target Message</label><textarea rows="5" required></textarea></div>
-          <button type="submit" class="dispatch-btn">Dispatch Message Frame</button>
+          <div class="form-row-split">
+            <div class="field-group">
+              <label>Request Type</label>
+              <select id="formSubject" required>
+                <option value="Service Inquiry">General Service Inquiry</option>
+                <option value="New Order Placement">Place Custom Business Order</option>
+                <option value="Urgent System Demand">Urgent Technical Demand</option>
+                <option value="ICT Training Enrollment">ICT Academy Training Enrollment</option>
+              </select>
+            </div>
+            <div class="field-group"><label>WhatsApp/Phone Number</label><input type="text" id="formPhone" required placeholder="e.g. +234..."></div>
+          </div>
+          <div class="field-group"><label>Detailed Specifications / Requirements</label><textarea id="formMessage" rows="4" required placeholder="Please state your specific orders or service configurations explicitly..."></textarea></div>
+          <button type="submit" class="dispatch-btn"><i class="fa-solid fa-paper-plane"></i> Dispatch Order Frame</button>
         </form>
       </div>
     </div>
   </section>
 
-  <!-- WHATSAPP FLOAT -->
   <a href="https://wa.me/2349127469686" class="whatsapp-float" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
 
-  <!-- CENTRAL CORE FOOTER -->
   <footer class="master-footer">
     <div class="footer-grid-layout">
-      <div class="footer-brand">
-        <h3>HAMBAK TECH & SERVICES</h3>
+      <div class="footer-brand-wrapper">
+        <div class="footer-logo-row">
+          <img src="logo.png" alt="Hambak Footer Logo" class="footer-logo-img">
+          <div class="footer-brand">
+            <h3>HAMBAK</h3>
+            <span>TECH & SERVICES</span>
+          </div>
+        </div>
         <p>Where Technology Meets Services. Pioneering synchronized automated platforms and high-fidelity operational business execution frames across regional spaces.</p>
       </div>
       <div class="footer-links">
@@ -1034,7 +1076,6 @@
     <div class="footer-base">&copy; 2026 HAMBAK TECH & SERVICES — All Rights Reserved.</div>
   </footer>
 
-  <!-- SCRIPT LOGIC FOR FAQ ACCORDIONS & SLIDER VIEW -->
   <script>
     // FAQ Accordion Mechanics
     document.querySelectorAll('.faq-trigger').forEach(trigger => {
@@ -1062,6 +1103,36 @@
       currentSlide = currentSlide === 0 ? 1 : 0;
       track.style.transform = `translateX(-${currentSlide * 50}%)`;
     }, 5000);
+
+    // Dynamic Client Response / Order Dispatch Mechanism
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const clientName = document.getElementById('formName').value;
+      const clientEmail = document.getElementById('formEmail').value;
+      const requestType = document.getElementById('formSubject').value;
+      const clientPhone = document.getElementById('formPhone').value;
+      const designSpecs = document.getElementById('formMessage').value;
+      
+      const secureEmailRecipient = "hambak901@gmail.com";
+      const subjectLine = encodeURIComponent(`[${requestType}] Global Demand Entry via Web Portal`);
+      
+      const emailBodyText = encodeURIComponent(
+        `Hello Hambak Tech Admin Core,\n\n` +
+        `A new business order demand has been securely generated from your online interface:\n\n` +
+        `-----------------------------------------\n` +
+        `Client Identifier: ${clientName}\n` +
+        `Primary Email: ${clientEmail}\n` +
+        `Contact Phone / WhatsApp: ${clientPhone}\n` +
+        `Nature of Intent: ${requestType}\n` +
+        `----\n` +
+        `Detailed Requirements:\n${designSpecs}\n` +
+        `-----------------------------------------\n\n` +
+        `System Timestamp: ${new Date().toISOString()}`
+      );
+      
+      window.location.href = `mailto:${secureEmailRecipient}?subject=${subjectLine}&body=${emailBodyText}`;
+    });
   </script>
 </body>
 </html>
