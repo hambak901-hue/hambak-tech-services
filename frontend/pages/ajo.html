@@ -4,72 +4,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ajo Contribution Scheme | HAMBAK TECH & SERVICES</title>
+  <title>Game Center | HAMBAK TECH & SERVICES</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* ==========================================================================
-       HAMBAK BRAND DESIGN SYSTEM & GLASSMORPHIC INTERFACE
+       GLOBAL NAVBAR UTILITIES (Sync with style.css layout)
        ========================================================================== */
-    :root {
-      --primary-blue: #0d47a1;
-      --deep-navy: #081120;
-      --brand-gold: #f5b942;
-      --soft-peach: #ffdfd3;
-      --accent-pink: #ff4081;
-      --clean-white: #ffffff;
-      --dark-card: rgba(15, 23, 42, 0.65);
-      --input-bg: #1e293b;
-      --status-success: #10b981;
-      --status-pending: #f5b942;
-      --status-danger: #ef4444;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, var(--deep-navy), #040812);
-      color: var(--clean-white);
-      line-height: 1.6;
-    }
-
-    /* SYSTEM NAVBAR */
     .navbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 20px 8%;
-      background: rgba(15, 23, 42, 0.8);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      position: sticky;
+      background: #081120;
+      color: white;
+      position: absolute;
       top: 0;
+      left: 0;
+      right: 0;
       z-index: 1000;
     }
 
-    .logo {
+    .navbar .logo {
       display: flex;
       flex-direction: column;
     }
 
-    .logo span {
+    .navbar .logo span {
       font-size: 1.5rem;
       font-weight: 800;
+      color: #f5b942;
       letter-spacing: 1px;
-      color: var(--clean-white);
     }
 
-    .logo small {
-      font-size: 0.75rem;
-      color: var(--brand-gold);
-      font-weight: 600;
+    .navbar .logo small {
+      font-size: 0.65rem;
       letter-spacing: 2px;
+      font-weight: bold;
+      color: white;
     }
 
     .nav-links a {
@@ -77,343 +49,386 @@
       text-decoration: none;
       margin-left: 25px;
       font-weight: 600;
-      font-size: 0.95rem;
       transition: 0.3s;
     }
 
     .nav-links a:hover, .nav-links a.active {
-      color: var(--brand-gold);
+      color: #f5b942;
     }
 
-    /* HERO PROFILE */
-    .ajo-hero {
-      padding: 130px 8% 50px;
-      text-align: center;
-    }
-
-    .ajo-hero h1 {
-      font-size: 3.5rem;
-      font-weight: 800;
-      margin-bottom: 20px;
-      background: linear-gradient(135deg, var(--clean-white), var(--brand-gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .ajo-hero p {
-      max-width: 800px;
-      margin: auto;
-      line-height: 1.8;
-      font-size: 1.15rem;
-      color: #cbd5e1;
-    }
-
-    /* SYSTEM MATRIX TABS */
-    .portal-tabs {
+    /* ==========================================================================
+       OFFLINE LIVE TICKER SYSTEM
+       ========================================================================== */
+    .live-ticker-banner {
+      background: #020617;
+      border-bottom: 2px solid #ef4444;
+      padding: 12px 8%;
       display: flex;
-      justify-content: center;
+      align-items: center;
       gap: 15px;
-      padding: 20px 8%;
-      flex-wrap: wrap;
+      position: absolute;
+      top: 85px;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      overflow: hidden;
     }
 
-    .tab-btn {
-      padding: 14px 28px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      color: #cbd5e1;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .tab-btn:hover, .tab-btn.active {
-      background: linear-gradient(135deg, var(--primary-blue), #1565c0);
-      color: var(--clean-white);
-      border-color: var(--brand-gold);
-      box-shadow: 0 4px 15px rgba(13, 71, 161, 0.4);
-    }
-
-    .portal-panel {
-      display: none;
-      padding: 30px 8% 80px;
-    }
-
-    .portal-panel.active {
-      display: block;
-    }
-
-    /* STRUCTURE INFOGRAPHIC TILES */
-    .tier-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 25px;
-      margin-bottom: 40px;
-    }
-
-    .tier-card {
-      background: var(--dark-card);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 30px;
-      border-radius: 20px;
-      text-align: center;
-      transition: 0.3s;
-    }
-
-    .tier-card:hover {
-      border-color: var(--brand-gold);
-      transform: translateY(-5px);
-    }
-
-    .tier-card h3 {
-      color: var(--brand-gold);
-      font-size: 1.3rem;
-      margin-bottom: 15px;
-    }
-
-    .tier-card .price {
-      font-size: 1.8rem;
+    .live-badge {
+      background: #ef4444;
+      color: white;
       font-weight: 800;
-      margin-bottom: 10px;
-      color: var(--clean-white);
+      font-size: 0.8rem;
+      padding: 5px 12px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      animation: pulseAlert 1.5s infinite alternate;
     }
 
-    /* REGISTRATION MATRIX FORM */
-    .form-container {
-      background: var(--dark-card);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 40px;
-      border-radius: 24px;
-      max-width: 900px;
-      margin: 0 auto;
+    .ticker-wrapper {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-bottom: 25px;
-    }
-
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .input-group label {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #94a3b8;
-    }
-
-    .input-group input, .input-group select, .input-group textarea {
-      padding: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      background: var(--input-bg);
-      color: var(--clean-white);
-      outline: none;
-      font-size: 0.95rem;
-    }
-
-    .input-group input:focus, .input-group select:focus {
-      border-color: var(--brand-gold);
-    }
-
-    .checkbox-group {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 25px;
-    }
-
-    .checkbox-group input {
-      margin-top: 5px;
-    }
-
-    .checkbox-group label {
-      font-size: 0.88rem;
+    .ticker-text {
+      display: inline-block;
       color: #cbd5e1;
-      line-height: 1.5;
+      font-weight: 600;
+      font-size: 0.95rem;
+      animation: continuousScroll 25s linear infinite;
     }
 
-    .checkbox-group a {
-      color: var(--brand-gold);
-      text-decoration: none;
+    @keyframes pulseAlert {
+      0% { opacity: 0.6; transform: scale(0.98); }
+      100% { opacity: 1; transform: scale(1.02); }
     }
 
-    .submit-btn {
-      width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, var(--brand-gold), #e0a534);
-      color: var(--deep-navy);
-      border: none;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.3s;
+    @keyframes continuousScroll {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
     }
 
-    .submit-btn:hover {
-      box-shadow: 0 5px 20px rgba(245, 185, 66, 0.3);
-      transform: translateY(-2px);
+    /* ==========================================================================
+       GAME CENTER MAIN STYLES
+       ========================================================================== */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #050816;
+      color: white;
     }
 
-    /* GRID TRACKER & SUMMARY BLOCKS */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 25px;
-      margin-bottom: 40px;
-    }
-
-    .stat-box {
-      background: rgba(13, 71, 161, 0.15);
-      border: 1px solid rgba(13, 71, 161, 0.3);
-      padding: 25px;
-      border-radius: 16px;
+    /* HERO */
+    .game-hero {
+      padding: 240px 8% 90px;
+      background: linear-gradient(135deg, #020617, #0d47a1);
       text-align: center;
     }
 
-    .stat-box p {
-      font-size: 0.85rem;
+    .game-hero h1 {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      font-weight: 800;
+    }
+
+    .game-hero p {
+      max-width: 750px;
+      margin: auto;
+      line-height: 1.9;
+      font-size: 1.2rem;
+      color: #cbd5e1;
+    }
+
+    /* WALLET SECTION */
+    .wallet-section {
+      padding: 60px 8% 20px;
+    }
+
+    .wallet-card {
+      background: linear-gradient(135deg, #0d47a1, #1565c0);
+      padding: 40px;
+      border-radius: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 25px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .wallet-balance p {
+      margin: 0 0 5px 0;
+      font-size: 1rem;
+      color: #cbd5e1;
       text-transform: uppercase;
-      color: #94a3b8;
       letter-spacing: 1px;
     }
 
-    .stat-box h2 {
-      font-size: 2rem;
-      color: var(--clean-white);
+    .wallet-balance h2 {
+      font-size: 3.5rem;
+      margin: 0;
+      font-weight: 800;
+      color: #f5b942;
+    }
+
+    .wallet-balance small {
+      display: block;
       margin-top: 5px;
+      color: #cbd5e1;
     }
 
-    .stat-box h2.gold-txt {
-      color: var(--brand-gold);
+    .wallet-actions {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
     }
 
-    /* DATA TABLE LAYOUTS */
-    .table-container {
-      background: var(--dark-card);
-      backdrop-filter: blur(16px);
+    .wallet-actions button {
+      padding: 16px 32px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    .deposit-btn {
+      background: #f5b942;
+      color: #050816;
+    }
+
+    .deposit-btn:hover {
+      background: #e0a42f;
+      transform: translateY(-2px);
+    }
+
+    .play-btn {
+      background: white;
+      color: #0d47a1;
+    }
+
+    /* ARENA SECTIONS */
+    .section {
+      padding: 80px 8%;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-title h2 {
+      font-size: 3rem;
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-weight: 800;
+    }
+
+    .section-title p {
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.8;
+      color: #cbd5e1;
+    }
+
+    /* GRID ARCHITECTURE */
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 35px;
+    }
+
+    /* INTERACTIVE APP CARDS */
+    .game-card {
+      background: #0f172a;
+      border-radius: 25px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
       border: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 30px;
-      border-radius: 20px;
-      overflow-x: auto;
-      margin-bottom: 30px;
+      display: flex;
+      flex-direction: column;
     }
 
-    .table-container h3 {
+    .game-image img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .game-content {
+      padding: 30px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .game-category {
+      align-self: flex-start;
+      padding: 6px 16px;
+      background: #f5b942;
+      color: black;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: bold;
       margin-bottom: 20px;
-      font-size: 1.3rem;
-      color: var(--clean-white);
+      text-transform: uppercase;
+    }
+
+    .game-content h3 {
+      font-size: 1.7rem;
+      margin: 0 0 15px 0;
+      font-weight: 700;
+    }
+
+    .game-content p {
+      line-height: 1.8;
+      color: #94a3b8;
+      margin: 0 0 25px 0;
+    }
+
+    .game-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: auto;
+      margin-bottom: 25px;
+      color: #cbd5e1;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .game-button {
+      display: block;
+      text-align: center;
+      padding: 16px;
+      background: #0d47a1;
+      color: white;
+      text-decoration: none;
+      border-radius: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    .game-button:hover {
+      background: #1565c0;
+    }
+
+    /* LIVE PLAYABLE ENGINE MODULES */
+    .live-engine-box {
+      background: #1e293b;
+      border-top: 2px solid #f5b942;
+      padding: 25px;
+      display: none; /* Controlled dynamically by script */
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .engine-input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: white;
+      border-radius: 10px;
+      font-size: 1rem;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .engine-input:focus {
+      border-color: #f5b942;
+    }
+
+    .engine-feedback {
+      font-weight: bold;
+      font-size: 0.95rem;
+      min-height: 20px;
+    }
+
+    /* LEADERBOARD ARCHITECTURE */
+    .leaderboard {
+      background: #0f172a;
+      padding: 40px;
+      border-radius: 25px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 700px;
     }
 
     table th, table td {
-      padding: 15px;
+      padding: 18px;
       text-align: left;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 0.95rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     table th {
-      background: rgba(13, 71, 161, 0.3);
-      color: var(--brand-gold);
-    }
-
-    table td {
-      color: #cbd5e1;
-    }
-
-    /* BADGES */
-    .badge {
+      background: #0d47a1;
+      color: white;
       font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      text-transform: uppercase;
+      font-size: 1.1rem;
     }
 
-    .badge.success { background: rgba(16, 185, 129, 0.15); color: var(--status-success); }
-    .badge.pending { background: rgba(245, 185, 66, 0.15); color: var(--status-pending); }
-    .badge.danger { background: rgba(239, 68, 68, 0.15); color: var(--status-danger); }
-
-    /* ACTION BUTTON LINES */
-    .action-btn-suite {
-      display: flex;
-      gap: 10px;
+    table tbody tr {
+      transition: 0.4s ease-in-out;
     }
 
-    .mini-btn {
-      padding: 6px 12px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.85rem;
+    table tbody tr:hover {
+      background: rgba(255, 255, 255, 0.02);
     }
 
-    .mini-btn.approve { background: var(--status-success); color: var(--deep-navy); }
-    .mini-btn.remind { background: var(--status-pending); color: var(--deep-navy); }
-
-    /* COMPLIANCE WARNING NOTICE */
-    .legal-notice {
-      background: rgba(245, 185, 66, 0.08);
-      border: 1px solid rgba(245, 185, 66, 0.2);
-      padding: 20px;
-      border-radius: 12px;
-      margin-top: 30px;
-      display: flex;
-      gap: 15px;
-      align-items: flex-start;
+    /* TOURNAMENT CONTEXT SECTION */
+    .tournament {
+      padding: 100px 8%;
+      background: linear-gradient(135deg, #081120, #0d47a1);
+      text-align: center;
     }
 
-    .legal-notice i {
-      color: var(--brand-gold);
-      font-size: 1.4rem;
-      margin-top: 3px;
+    .tournament h2 {
+      font-size: 3rem;
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-weight: 800;
     }
 
-    .legal-notice p {
-      font-size: 0.9rem;
+    .tournament p {
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.8;
+      margin-bottom: 40px;
       color: #cbd5e1;
-      line-height: 1.6;
+      font-size: 1.1rem;
     }
 
-    /* WHATSAPP FLOAT */
-    .whatsapp-float {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 60px;
-      height: 60px;
-      background: #25d366;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.9rem;
-      color: var(--clean-white);
+    .tournament-btn {
+      display: inline-block;
+      padding: 18px 40px;
+      background: #f5b942;
+      color: black;
       text-decoration: none;
-      z-index: 999;
-      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+      border-radius: 14px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      transition: 0.3s;
     }
 
-    /* FOOTER */
+    .tournament-btn:hover {
+      background: #e0a42f;
+      transform: translateY(-2px);
+    }
+
+    /* FOOTER ENVIRONMENT */
     .footer {
       background: #020617;
-      color: #94a3b8;
       padding: 70px 8% 20px;
       border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
@@ -426,36 +441,81 @@
     }
 
     .footer h3 {
+      margin-top: 0;
       margin-bottom: 20px;
-      color: var(--brand-gold);
+      color: #f5b942;
+      font-weight: 700;
+    }
+
+    .footer p {
+      line-height: 1.8;
+      color: #cbd5e1;
     }
 
     .footer-links a {
       display: block;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       color: #cbd5e1;
       text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #f5b942;
+      padding-left: 5px;
+    }
+
+    .footer-links a i {
+      margin-right: 8px;
+      font-size: 0.9rem;
     }
 
     .footer-bottom {
       text-align: center;
       padding-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      color: #64748b;
-      font-size: 0.85rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
     }
 
-    @media(max-width: 768px) {
-      .navbar { flex-direction: column; gap: 15px; }
-      .ajo-hero h1 { font-size: 2.4rem; }
-      .form-container { padding: 25px; }
+    /* WHATSAPP FLOAT SYSTEM */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 60px;
+      height: 60px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.8rem;
+      color: white;
+      text-decoration: none;
+      z-index: 999;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      transition: 0.3s;
+    }
+
+    .whatsapp-float:hover {
+      transform: scale(1.1);
+    }
+
+    /* RESPONSIVE LAYOUT SCALING */
+    @media(max-width:768px){
+      .live-ticker-banner { top: 120px; padding: 8px 5%; }
+      .game-hero { padding: 280px 5% 70px; }
+      .game-hero h1 { font-size: 2.8rem; }
+      .section-title h2, .tournament h2 { font-size: 2.2rem; }
+      .wallet-balance h2 { font-size: 2.5rem; }
+      .wallet-card { padding: 30px 20px; text-align: center; justify-content: center; }
+      .wallet-actions { justify-content: center; width: 100%; }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- NAVBAR -->
   <header class="navbar">
     <div class="logo">
       <span>HAMBAK</span>
@@ -465,353 +525,322 @@
       <a href="../index.html">Home</a>
       <a href="services.html">Services</a>
       <a href="shop.html">Shop</a>
-      <a href="vtu.html">VTU</a>
-      <a href="ajo.html" class="active">Ajo Scheme</a>
+      <a href="games.html" class="active">Game Center</a>
       <a href="contact.html">Contact</a>
     </nav>
   </header>
 
-  <!-- HERO COMPONENT -->
-  <section class="ajo-hero">
-    <h1>Ajo Contribution Portal</h1>
-    <p>A structured, secure, and legally transparent rotating community contribution platform managed securely by HAMBAK TECH & SERVICES.</p>
+  <div class="live-ticker-banner">
+    <div class="live-badge">🔴 WATCH LIVE NOW</div>
+    <div class="ticker-wrapper">
+      <div class="ticker-text" id="tickerContent">
+        Welcome to Hambak Game Center! • Track live score progress • Current Leader: Ahmad Hamahullah with 25,500 pts • Completing modules updates leaderboard standings instantaneously!
+      </div>
+    </div>
+  </div>
+
+  <section class="game-hero">
+    <h1>Gamified Arena</h1>
+    <p>
+      Test your technical capacity, clear structural spelling levels, and master Senior Secondary educational content parameters 
+      designed directly by HAMBAK TECH & SERVICES.
+    </p>
   </section>
 
-  <!-- TAB SWITCH CONTROLLERS -->
-  <div class="portal-tabs">
-    <button class="tab-btn active" onclick="switchPortalTab(event, 'overview-tab')"><i class="fa-solid fa-layer-group"></i> Scheme Structures</button>
-    <button class="tab-btn" onclick="switchPortalTab(event, 'register-tab')"><i class="fa-solid fa-user-plus"></i> Online Registration</button>
-    <button class="tab-btn" onclick="switchPortalTab(event, 'member-tab')"><i class="fa-solid fa-chart-pie"></i> Member Dashboard</button>
-    <button class="tab-btn" onclick="switchPortalTab(event, 'admin-tab')"><i class="fa-solid fa-shield-halved"></i> Admin Control Matrix</button>
-  </div>
-
-  <!-- PANEL 1: STRUCTURE OVERVIEW -->
-  <div id="overview-tab" class="portal-panel active">
-    <div class="section-title" style="text-align: center; margin-bottom: 40px;">
-      <h2 style="font-size: 2.2rem; margin-bottom: 10px;">Membership Contribution Tiers</h2>
-      <p style="color: #94a3b8;">Select your preferred slot capacity. Every single operational group converges to an ecosystem standard base rate of ₦100,000 monthly value per slot.</p>
-    </div>
-
-    <div class="tier-grid">
-      <div class="tier-card">
-        <h3>Category A: Individual</h3>
-        <div class="price">₦100,000 <span style="font-size: 1rem; color:#94a3b8;">/mo</span></div>
-        <p style="font-size: 0.9rem; color: #cbd5e1; margin-top: 10px;">Full individual ownership of 1 execution slot. Receives complete single payout pool.</p>
+  <section class="wallet-section">
+    <div class="wallet-card">
+      <div class="wallet-balance">
+        <p>Operational Gaming Account</p>
+        <h2 id="walletDisplay">₦25,500</h2>
+        <small>Real-time execution coin score tracking balance</small>
       </div>
-      <div class="tier-card">
-        <h3>Category B: 2-Person Partnership</h3>
-        <div class="price">₦50,000 <span style="font-size: 1rem; color:#94a3b8;">/mo per head</span></div>
-        <p style="font-size: 0.9rem; color: #cbd5e1; margin-top: 10px;">Two partners split one payment track. Total slot value yields ₦100,000 monthly.</p>
-      </div>
-      <div class="tier-card">
-        <h3>Category C: 4-Person Partnership</h3>
-        <div class="price">₦25,000 <span style="font-size: 1rem; color:#94a3b8;">/mo per head</span></div>
-        <p style="font-size: 0.9rem; color: #cbd5e1; margin-top: 10px;">Four grouped partners combine funds to back a single active collection stream.</p>
-      </div>
-      <div class="tier-card">
-        <h3>Category D/E: Corporate & Workers</h3>
-        <div class="price">Custom Tier</div>
-        <p style="font-size: 0.9rem; color: #cbd5e1; margin-top: 10px;">Tailored for specialized trade associations, public services, and verified civil servants.</p>
+      <div class="wallet-actions">
+        <button class="deposit-btn" onclick="alert('VTU automated funding engine integration loading...')">Deposit Coins</button>
+        <button class="play-btn" onclick="window.scrollTo({top: document.getElementById('arenaSection').offsetTop - 40, behavior: 'smooth'})">Launch Arena</button>
       </div>
     </div>
+  </section>
 
-    <div class="table-container" style="max-width: 900px; margin: 0 auto;">
-      <h3>Standard Operational Blueprint (10-Month Rotation Run)</h3>
-      <table style="min-width: auto;">
-        <thead>
-          <tr>
-            <th>Metric Param</th>
-            <th>Value Baseline Configuration</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Target Group Matrix Capacity</td><td>10 Active Slots per Pool Sequence</td></tr>
-          <tr><td>Baseline Allocation Payment</td><td>₦100,000 per month / slot</td></tr>
-          <tr><td>Total Aggregated Monthly Pool</td><td><strong>₦1,000,000 Liquid Value</strong></td></tr>
-          <tr><td>Rotational Timeline Span</td><td>10 Calendar Months Group Life Cycle</td></tr>
-          <tr><td>Payout Cycle Frequency</td><td>1 Beneficiary selected every single month via scheduled draw</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- PANEL 2: ONLINE REGISTRATION -->
-  <div id="register-tab" class="portal-panel">
-    <div class="form-container">
-      <h3 style="font-size: 1.5rem; margin-bottom: 25px; color: var(--brand-gold);"><i class="fa-solid fa-id-card"></i> Member Verification & Integration Form</h3>
-      <form>
-        
-        <h4 style="color: #cbd5e1; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px;">1. Personal Coordinates</h4>
-        <div class="form-grid">
-          <div class="input-group">
-            <label>Full Legal Name</label>
-            <input type="text" placeholder="Surname Firstname" required>
-          </div>
-          <div class="input-group">
-            <label>Phone Line Connection</label>
-            <input type="tel" placeholder="08012345678" required>
-          </div>
-          <div class="input-group">
-            <label>Email Address</label>
-            <input type="email" placeholder="name@example.com" required>
-          </div>
-        </div>
-
-        <div class="form-grid" style="grid-template-columns: 2fr 1fr;">
-          <div class="input-group">
-            <label>Residential Physical Address</label>
-            <input type="text" placeholder="Full street layout state coordinates" required>
-          </div>
-          <div class="input-group">
-            <label>Target Membership Track</label>
-            <select required>
-              <option value="">Choose Category...</option>
-              <option>Category A - Individual (₦100,000/mo)</option>
-              <option>Category B - 2-Partner (₦50,000/mo)</option>
-              <option>Category C - 4-Partner (₦25,000/mo)</option>
-              <option>Category D - Traders/Business</option>
-              <option>Category E - Civil Servant/Workers</option>
-            </select>
-          </div>
-        </div>
-
-        <h4 style="color: #cbd5e1; margin-top: 25px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px;">2. Regulatory Verification & Support Links</h4>
-        <div class="form-grid">
-          <div class="input-group">
-            <label>Identification Document Type</label>
-            <select required>
-              <option value="NIN">National Identification Number (NIN)</option>
-              <option value="Voter">Voter's Card</option>
-              <option value="Driver">Driver's License</option>
-              <option value="Passport">International Passport</option>
-            </select>
-          </div>
-          <div class="input-group">
-            <label>ID Document Reference Number</label>
-            <input type="text" placeholder="Enter number sequence" required>
-          </div>
-          <div class="input-group">
-            <label>Passport Photograph Upload</label>
-            <input type="file" accept="image/*" required>
-          </div>
-        </div>
-
-        <div class="form-grid">
-          <div class="input-group">
-            <label>Guarantor Full Identity Name</label>
-            <input type="text" placeholder="Guarantor Name" required>
-          </div>
-          <div class="input-group">
-            <label>Guarantor Verified Contact Number</label>
-            <input type="tel" placeholder="Guarantor Phone" required>
-          </div>
-          <div class="input-group">
-            <label>Next of Kin Identity Info</label>
-            <input type="text" placeholder="Next of Kin Name & Link" required>
-          </div>
-        </div>
-
-        <div class="checkbox-group">
-          <input type="checkbox" id="legal-terms-check" required>
-          <label for="legal-terms-check">I explicitly execute legal assent to the <a href="#">Ajo Participation Agreement</a>, group liability statutes, mandatory 5th-day submission deadlines, and risk disclosures governed under standard statutory provisions.</label>
-        </div>
-
-        <button type="submit" class="submit-btn">Transmit Registration Payload</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- PANEL 3: MEMBER DASHBOARD -->
-  <div id="member-tab" class="portal-panel">
-    <div class="stats-row">
-      <div class="stat-box">
-        <p>Allocated Cluster Group</p>
-        <h2 class="gold-txt">Group B-10</h2>
-      </div>
-      <div class="stat-box">
-        <p>Personal Total Deposited</p>
-        <h2>₦400,000</h2>
-      </div>
-      <div class="stat-box">
-        <p>Current Rotation Month</p>
-        <h2>Month 4 /10</h2>
-      </div>
-      <div class="stat-box">
-        <p>Target Scheduled Payout</p>
-        <h2 style="color: var(--status-success);">Month 7</h2>
-      </div>
+  <section class="section" id="arenaSection">
+    <div class="section-title">
+      <h2>Active Gaming Challenges</h2>
+      <p>Engage directly with interactive software challenges built to reward intellectual capacity.</p>
     </div>
 
-    <div class="table-container">
-      <h3>Personal Statement & Verification Receipt Logs</h3>
+    <div class="game-grid">
+
+      <div class="game-card">
+        <div class="game-image">
+          <img src="https://images.unsplash.com/photo-1542751110-97427bbecf20?q=80&w=1200&auto=format&fit=crop" alt="Spelling Bee">
+        </div>
+        <div class="game-content">
+          <div class="game-category">Educational App</div>
+          <h3>Spelling Bee Challenge</h3>
+          <p>Senior Secondary level spelling tracking. Arrange or type the target structural phrase correctly to score points.</p>
+          <div class="game-meta">
+            <span><i class="fa-solid fa-brain"></i> SSS 1 - 3</span>
+            <span><i class="fa-solid fa-coins"></i> +₦500 / Level</span>
+          </div>
+          <button class="game-button" id="beeTrigger" onclick="toggleEngine('bee')">Launch Spelling Bee</button>
+        </div>
+        <div class="live-engine-box" id="beeEngine">
+          <p id="beePrompt" style="margin:0; font-weight:700; color:#f5b942;">Rearrange letters to spell out a database link protocol: <br><span style="letter-spacing:3px; font-size:1.2rem; color:white;">O N G O M B D</span></p>
+          <input type="text" id="beeInput" class="engine-input" placeholder="Type correct layout structure...">
+          <div id="beeFeedback" class="engine-feedback"></div>
+          <button class="game-button" style="padding:10px; background:#059669;" onclick="verifySpellingBee()">Verify Solution</button>
+        </div>
+      </div>
+
+      <div class="game-card">
+        <div class="game-image">
+          <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop" alt="Quiz Arena">
+        </div>
+        <div class="game-content">
+          <div class="game-category">Academic Prep</div>
+          <h3>Senior Secondary Quiz</h3>
+          <p>Multi-subject exam preparation modules spanning ICT sciences, database administration foundations, and mathematics logic.</p>
+          <div class="game-meta">
+            <span><i class="fa-solid fa-graduation-cap"></i> ICT & Science</span>
+            <span><i class="fa-solid fa-coins"></i> +₦1,000 / Answer</span>
+          </div>
+          <button class="game-button" id="quizTrigger" onclick="toggleEngine('quiz')">Launch Exam Quiz</button>
+        </div>
+        <div class="live-engine-box" id="quizEngine">
+          <p id="quizPrompt" style="margin:0; font-weight:700; color:#f5b942;">Which backend architectural component acts as a flexible, document-oriented database store?</p>
+          <select id="quizSelect" class="engine-input" style="background:#0f172a; color:white;">
+            <option value="wrong1">Hypertext Markup Protocol (HTTP)</option>
+            <option value="correct">MongoDB Engine Storage</option>
+            <option value="wrong2">Cascading Style Sheets (CSS)</option>
+          </select>
+          <div id="quizFeedback" class="engine-feedback"></div>
+          <button class="game-button" style="padding:10px; background:#059669;" onclick="verifyQuiz()">Submit Answer</button>
+        </div>
+      </div>
+
+      <div class="game-card">
+        <div class="game-image">
+          <img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?q=80&w=1200&auto=format&fit=crop" alt="Math Matrix">
+        </div>
+        <div class="game-content">
+          <div class="game-category">Mathematical Logic</div>
+          <h3>Math Brain Quiz</h3>
+          <p>Speed calculation computations tracking dynamic data arrays, pricing margins, and high-speed algorithm equations.</p>
+          <div class="game-meta">
+            <span><i class="fa-solid fa-calculator"></i> Algorithms</span>
+            <span><i class="fa-solid fa-coins"></i> +₦300 / Solve</span>
+          </div>
+          <button class="game-button" id="mathTrigger" onclick="toggleEngine('math')">Launch Math Matrix</button>
+        </div>
+        <div class="live-engine-box" id="mathEngine">
+          <p id="mathPrompt" style="margin:0; font-weight:700; color:#f5b942;">Solve for the base computing index factor: <br>150 * 2 - (40 + 60)</p>
+          <input type="number" id="mathInput" class="engine-input" placeholder="Enter numeric integer solution...">
+          <div id="mathFeedback" class="engine-feedback"></div>
+          <button class="game-button" style="padding:10px; background:#059669;" onclick="verifyMath()">Verify Calculation</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section" style="background:#0a0f24;">
+    <div class="section-title">
+      <h2>Live Arena Standings</h2>
+      <p>Real-time programmatic updates mapping academic leaderboard point values across accounts.</p>
+    </div>
+
+    <div class="leaderboard">
       <table>
         <thead>
           <tr>
-            <th>Value Tracking Date</th>
-            <th>Receipt Voucher Block</th>
-            <th>Amount Contributed</th>
-            <th>Process Verification Status</th>
+            <th>Rank Position</th>
+            <th>Authenticated Player</th>
+            <th>Completed Module Arena</th>
+            <th>Accumulated Points</th>
           </tr>
         </thead>
-        <tbody>
-          <tr><td>May 04, 2026</td><td>TXN-AJO-99210</td><td>₦100,000</td><td><span class="badge success">Settled & Receipted</span></td></tr>
-          <tr><td>Apr 03, 2026</td><td>TXN-AJO-88124</td><td>₦100,000</td><td><span class="badge success">Settled & Receipted</span></td></tr>
-          <tr><td>Mar 05, 2026</td><td>TXN-AJO-77109</td><td>₦100,000</td><td><span class="badge success">Settled & Receipted</span></td></tr>
-          <tr><td>Feb 02, 2026</td><td>TXN-AJO-66190</td><td>₦100,000</td><td><span class="badge success">Settled & Receipted</span></td></tr>
-        </tbody>
+        <tbody id="leaderboardBody">
+          </tbody>
       </table>
     </div>
+  </section>
 
-    <!-- CHART LINK -->
-    <div class="table-container" style="background: rgba(15, 23, 42, 0.45);">
-      <h3 style="margin-bottom: 15px;">Ecosystem Group Collection Flow Graph</h3>
-      <canvas id="ajoPoolChart" style="max-height: 280px;"></canvas>
-    </div>
-  </div>
+  <section class="tournament">
+    <h2>Academic Tournament Drive</h2>
+    <p>
+      Join the upcoming Senior Secondary inter-school digital competitions. Win structural tech tools, 
+      high-capacity storage devices, and certified scholarship recognition awards.
+    </p>
+    <a href="#" class="tournament-btn" onclick="alert('Registration module for tournament drive initializing...')">Register for Tournament</a>
+  </section>
 
-  <!-- PANEL 4: ADMIN DASHBOARD CONTROL -->
-  <div id="admin-tab" class="portal-panel">
-    <div style="margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-      <h3 style="font-size: 1.5rem; color: var(--brand-gold);"><i class="fa-solid fa-gears"></i> Core System Administrative Matrix</h3>
-      <span class="badge" style="background: rgba(255, 64, 129, 0.2); color: var(--accent-pink); padding: 8px 15px; border-radius: 8px;">Secured Operator Authentication Active</span>
-    </div>
-
-    <div class="table-container">
-      <h3>Pending Registration Validation Verification Pipeline</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Target Applicant Identity</th>
-            <th>Contact Channel</th>
-            <th>Selected Tier Category</th>
-            <th>Uploaded Verification Dossier</th>
-            <th>System Operator Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Adegoke Gbadamosi</td>
-            <td>08034561122</td>
-            <td>Category A (Individual)</td>
-            <td><a href="#" style="color: var(--brand-gold); text-decoration: none;"><i class="fa-solid fa-file-pdf"></i> NIN_Doc.pdf</a></td>
-            <td>
-              <div class="action-btn-suite">
-                <button class="mini-btn approve" onclick="alert('Applicant ledger entry approved.')">Verify</button>
-                <button class="mini-btn remind" style="background:#475569; color:white;">Decline</button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="table-container">
-      <h3>Active Rotation Beneficiary Assignment Schedule</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Cycle Month Code</th>
-            <th>Assigned Collection Target Beneficiary</th>
-            <th>Value Volume Pool Amount</th>
-            <th>Distribution Status Block</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Month 1 (Jan)</td><td>Chidi Okafor</td><td>₦1,000,000</td><td><span class="badge success">Disbursed Complete</span></td></tr>
-          <tr><td>Month 2 (Feb)</td><td>Fatima Musa</td><td>₦1,000,000</td><td><span class="badge success">Disbursed Complete</span></td></tr>
-          <tr><td>Month 3 (Mar)</td><td>Olumide Awosika</td><td>₦1,000,000</td><td><span class="badge success">Disbursed Complete</span></td></tr>
-          <tr><td><strong>Month 4 (Current)</strong></td><td><strong>Amara Obi</strong></td><td><strong>₦1,000,000</strong></td><td><span class="badge pending">Pending Draw Verification</span></td></tr>
-          <tr><td>Month 5 (Jun)</td><td>Staged Pool Queue Selection</td><td>₦1,000,000</td><td><span class="badge" style="background:rgba(255,255,255,0.1); color:#94a3b8;">Locked</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="table-container">
-      <h3>Defaulter Tracking Matrix & Risk Warning System</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Defaulting Member Account Identity</th>
-            <th>Arrears Volume Balance</th>
-            <th>Consecutive Delinquency Count</th>
-            <th>Enforcement Warning Level</th>
-            <th>Direct Enforcement Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Tunde Jinadu (Group A-4)</td>
-            <td style="color: var(--status-danger); font-weight:700;">₦100,000</td>
-            <td>1 Month Late</td>
-            <td><span class="badge pending">Level 1 Alert Triggered</span></td>
-            <td><button class="mini-btn remind" onclick="alert('Automated warning broadcast triggered to Member and assigned Guarantor channel.')"><i class="fa-solid fa-bell"></i> Issue Demand Notice</button></td>
-          </tr>
-          <tr>
-            <td>Ibrahim Yusuf (Group C-2)</td>
-            <td style="color: var(--status-danger); font-weight:700;">₦25,000</td>
-            <td>2 Months Late</td>
-            <td><span class="badge danger">Level 2 Suspension Risk</span></td>
-            <td><button class="mini-btn remind" style="background: var(--status-danger); color: white;" onclick="alert('Staging system suspension protocols.')"><i class="fa-solid fa-triangle-exclamation"></i> Enforce Legal Hold</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- REGULATORY NOTICE BOARD BLOCK -->
-    <div class="legal-notice">
-      <i class="fa-solid fa-scale-balanced"></i>
-      <div>
-        <strong style="color: var(--brand-gold); display: block; margin-bottom: 5px;">Regulatory Governance Compliance Framework Note</strong>
-        <p>Before expanding this operation to general public access, ensure all explicit consumer participant agreements are finalized, and appropriate legal council is retained to evaluate cooperative laws, rotating savings club regulations, and tracking frameworks. The Excel ledger backup framework acts as the master mirror data layer alongside this platform architecture.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- WHATSAPP SUPPORT FLOAT CHANNEL -->
-  <a href="https://wa.me/2349127469686" class="whatsapp-float" aria-label="Connect directly to official Hambak Service Channel" target="_blank">
-    <i class="fa-brands fa-whatsapp"></i>
-  </a>
-
-  <!-- GENERAL SYSTEM FOOTER -->
   <footer class="footer">
     <div class="footer-content">
       <div>
         <h3>HAMBAK TECH & SERVICES</h3>
-        <p>Where corporate technical systems balance perfectly with agile service deployment pipelines.</p>
+        <p>Where technology meets services. Interactive computational platforms, branding solutions, and cloud asset deployment.</p>
       </div>
       <div>
-        <h3>Ecosystem Navigation</h3>
+        <h3>Quick Links</h3>
         <div class="footer-links">
-          <a href="../index.html">Home Ecosystem</a>
-          <a href="services.html">Services Catalog</a>
-          <a href="shop.html">Digital Shop</a>
-          <a href="vtu.html">VTU Portal</a>
-          <a href="ajo.html">Ajo Portal Matrix</a>
+          <a href="../index.html"><i class="fa-solid fa-chevron-right"></i>Home</a>
+          <a href="services.html"><i class="fa-solid fa-chevron-right"></i>Services</a>
+          <a href="games.html"><i class="fa-solid fa-chevron-right"></i>Game Center</a>
+          <a href="contact.html"><i class="fa-solid fa-chevron-right"></i>Contact</a>
         </div>
       </div>
       <div>
-        <h3>Contact Coordinates</h3>
-        <p style="margin-bottom: 8px;"><i class="fa-solid fa-phone" style="color: var(--brand-gold); margin-right: 8px;"></i> 09127469686</p>
-        <p style="margin-bottom: 8px;"><i class="fa-solid fa-envelope" style="color: var(--brand-gold); margin-right: 8px;"></i> hambak901@gmail.com</p>
-        <p><i class="fa-solid fa-location-dot" style="color: var(--brand-gold); margin-right: 8px;"></i> Ibeju-Lekki, Lagos Nigeria</p>
+        <h3>Contact Info</h3>
+        <p><i class="fa-solid fa-phone" style="color: #f5b942; margin-right: 8px;"></i> 09127469686</p>
+        <p><i class="fa-solid fa-envelope" style="color: #f5b942; margin-right: 8px;"></i> hambak901@gmail.com</p>
+        <p><i class="fa-solid fa-location-dot" style="color: #f5b942; margin-right: 8px;"></i> Ibeju-Lekki, Lagos, Nigeria</p>
       </div>
     </div>
     <div class="footer-bottom">
-      &copy; 2026 HAMBAK TECH & SERVICES. Secure Financial Rotation Technology Engine Live.
+      &copy; 2026 HAMBAK TECH & SERVICES
     </div>
   </footer>
 
-  <!-- ==========================================================
-       HAMBAK TECH ENGINE: CORE SCRIPT EXECUTION RUNTIME
-       ========================================================== -->
-  <!-- 1. Global Platform API Gateways -->
-  <script src="../js/apiMatrix.js"></script>
+  <a href="https://wa.me/2349155104724" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
 
-  <!-- 2. Global Interface Theme & Layout Module -->
-  <script src="../js/app.js"></script>
+  <script>
+    // State management storage array 
+    let players = [
+      { id: "user", name: "Ahmad Hamahullah (You)", module: "Spelling Bee Module", points: 25500, highlight: true },
+      { id: "fatimoh", name: "Fatimoh Alake", module: "Senior Secondary Quiz", points: 24200, highlight: false },
+      { id: "aisha", name: "Aisha Hambak", module: "Math Brain Quiz", points: 21800, highlight: false }
+    ];
 
-  <!-- 3. Specialized Rotation Scheme Logic Module -->
-  <script src="../js/ajo.js"></script>
+    /**
+     * Renders and sorts the leaderboard ranks dynamically based on values
+     */
+    function renderLeaderboard() {
+      const tbody = document.getElementById('leaderboardBody');
+      
+      // Sort array descending based on point bounds
+      players.sort((a, b) => b.points - a.points);
+      
+      tbody.innerHTML = "";
+      
+      players.forEach((player, index) => {
+        const tr = document.createElement('tr');
+        if(player.highlight) {
+          tr.style.background = "rgba(245, 185, 66, 0.05)";
+        }
+        
+        const rankColor = index === 0 ? "style='color:#f5b942; font-weight:bold;'" : "";
+        const pointsColor = player.highlight ? "style='color:#f5b942; font-weight:bold;'" : "";
+        
+        tr.innerHTML = `
+          <td ${rankColor}>#${index + 1}</td>
+          <td>${player.name}</td>
+          <td>${player.module}</td>
+          <td ${pointsColor}>${player.points.toLocaleString()}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Update values in ticker feed dynamically
+      const leader = players[0];
+      document.getElementById('tickerContent').innerText = `Welcome to Hambak Game Center! • Track live score progress • Current Leader: ${leader.name} with ${leader.points.toLocaleString()} pts • Completing modules updates standings instantaneously!`;
+    }
+
+    /**
+     * Toggles layout visibility grids for target game engines
+     */
+    function toggleEngine(engineKey) {
+      const targetedEngine = document.getElementById(`${engineKey}Engine`);
+      const targetTrigger = document.getElementById(`${engineKey}Trigger`);
+      
+      if (targetedEngine.style.display === "flex") {
+        targetedEngine.style.display = "none";
+        targetTrigger.innerText = "Launch Arena";
+      } else {
+        document.querySelectorAll('.live-engine-box').forEach(box => box.style.display = "none");
+        document.querySelectorAll('.game-grid .game-button').forEach(btn => {
+          if(btn.id) btn.innerText = "Launch Arena";
+        });
+        
+        targetedEngine.style.display = "flex";
+        targetTrigger.innerText = "Close Active Arena";
+      }
+    }
+
+    /**
+     * Standardized internal wallet increment rendering sequence
+     */
+    function creditGamingWallet(pointAmount, moduleName) {
+      const userObj = players.find(p => p.id === "user");
+      userObj.points += pointAmount;
+      userObj.module = moduleName;
+      
+      // Render layout wallet updates
+      document.getElementById('walletDisplay').innerText = `₦${userObj.points.toLocaleString()}`;
+      
+      // Re-compile leaderboard matrices
+      renderLeaderboard();
+    }
+
+    /**
+     * VERIFICATION PIPELINE: Spelling Bee
+     */
+    function verifySpellingBee() {
+      const value = document.getElementById('beeInput').value.trim().toLowerCase();
+      const feedback = document.getElementById('beeFeedback');
+      
+      if (value === "mongodb") {
+        feedback.style.color = "#10b981";
+        feedback.innerText = "Correct answer! +₦500 committed to account balance.";
+        creditGamingWallet(500, "Spelling Bee Module");
+        document.getElementById('beeInput').disabled = true;
+      } else {
+        feedback.style.color = "#ef4444";
+        feedback.innerText = "Incorrect configuration placement sequence. Try again.";
+      }
+    }
+
+    /**
+     * VERIFICATION PIPELINE: Academic Quiz Selection
+     */
+    function verifyQuiz() {
+      const selectValue = document.getElementById('quizSelect').value;
+      const feedback = document.getElementById('quizFeedback');
+      
+      if (selectValue === "correct") {
+        feedback.style.color = "#10b981";
+        feedback.innerText = "Correct structural answer! +₦1,000 committed to account balance.";
+        creditGamingWallet(1000, "Senior Secondary Quiz");
+        document.getElementById('quizSelect').disabled = true;
+      } else {
+        feedback.style.color = "#ef4444";
+        feedback.innerText = "Selection parameters incorrect. Review operational models.";
+      }
+    }
+
+    /**
+     * VERIFICATION PIPELINE: Math Array Calculation
+     */
+    function verifyMath() {
+      const inputVal = parseInt(document.getElementById('mathInput').value);
+      const feedback = document.getElementById('mathFeedback');
+      
+      if (inputVal === 200) {
+        feedback.style.color = "#10b981";
+        feedback.innerText = "Calculation clear! +₦300 committed to account balance.";
+        creditGamingWallet(300, "Math Brain Quiz");
+        document.getElementById('mathInput').disabled = true;
+      } else {
+        feedback.style.color = "#ef4444";
+        feedback.innerText = "Mathematical bounds equation unverified. Try computation again.";
+      }
+    }
+
+    // Initialize leaderboard layout parameters on boot sequence
+    window.onload = function() {
+      renderLeaderboard();
+    };
+  </script>
+
 </body>
-
 </html>
