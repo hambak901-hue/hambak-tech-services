@@ -107,6 +107,31 @@
       color: #cbd5e1;
     }
 
+    /* TIERS PREVIEW DISPLAY DECK */
+    .tiers-badge-container {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+
+    .tier-badge {
+      padding: 6px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+
+    .tier-badge.active-tier {
+      border-color: var(--brand-gold);
+      color: var(--brand-gold);
+      background: rgba(245, 185, 66, 0.05);
+    }
+
     /* PREMIUM LEDGER WALLET HOVER DECK */
     .wallet-section {
       padding: 40px 8% 20px;
@@ -267,7 +292,8 @@
     }
 
     .vtu-form select,
-    .vtu-form input {
+    .vtu-form input,
+    .vtu-form textarea {
       padding: 15px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
@@ -276,10 +302,12 @@
       outline: none;
       font-size: 0.95rem;
       transition: 0.3s;
+      font-family: inherit;
     }
 
     .vtu-form select:focus,
-    .vtu-form input:focus {
+    .vtu-form input:focus,
+    .vtu-form textarea:focus {
       border-color: var(--brand-gold);
     }
 
@@ -475,7 +503,6 @@
 
 <body>
 
-  <!-- GLOBAL SYSTEM NAVBAR -->
   <header class="navbar">
     <div class="logo">
       <span>HAMBAK</span>
@@ -490,13 +517,18 @@
     </nav>
   </header>
 
-  <!-- HERO PANEL -->
   <section class="vtu-hero">
     <h1>VTU & Recharge Center</h1>
     <p>Fast and secure airtime distribution, multi-band data subscriptions, utility bills, and instant smart-card activations.</p>
+    
+    <div class="tiers-badge-container">
+      <span class="tier-badge" id="tier-retailer">Retailer Mode</span>
+      <span class="tier-badge" id="tier-wholesaler">Wholesaler Tier</span>
+      <span class="tier-badge" id="tier-subdealer">Sub-Dealer Rate</span>
+      <span class="tier-badge active-tier" id="tier-dealer">Dealer Active Layer</span>
+    </div>
   </section>
 
-  <!-- USER LEDGER PROFILE -->
   <section class="wallet-section">
     <div class="wallet-card">
       <div class="wallet-balance">
@@ -511,7 +543,6 @@
     </div>
   </section>
 
-  <!-- SERVICES STAGING HUB -->
   <section class="service-section">
     <div class="section-title">
       <h2>Recharge Services</h2>
@@ -520,7 +551,6 @@
 
     <div class="service-grid">
 
-      <!-- SERVICE CORE: AIRTIME -->
       <div class="service-card">
         <div class="service-icon"><i class="fa-solid fa-phone"></i></div>
         <h3>Airtime Recharge</h3>
@@ -539,7 +569,6 @@
         </form>
       </div>
 
-      <!-- SERVICE CORE: DATA -->
       <div class="service-card">
         <div class="service-icon"><i class="fa-solid fa-wifi"></i></div>
         <h3>Data Subscription</h3>
@@ -564,7 +593,40 @@
         </form>
       </div>
 
-      <!-- SERVICE CORE: ELECTRICITY -->
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-print"></i></div>
+        <h3>Bulk Printing & Dealer Pins</h3>
+        <p>Generate, download e-pins or request physical delivery for high-volume transactions.</p>
+        <form class="vtu-form" id="bulkForm" onsubmit="handleBulkSubmission(event)">
+          <select id="bulkNetwork" required>
+            <option value="">Select Target Network...</option>
+            <option value="MTN">MTN Pins</option>
+            <option value="Airtel">Airtel Pins</option>
+            <option value="GLO">GLO Pins</option>
+            <option value="9mobile">9mobile Pins</option>
+          </select>
+          <select id="bulkDenomination" required>
+            <option value="">Select Denomination Tier...</option>
+            <option value="100">₦100 Face Value</option>
+            <option value="200">₦200 Face Value</option>
+            <option value="500">₦500 Face Value</option>
+            <option value="1000">₦1000 Face Value</option>
+          </select>
+          <input type="number" id="bulkQuantity" placeholder="Quantity (e.g. 100, 500, 1000)" min="10" required>
+          <select id="deliveryMode" onchange="toggleDeliveryFields(this.value)" required>
+            <option value="digital">Instant Digital Token (Download PDF / E-Pin)</option>
+            <option value="physical">Physical Delivery Order (Scratch Cards Delivery)</option>
+          </select>
+          
+          <div id="logisticsContainer" style="display: none; flex-direction: column; gap: 14px;">
+            <textarea id="deliveryAddress" placeholder="Enter full logistical delivery destination address..." rows="2"></textarea>
+            <input type="text" id="contactReceiver" placeholder="Receiver's Contact Name">
+          </div>
+
+          <button type="submit" class="vtu-btn">Initialize Wholesale Request</button>
+        </form>
+      </div>
+
       <div class="service-card">
         <div class="service-icon"><i class="fa-solid fa-bolt"></i></div>
         <h3>Electricity Payment</h3>
@@ -582,32 +644,9 @@
         </form>
       </div>
 
-      <!-- SERVICE CORE: CABLE -->
-      <div class="service-card">
-        <div class="service-icon"><i class="fa-solid fa-tv"></i></div>
-        <h3>Cable TV Subscription</h3>
-        <p>Renew cable TV subscriptions instantly.</p>
-        <form class="vtu-form" onsubmit="event.preventDefault(); alert('Cable terminal authentication ongoing.');">
-          <select required>
-            <option value="">Select Service Provider...</option>
-            <option>DStv</option>
-            <option>GOtv</option>
-            <option>Startimes</option>
-          </select>
-          <input type="text" placeholder="Smart Card / IUC Number" required>
-          <select required>
-            <option value="">Select Package Tier...</option>
-            <option>Basic / Small Pack Suite</option>
-            <option>Premium / Enterprise Max Access</option>
-          </select>
-          <button type="submit" class="vtu-btn">Authorize Subscription</button>
-        </form>
-      </div>
-
     </div>
   </section>
 
-  <!-- ANALYTICS MONITOR MATRIX -->
   <section class="chart-section">
     <div class="chart-card">
       <h2>Transaction Flow Analytics</h2>
@@ -615,7 +654,6 @@
     </div>
   </section>
 
-  <!-- AUDIT LOG TABLE -->
   <section class="transaction-section">
     <div class="transaction-box">
       <h2>Recent System Event Logs</h2>
@@ -642,17 +680,16 @@
             <td><span class="status-text success">Successful</span></td>
           </tr>
           <tr>
-            <td>Grid Power Bill</td>
-            <td>IKEDC</td>
-            <td>₦5,000</td>
-            <td><span class="status-text pending">Pending Processing</span></td>
+            <td>Bulk Cargo Order</td>
+            <td>MTN (500 Pcs)</td>
+            <td>₦50,000</td>
+            <td><span class="status-text pending">In Transit</span></td>
           </tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- SYSTEMS FOOTER CONTAINER -->
   <footer class="footer">
     <div class="footer-content">
       <div>
@@ -681,16 +718,47 @@
     </div>
   </footer>
 
-  <!-- FLOATING COMMUNICATION LINK -->
   <a href="https://wa.me/2349127469686" class="whatsapp-float" aria-label="Direct Link to WhatsApp Support Matrix">
     <i class="fa-brands fa-whatsapp"></i>
   </a>
 
-  <!-- HIGH-PERFORMANCE DATA VISUALIZATION GRAPH -->
   <script>
+    /**
+     * Intercepts delivery mode updates to mount physical shipping fields dynamically
+     */
+    function toggleDeliveryFields(modeValue) {
+      const logisticsBox = document.getElementById("logisticsContainer");
+      const addressInput = document.getElementById("deliveryAddress");
+      
+      if (modeValue === "physical") {
+        logisticsBox.style.display = "flex";
+        addressInput.required = true;
+      } else {
+        logisticsBox.style.display = "none";
+        addressInput.required = false;
+      }
+    }
+
+    /**
+     * Dispatches bulk staging variables safely based on delivery configuration modes
+     */
+    function handleBulkSubmission(event) {
+      event.preventDefault();
+      const mode = document.getElementById("deliveryMode").value;
+      const network = document.getElementById("bulkNetwork").value;
+      const qty = document.getElementById("bulkQuantity").value;
+      const val = document.getElementById("bulkDenomination").value;
+
+      if (mode === "digital") {
+        alert(`Generating structural token block for ${qty} pieces of ₦${val} ${network} E-pins. Document preparation initializing...`);
+      } else {
+        const destination = document.getElementById("deliveryAddress").value;
+        alert(`Logistics Order Staged! ${qty} units of physical ₦${val} cards queued for dispatch to delivery node:\n${destination}`);
+      }
+    }
+
+    // Chart.js Graph Rendering Logic 
     const executionContext = document.getElementById("transactionChart").getContext("2d");
-    
-    // Create soft, glowing gradient lines for dark mode metrics
     const blueGradientNode = executionContext.createLinearGradient(0, 0, 0, 400);
     blueGradientNode.addColorStop(0, 'rgba(245, 185, 66, 0.4)');
     blueGradientNode.addColorStop(1, 'rgba(13, 71, 161, 0.0)');
