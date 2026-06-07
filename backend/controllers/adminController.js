@@ -1,7 +1,7 @@
 import User from "../models/userModel.js";
-import Order from "../models/Order.js";
-import Transaction from "../models/Transaction.js";
-import Service from "../models/Service.js";
+import Order from "../models/order.js";
+import Transaction from "../models/transaction.js";
+import Service from "../models/service.js";
 
 /* ==========================================================
    ADMIN ENGINE: FETCH SYSTEM METRICS & DASHBOARD STATS
