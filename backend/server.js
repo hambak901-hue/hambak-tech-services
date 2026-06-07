@@ -17,6 +17,8 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import vtuRoutes from './routes/vtuRoutes.js';
+
 
 dotenv.config();
 connectDB();
