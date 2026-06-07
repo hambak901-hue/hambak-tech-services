@@ -1,519 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game Center | HAMBAK TECH & SERVICES</title>
+  <title>Login & Register | HAMBAK TECH & SERVICES</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     /* ==========================================================================
-       GLOBAL NAVBAR UTILITIES (Sync with style.css layout)
+       PREMIUM BRAND COLOR PALETTE (BLUE, GOLD, PEACH, PINK)
        ========================================================================== */
+    :root {
+      --primary-blue: #0d47a1;
+      --deep-navy: #081120;
+      --brand-gold: #f5b942;
+      --soft-peach: #ffdfd3;
+      --accent-pink: #ff4081;
+      --clean-white: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      background: var(--deep-navy); 
+      color: var(--clean-white);
+      min-height: 100vh;
+    }
+    
+    /* NAVBAR */
     .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 8%;
-      background: #081120;
-      color: white;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-    }
-
-    .navbar .logo {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .navbar .logo span {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: #f5b942;
-      letter-spacing: 1px;
-    }
-
-    .navbar .logo small {
-      font-size: 0.65rem;
-      letter-spacing: 2px;
-      font-weight: bold;
-      color: white;
-    }
-
-    .nav-links a {
-      color: #cbd5e1;
-      text-decoration: none;
-      margin-left: 25px;
-      font-weight: 600;
-      transition: 0.3s;
-    }
-
-    .nav-links a:hover, .nav-links a.active {
-      color: #f5b942;
-    }
-
-    /* ==========================================================================
-       OFFLINE LIVE TICKER SYSTEM
-       ========================================================================== */
-    .live-ticker-banner {
-      background: #020617;
-      border-bottom: 2px solid #ef4444;
-      padding: 12px 8%;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      position: absolute;
-      top: 85px;
-      left: 0;
-      right: 0;
-      z-index: 999;
-      overflow: hidden;
-    }
-
-    .live-badge {
-      background: #ef4444;
-      color: white;
-      font-weight: 800;
-      font-size: 0.8rem;
-      padding: 5px 12px;
-      border-radius: 4px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      white-space: nowrap;
-      animation: pulseAlert 1.5s infinite alternate;
-    }
-
-    .ticker-wrapper {
-      flex: 1;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-
-    .ticker-text {
-      display: inline-block;
-      color: #cbd5e1;
-      font-weight: 600;
-      font-size: 0.95rem;
-      animation: continuousScroll 25s linear infinite;
-    }
-
-    @keyframes pulseAlert {
-      0% { opacity: 0.6; transform: scale(0.98); }
-      100% { opacity: 1; transform: scale(1.02); }
-    }
-
-    @keyframes continuousScroll {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
-
-    /* ==========================================================================
-       GAME CENTER MAIN STYLES
-       ========================================================================== */
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #050816;
-      color: white;
-    }
-
-    /* HERO */
-    .game-hero {
-      padding: 240px 8% 90px;
-      background: linear-gradient(135deg, #020617, #0d47a1);
-      text-align: center;
-    }
-
-    .game-hero h1 {
-      font-size: 4rem;
-      margin-bottom: 20px;
-      font-weight: 800;
-    }
-
-    .game-hero p {
-      max-width: 750px;
-      margin: auto;
-      line-height: 1.9;
-      font-size: 1.2rem;
-      color: #cbd5e1;
-    }
-
-    /* WALLET SECTION */
-    .wallet-section {
-      padding: 60px 8% 20px;
-    }
-
-    .wallet-card {
-      background: linear-gradient(135deg, #0d47a1, #1565c0);
-      padding: 40px;
-      border-radius: 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 25px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-    }
-
-    .wallet-balance p {
-      margin: 0 0 5px 0;
-      font-size: 1rem;
-      color: #cbd5e1;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .wallet-balance h2 {
-      font-size: 3.5rem;
-      margin: 0;
-      font-weight: 800;
-      color: #f5b942;
-    }
-
-    .wallet-balance small {
-      display: block;
-      margin-top: 5px;
-      color: #cbd5e1;
-    }
-
-    .wallet-actions {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .wallet-actions button {
-      padding: 16px 32px;
-      border: none;
-      border-radius: 14px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 1rem;
-      transition: 0.3s;
-    }
-
-    .deposit-btn {
-      background: #f5b942;
-      color: #050816;
-    }
-
-    .deposit-btn:hover {
-      background: #e0a42f;
-      transform: translateY(-2px);
-    }
-
-    .play-btn {
-      background: white;
-      color: #0d47a1;
-    }
-
-    /* ARENA SECTIONS */
-    .section {
-      padding: 80px 8%;
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-
-    .section-title h2 {
-      font-size: 3rem;
-      margin-top: 0;
-      margin-bottom: 15px;
-      font-weight: 800;
-    }
-
-    .section-title p {
-      max-width: 700px;
-      margin: auto;
-      line-height: 1.8;
-      color: #cbd5e1;
-    }
-
-    /* GRID ARCHITECTURE */
-    .game-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 35px;
-    }
-
-    /* INTERACTIVE APP CARDS */
-    .game-card {
-      background: #0f172a;
-      border-radius: 25px;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .game-image img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-    }
-
-    .game-content {
-      padding: 30px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .game-category {
-      align-self: flex-start;
-      padding: 6px 16px;
-      background: #f5b942;
-      color: black;
-      border-radius: 50px;
-      font-size: 0.85rem;
-      font-weight: bold;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-    }
-
-    .game-content h3 {
-      font-size: 1.7rem;
-      margin: 0 0 15px 0;
-      font-weight: 700;
-    }
-
-    .game-content p {
-      line-height: 1.8;
-      color: #94a3b8;
-      margin: 0 0 25px 0;
-    }
-
-    .game-meta {
-      display: flex;
-      justify-content: space-between;
-      margin-top: auto;
-      margin-bottom: 25px;
-      color: #cbd5e1;
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-
-    .game-button {
-      display: block;
-      text-align: center;
-      padding: 16px;
-      background: #0d47a1;
-      color: white;
-      text-decoration: none;
-      border-radius: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      border: none;
-      font-size: 1rem;
-      transition: 0.3s;
-    }
-
-    .game-button:hover {
-      background: #1565c0;
-    }
-
-    /* LIVE PLAYABLE ENGINE MODULES */
-    .live-engine-box {
-      background: #1e293b;
-      border-top: 2px solid #f5b942;
-      padding: 25px;
-      display: none; /* Controlled dynamically by script */
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .engine-input {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #475569;
-      background: #0f172a;
-      color: white;
-      border-radius: 10px;
-      font-size: 1rem;
-      outline: none;
-      box-sizing: border-box;
-    }
-
-    .engine-input:focus {
-      border-color: #f5b942;
-    }
-
-    .engine-feedback {
-      font-weight: bold;
-      font-size: 0.95rem;
-      min-height: 20px;
-    }
-
-    /* LEADERBOARD ARCHITECTURE */
-    .leaderboard {
-      background: #0f172a;
-      padding: 40px;
-      border-radius: 25px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    table th, table td {
-      padding: 18px;
-      text-align: left;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    table th {
-      background: #0d47a1;
-      color: white;
-      font-weight: 700;
-      font-size: 1.1rem;
-    }
-
-    table tbody tr {
-      transition: 0.4s ease-in-out;
-    }
-
-    table tbody tr:hover {
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    /* TOURNAMENT CONTEXT SECTION */
-    .tournament {
-      padding: 100px 8%;
-      background: linear-gradient(135deg, #081120, #0d47a1);
-      text-align: center;
-    }
-
-    .tournament h2 {
-      font-size: 3rem;
-      margin-top: 0;
-      margin-bottom: 20px;
-      font-weight: 800;
-    }
-
-    .tournament p {
-      max-width: 700px;
-      margin: auto;
-      line-height: 1.8;
-      margin-bottom: 40px;
-      color: #cbd5e1;
-      font-size: 1.1rem;
-    }
-
-    .tournament-btn {
-      display: inline-block;
-      padding: 18px 40px;
-      background: #f5b942;
-      color: black;
-      text-decoration: none;
-      border-radius: 14px;
-      font-weight: bold;
-      font-size: 1.1rem;
-      transition: 0.3s;
-    }
-
-    .tournament-btn:hover {
-      background: #e0a42f;
-      transform: translateY(-2px);
-    }
-
-    /* FOOTER ENVIRONMENT */
-    .footer {
-      background: #020617;
-      padding: 70px 8% 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .footer-content {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 40px;
-      margin-bottom: 40px;
-    }
-
-    .footer h3 {
-      margin-top: 0;
-      margin-bottom: 20px;
-      color: #f5b942;
-      font-weight: 700;
-    }
-
-    .footer p {
-      line-height: 1.8;
-      color: #cbd5e1;
-    }
-
-    .footer-links a {
-      display: block;
-      margin-bottom: 10px;
-      color: #cbd5e1;
-      text-decoration: none;
-      transition: 0.2s;
-    }
-
-    .footer-links a:hover {
-      color: #f5b942;
-      padding-left: 5px;
-    }
-
-    .footer-links a i {
-      margin-right: 8px;
-      font-size: 0.9rem;
-    }
-
-    .footer-bottom {
-      text-align: center;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      color: #94a3b8;
-    }
-
-    /* WHATSAPP FLOAT SYSTEM */
-    .whatsapp-float {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      width: 60px;
-      height: 60px;
-      background: #25d366;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.8rem;
-      color: white;
-      text-decoration: none;
-      z-index: 999;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-      transition: 0.3s;
-    }
-
-    .whatsapp-float:hover {
-      transform: scale(1.1);
-    }
-
-    /* RESPONSIVE LAYOUT SCALING */
-    @media(max-width:768px){
-      .live-ticker-banner { top: 120px; padding: 8px 5%; }
-      .game-hero { padding: 280px 5% 70px; }
-      .game-hero h1 { font-size: 2.8rem; }
-      .section-title h2, .tournament h2 { font-size: 2.2rem; }
-      .wallet-balance h2 { font-size: 2.5rem; }
-      .wallet-card { padding: 30px 20px; text-align: center; justify-content: center; }
-      .wallet-actions { justify-content: center; width: 100%; }
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 8%; background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      position: sticky; top: 0; z-index: 1000;
+    }
+    .logo { display: flex; flex-direction: column; }
+    .logo span { font-size: 1.8rem; font-weight: 800; color: var(--brand-gold); letter-spacing: 1px; }
+    .logo small { color: var(--clean-white); font-weight: 600; font-size: 0.75rem; letter-spacing: 2px; }
+    .nav-links { display: flex; gap: 30px; }
+    .nav-links a { text-decoration: none; color: var(--clean-white); font-weight: 600; transition: 0.3s ease; }
+    .nav-links a:hover { color: var(--brand-gold); }
+
+    /* AUTH PANEL LAYOUT */
+    .auth-section {
+      min-height: calc(100vh - 85px); display: flex; justify-content: center;
+      align-items: center; padding: 40px 20px;
+      background: radial-gradient(circle at top right, rgba(13, 71, 161, 0.4), transparent), var(--deep-navy);
+    }
+    
+    .auth-container {
+      width: 100%; max-width: 480px; background: var(--clean-white);
+      padding: 40px; border-radius: 24px; 
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      border: 2px solid var(--soft-peach);
+      position: relative; overflow: hidden;
+    }
+
+    /* Premium Design Accent Line */
+    .auth-container::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+      background: linear-gradient(90deg, var(--primary-blue), var(--brand-gold), var(--accent-pink));
+    }
+
+    .auth-header { text-align: center; margin-bottom: 32px; }
+    .auth-header h1 { font-size: 2.2rem; color: var(--deep-navy); font-weight: 800; margin-bottom: 8px; }
+    .auth-header p { color: #64748b; font-size: 0.95rem; }
+
+    /* STRUCTURED INPUT FIELDS */
+    .auth-form { display: flex; flex-direction: column; gap: 20px; }
+    .input-group { position: relative; }
+    .input-group i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.1rem; }
+    
+    .input-group input { 
+      width: 100%; padding: 16px 16px 16px 48px; 
+      border: 1px solid #cbd5e1; border-radius: 12px; 
+      font-size: 1rem; color: var(--deep-navy); outline: none; 
+      transition: all 0.3s ease; background: #f8fafc;
+    }
+    .input-group input:focus { 
+      border-color: var(--primary-blue); background: var(--clean-white);
+      box-shadow: 0 0 0 4px rgba(13, 71, 161, 0.1);
+    }
+
+    /* ACTION BUTTON MATRIX */
+    .auth-btn { 
+      padding: 16px; border: none; border-radius: 12px; 
+      background: linear-gradient(135deg, var(--primary-blue), #1565c0); 
+      color: var(--clean-white); font-size: 1rem; font-weight: 700; 
+      cursor: pointer; transition: all 0.3s ease; letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(13, 71, 161, 0.3);
+    }
+    .auth-btn:hover { 
+      transform: translateY(-2px); 
+      box-shadow: 0 6px 20px rgba(13, 71, 161, 0.4);
+    }
+    .auth-btn:active { transform: translateY(0); }
+    .auth-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .auth-switch { text-align: center; margin-top: 24px; color: #64748b; font-size: 0.95rem; }
+    .auth-switch span { color: var(--primary-blue); cursor: pointer; font-weight: 700; transition: 0.2s; }
+    .auth-switch span:hover { color: var(--accent-pink); text-decoration: underline; }
+
+    .forgot-password { text-align: right; margin-top: -10px; }
+    .forgot-password a { color: var(--primary-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.2s; }
+    .forgot-password a:hover { color: var(--accent-pink); }
+
+    .info-badge { 
+      margin-top: 28px; padding: 16px; 
+      background: var(--soft-peach); border-radius: 12px; 
+      font-size: 0.85rem; color: var(--deep-navy); line-height: 1.5;
+      border-left: 4px solid var(--accent-pink); font-weight: 500;
+    }
+
+    .whatsapp-float { 
+      position: fixed; width: 60px; height: 60px; bottom: 25px; right: 25px; 
+      background: #25d366; color: white; border-radius: 50%; 
+      display: flex; justify-content: center; align-items: center; 
+      font-size: 2rem; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
+      z-index: 1000; transition: 0.3s ease;
+    }
+    .whatsapp-float:hover { transform: scale(1.1); }
+
+    @media(max-width: 768px) {
+      .navbar { flex-direction: column; gap: 15px; padding: 15px; }
+      .nav-links { gap: 20px; }
+      .auth-container { padding: 30px 20px; }
     }
   </style>
 </head>
-
 <body>
 
   <header class="navbar">
@@ -525,186 +140,70 @@
       <a href="../index.html">Home</a>
       <a href="services.html">Services</a>
       <a href="shop.html">Shop</a>
-      <a href="games.html" class="active">Game Center</a>
       <a href="contact.html">Contact</a>
     </nav>
   </header>
 
-  <div class="live-ticker-banner">
-    <div class="live-badge">🔴 WATCH LIVE NOW</div>
-    <div class="ticker-wrapper">
-      <div class="ticker-text" id="tickerContent">
-        Welcome to Hambak Game Center! • Track live score progress • Current Leader: Ahmad Hamahullah with 25,500 pts • Completing modules updates leaderboard standings instantaneously!
-      </div>
-    </div>
-  </div>
-
-  <section class="game-hero">
-    <h1>Gamified Arena</h1>
-    <p>
-      Test your technical capacity, clear structural spelling levels, and master Senior Secondary educational content parameters 
-      designed directly by HAMBAK TECH & SERVICES.
-    </p>
-  </section>
-
-  <section class="wallet-section">
-    <div class="wallet-card">
-      <div class="wallet-balance">
-        <p>Operational Gaming Account</p>
-        <h2 id="walletDisplay">₦25,500</h2>
-        <small>Real-time execution coin score tracking balance</small>
-      </div>
-      <div class="wallet-actions">
-        <button class="deposit-btn" onclick="alert('VTU automated funding engine integration loading...')">Deposit Coins</button>
-        <button class="play-btn" onclick="window.scrollTo({top: document.getElementById('arenaSection').offsetTop - 40, behavior: 'smooth'})">Launch Arena</button>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="arenaSection">
-    <div class="section-title">
-      <h2>Active Gaming Challenges</h2>
-      <p>Engage directly with interactive software challenges built to reward intellectual capacity.</p>
-    </div>
-
-    <div class="game-grid">
-
-      <div class="game-card">
-        <div class="game-image">
-          <img src="https://images.unsplash.com/photo-1542751110-97427bbecf20?q=80&w=1200&auto=format&fit=crop" alt="Spelling Bee">
-        </div>
-        <div class="game-content">
-          <div class="game-category">Educational App</div>
-          <h3>Spelling Bee Challenge</h3>
-          <p>Senior Secondary level spelling tracking. Arrange or type the target structural phrase correctly to score points.</p>
-          <div class="game-meta">
-            <span><i class="fa-solid fa-brain"></i> SSS 1 - 3</span>
-            <span><i class="fa-solid fa-coins"></i> +₦500 / Level</span>
-          </div>
-          <button class="game-button" id="beeTrigger" onclick="toggleEngine('bee')">Launch Spelling Bee</button>
-        </div>
-        <div class="live-engine-box" id="beeEngine">
-          <p id="beePrompt" style="margin:0; font-weight:700; color:#f5b942;">Rearrange letters to spell out a database link protocol: <br><span style="letter-spacing:3px; font-size:1.2rem; color:white;">O N G O M B D</span></p>
-          <input type="text" id="beeInput" class="engine-input" placeholder="Type correct layout structure...">
-          <div id="beeFeedback" class="engine-feedback"></div>
-          <button class="game-button" style="padding:10px; background:#059669;" onclick="verifySpellingBee()">Verify Solution</button>
-        </div>
+  <section class="auth-section">
+    <div class="auth-container">
+      
+      <div class="auth-header">
+        <h1 id="formTitle">Customer Login</h1>
+        <p id="formSubtitle">Access your dashboard & services</p>
       </div>
 
-      <div class="game-card">
-        <div class="game-image">
-          <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop" alt="Quiz Arena">
+      <form class="auth-form" id="authForm" autocomplete="on">
+        
+        <div class="input-group" id="nameWrapper" style="display:none">
+          <i class="fa-solid fa-user"></i>
+          <input type="text" placeholder="Full Name" id="nameField" name="username" autocomplete="name">
         </div>
-        <div class="game-content">
-          <div class="game-category">Academic Prep</div>
-          <h3>Senior Secondary Quiz</h3>
-          <p>Multi-subject exam preparation modules spanning ICT sciences, database administration foundations, and mathematics logic.</p>
-          <div class="game-meta">
-            <span><i class="fa-solid fa-graduation-cap"></i> ICT & Science</span>
-            <span><i class="fa-solid fa-coins"></i> +₦1,000 / Answer</span>
-          </div>
-          <button class="game-button" id="quizTrigger" onclick="toggleEngine('quiz')">Launch Exam Quiz</button>
+
+        <div class="input-group" id="usernameWrapper" style="display:none">
+          <i class="fa-solid fa-at"></i>
+          <input type="text" placeholder="Username" id="usernameField" name="nickname" autocomplete="username">
         </div>
-        <div class="live-engine-box" id="quizEngine">
-          <p id="quizPrompt" style="margin:0; font-weight:700; color:#f5b942;">Which backend architectural component acts as a flexible, document-oriented database store?</p>
-          <select id="quizSelect" class="engine-input" style="background:#0f172a; color:white;">
-            <option value="wrong1">Hypertext Markup Protocol (HTTP)</option>
-            <option value="correct">MongoDB Engine Storage</option>
-            <option value="wrong2">Cascading Style Sheets (CSS)</option>
-          </select>
-          <div id="quizFeedback" class="engine-feedback"></div>
-          <button class="game-button" style="padding:10px; background:#059669;" onclick="verifyQuiz()">Submit Answer</button>
+
+        <div class="input-group" id="phoneWrapper" style="display:none">
+          <i class="fa-solid fa-phone"></i>
+          <input type="tel" placeholder="Phone Number" id="phoneField" name="phone" autocomplete="tel">
         </div>
+
+        <div class="input-group">
+          <i class="fa-solid fa-envelope"></i>
+          <input type="email" placeholder="Email Address or Username" id="emailField" name="email" autocomplete="email" required>
+        </div>
+
+        <div class="input-group">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" placeholder="Password" id="passwordField" name="password" autocomplete="current-password" required>
+          <span id="togglePassword" style="position:absolute; right:15px; top:50%; transform:translateY(-50%); cursor:pointer; color:#64748b;">
+            <i class="fa-solid fa-eye"></i>
+          </span>
+        </div>
+
+        <div class="forgot-password" id="forgotPasswordWrapper">
+          <a href="forgot-password.html">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="auth-btn" id="submitBtn">Login</button>
+      </form>
+
+      <div class="auth-switch">
+        <span id="toggleForm">Create New Account</span>
       </div>
 
-      <div class="game-card">
-        <div class="game-image">
-          <img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?q=80&w=1200&auto=format&fit=crop" alt="Math Matrix">
-        </div>
-        <div class="game-content">
-          <div class="game-category">Mathematical Logic</div>
-          <h3>Math Brain Quiz</h3>
-          <p>Speed calculation computations tracking dynamic data arrays, pricing margins, and high-speed algorithm equations.</p>
-          <div class="game-meta">
-            <span><i class="fa-solid fa-calculator"></i> Algorithms</span>
-            <span><i class="fa-solid fa-coins"></i> +₦300 / Solve</span>
-          </div>
-          <button class="game-button" id="mathTrigger" onclick="toggleEngine('math')">Launch Math Matrix</button>
-        </div>
-        <div class="live-engine-box" id="mathEngine">
-          <p id="mathPrompt" style="margin:0; font-weight:700; color:#f5b942;">Solve for the base computing index factor: <br>150 * 2 - (40 + 60)</p>
-          <input type="number" id="mathInput" class="engine-input" placeholder="Enter numeric integer solution...">
-          <div id="mathFeedback" class="engine-feedback"></div>
-          <button class="game-button" style="padding:10px; background:#059669;" onclick="verifyMath()">Verify Calculation</button>
-        </div>
+      <div class="info-badge">
+        <strong>Ecosystem Status:</strong> Verified Connection Cluster Live. Ready for launch.
       </div>
 
     </div>
   </section>
-
-  <section class="section" style="background:#0a0f24;">
-    <div class="section-title">
-      <h2>Live Arena Standings</h2>
-      <p>Real-time programmatic updates mapping academic leaderboard point values across accounts.</p>
-    </div>
-
-    <div class="leaderboard">
-      <table>
-        <thead>
-          <tr>
-            <th>Rank Position</th>
-            <th>Authenticated Player</th>
-            <th>Completed Module Arena</th>
-            <th>Accumulated Points</th>
-          </tr>
-        </thead>
-        <tbody id="leaderboardBody">
-          </tbody>
-      </table>
-    </div>
-  </section>
-
-  <section class="tournament">
-    <h2>Academic Tournament Drive</h2>
-    <p>
-      Join the upcoming Senior Secondary inter-school digital competitions. Win structural tech tools, 
-      high-capacity storage devices, and certified scholarship recognition awards.
-    </p>
-    <a href="#" class="tournament-btn" onclick="alert('Registration module for tournament drive initializing...')">Register for Tournament</a>
-  </section>
-
-  <footer class="footer">
-    <div class="footer-content">
-      <div>
-        <h3>HAMBAK TECH & SERVICES</h3>
-        <p>Where technology meets services. Interactive computational platforms, branding solutions, and cloud asset deployment.</p>
-      </div>
-      <div>
-        <h3>Quick Links</h3>
-        <div class="footer-links">
-          <a href="../index.html"><i class="fa-solid fa-chevron-right"></i>Home</a>
-          <a href="services.html"><i class="fa-solid fa-chevron-right"></i>Services</a>
-          <a href="games.html"><i class="fa-solid fa-chevron-right"></i>Game Center</a>
-          <a href="contact.html"><i class="fa-solid fa-chevron-right"></i>Contact</a>
-        </div>
-      </div>
-      <div>
-        <h3>Contact Info</h3>
-        <p><i class="fa-solid fa-phone" style="color: #f5b942; margin-right: 8px;"></i> 09127469686</p>
-        <p><i class="fa-solid fa-envelope" style="color: #f5b942; margin-right: 8px;"></i> hambak901@gmail.com</p>
-        <p><i class="fa-solid fa-location-dot" style="color: #f5b942; margin-right: 8px;"></i> Ibeju-Lekki, Lagos, Nigeria</p>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      &copy; 2026 HAMBAK TECH & SERVICES
-    </div>
-  </footer>
 
   <a href="https://wa.me/2349155104724" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
     <i class="fa-brands fa-whatsapp"></i>
   </a>
 
-  <script src="../js/game.js"></script>
-
+  <script src="../js/login.js"></script>
 </body>
 </html>
