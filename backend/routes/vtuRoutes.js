@@ -8,8 +8,8 @@ const router = express.Router();
 // Assuming you have an authentication middleware to secure transactions
 // import { protect } from '../middleware/authMiddleware.js'; 
 
-import User from '../models/User.js'; 
-import Order from '../models/Order.js'; 
+import User from '../models/user.js'; 
+import Order from '../models/order.js'; 
 
 // ==========================================================================
 // CENTRALIZED DISPATCH CONFIGURATION MATRIX (PRICING INDEX SYSTEM)
