@@ -1,7 +1,7 @@
-import Order from "../models/Order.js";
-import Service from "../models/Service.js";
+import Order from "../models/order.js";
+import Service from "../models/service.js";
 import User from "../models/userModel.js";
-import Transaction from "../models/Transaction.js";
+import Transaction from "../models/transaction.js";
 
 /* ==========================================================
    ORDER MATRIX: PROCESS CHECKOUT & BALANCE LOGS
