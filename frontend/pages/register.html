@@ -405,7 +405,6 @@
 
   <div class="register-container">
 
-    <!-- LEFT SIDE - VALUE INFRASTRUCTURE FRAMEWORK -->
     <div class="register-left">
       <h1>Join HAMBAK TECH & SERVICES</h1>
       <p>Create your singular user token to access automated billing trackers, secure VTU channels, custom branding configurations, and active computer science training structures.</p>
@@ -430,7 +429,6 @@
       </div>
     </div>
 
-    <!-- RIGHT SIDE - TRANSACTION FORM CAPTURE CONTROLS -->
     <div class="register-right">
       <div class="form-header">
         <h2>Create Account</h2>
@@ -439,7 +437,6 @@
 
       <form class="register-form" id="registerForm" novalidate>
         
-        <!-- FULL NAME -->
         <div class="form-group">
           <label for="name">Full Name</label>
           <div class="input-box">
@@ -448,7 +445,6 @@
           </div>
         </div>
 
-        <!-- USERNAME -->
         <div class="form-group">
           <label for="username">System Username</label>
           <div class="input-box">
@@ -457,7 +453,6 @@
           </div>
         </div>
 
-        <!-- EMAIL -->
         <div class="form-group">
           <label for="email">Email Address</label>
           <div class="input-box">
@@ -466,7 +461,6 @@
           </div>
         </div>
 
-        <!-- PHONE -->
         <div class="form-group">
           <label for="phone">Phone Number</label>
           <div class="input-box">
@@ -475,7 +469,6 @@
           </div>
         </div>
 
-        <!-- ROLE CLUSTER SELECT -->
         <div class="form-group">
           <label for="role">Account Security Role</label>
           <div class="input-box">
@@ -490,7 +483,6 @@
           </div>
         </div>
 
-        <!-- PASSWORD -->
         <div class="form-group">
           <label for="password">Password Token</label>
           <div class="input-box">
@@ -502,7 +494,6 @@
           </div>
         </div>
 
-        <!-- CONFIRM PASSWORD -->
         <div class="form-group">
           <label for="confirmPassword">Confirm Password Verification</label>
           <div class="input-box">
@@ -514,7 +505,6 @@
           </div>
         </div>
 
-        <!-- FILE PROFILE DROPZONE -->
         <div class="form-group">
           <label>Profile Avatar Asset (Optional)</label>
           <div class="upload-box">
@@ -524,7 +514,6 @@
           </div>
         </div>
 
-        <!-- COMPLIANCE BOX -->
         <div class="checkbox-group">
           <input type="checkbox" id="termsCheckbox" required>
           <label for="termsCheckbox">
@@ -532,14 +521,11 @@
           </label>
         </div>
 
-        <!-- CORE RUNTIME FEEDBACK MATRIX COMPONENT -->
         <div id="messageBanner" class="message-banner"></div>
 
-        <!-- BUTTON TRIGGER -->
-        <button type="submit" class="register-btn">Establish Ecosystem Identity</button>
+        <button type="submit" class="register-btn" id="submitBtn">Establish Ecosystem Identity</button>
       </form>
 
-      <!-- SOCIAL IDENTITY FEDERATION INTERFACES -->
       <div class="social-login">
         <p>Or instantiate workspace using federated paths</p>
         <div class="social-buttons">
@@ -555,7 +541,6 @@
         </div>
       </div>
 
-      <!-- REDIRECTION INTER-PAGE CONNECTIONS -->
       <div class="login-link">
         Already registered inside the ecosystem? <a href="login.html">Execute Secure Login</a>
       </div>
@@ -563,138 +548,7 @@
 
   </div>
 
-  <!-- COMPONENT LOGIC SCRIPT RUNTIME ARCHITECTURE -->
-  <script>
-    /**
-     * Intercepts input type state transformations to toggle visual masking
-     */
-    function togglePasswordVisibility(targetInputId, controllerElement) {
-      const fieldInstance = document.getElementById(targetInputId);
-      const iconInstance = controllerElement.querySelector("i");
-
-      if (fieldInstance.type === "password") {
-        fieldInstance.type = "text";
-        iconInstance.classList.replace("fa-eye", "fa-eye-slash");
-      } else {
-        fieldInstance.type = "password";
-        iconInstance.classList.replace("fa-eye-slash", "fa-eye");
-      }
-    }
-
-    /**
-     * Visual tracking update hook for local file staging events
-     */
-    function updateUploadBoxStatus(inputField) {
-      const indicatorText = document.getElementById("uploadStatusText");
-      if (inputField.files && inputField.files[0]) {
-        indicatorText.innerText = `Asset Staged: ${inputField.files[0].name}`;
-        indicatorText.style.color = "var(--brand-gold)";
-      } else {
-        indicatorText.innerText = "Drag files or click to upload avatar PNG/JPG";
-        indicatorText.style.color = "#cbd5e1";
-      }
-    }
-
-    /**
-     * Dispatched intercept handler managing payload aggregation and upstream ingestion loops
-     */
-    const formElement = document.getElementById("registerForm");
-    const communicationBanner = document.getElementById("messageBanner");
-
-    formElement.addEventListener("submit", async (submissionEvent) => {
-      submissionEvent.preventDefault();
-
-      // Clear existing UI alert banners
-      communicationBanner.className = "message-banner";
-      communicationBanner.innerText = "";
-
-      /* ACQUIRE FIELD MATRIX VALUE SCOPES */
-      const name = document.getElementById("name").value.trim();
-      const username = document.getElementById("username").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const role = document.getElementById("role").value;
-      const password = document.getElementById("password").value;
-      const confirmPassword = document.getElementById("confirmPassword").value;
-      const termsAccepted = document.getElementById("termsCheckbox").checked;
-
-      /* NATIVE FORM COMPLETENESS RULE VALIDATION */
-      if (!name || !username || !email || !phone || !role || !password) {
-        communicationBanner.innerText = "Error: All mandatory infrastructure fields must be populated.";
-        communicationBanner.classList.add("error");
-        return;
-      }
-
-      if (password !== confirmPassword) {
-        communicationBanner.innerText = "Security Conflict: Token keys do not match verification outputs.";
-        communicationBanner.classList.add("error");
-        return;
-      }
-
-      if (!termsAccepted) {
-        communicationBanner.innerText = "Authorization Blocked: You must sign and accept our network usage policies.";
-        communicationBanner.classList.add("error");
-        return;
-      }
-
-      /* BUILD FORM ENVELOPE ENCAPSULATION */
-      try {
-        // Absolute local routing context avoiding external cross-domain port bindings
-        const executionPipelineRoute = "/api/auth/register";
-
-        const dispatchPayload = {
-          name,
-          username,
-          email,
-          phone,
-          role,
-          password
-        };
-
-        const serverTransportStream = await fetch(executionPipelineRoute, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(dispatchPayload)
-        });
-
-        const processingResultData = await serverTransportStream.json();
-
-        /* VALIDATE TRANSACTION RESPONSE METRICS */
-        if (!serverTransportStream.ok || !processingResultData.success) {
-          communicationBanner.innerText = `Registration Failure: ${processingResultData.message || "Invalid field parameters configuration."}`;
-          communicationBanner.classList.add("error");
-          return;
-        }
-
-        /* SUCCESS LEDGER TRANSACTION LOG COMMITTED */
-        communicationBanner.innerText = "Ecosystem Token Staged Successfully. Mapping environment context profiles...";
-        communicationBanner.classList.add("success");
-
-        // Commit standard cryptographically generated identity web tokens to browser state memory
-        if (processingResultData.token) {
-          localStorage.setItem("token", processingResultData.token);
-        }
-
-        /* DISPATCH INTER-PAGE ROUTING DESTINATION REDIRECTS DEPENDING ON ACCOUNT METRIC CLASSIFICATIONS */
-        setTimeout(() => {
-          if (role === "admin") {
-            window.location.href = "admin.html";
-          } else if (role === "student") {
-            window.location.href = "dashboard.html?context=training";
-          } else {
-            window.location.href = "login.html";
-          }
-        }, 1800);
-
-      } catch (externalNetworkFaultError) {
-        communicationBanner.innerText = "Fatal Infrastructure Defect: Upstream processing server cluster returned an unhandled communications fault.";
-        communicationBanner.classList.add("error");
-        console.error("Transport Fault Framework Trace Log:", externalNetworkFaultError);
-      }
-    });
-  </script>
+  <script src="../js/register.js"></script>
 </body>
 
 </html>
