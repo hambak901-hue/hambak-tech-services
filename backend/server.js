@@ -64,6 +64,8 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
+app.use('/api/vtu', require('./routes/vtuRoutes'));
+
 
 /* =========================
 FALLBACK ROUTING FOR REFRESHES
