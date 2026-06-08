@@ -19,7 +19,7 @@ const serviceSchema = new mongoose.Schema({
     required: true,
     enum: [
       "ICT Training Services", 
-      "ICT & Technology Services", // Added to match your database seeding text perfectly!
+      "ICT & Technology Services", // Perfectly matches your data seeding routine!
       "Website Development", 
       "Graphic Design", 
       "Computer Services", 
