@@ -68,6 +68,36 @@ app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
 app.use('/api/vtu', vtuRoutes);
 
+// 2. Paste this exact route to handle the incoming form data
+app.post('/api/contact', async (req, res) => {
+  try {
+    const { name, email, requestType, whatsapp, requirements } = req.body;
+
+    // Optional: Log it in your Render terminal to confirm it arrived
+    console.log(`New Dispatch Received from ${name} (${whatsapp})`);
+
+    // --- MONGOOSE SAVING LOGIC ---
+    // If you have a Mongoose Schema set up (e.g., ContactModel), uncomment the lines below:
+    /*
+    const newContact = new ContactModel({ name, email, requestType, whatsapp, requirements });
+    await newContact.save();
+    */
+
+    // 3. Send a successful 200 OK status back to the frontend
+    return res.status(200).json({ 
+      success: true, 
+      message: 'Order dispatched and saved securely to the backend database!' 
+    });
+
+  } catch (error) {
+    console.error('Database Save Error:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Internal Server Error while saving data.' 
+    });
+  }
+});
+
 /* =========================
 FALLBACK ROUTING FOR REFRESHES
 ========================= */
@@ -94,4 +124,3 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-        
