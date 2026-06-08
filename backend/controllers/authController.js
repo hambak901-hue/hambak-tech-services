@@ -33,7 +33,7 @@ export const registerUser = async (req, res) => {
     const newUser = await User.create({
       name,
       username,
-      email,
+      email: email.toLowerCase(),
       phone,
       password,
       wallet: 0.00
@@ -49,7 +49,7 @@ export const registerUser = async (req, res) => {
         username: newUser.username,
         email: newUser.email,
         phone: newUser.phone,
-        role: newUser.role,
+        role: newUser.role || "user",
         wallet: newUser.wallet
       }
     });
@@ -274,4 +274,13 @@ export const resetPassword = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
-      
+
+export default {
+  registerUser,
+  loginUser,
+  getMyProfile,
+  logoutUser,
+  forgotPassword,
+  verifyToken,
+  resetPassword
+};
