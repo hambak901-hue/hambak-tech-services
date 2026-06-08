@@ -4,13 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Services | HAMBAK TECH & SERVICES</title>
+  <title>Digital Shop | HAMBAK TECH & SERVICES</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    /* ==========================================================================
-       PREMIUM BRAND COLOR PALETTE (BLUE, GOLD, PEACH, PINK)
-       ========================================================================== */
     :root {
       --primary-blue: #0d47a1;
       --deep-navy: #081120;
@@ -36,7 +33,7 @@
       line-height: 1.6;
     }
 
-    /* GLOBAL ECOSYSTEM NAVBAR OVERRIDES */
+    /* NAVBAR MODULE */
     .navbar {
       display: flex;
       justify-content: space-between;
@@ -50,24 +47,9 @@
       z-index: 1000;
     }
 
-    .logo {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .logo span {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: var(--clean-white);
-    }
-
-    .logo small {
-      font-size: 0.75rem;
-      color: var(--brand-gold);
-      font-weight: 600;
-      letter-spacing: 2px;
-    }
+    .logo { display: flex; flex-direction: column; }
+    .logo span { font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; color: var(--clean-white); }
+    .logo small { font-size: 0.75rem; color: var(--brand-gold); font-weight: 600; letter-spacing: 2px; }
 
     .nav-links a {
       color: #cbd5e1;
@@ -77,295 +59,187 @@
       font-size: 0.95rem;
       transition: 0.3s;
     }
+    .nav-links a:hover, .nav-links a.active { color: var(--brand-gold); }
 
-    .nav-links a:hover, .nav-links a.active {
-      color: var(--brand-gold);
-    }
-
-    /* SERVICES HERO BRAND PROFILE ENTRY */
-    .services-hero {
-      padding: 120px 8% 80px;
-      background: linear-gradient(135deg, rgba(8, 17, 32, 0.95), rgba(13, 71, 161, 0.3)), 
-                  radial-gradient(circle at top center, var(--accent-pink), transparent 60%);
+    /* RETAIL HUB HEADER */
+    .shop-hero {
+      padding: 100px 8% 60px;
+      background: linear-gradient(135deg, rgba(8, 17, 32, 0.95), rgba(13, 71, 161, 0.2));
       text-align: center;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .services-hero h1 {
-      font-size: 3.8rem;
-      font-weight: 800;
-      margin-bottom: 20px;
-      background: linear-gradient(135deg, var(--clean-white), var(--soft-peach));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .services-hero p {
-      max-width: 750px;
-      margin: auto;
-      font-size: 1.15rem;
-      color: #94a3b8;
-      line-height: 1.8;
-    }
-
-    /* SERVICE DISPLAY SYSTEM GRID */
-    .services-section {
-      padding: 80px 8%;
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 55px;
-    }
-
-    .section-title h2 {
-      font-size: 2.6rem;
+    .shop-hero h1 {
+      font-size: 3.5rem;
       font-weight: 800;
       margin-bottom: 15px;
-      background: linear-gradient(135deg, var(--brand-gold), var(--accent-pink));
+      background: linear-gradient(135deg, var(--clean-white), var(--brand-gold));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .section-title p {
-      color: #cbd5e1;
-      font-size: 1.05rem;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 30px;
-    }
-
-    /* CARD BLOCK STRUCTURAL PACKAGES */
-    .service-card {
-      background: rgba(15, 23, 42, 0.65);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 40px 30px;
-      border-radius: 24px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-      transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card:hover {
-      transform: translateY(-10px);
-      border-color: rgba(245, 185, 66, 0.3);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    }
-
-    .service-icon {
-      width: 72px;
-      height: 72px;
-      background: rgba(13, 71, 161, 0.2);
-      border: 1px solid rgba(13, 71, 161, 0.4);
-      border-radius: 16px;
+    /* INVENTORY FILTER BUTTON PANEL */
+    .filter-container {
       display: flex;
       justify-content: center;
-      align-items: center;
-      font-size: 1.75rem;
-      color: var(--brand-gold);
-      margin-bottom: 25px;
+      gap: 15px;
+      padding: 30px 8%;
+      flex-wrap: wrap;
     }
 
-    .service-card h3 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: var(--clean-white);
-    }
-
-    .service-card p {
-      color: #94a3b8;
-      font-size: 0.95rem;
-      line-height: 1.7;
-      margin-bottom: 20px;
-    }
-
-    .service-list {
-      list-style: none;
-      margin-bottom: 25px;
-      flex-grow: 1;
-    }
-
-    .service-list li {
-      margin-bottom: 10px;
+    .filter-btn {
+      padding: 10px 24px;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       color: #cbd5e1;
-      font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .service-list li::before {
-      content: "\f00c";
-      font-family: "Font Awesome 6 Free";
-      font-weight: 900;
-      color: var(--accent-pink);
-      font-size: 0.8rem;
-    }
-
-    /* BRAND FINANCIAL PILLS */
-    .price-tag {
-      display: inline-block;
-      align-self: flex-start;
-      padding: 6px 16px;
-      background: rgba(245, 185, 66, 0.12);
-      border: 1px solid rgba(245, 185, 66, 0.3);
-      color: var(--brand-gold);
       border-radius: 50px;
-      font-weight: 700;
-      font-size: 0.85rem;
-      margin-bottom: 25px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .service-btn {
-      display: block;
-      text-align: center;
-      padding: 14px;
-      background: linear-gradient(135deg, var(--primary-blue), #1565c0);
-      color: var(--clean-white);
-      text-decoration: none;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      box-shadow: 0 5px 15px rgba(13, 71, 161, 0.3);
-      transition: 0.3s ease;
-    }
-
-    .service-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 20px rgba(13, 71, 161, 0.5);
-    }
-
-    /* DIRECT ASSISTANCE INTERRUPT BANNER (CTA) */
-    .cta-section {
-      padding: 90px 8%;
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(8, 17, 32, 0.9)), 
-                  radial-gradient(circle at bottom center, var(--primary-blue), transparent 70%);
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      text-align: center;
-    }
-
-    .cta-section h2 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      margin-bottom: 15px;
-    }
-
-    .cta-section p {
-      max-width: 650px;
-      margin: auto;
-      line-height: 1.7;
-      color: #94a3b8;
-      margin-bottom: 30px;
-    }
-
-    .cta-btn {
-      display: inline-block;
-      padding: 16px 40px;
-      background: var(--brand-gold);
-      color: var(--dark-card);
-      text-decoration: none;
-      border-radius: 12px;
-      font-weight: 700;
-      box-shadow: 0 5px 15px rgba(245, 185, 66, 0.3);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
       transition: 0.3s;
     }
 
-    .cta-btn:hover {
-      background: var(--clean-white);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 22px rgba(255, 255, 255, 0.2);
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--brand-gold);
+      color: var(--dark-card);
+      border-color: var(--brand-gold);
+      box-shadow: 0 4px 15px rgba(245, 185, 66, 0.3);
     }
 
-    /* SYSTEMS ECOSYSTEM FOOTER MODULE */
-    .footer {
-      background: #020617;
-      color: #94a3b8;
-      padding: 60px 8% 20px;
-    }
-
-    .footer-content {
+    /* GRID STRUCTURE FOR PRODUCTS */
+    .shop-section { padding: 20px 8% 80px; }
+    
+    .products-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 40px;
-      margin-bottom: 40px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
     }
 
-    .footer h3 {
-      margin-bottom: 20px;
-      color: var(--brand-gold);
-      font-size: 1.15rem;
-      font-weight: 700;
+    .product-card {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: 0.3s ease;
     }
 
-    .footer p {
-      line-height: 1.7;
-      font-size: 0.95rem;
+    .product-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(245, 185, 66, 0.25);
     }
 
-    .footer-links a {
-      display: block;
-      margin-bottom: 12px;
-      color: #cbd5e1;
-      text-decoration: none;
-      font-size: 0.95rem;
-      transition: 0.2s;
+    .product-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      background: #1e293b;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .footer-links a:hover {
+    .product-info {
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .product-tag {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       color: var(--accent-pink);
-      padding-left: 5px;
+      font-weight: 700;
+      margin-bottom: 8px;
     }
 
-    .footer-bottom {
-      text-align: center;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    .product-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--clean-white);
+      margin-bottom: 10px;
+    }
+
+    .product-desc {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .product-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+    }
+
+    .product-price {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--brand-gold);
+    }
+
+    .cart-btn {
+      padding: 10px 18px;
+      background: linear-gradient(135deg, var(--primary-blue), #1565c0);
+      color: var(--clean-white);
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
       font-size: 0.85rem;
-      color: #64748b;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    /* FLOATING EMERGENCY TELEMETRY CONNECTION */
-    .whatsapp-float {
+    .cart-btn:hover {
+      box-shadow: 0 5px 15px rgba(13, 71, 161, 0.4);
+    }
+
+    /* FLOATING SHOPPING CART CONTROL NOTIFICATION BUTTON */
+    .cart-badge-float {
       position: fixed;
-      bottom: 30px;
+      bottom: 110px;
       right: 30px;
       width: 60px;
       height: 60px;
-      background: #25d366;
+      background: var(--brand-gold);
+      color: var(--dark-card);
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.9rem;
-      color: var(--clean-white);
+      font-size: 1.4rem;
       text-decoration: none;
       z-index: 999;
-      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
-      transition: 0.3s ease;
+      box-shadow: 0 10px 25px rgba(245, 185, 66, 0.3);
+      transition: 0.3s;
     }
 
-    .whatsapp-float:hover {
-      transform: scale(1.1);
+    .cart-count {
+      position: absolute;
+      top: -5px;
+      right: -2px;
+      background: var(--accent-pink);
+      color: var(--clean-white);
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 20px;
+      border: 2px solid var(--dark-card);
     }
 
-    /* RESPONSIVENESS OVERRIDES */
+    .whatsapp-float { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: #25d366; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.9rem; color: var(--clean-white); text-decoration: none; z-index: 999; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3); }
+
     @media(max-width: 768px) {
-      .navbar { flex-direction: column; gap: 15px; text-align: center; }
-      .nav-links a { margin: 0 10px; font-size: 0.9rem; }
-      .services-hero h1 { font-size: 2.5rem; }
-      .section-title h2, .cta-section h2 { font-size: 2rem; }
-      .services-section { padding: 50px 5%; }
+      .navbar { flex-direction: column; gap: 15px; }
+      .nav-links a { margin: 0 10px; }
+      .shop-hero h1 { font-size: 2.3rem; }
     }
   </style>
 </head>
@@ -379,212 +253,159 @@
     </div>
     <nav class="nav-links">
       <a href="../index.html">Home</a>
-      <a href="services.html" class="active">Services</a>
+      <a href="services.html">Services</a>
       <a href="registration.html">Registration</a>
-      <a href="shop.html">Shop</a>
+      <a href="shop.html" class="active">Shop</a>
       <a href="contact.html">Contact</a>
       <a href="login.html">Login</a>
     </nav>
   </header>
 
-  <section class="services-hero">
-    <h1>Our Professional Services</h1>
-    <p>HAMBAK TECH & SERVICES provides top-tier corporate ICT architectures, online registration processing, high-volume graphic branding, automated VTU portals, and computer science training structures.</p>
+  <section class="shop-hero">
+    <h1>Hardware & Retail Catalog</h1>
+    <p>Procure computer hardware, premium branding components, or certified production inventory items instantly.</p>
   </section>
 
-  <section class="services-section">
-    <div class="section-title">
-      <h2>What We Offer</h2>
-      <p>Reliable technology workflows engineered precisely for individuals, business systems, and academic trainees.</p>
-    </div>
+  <div class="filter-container">
+    <button class="filter-btn active" onclick="filterItems('all')">All Hardware</button>
+    <button class="filter-btn" onclick="filterItems('accessories')">Accessories</button>
+    <button class="filter-btn" onclick="filterItems('components')">Components</button>
+    <button class="filter-btn" onclick="filterItems('stationery')">Stationery & Prints</button>
+  </div>
 
-    <div class="services-grid" id="servicesGrid">
-
-      <div class="service-card">
-        <div class="service-icon"><i class="fa-solid fa-id-card"></i></div>
-        <h3>NIN Services</h3>
-        <p>Rapid deployment and management systems for National Identification biometric validations.</p>
-        <ul class="service-list">
-          <li>New Data Enrolment Capture</li>
-          <li>System Modification & Modification</li>
-          <li>Loss Recovery & Card Reprint</li>
-          <li>Ecosystem Integration & Validation</li>
-        </ul>
-        <div class="price-tag">Starting ₦1,000</div>
-        <a href="shop.html?category=nin" class="service-btn">Book Verification Service</a>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon"><i class="fa-solid fa-print"></i></div>
-        <h3>Printing & Photocopy</h3>
-        <p>High-resolution document copying, secure print servers, and automated lamination lanes.</p>
-        <ul class="service-list">
-          <li>Monochrome Laser Printing</li>
-          <li>High-Impact Color Production</li>
-          <li>Fast Bulk Document Photocopy</li>
-          <li>Thermal Asset Lamination</li>
-        </ul>
-        <div class="price-tag">Starting ₦100</div>
-        <a href="shop.html?category=printing" class="service-btn">Place Copy Order</a>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon"><i class="fa-solid fa-file-pen"></i></div>
-        <h3>Online Registration</h3>
-        <p>Direct enrollment pipelines for regional academic, testing, and governmental identification boards.</p>
-        <ul class="service-list">
-          <li>WAEC Portal Staging</li>
-          <li>JAMB Core Processing</li>
-          <li>NECO / GCE Access Nodes</li>
-          <li>NYSC Mobilization Unit</li>
-        </ul>
-        <div class="price-tag">Starting ₦3,000</div>
-        <a href="registration.html" class="service-btn">Launch Portal Terminal</a>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon"><i class="fa-solid fa-sim-card"></i></div>
-        <h3>VTU Airtime & Data</h3>
-        <p>Instant automated API dispersal for all major network operators inside Nigeria.</p>
-        <ul class="service-list">
-          <li>MTN / Airtel Instant Vending</li>
-          <li>Glo / 9mobile Virtual Airtime</li>
-          <li>SME & Corporate High-Volume Data</li>
-          <li>Automated Utility Transactions</li>
-        </ul>
-        <div class="price-tag">Starting ₦100</div>
-        <a href="shop.html?category=vtu" class="service-btn">Recharge Terminal</a>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon"><i class="fa-solid fa-palette"></i></div>
-        <h3>Graphics & Brand Design</h3>
-        <p>Creative design asset compilation ensuring strong visibility vectors across media frameworks.</p>
-        <ul class="service-list">
-          <li>Flyer & Event Production</li>
-          <li>Large-Scale Banner Rendering</li>
-          <li>Corporate Stationery Profiles</li>
-          <li>Plastic ID Badge Compositing</li>
-        </ul>
-        <div class="price-tag">Starting ₦3,000</div>
-        <a href="shop.html?category=graphics" class="service-btn">Order Visual Assets</a>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-        <h3>ICT Training Tracks</h3>
-        <p>Practical curricula focused on foundational logic, business automation, and developer engineering tracks.</p>
-        <ul class="service-list">
-          <li>Basic Computer Productivity</li>
-          <li>Spreadsheet & Business Analytics</li>
-          <li>After-School Supplementary Tracks</li>
-          <li>Comprehensive Monthly Bootcamps</li>
-        </ul>
-        <div class="price-tag">Starting ₦5,000</div>
-        <a href="shop.html?category=training" class="service-btn">Enroll In Track</a>
-      </div>
-
-    </div>
-  </section>
-
-  <section class="cta-section">
-    <h2>Need Professional Custom Integration?</h2>
-    <p>Our team builds specialized business workflows tailored precisely for enterprises, schools, and administrators.</p>
-    <a href="contact.html" class="cta-btn">Connect With Support Core</a>
-  </section>
-
-  <footer class="footer">
-    <div class="footer-content">
-      <div>
-        <h3>HAMBAK TECH & SERVICES</h3>
-        <p>Where elite engineering principles map directly to real-world solution frameworks. Streamlining transactions across Lagos and beyond.</p>
-      </div>
-      <div>
-        <h3>Quick Navigation</h3>
-        <div class="footer-links">
-          <a href="../index.html">Home Ecosystem</a>
-          <a href="services.html">Services Catalog</a>
-          <a href="registration.html">Registration Portal</a>
-          <a href="shop.html">Digital Shop</a>
-          <a href="contact.html">Support Desk</a>
+  <section class="shop-section">
+    <div class="products-grid" id="productsGrid">
+      
+      <div class="product-card" data-category="accessories">
+        <div class="product-img" style="background: url('https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500') center/cover;"></div>
+        <div class="product-info">
+          <div class="product-tag">Accessories</div>
+          <h3 class="product-title">Wireless Optical Mouse</h3>
+          <p class="product-desc">High precision 2.4GHz connection ergonomic mouse optimized for extended productivity tasks.</p>
+          <div class="product-meta">
+            <div class="product-price">₦4,500</div>
+            <button class="cart-btn" onclick="addToCart('mouse-01', 'Wireless Optical Mouse', 4500)">
+              <i class="fa-solid fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
         </div>
       </div>
-      <div>
-        <h3>Ecosystem Core Interfaces</h3>
-        <p style="margin-bottom: 8px;"><i class="fa-solid fa-phone" style="color: var(--brand-gold); margin-right: 8px;"></i> 09127469686</p>
-        <p style="margin-bottom: 8px;"><i class="fa-solid fa-envelope" style="color: var(--brand-gold); margin-right: 8px;"></i> hambak901@gmail.com</p>
-        <p><i class="fa-solid fa-location-dot" style="color: var(--brand-gold); margin-right: 8px;"></i> Ibeju-Lekki, Lagos Nigeria</p>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      &copy; 2026 HAMBAK TECH & SERVICES. All Operational Rights Confirmed.
-    </div>
-  </footer>
 
-  <a href="https://wa.me/2349127469686" class="whatsapp-float" aria-label="Connect directly to technical support reps">
+      <div class="product-card" data-category="stationery">
+        <div class="product-img" style="background: url('https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=500') center/cover;"></div>
+        <div class="product-info">
+          <div class="product-tag">Stationery & Prints</div>
+          <h3 class="product-title">Premium A4 Copy Paper Bundle</h3>
+          <p class="product-desc">High-brightness 80gsm pure white laser-printing papers. Ideal for clean business documentation operations.</p>
+          <div class="product-meta">
+            <div class="product-price">₦6,200</div>
+            <button class="cart-btn" onclick="addToCart('paper-a4', 'Premium A4 Copy Paper Bundle', 6200)">
+              <i class="fa-solid fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <a href="cart.html" class="cart-badge-float">
+    <i class="fa-solid fa-shopping-cart"></i>
+    <span class="cart-count" id="globalCartCount">0</span>
+  </a>
+
+  <a href="https://wa.me/2349127469686" class="whatsapp-float">
     <i class="fa-brands fa-whatsapp"></i>
   </a>
 
   <script>
-    async function loadDynamicServices() {
-      const servicesContainer = document.getElementById("servicesGrid");
-      const identityToken = localStorage.getItem("token");
+    let internalCartItems = JSON.parse(localStorage.getItem("hambak_cart")) || [];
 
-      // Stop processing early if no authentication token is active
-      if (!identityToken) {
-        console.warn("Telemetry Status Notice: Guest context logged. Dynamic server catalogs are currently locked. Displaying baseline system products.");
-        return;
-      }
-
-      try {
-        const queryPipelineUrl = "/api/orders";
-        const fetchStreamResponse = await fetch(queryPipelineUrl, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${identityToken}`,
-            "Content-Type": "application/json"
-          }
-        });
-
-        // Ensure the stream is alive before parsing json structures
-        if (!fetchStreamResponse.ok) {
-          throw new Error(`Upstream Ingestion Failure: Target returned server code ${fetchStreamResponse.status}`);
-        }
-
-        const aggregatedResultData = await fetchStreamResponse.json();
-
-        // Safety assertion verification for property paths existence
-        if (aggregatedResultData && aggregatedResultData.services && aggregatedResultData.services.length > 0) {
-          aggregatedResultData.services.forEach(item => {
-            const parsedCardWrapper = document.createElement("div");
-            parsedCardWrapper.className = "service-card";
-
-            const graphicBannerAsset = item.image 
-              ? `<img src="${item.image.startsWith('http') ? '' : '/api'}${item.image}" style="width:100%; height:200px; object-fit:cover; border-radius:14px; margin-bottom:20px; border: 1px solid rgba(255,255,255,0.05);">` 
-              : "";
-
-            parsedCardWrapper.innerHTML = `
-              ${graphicBannerAsset}
-              <div class="service-icon">
-                <i class="fa-solid fa-briefcase"></i>
-              </div>
-              <h3>${item.name}</h3>
-              <p>${item.description || "Custom server catalog asset resource item deployed into network infrastructure parameters."}</p>
-              <div class="price-tag">₦${Number(item.price).toLocaleString()}</div>
-              <a href="shop.html?id=${item._id}" class="service-btn">Instantiate Order Node</a>
-            `;
-
-            servicesContainer.insertBefore(parsedCardWrapper, servicesContainer.firstChild);
-          });
-        }
-      } catch (runtimeInfrastructuralFault) {
-        console.error("Critical Sync Failure Trace log inside loadDynamicServices:", runtimeInfrastructuralFault);
+    function updateCartCounterUI() {
+      const countLabel = document.getElementById("globalCartCount");
+      if(countLabel) {
+        const aggregatedSum = internalCartItems.reduce((acc, curr) => acc + (curr.quantity || 1), 0);
+        countLabel.innerText = aggregatedSum;
       }
     }
 
-    // Initialize application catalog evaluation loop on window construction
-    document.addEventListener("DOMContentLoaded", loadDynamicServices);
+    function addToCart(productId, name, price) {
+      const distinctCheck = internalCartItems.find(item => item.id === productId);
+      if(distinctCheck) {
+        distinctCheck.quantity += 1;
+      } else {
+        internalCartItems.push({ id: productId, name: name, price: Number(price), quantity: 1 });
+      }
+      localStorage.setItem("hambak_cart", JSON.stringify(internalCartItems));
+      updateCartCounterUI();
+      alert(`${name} added to cart!`);
+    }
+
+    function filterItems(targetCategory) {
+      // Manage filter buttons appearance states
+      const buttons = document.querySelectorAll('.filter-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const itemCards = document.querySelectorAll('.product-card');
+      itemCards.forEach(card => {
+        if(targetCategory === 'all') {
+          card.style.display = 'flex';
+        } else {
+          card.getAttribute('data-category') === targetCategory ? card.style.display = 'flex' : card.style.display = 'none';
+        }
+      });
+    }
+
+    async function ingestDatabaseProducts() {
+      const catalogContainer = document.getElementById("productsGrid");
+      const BACKEND_API = "https://hambak-tech-services.onrender.com/api";
+
+      try {
+        const networkResponse = await fetch(`${BACKEND_API}/products`);
+        if(!networkResponse.ok) return; // Keep static inventory cards as structural safeties if route is unpopulated
+
+        const collectionData = await networkResponse.json();
+        if(collectionData && collectionData.products && collectionData.products.length > 0) {
+          
+          // Clear static catalog instances once verified db arrays populate
+          catalogContainer.innerHTML = "";
+
+          collectionData.products.forEach(prod => {
+            const layoutCard = document.createElement("div");
+            layoutCard.className = "product-card";
+            layoutCard.setAttribute("data-category", prod.category || "accessories");
+
+            const assetImage = prod.image 
+              ? (prod.image.startsWith('http') ? prod.image : `${BACKEND_API}/..${prod.image}`)
+              : "https://images.unsplash.com/photo-1588702547919-26089e690ecc?w=500";
+
+            layoutCard.innerHTML = `
+              <div class="product-img" style="background: url('${assetImage}') center/cover;"></div>
+              <div class="product-info">
+                <div class="product-tag">${prod.category || "Accessories"}</div>
+                <h3 class="product-title">${prod.name}</h3>
+                <p class="product-desc">${prod.description || "Hambak certified technical retail item configuration product asset resource."}</p>
+                <div class="product-meta">
+                  <div class="product-price">₦${Number(prod.price).toLocaleString()}</div>
+                  <button class="cart-btn" onclick="addToCart('${prod._id}', '${prod.name}', ${prod.price})">
+                    <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                  </button>
+                </div>
+              </div>
+            `;
+            catalogContainer.appendChild(layoutCard);
+          });
+        }
+      } catch (fault) {
+        console.error("Retail product synchronization log trace fault context:", fault);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      updateCartCounterUI();
+      ingestDatabaseProducts();
+    });
   </script>
 </body>
-
 </html>
