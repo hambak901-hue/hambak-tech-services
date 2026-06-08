@@ -294,6 +294,11 @@
       transform: translateY(-1px);
       box-shadow: 0 8px 20px rgba(13, 71, 161, 0.5);
     }
+    .reg-btn:disabled {
+      background: #475569;
+      cursor: not-allowed;
+      transform: none;
+    }
 
     /* APPLICATION STATE TRACKING ARCHITECTURE */
     .status-section {
@@ -558,7 +563,6 @@
 
 <body>
 
-  <!-- GLOBAL APPLICATION ECOSYSTEM NAVBAR -->
   <header class="navbar">
     <div class="logo">
       <span>HAMBAK</span>
@@ -572,13 +576,11 @@
     </nav>
   </header>
 
-  <!-- DATA HERO COMPONENT PROFILE ENTRY -->
   <section class="registration-hero">
     <h1>Online Registration Portal</h1>
     <p>Secure encryption and direct terminal processing pipelines for WAEC, JAMB, NECO, NYSC, and strategic governmental identification verification modules inside Nigeria.</p>
   </section>
 
-  <!-- CORE TRANSACTION REGISTRATION LOG INTERFACES -->
   <section class="section">
     <div class="section-title">
       <h2>Registration Services</h2>
@@ -587,7 +589,6 @@
 
     <div class="registration-grid">
 
-      <!-- WAEC OPERATIONS PIPELINE -->
       <div class="registration-card">
         <div class="registration-icon">
           <i class="fa-solid fa-graduation-cap"></i>
@@ -620,7 +621,6 @@
         </form>
       </div>
 
-      <!-- JAMB OPERATIONS PIPELINE -->
       <div class="registration-card">
         <div class="registration-icon">
           <i class="fa-solid fa-book"></i>
@@ -658,7 +658,6 @@
         </form>
       </div>
 
-      <!-- NYSC OPERATIONS PIPELINE -->
       <div class="registration-card">
         <div class="registration-icon">
           <i class="fa-solid fa-id-card"></i>
@@ -694,7 +693,6 @@
     </div>
   </section>
 
-  <!-- LIVE METRIC STATUS ASYNC COMPONENT LOGIC SINK -->
   <section class="status-section">
     <div class="status-box">
       <h2>Track Registration Status</h2>
@@ -709,7 +707,6 @@
     </div>
   </section>
 
-  <!-- COMPILATION LOG COMPONENT TABLE -->
   <section class="table-section">
     <div class="table-box">
       <h2>Ecosystem Registration Log Logs</h2>
@@ -746,7 +743,6 @@
     </div>
   </section>
 
-  <!-- TRANSACTION GATEWAY GATEWAY HOOK -->
   <section class="payment-section">
     <div class="payment-card">
       <h2>Online Fee Payment Gateway</h2>
@@ -757,7 +753,6 @@
     </div>
   </section>
 
-  <!-- ECOSYSTEM PLATFORM FOOTER UTILITIES -->
   <footer class="footer">
     <div class="footer-content">
       <div>
@@ -785,16 +780,13 @@
     </div>
   </footer>
 
-  <!-- FLOATING CALL-TO-ACTION EMERGENCY INTERRUPT -->
   <a href="https://wa.me/2349127469686" class="whatsapp-float" aria-label="Connect to technical engineering channels">
     <i class="fa-brands fa-whatsapp"></i>
   </a>
 
-  <!-- COMPONENT LOGIC SYSTEM SCRIPT RUNTIME -->
   <script>
-    /**
-     * Updates visual placeholder context parameters upon asset upload interaction hooks
-     */
+    const API_REG_URL = "https://hambak-tech-services.onrender.com/api/registrations";
+
     function captureFileState(fileInputInstance) {
       const parentUploadContainer = fileInputInstance.closest('.upload-box');
       const designTextLabel = parentUploadContainer.querySelector('p');
@@ -808,57 +800,85 @@
       }
     }
 
-    /**
-     * Intercepts standard application setups to emulate edge routing data state mutations
-     */
-    function handleFormSubmission(formEventInstance, trackCategoryName) {
+    async function handleFormSubmission(formEventInstance, trackCategoryName) {
       formEventInstance.preventDefault();
       
       const formDOMReference = formEventInstance.target;
-      const applicantNameValue = formDOMReference.querySelector('input[name="applicantName"]').value;
+      const actionButton = formDOMReference.querySelector('button[type="submit"]');
       
-      // Compute cryptographic-looking mock infrastructure routing tracking context tokens
-      const generatedTokenIndex = `REG-2026-${Math.floor(1000 + Math.random() * 9000)}`;
-      
-      // Inject transaction into runtime table element storage
-      const tableBody = document.getElementById('ledgerTableBody');
-      const newlyMintedRow = document.createElement('tr');
-      
-      newlyMintedRow.innerHTML = `
-        <td>${trackCategoryName} Routing</td>
-        <td>${applicantNameValue} (${generatedTokenIndex})</td>
-        <td><span class="badge processing">Processing</span></td>
-        <td>May 2026</td>
-      `;
-      
-      // Append row logs directly to table head context index boundaries
-      tableBody.insertBefore(newlyMintedRow, tableBody.firstChild);
-      
-      alert(`Success: Staging pipeline instantiated for ${trackCategoryName}.\nYour operational routing context verification token key is: ${generatedTokenIndex}\nKeep this safe for telemetry query lookups.`);
-      formDOMReference.reset();
-      
-      // Reset upload display labels explicitly
-      const uploadLabel = formDOMReference.querySelector('.upload-box p');
-      if (uploadLabel) uploadLabel.innerText = "Stage Verification File Context";
+      actionButton.disabled = true;
+      actionButton.innerText = "Processing System Uploads...";
+
+      // Prepare multi-part structural layout payload
+      const payloadData = new FormData(formDOMReference);
+      payloadData.append("category", trackCategoryName);
+
+      try {
+        const res = await fetch(`${API_REG_URL}/submit`, {
+          method: "POST",
+          body: payloadData
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          const generatedTokenIndex = data.referenceToken || `REG-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+          const applicantNameValue = formDOMReference.querySelector('input[name="applicantName"]').value;
+          
+          const tableBody = document.getElementById('ledgerTableBody');
+          const newlyMintedRow = document.createElement('tr');
+          
+          newlyMintedRow.innerHTML = `
+            <td>${trackCategoryName} Identification</td>
+            <td>${applicantNameValue} (${generatedTokenIndex})</td>
+            <td><span class="badge processing">Processing</span></td>
+            <td>Just Now</td>
+          `;
+          
+          tableBody.insertBefore(newlyMintedRow, tableBody.firstChild);
+          
+          alert(`Success: Staging pipeline instantiated for ${trackCategoryName}.\nYour operational routing context verification token key is: ${generatedTokenIndex}\nKeep this safe for telemetry query lookups.`);
+          formDOMReference.reset();
+        } else {
+          throw new Error(data.message || "Pipeline processing rejected by server node.");
+        }
+      } catch (err) {
+        alert(`Registration Error: ${err.message}`);
+      } finally {
+        actionButton.disabled = false;
+        actionButton.innerText = "Submit Registration Layer";
+        const uploadLabel = formDOMReference.querySelector('.upload-box p');
+        if (uploadLabel) {
+          uploadLabel.innerText = "Staging Upload Passport (Max 2MB)";
+          uploadLabel.style.color = "#cbd5e1";
+        }
+      }
     }
 
-    /**
-     * Evaluates active text entries in order to assert transaction lifecycle execution paths
-     */
-    function executeTrackingEvaluation(trackingSubmissionEvent) {
+    async function executeTrackingEvaluation(trackingSubmissionEvent) {
       trackingSubmissionEvent.preventDefault();
       
       const stringTokenValue = document.getElementById('trackerInput').value.trim();
       const visualBannerFeedbackNode = document.getElementById('trackingFeedback');
       
       visualBannerFeedbackNode.className = "tracking-banner";
+      visualBannerFeedbackNode.style.display = "none";
       
-      if (stringTokenValue.toUpperCase().includes('REG-2026')) {
-        visualBannerFeedbackNode.innerText = `System Ledger Hit: Transaction ${stringTokenValue} verified inside active pipeline blocks. Current lifecycle configuration state: [PROCESSING_STAGE_ALPHA].`;
-        visualBannerFeedbackNode.classList.add('info');
-      } else {
-        visualBannerFeedbackNode.innerText = `Routing Fault: Token ${stringTokenValue} failed verification bounds across upstream data architectures. Verify structure entries and re-execute query.`;
+      try {
+        const res = await fetch(`${API_REG_URL}/track/${stringTokenValue}`);
+        const data = await res.json();
+
+        if (res.ok) {
+          visualBannerFeedbackNode.innerText = `System Ledger Hit: Transaction verified. Status: [${data.status.toUpperCase()}]. Comment: ${data.adminComment || 'No administrative updates yet.'}`;
+          visualBannerFeedbackNode.classList.add('info');
+        } else {
+          throw new Error(data.message || "Token missing inside data architectures.");
+        }
+      } catch (err) {
+        visualBannerFeedbackNode.innerText = `Routing Fault: ${err.message}`;
         visualBannerFeedbackNode.classList.add('error');
+      } finally {
+        visualBannerFeedbackNode.style.display = "block";
       }
     }
   </script>
