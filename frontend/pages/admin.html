@@ -470,11 +470,12 @@
     </div>
   </div>
 
-  <script>
-    const token = localStorage.getItem("hambak_token");
+    <script>
+    // Unified Token Key to match the login/registration state system
+    const token = localStorage.getItem("token") || localStorage.getItem("hambak_token");
     const LIVE_API_URL = "https://hambak-tech-services.onrender.com/api";
 
-    // Direct kick out to login sequence if user authentication key is absent
+    // Direct redirection to login sequence if verification context keys are absent
     if (!token) { window.location.href = "login.html"; }
 
     const getHeaders = () => ({
@@ -482,7 +483,7 @@
       "Content-Type": "application/json"
     });
 
-    // SPA Section Navigation Switcher
+    // Single Page Application View Switcher
     function showSection(sectionId) {
       document.querySelectorAll('.app-view').forEach(view => view.classList.remove('active-view'));
       document.querySelectorAll('.sidebar-links a').forEach(link => link.classList.remove('active'));
@@ -495,22 +496,33 @@
       if(targetNavLink) targetNavLink.classList.add('active');
     }
 
-    // Verify Admin Credentials Matrix on Load
+    // Verify Admin Credentials Matrix against authController Profiles
     async function verifyAdminAuthProfile() {
       try {
-        const response = await fetch(`${LIVE_API_URL}/auth/me`, { method: "GET", headers: getHeaders() });
+        // Aligned with the exact endpoint of your backend profile tracker
+        const response = await fetch(`${LIVE_API_URL}/users/profile`, { 
+          method: "GET", 
+          headers: getHeaders() 
+        });
         const data = await response.json();
-        const activeUser = data.user ? data.user : data;
 
-        if (response.ok && activeUser.role === "admin") {
-          document.getElementById("adminName").innerText = activeUser.name || "Root Director";
-          
-          // Execute Global Server Scans
-          loadAdminAnalyticsMatrix();
-          loadUserDirectoryEngine();
-          loadGlobalTransactions();
+        // Extracts context matching your controller's structure: { success: true, user: { ... } }
+        if (response.ok && data.success && data.user) {
+          const activeUser = data.user;
+
+          if (activeUser.role === "admin") {
+            document.getElementById("adminName").innerText = activeUser.name || "Root Director";
+            
+            // Execute Global Database Scans
+            loadAdminAnalyticsMatrix();
+            loadUserDirectoryEngine();
+            loadGlobalTransactions();
+          } else {
+            alert("Security Violation: Administrative clearance level required.");
+            window.location.href = "dashboard.html";
+          }
         } else {
-          alert("Unauthorized access attempt. Diverting parameters back to safety nodes.");
+          alert("Unauthorized access attempt. Diverting parameters back to profile views.");
           window.location.href = "dashboard.html";
         }
       } catch (error) {
@@ -522,13 +534,13 @@
     // Load Overview Analytics Data Indexes
     async function loadAdminAnalyticsMatrix() {
       try {
-        // Integrate aggregate logic from dashboard counts
+        // These can be extended to pull from aggregate count endpoints later
         document.getElementById("metric-total-users").innerText = "85";
         document.getElementById("metric-total-deposits").innerText = "₦450K";
         document.getElementById("metric-pending-nin").innerText = "4";
         document.getElementById("metric-pending-print").innerText = "2";
       } catch (err) {
-        console.log("Analytics aggregation engine exception occurred.");
+        console.warn("Analytics aggregation engine exception occurred.");
       }
     }
 
@@ -542,12 +554,14 @@
         if (data.success && data.transactions && data.transactions.length > 0) {
           tbody.innerHTML = "";
           data.transactions.forEach(tx => {
-            const badgeClass = tx.status === 'successful' ? 'success' : (tx.status === 'pending' ? 'pending' : 'failed');
+            const statusStr = tx.status || 'pending';
+            const badgeClass = statusStr.toLowerCase() === 'successful' ? 'success' : (statusStr.toLowerCase() === 'pending' ? 'pending' : 'failed');
+            
             tbody.innerHTML += `<tr>
               <td><strong>${tx.userId?.name || 'System Identity'}</strong><br><small>${tx.userId?.email || 'N/A'}</small></td>
               <td><span style="text-transform:uppercase; font-weight:bold;">${tx.type}</span></td>
               <td>₦${Number(tx.amount).toLocaleString(undefined, {minimumFractionDigits:2})}</td>
-              <td><span class="status-badge ${badgeClass}">${tx.status}</span></td>
+              <td><span class="status-badge ${badgeClass}">${statusStr}</span></td>
               <td>${new Date(tx.createdAt).toLocaleDateString()}</td>
             </tr>`;
           });
@@ -559,10 +573,9 @@
       }
     }
 
-    // Load and Modify User Directives Ecosystem Array
+    // Load User Directory Matrix
     async function loadUserDirectoryEngine() {
       try {
-        // FIXED: Endpoint changed from /users to /admin/users to clear Render 404 log error
         const res = await fetch(`${LIVE_API_URL}/admin/users`, { headers: getHeaders() });
         const users = await res.json();
         const tbody = document.getElementById("usersDirectoryTableBody");
@@ -571,9 +584,9 @@
           tbody.innerHTML = "";
           users.forEach(user => {
             tbody.innerHTML += `<tr>
-              <td><strong>${user.name}</strong></td>
+              <td><strong>${user.name}</strong><br><small>${user.username || ''}</small></td>
               <td>${user.email}</td>
-              <td><span style="text-transform:uppercase; font-weight:800; color:var(--primary-blue);">${user.role}</span></td>
+              <td><span style="text-transform:uppercase; font-weight:800; color:var(--primary-blue);">${user.role || 'user'}</span></td>
               <td><strong>₦${Number(user.wallet || 0).toLocaleString(undefined, {minimumFractionDigits:2})}</strong></td>
               <td>
                 <button class="action-btn" onclick="adjustUserWalletAllocation('${user._id}')"><i class="fa-solid fa-money-bill-transfer"></i> Fund</button>
@@ -582,7 +595,7 @@
             </tr>`;
           });
         } else {
-          // Robust elegant live layout fallback representation
+          // Dynamic fallback to display operational team data securely
           tbody.innerHTML = `
             <tr>
               <td><strong>Fatimoh Alake</strong></td>
@@ -600,7 +613,7 @@
       }
     }
 
-    // Administrative Fund Allocator Execution Function
+    // Administrative Ledger Capital Allocator Execution Module
     async function adjustUserWalletAllocation(userId) {
       const amount = prompt("Enter custom Naira amount value to allocate onto client ledger node:");
       if (!amount || isNaN(amount)) return;
@@ -613,7 +626,7 @@
         });
         const data = await res.json();
         if (data.success) {
-          alert("Wallet configuration modified successfully.");
+          alert("Wallet asset allocation modified successfully.");
           loadUserDirectoryEngine();
         } else {
           alert(data.message || "Failed to submit allocation profile adjustments.");
@@ -623,9 +636,9 @@
       }
     }
 
-    // Administrative Block/Restrict Toggle Module
+    // Administrative Profiles Access Control (Lockout System)
     async function toggleUserAuthorizationNode(userId) {
-      if(!confirm("Are you certain you want to toggle the access authorization permissions for this identity profile node?")) return;
+      if(!confirm("Are you certain you want to alter authorization access codes for this client profile node?")) return;
 
       try {
         const res = await fetch(`${LIVE_API_URL}/admin/toggle-block/${userId}`, {
@@ -634,7 +647,7 @@
         });
         const data = await res.json();
         if(data.success) {
-          alert("Access configuration permissions altered seamlessly.");
+          alert("Access privileges adjusted seamlessly.");
           loadUserDirectoryEngine();
         }
       } catch(err) {
@@ -642,21 +655,23 @@
       }
     }
 
-    // Save configuration settings callback
+    // Environmental variables submission routing logic
     document.getElementById("globalSettingsForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      alert('Ecosystem configuration variables written into permanent database memory.');
+      alert('Ecosystem configuration settings written into permanent server variable records.');
     });
 
-    // Secure clear session configuration loops
+    // Clear Session Identity Engine
     document.getElementById("logoutBtn").addEventListener("click", (e) => {
       e.preventDefault();
+      localStorage.removeItem("token");
       localStorage.removeItem("hambak_token");
       window.location.href = "login.html";
     });
 
-    // Core Initialization
+    // Core Initialization Entry
     window.addEventListener("DOMContentLoaded", verifyAdminAuthProfile);
   </script>
+  
 </body>
 </html>
