@@ -183,7 +183,6 @@
     .form-box h2 {
       margin-top: 0;
       font-size: 2rem;
-      color: var(--deep-navy);
       background: var(--clean-white);
       color: #0f172a;
       display: inline-block;
@@ -313,15 +312,9 @@
 
     /* RECONSTRUCTED SCREEN SYSTEM BREAKPOINTS */
     @media(max-width:900px){
-      .form-form-layout {
-        grid-template-columns: 1fr;
-      }
-      .form-group.full-width {
-        grid-column: span 1;
-      }
-      .submit-btn {
-        grid-column: span 1;
-      }
+      .form-form-layout { grid-template-columns: 1fr; }
+      .form-group.full-width { grid-column: span 1; }
+      .submit-btn { grid-column: span 1; }
     }
 
     @media(max-width:768px){
@@ -352,7 +345,6 @@
   </header>
 
   <div class="container">
-
     <div class="page-title">
       <h1>Secure Order Placement</h1>
       <p>Configure and provision institutional tech setups, branding prints, or computational service arrays seamlessly.</p>
@@ -363,14 +355,10 @@
         <i class="fa-solid fa-spinner fa-spin"></i> Initializing Hambak Cloud Cluster Services...
       </div>
     </div>
-
   </div>
 
   <script>
-    // System Endpoint Config Node Paths
     const BACKEND_SERVICE_API = "https://hambak-tech-services.onrender.com/api";
-
-    // URL Param Search Token Query Capture
     const parsedServiceTokenId = new URLSearchParams(window.location.search).get("id");
 
     if (!parsedServiceTokenId) {
@@ -378,9 +366,9 @@
       window.location.href = "services.html";
     }
 
-    /**
-     * Executes server instance queries to draw metadata down into fields
-     */
+    // Fetch details on page initialization
+    window.addEventListener("DOMContentLoaded", fetchTargetServiceInstance);
+
     async function fetchTargetServiceInstance() {
       try {
         const fetchResponse = await fetch(`${BACKEND_SERVICE_API}/services/${parsedServiceTokenId}`);
@@ -392,10 +380,10 @@
 
         const structuralServiceObj = transactionPayload.service;
         
-        // Check local caching records to populate authenticated user structures automatically
         let cachedEcosystemProfile = { name: "", email: "", phone: "" };
         try {
-          const userMetaPayload = localStorage.getItem("hambak_user");
+          // Check both storage models to guarantee user profile alignment
+          const userMetaPayload = localStorage.getItem("hambak_user") || localStorage.getItem("user");
           if (userMetaPayload) {
             cachedEcosystemProfile = JSON.parse(userMetaPayload);
           }
@@ -403,11 +391,13 @@
           console.error("Local data cache parsing bypass handled:", storageErr);
         }
 
-        // Render fully tailored workspace interface
+        const imagePath = structuralServiceObj.image;
+        const resolvedImage = imagePath.startsWith('http') ? imagePath : `${BACKEND_SERVICE_API}/../${imagePath}`.replace(/\/+/g, '/').replace('https:/', 'https://');
+
         document.getElementById("serviceContainer").innerHTML = `
           <div class="service-box">
             <div class="service-image-container">
-              <img src="${structuralServiceObj.image.startsWith('http') ? structuralServiceObj.image : BACKEND_SERVICE_API + '/..' + structuralServiceObj.image}" class="service-image" alt="Hambak Asset">
+              <img src="${resolvedImage}" class="service-image" alt="Hambak Asset">
             </div>
 
             <div class="service-details">
@@ -466,7 +456,7 @@
                   <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2rem; color: var(--brand-gold); margin-bottom: 10px;"></i>
                   <p style="margin:0; font-weight:600;">Click to explore directories or drop assets here</p>
                   <p id="fileStatusTracker" class="file-info-text">No document attached yet</p>
-                  <input type="file" id="documentAssetFile" onchange="evaluateFile Footprint(this)">
+                  <input type="file" id="documentAssetFile">
                 </div>
               </div>
 
@@ -475,8 +465,13 @@
           </div>
         `;
 
-        // Wire dynamic calculation matrix engine updates
+        // Bind core systems and watchdogs
         attachDynamicCalculationEngine(structuralServiceObj);
+        
+        // Fix for the broken event hook
+        document.getElementById("documentAssetFile").addEventListener("change", function() {
+          evaluateFileFootprint(this);
+        });
 
       } catch (executionError) {
         console.error("Critical Asset Mapping Exception:", executionError);
@@ -488,15 +483,11 @@
       }
     }
 
-    /**
-     * Attaches live computation calculation engine listeners mapped to administrative billing rules
-     */
     function attachDynamicCalculationEngine(serviceRef) {
       const quantityInput = document.getElementById("quantity");
       const summaryQtyText = document.getElementById("summaryQty");
       const summaryTotalText = document.getElementById("summaryTotal");
 
-      // Match dynamic operational types
       const lowerName = serviceRef.name.toLowerCase();
       const isTypingTask = lowerName.includes("typing") || lowerName.includes("transcription");
 
@@ -505,12 +496,9 @@
         summaryQtyText.innerText = numericalQty;
         
         let calculatedOutputTotal = 0;
-        
         if (isTypingTask) {
-          // Rule: Typing baseline asset fee acts as a one-time charge per page template layer
           calculatedOutputTotal = Number(serviceRef.price);
         } else {
-          // Rule: Standard service operations or print copies scale sequentially via per-student multiplier rules
           calculatedOutputTotal = Number(serviceRef.price) * numericalQty;
         }
 
@@ -520,7 +508,6 @@
 
       quantityInput.addEventListener("input", executePricingRecalculation);
 
-      // Bind submission intercept loops inside programmatic window fields
       document.getElementById("orderForm").addEventListener("submit", async function(event) {
         event.preventDefault();
         
@@ -545,7 +532,7 @@
         }
 
         try {
-          const pipelineToken = localStorage.getItem("hambak_token");
+          const pipelineToken = localStorage.getItem("token") || localStorage.getItem("hambak_token");
           const submissionHeaders = {};
           if (pipelineToken) {
             submissionHeaders["Authorization"] = `Bearer ${pipelineToken}`;
@@ -576,9 +563,6 @@
       });
     }
 
-    /**
-     * Document byte calculation watchdog keeping file allocations lightweight
-     */
     function evaluateFileFootprint(fileInputField) {
       const statusTrackerNode = document.getElementById("fileStatusTracker");
       const targetedFileObj = fileInputField.files[0];
@@ -592,15 +576,13 @@
       const byteSizeInKb = targetedFileObj.size / 1024;
       statusTrackerNode.innerText = `${targetedFileObj.name} (${byteSizeInKb.toFixed(1)} KB)`;
       
-      // Verification Alert: Highlight optimization threshold parameters if file exceeds 15kb
       if (byteSizeInKb > 15) {
-        statusTrackerNode.innerText += " - Note: This document exceeds standard 15KB image optimization recommendations. High-capacity files might experience compilation queues.";
-        statusTrackerNode.style.color = var(--brand-gold);
+        statusTrackerNode.innerText += " - Note: Document exceeds recommended 15KB image optimization thresholds.";
+        statusTrackerNode.style.color = "#f5b942"; // Clean hex string mapping fallback
       } else {
         statusTrackerNode.style.color = "#10b981";
       }
     }
   </script>
-
 </body>
 </html>
