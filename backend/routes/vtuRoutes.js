@@ -8,7 +8,7 @@ const router = express.Router();
 // Assuming you have an authentication middleware to secure transactions
 // import { protect } from '../middleware/authMiddleware.js'; 
 
-import User from '../models/user.js'; 
+import User from '../models/userModel.js'; 
 import Order from '../models/order.js'; 
 
 // ==========================================================================
