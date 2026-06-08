@@ -1,5 +1,5 @@
 import User from "../models/user.js";
-import jwt from "jsonwebtoken";
+ jwt from "jsonwebtoken";
 import sendEmail from "../utils/sendEmail.js";
 
 // Internal helper to mint tokens cleanly
