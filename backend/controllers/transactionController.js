@@ -1,5 +1,5 @@
 import https from "https";
-import Transaction from "../models/Transaction.js";
+import Transaction from "../models/transaction.js";
 import User from "../models/userModel.js";
 
 /* ==========================================================
