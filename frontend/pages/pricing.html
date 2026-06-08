@@ -41,7 +41,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 20px 8%;
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(15, 23, 42, 0.8);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       position: sticky;
@@ -49,28 +49,28 @@
       z-index: 1000;
     }
 
-    .navbar .logo {
+    .logo {
       display: flex;
       flex-direction: column;
     }
 
-    .navbar .logo span {
-      font-size: 1.8rem;
+    .logo span {
+      font-size: 1.5rem;
       font-weight: 800;
-      color: var(--brand-gold);
       letter-spacing: 1px;
+      color: var(--clean-white);
     }
 
-    .navbar .logo small {
-      color: var(--clean-white);
-      font-weight: 600;
+    .logo small {
       font-size: 0.75rem;
+      color: var(--brand-gold);
+      font-weight: 600;
       letter-spacing: 2px;
     }
 
     .nav-links a {
       text-decoration: none;
-      color: var(--clean-white);
+      color: #cbd5e1;
       font-weight: 600;
       margin-left: 25px;
       transition: 0.3s ease;
@@ -154,7 +154,7 @@
     }
 
     .price-card.popular {
-      border: 2px solid var(--soft-peach);
+      border: 2px solid var(--brand-gold);
     }
 
     .popular-badge {
@@ -185,13 +185,13 @@
     }
 
     .price-card h3 {
-      font-size: 1.6rem;
+      font-size: 1.4rem;
       margin-bottom: 15px;
       font-weight: 800;
     }
 
     .price {
-      font-size: 2.5rem;
+      font-size: 2.2rem;
       font-weight: 800;
       color: var(--clean-white);
       margin-bottom: 20px;
@@ -219,7 +219,7 @@
 
     .price-features i {
       color: var(--accent-pink);
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
 
     .price-btn {
@@ -337,7 +337,7 @@
 
     .cta-card {
       background: linear-gradient(135deg, var(--primary-blue), var(--deep-navy));
-      border: 1px solid var(--soft-peach);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       padding: 60px;
       border-radius: 24px;
       text-align: center;
@@ -459,7 +459,7 @@
       .section-title h2, .cta-card h2 { font-size: 2rem; }
       .navbar { flex-direction: column; gap: 15px; padding: 15px; }
       .nav-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-      .nav-links a { margin-left: 15px; margin-right: 15px; }
+      .nav-links a { margin-left: 10px; margin-right: 10px; }
       .cta-card { padding: 35px 20px; }
     }
   </style>
@@ -475,8 +475,8 @@
     <nav class="nav-links">
       <a href="../index.html">Home</a>
       <a href="services.html">Services</a>
+      <a href="registration.html">Registration</a>
       <a href="shop.html">Shop</a>
-      <a href="orders.html">My Orders</a>
       <a href="pricing.html" class="active">Pricing</a>
       <a href="contact.html">Contact</a>
     </nav>
@@ -487,7 +487,6 @@
     <p>Flexible packages and standard service fees structured to provide students, businesses, and professionals with optimized value channels.</p>
   </section>
 
-  <!-- DYNAMIC SYSTEM BUNDLES SECTION -->
   <section class="section">
     <div class="section-title">
       <h2>Recommended Website & Business Packages</h2>
@@ -495,12 +494,35 @@
     </div>
 
     <div class="pricing-grid" id="packages-grid">
-      <!-- Loaded dynamically via fetch request -->
-      <p style="text-align: center; color: #94a3b8; grid-column: 1/-1;">Syncing active operational bundles from cluster database...</p>
+      <div class="price-card">
+        <div class="price-icon"><i class="fa-solid fa-user"></i></div>
+        <h3>Starter Package</h3>
+        <div class="price"><span>₦45,000</span></div>
+        <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 20px;">Ideal framework setup tailored for solo operations and single landers.</p>
+        <ul class="price-features">
+          <li><i class="fa-solid fa-circle-check"></i> Standard Landing Page</li>
+          <li><i class="fa-solid fa-circle-check"></i> Core Domain Setup</li>
+          <li><i class="fa-solid fa-circle-check"></i> Basic Branding Asset</li>
+        </ul>
+        <a href="contact.html?package=Starter" class="price-btn">Secure Package</a>
+      </div>
+
+      <div class="price-card popular">
+        <div class="popular-badge">POPULAR</div>
+        <div class="price-icon"><i class="fa-solid fa-briefcase"></i></div>
+        <h3>Business Growth Package</h3>
+        <div class="price"><span>₦120,000</span></div>
+        <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 20px;">Complete scaling systems setup built for expanding commercial systems.</p>
+        <ul class="price-features">
+          <li><i class="fa-solid fa-circle-check"></i> Multi-page Dynamic Site</li>
+          <li><i class="fa-solid fa-circle-check"></i> Automated Sales Tracker</li>
+          <li><i class="fa-solid fa-circle-check"></i> Premium Flyer Suite</li>
+        </ul>
+        <a href="contact.html?package=BusinessGrowth" class="price-btn">Secure Package</a>
+      </div>
     </div>
   </section>
 
-  <!-- DYNAMIC DETAILED SERVICES SECTIONS -->
   <section class="table-section">
     <div class="section-title">
       <h2>Itemized Service Rate Sheets</h2>
@@ -508,8 +530,28 @@
     </div>
 
     <div class="services-container" id="services-catalog">
-      <!-- Loaded dynamically via fetch request -->
-      <p style="text-align: center; color: #94a3b8;">Syncing complete enterprise rate matrix...</p>
+      <div class="table-box">
+        <h3>
+          <span>Core IT & Identity Units</span>
+          <span class="category-badge">Standard Services</span>
+        </h3>
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Service Target Component</th>
+                <th>Standard Fees / Rates</th>
+                <th>Operational Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>NIN New Enrolment Capture</td><td style="font-weight: 700; color: var(--clean-white);">₦1,500</td><td><span class="status-badge active">Available</span></td></tr>
+              <tr><td>JAMB Portal Profile Staging</td><td style="font-weight: 700; color: var(--clean-white);">₦4,500</td><td><span class="status-badge active">Available</span></td></tr>
+              <tr><td>Laser Print Processing (Per Page)</td><td style="font-weight: 700; color: var(--clean-white);">₦100</td><td><span class="status-badge active">Available</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -548,28 +590,32 @@
     </div>
   </footer>
 
-  <a href="https://wa.me/2349155104724" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
+  <a href="https://wa.me/2349127469686" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
     <i class="fa-brands fa-whatsapp"></i>
   </a>
 
-  <!-- REWRITTEN SYSTEM SYNC ENGINE SCRIPT -->
   <script>
+    const BACKEND_SERVICE_API = "https://hambak-tech-services.onrender.com/api";
+
     document.addEventListener("DOMContentLoaded", () => {
       fetchHambakPackages();
       fetchHambakServices();
     });
 
-    // Fetches systemic business bundles dynamically from backend database
     async function fetchHambakPackages() {
       try {
-        const res = await fetch("/api/services/packages");
+        const res = await fetch(`${BACKEND_SERVICE_API}/services/packages`);
         if (!res.ok) throw new Error("Network collection access failed");
         const packages = await res.json();
         
         const grid = document.getElementById("packages-grid");
+        
+        // Handle array validation safely if coming back from API nested or direct
+        const dataset = Array.isArray(packages) ? packages : (packages.packages || []);
+        if (dataset.length === 0) return;
+
         grid.innerHTML = "";
 
-        // Designate specific profile layout icon shapes based on bundle classification names
         const iconMap = {
           "Starter Package": "fa-user",
           "Business Growth Package": "fa-briefcase",
@@ -577,60 +623,65 @@
           "Enterprise Package": "fa-building"
         };
 
-        packages.forEach((pkg, index) => {
-          const isPopular = pkg.packageName === "Business Growth Package";
-          const iconClass = iconMap[pkg.packageName] || "fa-cubes";
-          const featuresList = pkg.features.map(f => `<li><i class="fa-solid fa-circle-check"></i> ${f}</li>`).join("");
+        dataset.forEach((pkg) => {
+          const isPopular = pkg.packageName === "Business Growth Package" || pkg.name === "Business Growth Package";
+          const nameStr = pkg.packageName || pkg.name || "Custom Bundle";
+          const iconClass = iconMap[nameStr] || "fa-cubes";
           
-          // Formats numbers cleanly if numeric values are provided
-          const cleanPrice = isNaN(pkg.price.replace(/,/g, '')) ? pkg.price : `₦${Number(pkg.price.replace(/,/g, '')).toLocaleString()}`;
+          // Render features list dynamically
+          const rawFeatures = pkg.features || [];
+          const featuresList = rawFeatures.map(f => `<li><i class="fa-solid fa-circle-check"></i> ${f}</li>`).join("");
+          
+          const priceVal = pkg.price ? String(pkg.price) : "Contact Us";
+          const cleanPrice = isNaN(priceVal.replace(/,/g, '')) ? priceVal : `₦${Number(priceVal.replace(/,/g, '')).toLocaleString()}`;
 
           grid.innerHTML += `
             <div class="price-card ${isPopular ? 'popular' : ''}">
               ${isPopular ? '<div class="popular-badge">POPULAR</div>' : ''}
               <div class="price-icon"><i class="fa-solid ${iconClass}"></i></div>
-              <h3>${pkg.packageName}</h3>
+              <h3>${nameStr}</h3>
               <div class="price">
                 <span>${cleanPrice.startsWith('₦') || cleanPrice.toLowerCase().includes('quote') ? cleanPrice : '₦' + cleanPrice}</span>
               </div>
-              <p class="price-description">Strategic bundle configured directly for business growth optimization targets.</p>
+              <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 20px;">${pkg.description || "Strategic bundle configured directly for business growth optimization targets."}</p>
               <ul class="price-features">${featuresList}</ul>
-              <a href="contact.html?package=${encodeURIComponent(pkg.packageName)}" class="price-btn">Secure Package</a>
+              <a href="contact.html?package=${encodeURIComponent(nameStr)}" class="price-btn">Secure Package</a>
             </div>
           `;
         });
       } catch (err) {
         console.error("Error connecting with structural configuration array:", err);
-        document.getElementById("packages-grid").innerHTML = `
-          <p style="text-align: center; color: var(--accent-pink); grid-column: 1/-1;">
-            <i class="fa-solid fa-triangle-exclamation"></i> Cluster data unreachable. Please refresh or check connection.
-          </p>`;
       }
     }
 
-    // Fetches and organizes all 18 core services dynamically into distinct administrative tables
     async function fetchHambakServices() {
       try {
-        const res = await fetch("/api/services");
+        const res = await fetch(`${BACKEND_SERVICE_API}/services`);
         if (!res.ok) throw new Error("Services cluster read failed");
         const services = await res.json();
 
         const catalog = document.getElementById("services-catalog");
+        
+        const dataset = Array.isArray(services) ? services : (services.services || []);
+        if (dataset.length === 0) return;
+
         catalog.innerHTML = "";
 
-        services.forEach(srv => {
-          const tableRows = srv.pricing.map(p => {
-            // Evaluates and applies native currency string format layers safely
-            let formattedPrice = p.priceDisplay;
+        dataset.forEach(srv => {
+          // Fallback map if database schema structures pricing array differently
+          const pricingArr = srv.pricing || [{ item: srv.name, priceDisplay: String(srv.price) }];
+          
+          const tableRows = pricingArr.map(p => {
+            let formattedPrice = p.priceDisplay || String(p.price || srv.price || "Rates Apply");
             if (!isNaN(formattedPrice.replace(/,/g, '')) && formattedPrice.trim() !== "") {
               formattedPrice = "₦" + Number(formattedPrice.replace(/,/g, '')).toLocaleString();
-            } else if (!formattedPrice.includes("₦") && !formattedPrice.toLowerCase().includes("rate") && !formattedPrice.toLowerCase().includes("charge") && !formattedPrice.toLowerCase().includes("required") && !formattedPrice.toLowerCase().includes("quote") && !formattedPrice.toLowerCase().includes("soon") && !formattedPrice.includes("%")) {
+            } else if (!formattedPrice.includes("₦") && !formattedPrice.toLowerCase().includes("rate") && !formattedPrice.toLowerCase().includes("free") && !formattedPrice.includes("%")) {
               formattedPrice = "₦" + formattedPrice;
             }
 
             return `
               <tr>
-                <td>${p.item}</td>
+                <td>${p.item || srv.name}</td>
                 <td style="font-weight: 700; color: var(--clean-white);">${formattedPrice}</td>
                 <td>
                   <span class="status-badge ${srv.status === 'coming-soon' ? 'coming-soon' : 'active'}">
@@ -644,8 +695,8 @@
           catalog.innerHTML += `
             <div class="table-box">
               <h3>
-                <span>${srv.title}</span>
-                <span class="category-badge">${srv.category}</span>
+                <span>${srv.title || srv.name}</span>
+                <span class="category-badge">${srv.category || "General Service"}</span>
               </h3>
               <div style="overflow-x: auto;">
                 <table>
@@ -666,10 +717,6 @@
         });
       } catch (err) {
         console.error("Error mapping itemized services structure:", err);
-        document.getElementById("services-catalog").innerHTML = `
-          <p style="text-align: center; color: var(--accent-pink); padding: 20px;">
-            <i class="fa-solid fa-triangle-exclamation"></i> Unable to populate live itemized lists. Please try again.
-          </p>`;
       }
     }
   </script>
