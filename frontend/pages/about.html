@@ -44,6 +44,11 @@
       color: white;
     }
 
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+
     .nav-links a {
       color: #cbd5e1;
       text-decoration: none;
@@ -54,6 +59,27 @@
 
     .nav-links a:hover, .nav-links a.active {
       color: #f5b942;
+    }
+
+    /* Theme Mode Layer Button Styles */
+    .theme-toggle-btn {
+      background: transparent;
+      border: 1px solid rgba(245, 185, 66, 0.4);
+      color: #f5b942;
+      padding: 8px 14px;
+      margin-left: 25px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .theme-toggle-btn:hover {
+      background: #f5b942;
+      color: #081120;
     }
 
     /* ==========================================================================
@@ -87,9 +113,20 @@
       color: #cbd5e1;
     }
 
-    /* ABOUT SECTION */
+    /* ABOUT SECTION WITH TRANSPARENT OFFICE OVERLAY BACKGROUND */
     .about-section {
       padding: 90px 8%;
+      position: relative;
+      background-image: linear-gradient(rgba(245, 247, 251, 0.92), rgba(245, 247, 251, 0.92)), url('../office.jpeg');
+      background-attachment: fixed;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    /* Dark Mode Variant support for Background if active */
+    body.dark-mode .about-section {
+      background-image: linear-gradient(rgba(15, 23, 42, 0.94), rgba(15, 23, 42, 0.94)), url('../office.jpeg');
     }
 
     .about-grid {
@@ -97,6 +134,8 @@
       grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
       gap: 50px;
       align-items: center;
+      position: relative;
+      z-index: 2;
     }
 
     .about-image {
@@ -107,6 +146,8 @@
       width: 100%;
       border-radius: 25px;
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      object-fit: cover;
+      border: 2px solid rgba(245, 185, 66, 0.3);
     }
 
     .about-content h2 {
@@ -447,6 +488,7 @@
       <a href="services.html">Services</a>
       <a href="shop.html">Shop</a>
       <a href="contact.html">Contact</a>
+      <button class="theme-toggle-btn" id="modeToggle"><i class="fa-solid fa-moon"></i> Mode</button>
     </nav>
   </header>
 
@@ -462,7 +504,7 @@
   <section class="about-section">
     <div class="about-grid">
       <div class="about-image">
-        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop" alt="about panel">
+        <img src="../company certificate.jpeg" alt="HAMBAK Corporate Registration Certificate">
       </div>
       <div class="about-content">
         <h2>Who We Are</h2>
