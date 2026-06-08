@@ -4,59 +4,56 @@
 
 import express from 'express';
 const router = express.Router();
-
-// Assuming you have an authentication middleware to secure transactions
-// import { protect } from '../middleware/authMiddleware.js'; 
-
 import User from '../models/userModel.js'; 
 import Order from '../models/order.js'; 
 
-// ==========================================================================
-// CENTRALIZED DISPATCH CONFIGURATION MATRIX (PRICING INDEX SYSTEM)
-// ==========================================================================
+// Centralized pricing discount arrays
 const PRICING_MATRIX = {
   airtime: {
-    retailer: 0.98,   // 2% Discount
-    wholesaler: 0.97, // 3% Discount
-    subdealer: 0.96,  // 4% Discount
-    dealer: 0.95      // 5% Premium Discount
+    user: 0.98,        // Standard Client rate (2% discount)
+    subdealer: 0.96,   // Wholesaler tier (4% discount)
+    admin: 0.95        // Manager tier (5% premium discount)
   },
   data_1gb: {
-    retailer: 250,
-    wholesaler: 235,
+    user: 250,
     subdealer: 225,
-    dealer: 215
+    admin: 215
   }
 };
 
 /**
  * @route   POST /api/vtu/airtime
- * @desc    Executes instant airtime dispatch matching account classification layers
- * @access  Private
+ * @desc    Executes instant airtime/data dispatch matching account tier classification
  */
-// If you use authentication middleware, add 'protect' back inside: router.post('/airtime', protect, async ...
 router.post('/airtime', async (req, res) => {
   try {
-    const { network, phoneNumber, amount, userId } = req.body; 
+    const { network, phoneNumber, amount, isData, dataPlan } = req.body; 
 
-    if (!network || !phoneNumber || !amount || !userId) {
-      return res.status(400).json({ success: false, message: "Missing system validation properties." });
+    // Retrieve userId safely from parsing headers or custom authentication payloads
+    const userId = req.body.userId || req.headers['user-id']; 
+
+    if (!network || !phoneNumber || !amount) {
+      return res.status(400).json({ success: false, message: "Missing system validation parameters." });
     }
 
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ success: false, message: "Ecosystem identity record not found." });
+      return res.status(404).json({ success: false, message: "Ecosystem user identity not found." });
     }
 
-    const userTier = user.tier || 'retailer';
-    const discountFactor = PRICING_MATRIX.airtime[userTier] || PRICING_MATRIX.airtime.retailer;
-    const totalSystemCharge = Number(amount) * discountFactor;
+    // Align with userModel role tracking attributes safely
+    const userRole = user.role || 'user';
+    const discountFactor = PRICING_MATRIX.airtime[userRole] || PRICING_MATRIX.airtime.user;
+    
+    // Calculate charges based on transaction intent
+    let totalSystemCharge = isData ? (PRICING_MATRIX.data_1gb[userRole] || 250) : (Number(amount) * discountFactor);
 
-    if (user.walletBalance < totalSystemCharge) {
-      return res.status(400).json({ success: false, message: "Insufficient ledger capital balance." });
+    if (user.wallet < totalSystemCharge) {
+      return res.status(400).json({ success: false, message: "Insufficient ledger capital balance inside wallet." });
     }
 
-    user.walletBalance -= totalSystemCharge;
+    // Deduct directly from the exact schema field
+    user.wallet -= totalSystemCharge;
     await user.save();
 
     const upstreamTransactionId = "HBK-" + Math.random().toString(36).substr(2, 9).toUpperCase();
@@ -64,7 +61,7 @@ router.post('/airtime', async (req, res) => {
     const newVtuOrder = await Order.create({
       user: userId,
       isVtuOrder: true,
-      type: 'Airtime Dispatch',
+      type: isData ? `Data Allocation (${dataPlan})` : 'Airtime Dispatch',
       network,
       destination: phoneNumber,
       amount: Number(amount),
@@ -74,9 +71,9 @@ router.post('/airtime', async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Airtime automated dispatch transaction complete.",
+      message: `${isData ? 'Data plan bundle' : 'Airtime'} transaction complete.`,
       chargeDeducted: totalSystemCharge,
-      newBalance: user.walletBalance,
+      newBalance: user.wallet,
       logToken: newVtuOrder
     });
 
@@ -88,14 +85,14 @@ router.post('/airtime', async (req, res) => {
 
 /**
  * @route   POST /api/vtu/bulk-wholesale
- * @desc    Handles deep bulk processing for E-pin generation blueprints vs cargo shipping allocations
- * @access  Private
+ * @desc    Handles deep bulk processing for E-pin generation blueprints
  */
 router.post('/bulk-wholesale', async (req, res) => {
   try {
-    const { network, denomination, quantity, deliveryMode, deliveryAddress, contactReceiver, userId } = req.body;
+    const { network, denomination, quantity, deliveryMode, deliveryAddress, contactReceiver } = req.body;
+    const userId = req.body.userId || req.headers['user-id'];
 
-    if (!network || !denomination || !quantity || !deliveryMode || !userId) {
+    if (!network || !denomination || !quantity || !deliveryMode) {
       return res.status(400).json({ success: false, message: "Missing essential bulk payload markers." });
     }
 
@@ -105,11 +102,11 @@ router.post('/bulk-wholesale', async (req, res) => {
     }
 
     const rawCost = Number(denomination) * Number(quantity);
-    const userTier = user.tier || 'retailer';
+    const userRole = user.role || 'user';
     
     let wholesaleDiscount = 0.97; 
-    if (userTier === 'subdealer') wholesaleDiscount = 0.95; 
-    if (userTier === 'dealer') wholesaleDiscount = 0.94;    
+    if (userRole === 'subdealer') wholesaleDiscount = 0.95; 
+    if (userRole === 'admin') wholesaleDiscount = 0.94;    
 
     let totalBulkCharge = rawCost * wholesaleDiscount;
     let shippingCost = 0;
@@ -122,11 +119,11 @@ router.post('/bulk-wholesale', async (req, res) => {
       totalBulkCharge += shippingCost;
     }
 
-    if (user.walletBalance < totalBulkCharge) {
-      return res.status(400).json({ success: false, message: "Insufficient balance for bulk procurement." });
+    if (user.wallet < totalBulkCharge) {
+      return res.status(400).json({ success: false, message: "Insufficient wallet balance for wholesale procurement." });
     }
 
-    user.walletBalance -= totalBulkCharge;
+    user.wallet -= totalBulkCharge;
     await user.save();
 
     let orderStatus = deliveryMode === 'physical' ? 'Pending Processing' : 'Successful';
@@ -155,17 +152,17 @@ router.post('/bulk-wholesale', async (req, res) => {
     res.status(200).json({
       success: true,
       message: deliveryMode === 'physical' 
-        ? "Bulk physical order queued for physical warehouse delivery." 
+        ? "Bulk physical cargo configuration queued for fulfillment." 
         : "E-Pin batch generation trace processed successfully.",
       chargeDeducted: totalBulkCharge,
-      newBalance: user.walletBalance,
+      newBalance: user.wallet,
       pins: generatedEPins.length > 0 ? generatedEPins : undefined,
       logToken: wholesaleOrderLog
     });
 
   } catch (error) {
     console.error("Bulk Wholesale System Error Trace:", error);
-    res.status(500).json({ success: false, message: "Fatal transaction runtime exception inside distribution engine." });
+    res.status(500).json({ success: false, message: "Fatal transaction runtime exception inside engine." });
   }
 });
 
