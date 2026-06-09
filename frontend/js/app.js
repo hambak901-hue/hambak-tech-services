@@ -87,15 +87,52 @@ if (links.length > 0 && navLinks) {
 }
 
 // ==========================
-// CONTACT FORM DEMO
+// PRODUCTION CONTACT FORM MATRIX (Saved to DB + Email + WhatsApp)
 // ==========================
-const contactForm = document.querySelector(".contact-form");
+const contactForm = document.getElementById("contactForm") || document.querySelector(".contact-form");
 
 if (contactForm) {
-  contactForm.addEventListener("submit", (e) => {
+  contactForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    alert("Message Sent Successfully!");
-    contactForm.reset();
+
+    // Gather form input element datasets securely
+    const formData = {
+      name: document.getElementById("name").value,
+      phone: document.getElementById("phone").value,
+      email: document.getElementById("email").value,
+      message: document.getElementById("message").value
+    };
+
+    try {
+      // Submit datasets to your live backend server API pipe
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert("Form data sent to system backend matrix!");
+        contactForm.reset();
+
+        // Format WhatsApp API String URL and auto-redirect the client browser frame
+        // Ensure you change the '234...' pattern to your exact business line
+        const businessPhone = "2348000000000"; 
+        const encodedText = encodeURIComponent(
+          `Hello Hambak Tech & Services, my name is ${formData.name}. I just filled your website contact form. Here is my request: ${formData.message}`
+        );
+        
+        // Instantly open WhatsApp dispatch panel channel
+        window.open(`https://wa.me/${businessPhone}?text=${encodedText}`, "_blank");
+      } else {
+        alert("Error logging system dispatch frame.");
+      }
+    } catch (err) {
+      console.error("Network flow error:", err);
+      alert("Could not link to backend routing system.");
+    }
   });
 }
 
