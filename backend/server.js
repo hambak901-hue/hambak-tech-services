@@ -98,6 +98,30 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
+// 3. Paste this exact route to handle incoming AI Chat request entries securely
+app.post('/api/ai/chat', async (req, res) => {
+  try {
+    const { message } = req.body;
+    
+    // Log the message transmission inside the Render terminal console
+    console.log(`Incoming AI Chat request processed: "${message}"`);
+
+    // Placeholder for your integrated AI response logic
+    const aiReply = "Thank you for reaching out to HAMBAK TECH & SERVICES AI assistant. How can we optimize your digital tasks today?";
+
+    return res.status(200).json({
+      success: true,
+      reply: aiReply
+    });
+  } catch (error) {
+    console.error('AI Chat Routing Error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Error in AI Matrix Subsystem.'
+    });
+  }
+});
+
 /* =========================
 FALLBACK ROUTING FOR REFRESHES
 ========================= */
