@@ -101,7 +101,8 @@ app.post('/api/contact', async (req, res) => {
 // 3. Paste this exact route to handle incoming AI Chat request entries securely
 app.post('/api/ai/chat', async (req, res) => {
   try {
-    const { message } = req.body;
+    // Upgraded fallback definition to capture both "message" and "question" inputs seamlessly
+    const message = req.body.message || req.body.question;
     
     // Log the message transmission inside the Render terminal console
     console.log(`Incoming AI Chat request processed: "${message}"`);
