@@ -19,6 +19,8 @@ import transactionRoutes from "./routes/transactionRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import vtuRoutes from './routes/vtuRoutes.js';
 
+// Import OpenAI SDK Initialization
+import OpenAI from "openai";
 
 dotenv.config();
 connectDB();
@@ -30,6 +32,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan("dev"));
 app.use(cookieParser());
+
+// Initialize OpenAI client instance securely using environment variables to satisfy GitHub security compliance
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY, 
+});
 
 /* =========================
 STATIC FILES & FRONTEND ROUTING
@@ -107,8 +114,23 @@ app.post('/api/ai/chat', async (req, res) => {
     // Log the message transmission inside the Render terminal console
     console.log(`Incoming AI Chat request processed: "${message}"`);
 
-    // Placeholder for your integrated AI response logic
-    const aiReply = "Thank you for reaching out to HAMBAK TECH & SERVICES AI assistant. How can we optimize your digital tasks today?";
+    if (!message) {
+      return res.status(400).json({ success: false, message: "No question provided" });
+    }
+
+    // Requesting a live dynamic completion response directly from OpenAI ChatGPT Engine
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        { 
+          role: "system", 
+          content: "You are the official AI assistant for HAMBAK TECH & SERVICES, located in Ibeju-Lekki, Lagos, Nigeria. Answer customer questions professionally about ICT training, computer solutions, registrations (NIN, JAMB, WAEC), printing, corporate branding design, and automated VTU data/airtime services." 
+        },
+        { role: "user", content: message }
+      ],
+    });
+
+    const aiReply = completion.choices[0].message.content;
 
     return res.status(200).json({
       success: true,
