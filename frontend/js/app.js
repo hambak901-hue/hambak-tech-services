@@ -89,22 +89,29 @@ if (links.length > 0 && navLinks) {
 // ==========================
 // PRODUCTION CONTACT FORM MATRIX (Saved to DB + Email + WhatsApp)
 // ==========================
-const contactForm = document.getElementById("contactForm") || document.querySelector(".contact-form");
+const contactForm = document.getElementById("contactForm");
 
 if (contactForm) {
   contactForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // Gather form input element datasets securely
+    // Pull aligned ID data vectors from the updated HTML form elements
+    const nameVal = document.getElementById("name").value;
+    const phoneVal = document.getElementById("phone").value;
+    const emailVal = document.getElementById("email").value;
+    const serviceVal = document.getElementById("serviceType").value;
+    const msgVal = document.getElementById("message").value;
+
+    // Wrap submission values cleanly for backend integration endpoints
     const formData = {
-      name: document.getElementById("name").value,
-      phone: document.getElementById("phone").value,
-      email: document.getElementById("email").value,
-      message: document.getElementById("message").value
+      name: nameVal,
+      phone: phoneVal,
+      email: emailVal,
+      message: `[Category: ${serviceVal}] ${msgVal}`
     };
 
     try {
-      // Submit datasets to your live backend server API pipe
+      // Forward the compiled dataset payload matrix to your Render deployment 
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -117,21 +124,20 @@ if (contactForm) {
         alert("Form data sent to system backend matrix!");
         contactForm.reset();
 
-        // Format WhatsApp API String URL and auto-redirect the client browser frame
-        // Ensure you change the '234...' pattern to your exact business line
-        const businessPhone = "2348000000000"; 
+        // Redirect framework triggering your direct WhatsApp communication line
+        const businessPhone = "2349127469686"; 
         const encodedText = encodeURIComponent(
-          `Hello Hambak Tech & Services, my name is ${formData.name}. I just filled your website contact form. Here is my request: ${formData.message}`
+          `Hello Hambak Tech & Services, my name is ${nameVal}. I just filled your website contact form. Here is my request: ${msgVal}`
         );
         
-        // Instantly open WhatsApp dispatch panel channel
+        // Open the communication route tab cleanly
         window.open(`https://wa.me/${businessPhone}?text=${encodedText}`, "_blank");
       } else {
-        alert("Error logging system dispatch frame.");
+        alert("Server processed request but returned a failure verification parameter.");
       }
     } catch (err) {
       console.error("Network flow error:", err);
-      alert("Could not link to backend routing system.");
+      alert("Could not build communication pipe with the live API container.");
     }
   });
 }
