@@ -19,8 +19,8 @@ export const handleContactSubmit = async (req, res) => {
 
     // 2. Dispatch Instant Email Alert via Resend
     await resend.emails.send({
-      from: "Hambak Web System <onboarding@resend.dev>", // Replace with your domain email later if verified
-      to: "your-email@gmail.com", // Put your actual corporate email here to receive the alerts
+      from: "Hambak Web System <onboarding@resend.dev>", 
+      to: "hambak901@gmail.com", // Updated to your direct corporate email vector
       subject: `New Dispatch Received from ${name}`,
       html: `
         <h3>New Contact Form Submission</h3>
