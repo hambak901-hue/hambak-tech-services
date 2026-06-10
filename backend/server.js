@@ -18,6 +18,7 @@ import adminRoutes from "./routes/adminRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import vtuRoutes from './routes/vtuRoutes.js';
+import contactRoutes from "./routes/contactRoutes.js"; // Integrated into production route matrix
 
 // Import OpenAI SDK Initialization
 import OpenAI from "openai";
@@ -74,38 +75,9 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
 app.use('/api/vtu', vtuRoutes);
+app.use("/api", contactRoutes); // Clean production mount point for contact form submissions
 
-// 2. Paste this exact route to handle the incoming form data
-app.post('/api/contact', async (req, res) => {
-  try {
-    const { name, email, requestType, whatsapp, requirements } = req.body;
-
-    // Optional: Log it in your Render terminal to confirm it arrived
-    console.log(`New Dispatch Received from ${name} (${whatsapp})`);
-
-    // --- MONGOOSE SAVING LOGIC ---
-    // If you have a Mongoose Schema set up (e.g., ContactModel), uncomment the lines below:
-    /*
-    const newContact = new ContactModel({ name, email, requestType, whatsapp, requirements });
-    await newContact.save();
-    */
-
-    // 3. Send a successful 200 OK status back to the frontend
-    return res.status(200).json({ 
-      success: true, 
-      message: 'Order dispatched and saved securely to the backend database!' 
-    });
-
-  } catch (error) {
-    console.error('Database Save Error:', error);
-    return res.status(500).json({ 
-      success: false, 
-      message: 'Internal Server Error while saving data.' 
-    });
-  }
-});
-
-// 3. Paste this exact route to handle incoming AI Chat request entries securely
+// Incoming AI Chat request entries handler
 app.post('/api/ai/chat', async (req, res) => {
   try {
     // Upgraded fallback definition to capture both "message" and "question" inputs seamlessly
