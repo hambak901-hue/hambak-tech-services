@@ -79,22 +79,32 @@ app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
 app.use('/api/vtu', vtuRoutes);
 
-// 2. Paste this exact route to handle the incoming form data
+// Corrected single route to handle incoming contact/order form submissions smoothly
 app.post('/api/contact', async (req, res) => {
   try {
-    // Capturing incoming payload parameters matching your frontend exactly
-    const { name, email, requestType, whatsapp, requirements } = req.body;
+    // Capturing incoming payload parameters safely using fallbacks for the phone number
+    const { name, email, requestType, whatsapp, phone, requirements } = req.body;
+    
+    // Auto-detect the phone number whether the frontend sends it as 'phone' or 'whatsapp'
+    const finalPhone = whatsapp || phone;
 
-    // Optional: Log it in your Render terminal to confirm it arrived
-    console.log(`New Dispatch Received from ${name} (${whatsapp})`);
+    // Log it in your Render terminal to confirm it arrived safely
+    console.log(`New Dispatch Received from ${name} (${finalPhone})`);
+
+    if (!finalPhone) {
+      return res.status(400).json({
+        success: false,
+        message: "Validation Error: Phone number is required."
+      });
+    }
 
     // --- MONGOOSE SAVING LOGIC ---
     // Activated and matched to your exact Contact model keys
     const newContact = new Contact({ 
       name, 
       email, 
-      phone: whatsapp, // Maps your WhatsApp number input directly to the model's required phone field
-      message: `Type: ${requestType}. Requirements: ${requirements}` 
+      phone: finalPhone, // Securely inputs the validated phone number vector
+      message: `Type: ${requestType || "General Inquiry"}. Requirements: ${requirements || "None provided"}` 
     });
     await newContact.save();
 
@@ -109,16 +119,16 @@ app.post('/api/contact', async (req, res) => {
       html: `
         <h3>New Contact Form Submission</h3>
         <p><strong>Name:</strong> ${name}</p>
-        <p><strong>WhatsApp/Phone:</strong> ${whatsapp}</p>
+        <p><strong>WhatsApp/Phone:</strong> ${finalPhone}</p>
         <p><strong>Email:</strong> ${email || "Not provided"}</p>
-        <p><strong>Request Type:</strong> ${requestType}</p>
-        <p><strong>Requirements:</strong> ${requirements}</p>
+        <p><strong>Request Type:</strong> ${requestType || "General Inquiry"}</p>
+        <p><strong>Requirements:</strong> ${requirements || "None provided"}</p>
         <br>
         <p><em>Logged successfully in Hambak Tech Database Systems.</em></p>
       `
     });
 
-    // 3. Send a successful 200 OK status back to the frontend
+    // Send a successful 200 OK status back to the frontend
     return res.status(200).json({ 
       success: true, 
       message: 'Order dispatched, saved securely to the backend database, and email alert transmitted!' 
@@ -133,7 +143,7 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
-// 3. Paste this exact route to handle incoming AI Chat request entries securely
+// Route to handle incoming AI Chat request entries securely
 app.post('/api/ai/chat', async (req, res) => {
   try {
     // Upgraded fallback definition to capture both "message" and "question" inputs seamlessly
@@ -195,6 +205,9 @@ app.use((req, res) => {
 
 app.use(errorHandler);
 
+/* =========================
+SERVER INITIALIZATION
+========================= */
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
