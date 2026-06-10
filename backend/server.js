@@ -42,9 +42,6 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, 
 });
 
-// Initialize Resend safely using your environment variable
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 /* =========================
 STATIC FILES & FRONTEND ROUTING
 ========================= */
@@ -102,6 +99,9 @@ app.post('/api/contact', async (req, res) => {
     await newContact.save();
 
     // --- RESEND EMAIL SYSTEM DISPATCH ---
+    // Instantiated safely here to guarantee process.env has fully loaded into runtime memory
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
     await resend.emails.send({
       from: "Hambak Web System <onboarding@resend.dev>",
       to: "hambak901@gmail.com",
