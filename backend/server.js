@@ -18,7 +18,10 @@ import adminRoutes from "./routes/adminRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import vtuRoutes from './routes/vtuRoutes.js';
-import contactRoutes from "./routes/contactRoutes.js"; // Integrated into production route matrix
+
+// Import your exact database model and Resend for the contact route
+import Contact from "./models/Contact.js";
+import { Resend } from "resend";
 
 // Import OpenAI SDK Initialization
 import OpenAI from "openai";
@@ -38,6 +41,9 @@ app.use(cookieParser());
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, 
 });
+
+// Initialize Resend safely using your environment variable
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 /* =========================
 STATIC FILES & FRONTEND ROUTING
@@ -75,9 +81,59 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
 app.use('/api/vtu', vtuRoutes);
-app.use("/api", contactRoutes); // Clean production mount point for contact form submissions
 
-// Incoming AI Chat request entries handler
+// 2. Paste this exact route to handle the incoming form data
+app.post('/api/contact', async (req, res) => {
+  try {
+    // Capturing incoming payload parameters matching your frontend exactly
+    const { name, email, requestType, whatsapp, requirements } = req.body;
+
+    // Optional: Log it in your Render terminal to confirm it arrived
+    console.log(`New Dispatch Received from ${name} (${whatsapp})`);
+
+    // --- MONGOOSE SAVING LOGIC ---
+    // Activated and matched to your exact Contact model keys
+    const newContact = new Contact({ 
+      name, 
+      email, 
+      phone: whatsapp, // Maps your WhatsApp number input directly to the model's required phone field
+      message: `Type: ${requestType}. Requirements: ${requirements}` 
+    });
+    await newContact.save();
+
+    // --- RESEND EMAIL SYSTEM DISPATCH ---
+    await resend.emails.send({
+      from: "Hambak Web System <onboarding@resend.dev>",
+      to: "hambak901@gmail.com",
+      subject: `New Dispatch Received from ${name}`,
+      html: `
+        <h3>New Contact Form Submission</h3>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>WhatsApp/Phone:</strong> ${whatsapp}</p>
+        <p><strong>Email:</strong> ${email || "Not provided"}</p>
+        <p><strong>Request Type:</strong> ${requestType}</p>
+        <p><strong>Requirements:</strong> ${requirements}</p>
+        <br>
+        <p><em>Logged successfully in Hambak Tech Database Systems.</em></p>
+      `
+    });
+
+    // 3. Send a successful 200 OK status back to the frontend
+    return res.status(200).json({ 
+      success: true, 
+      message: 'Order dispatched, saved securely to the backend database, and email alert transmitted!' 
+    });
+
+  } catch (error) {
+    console.error('Database Save Error:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Internal Server Error while saving data.' 
+    });
+  }
+});
+
+// 3. Paste this exact route to handle incoming AI Chat request entries securely
 app.post('/api/ai/chat', async (req, res) => {
   try {
     // Upgraded fallback definition to capture both "message" and "question" inputs seamlessly
