@@ -45,6 +45,15 @@ const openai = new OpenAI({
 /* =========================
 STATIC FILES & FRONTEND ROUTING
 ========================= */
+// Intercept double /pages/ loops before serving static files to cleanly redirect browser paths
+app.use((req, res, next) => {
+  if (req.url.startsWith('/pages/pages/') || req.url.includes('/pages/')) {
+    const cleanUrl = req.url.replace(/\/pages\/pages\//g, '/').replace(/\/pages\//g, '/');
+    return res.redirect(cleanUrl);
+  }
+  next();
+});
+
 // 1. Serve upload folders smoothly
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
