@@ -107,14 +107,16 @@ if (contactForm) {
       name: nameVal,
       phone: phoneVal,
       email: emailVal,
-      message: `[Category: ${serviceVal}] ${msgVal}`
+      requestType: serviceVal, // Provided parameter variable mapping for the AI context metrics
+      message: `[Category: ${serviceVal}] ${msgVal}`,
+      requirements: msgVal
     };
 
     try {
       // Forward the compiled dataset payload matrix to your Render deployment 
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
 
@@ -124,14 +126,12 @@ if (contactForm) {
         alert("Form data sent to system backend matrix!");
         contactForm.reset();
 
-        // Redirect framework triggering your direct WhatsApp communication line
+        // Construct the WhatsApp API message vector strings dynamically
         const businessPhone = "2349127469686"; 
-        const encodedText = encodeURIComponent(
-          `Hello Hambak Tech & Services, my name is ${nameVal}. I just filled your website contact form. Here is my request: ${msgVal}`
-        );
+        const messageText = `Hello Hambak Tech, I just submitted an order!\nName: ${formData.name}\nService: ${formData.requestType}`;
         
-        // Open the communication route tab cleanly
-        window.open(`https://wa.me/${businessPhone}?text=${encodedText}`, "_blank");
+        // This line forces the user's phone or browser to open WhatsApp automatically
+        window.open(`https://wa.me/${businessPhone}?text=${encodeURIComponent(messageText)}`, '_blank');
       } else {
         alert("Server processed request but returned a failure verification parameter.");
       }
