@@ -1,106 +1,223 @@
-// ==========================================
-// CORE DOM ELEMENT BINDINGS & LIFECYCLE
-// ==========================================
-document.addEventListener("DOMContentLoaded", () => {
-  const fundBtn = document.getElementById("fund-wallet-btn");
-  const amountField = document.getElementById("funding-amount-input");
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import morgan from "morgan";
+import cookieParser from "cookie-parser";
+import path from "path";
+import errorHandler from "./middleware/errorMiddleware.js";
+import orderRoutes from "./routes/orderRoutes.js";
 
-  if (fundBtn && amountField) {
-    fundBtn.addEventListener("click", async (e) => {
-      e.preventDefault();
-      const rawAmount = amountField.value.trim();
-      await handleWalletFunding(rawAmount);
-    });
-  }
+/* DATABASE */
+import connectDB from "./config/db.js";
 
-  // Run the automatic redirection payment verification sweep immediately on load
-  checkPaymentCallback();
+/* ROUTES */
+import authRoutes from "./routes/authRoutes.js";
+import serviceRoutes from "./routes/serviceRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+import transactionRoutes from "./routes/transactionRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import vtuRoutes from './routes/vtuRoutes.js';
+
+// Import your exact database model and Resend for the contact route
+import Contact from "./models/Contact.js";
+import { Resend } from "resend";
+
+// Import OpenAI SDK Initialization
+import OpenAI from "openai";
+
+dotenv.config();
+connectDB();
+
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+app.use(morgan("dev"));
+app.use(cookieParser());
+
+// Initialize OpenAI client instance securely using environment variables to satisfy GitHub security compliance
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY, 
 });
 
-// ==========================================
-// PAYSTACK INITIALIZATION METHOD
-// ==========================================
-async function handleWalletFunding(amountInput) {
-  const parsedAmount = parseFloat(amountInput);
-
-  if (!parsedAmount || parsedAmount <= 0 || isNaN(parsedAmount)) {
-    alert("Please enter a valid amount to fund your wallet.");
-    return;
+/* =========================
+STATIC FILES & FRONTEND ROUTING
+========================= */
+// Intercept double /pages/ loops before serving static files to cleanly redirect browser paths
+app.use((req, res, next) => {
+  if (req.url.startsWith('/pages/pages/') || req.url.includes('/pages/')) {
+    const cleanUrl = req.url.replace(/\/pages\/pages\//g, '/').replace(/\/pages\//g, '/');
+    return res.redirect(cleanUrl);
   }
+  next();
+});
 
-  // Namespace structural dependency validation check
-  if (!window.API || !window.API.transactions) {
-    alert("System core error: Transaction processing matrix engine not found.");
-    return;
-  }
+// 1. Serve upload folders smoothly
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
+// 2. Serve main frontend assets (css, js, images)
+app.use(express.static(path.resolve(process.cwd(), "..", "frontend")));
+
+// 3. Serve pages directory seamlessly (Fixes the admin and client pages 404s)
+app.use(express.static(path.resolve(process.cwd(), "..", "frontend", "pages")));
+
+// 4. Custom alias routing so "/admin/admin.html" maps perfectly to your folder structure
+app.use("/admin", express.static(path.resolve(process.cwd(), "..", "frontend", "pages")));
+
+/* =========================
+HOME ROUTE
+========================= */
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "HAMBAK TECH & SERVICES Backend Running Successfully"
+  });
+});
+
+/* =========================
+API ROUTES
+========================= */
+app.use("/api/auth", authRoutes);
+app.use("/api/services", serviceRoutes);
+app.use("/api/upload", uploadRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/transactions", transactionRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/orders", orderRoutes);
+app.use('/api/vtu', vtuRoutes);
+
+// Corrected single route to handle incoming contact/order form submissions smoothly
+app.post('/api/contact', async (req, res) => {
   try {
-    if (window.showLoadingSpinner) window.showLoadingSpinner(true); 
+    // Capturing incoming payload parameters safely using fallbacks for the phone number
+    const { name, email, requestType, whatsapp, phone, requirements } = req.body;
     
-    // 1. Call Backend to kick off Paystack session
-    const result = await window.API.transactions.initializeDeposit(parsedAmount);
-    
-    if (result && result.success && result.authorization_url) {
-      // Save the transaction reference temporarily to verify later if needed
-      localStorage.setItem("pending_funding_reference", result.reference);
-      
-      // 2. Redirect user seamlessly to Paystack Secure Portal
-      window.location.href = result.authorization_url;
-    } else {
-      alert("Payment initialization error: " + (result?.message || "Unknown routing exception."));
+    // Auto-detect the phone number whether the frontend sends it as 'phone' or 'whatsapp'
+    const finalPhone = whatsapp || phone;
+
+    // Log it in your Render terminal to confirm it arrived safely
+    console.log(`New Dispatch Received from ${name} (${finalPhone})`);
+
+    if (!finalPhone) {
+      return res.status(400).json({
+        success: false,
+        message: "Validation Error: Phone number is required."
+      });
     }
+
+    // --- MONGOOSE SAVING LOGIC ---
+    // Activated and matched to your exact Contact model keys
+    const newContact = new Contact({ 
+      name, 
+      email, 
+      phone: finalPhone, // Securely inputs the validated phone number vector
+      message: `Type: ${requestType || "General Inquiry"}. Requirements: ${requirements || "None provided"}` 
+    });
+    await newContact.save();
+
+    // --- RESEND EMAIL SYSTEM DISPATCH ---
+    // Instantiated safely here to guarantee process.env has fully loaded into runtime memory
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    await resend.emails.send({
+      from: "Hambak Web System <onboarding@resend.dev>",
+      to: "hambak901@gmail.com",
+      subject: `New Dispatch Received from ${name}`,
+      html: `
+        <h3>New Contact Form Submission</h3>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>WhatsApp/Phone:</strong> ${finalPhone}</p>
+        <p><strong>Email:</strong> ${email || "Not provided"}</p>
+        <p><strong>Request Type:</strong> ${requestType || "General Inquiry"}</p>
+        <p><strong>Requirements:</strong> ${requirements || "None provided"}</p>
+        <br>
+        <p><em>Logged successfully in Hambak Tech Database Systems.</em></p>
+      `
+    });
+
+    // Send a successful 200 OK status back to the frontend
+    return res.status(200).json({ 
+      success: true, 
+      message: 'Order dispatched, saved securely to the backend database, and email alert transmitted!' 
+    });
+
   } catch (error) {
-    console.error("Funding Matrix Exception:", error);
-    alert("Failed to communicate with payment gateway engine.");
-  } finally {
-    if (window.showLoadingSpinner) window.showLoadingSpinner(false);
+    console.error('Database Save Error:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Internal Server Error while saving data.' 
+    });
   }
-}
+});
 
-// ==========================================
-// PAYSTACK CALLBACK VERIFICATION ENGINE
-// ==========================================
-async function checkPaymentCallback() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const reference = urlParams.get("reference");
+// Route to handle incoming AI Chat request entries securely
+app.post('/api/ai/chat', async (req, res) => {
+  try {
+    // Upgraded fallback definition to capture both "message" and "question" inputs seamlessly
+    const message = req.body.message || req.body.question;
+    
+    // Log the message transmission inside the Render terminal console
+    console.log(`Incoming AI Chat request processed: "${message}"`);
 
-  if (reference) {
-    if (!window.API || !window.API.transactions) {
-      console.error("Delayed callback execution fault: API structure context unreachable.");
-      return;
+    if (!message) {
+      return res.status(400).json({ success: false, message: "No question provided" });
     }
 
-    try {
-      // Clear query params immediately so the user doesn't trigger multiple refreshes
-      window.history.replaceState({}, document.title, window.location.pathname);
-      
-      console.log(`Intercepted reference payload: ${reference}. Initializing authorization handshake...`);
-      
-      // Call backend handler to confirm payment settlement and credit wallet
-      const verification = await window.API.transactions.verifyDeposit(reference);
-      
-      if (verification && verification.success) {
-        alert(`Success! ${verification.message}`);
-        
-        // Trigger fresh UI updates to reflect the funded amount instantly
-        if (typeof window.loadUserProfileData === "function") {
-          window.loadUserProfileData(); 
-        } else {
-          window.location.reload();
-        }
-      } else {
-        alert("Payment Verification Failed: " + (verification?.message || "Verification rejection."));
-      }
-    } catch (error) {
-      console.error("Callback Verification Error:", error);
-      alert("An error occurred while confirming your wallet funding status.");
-    }
-  }
-}
+    // Requesting a live dynamic completion response directly from OpenAI ChatGPT Engine
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        { 
+          role: "system", 
+          content: "You are the official AI assistant for HAMBAK TECH & SERVICES, located in Ibeju-Lekki, Lagos, Nigeria. Answer customer questions professionally about ICT training, computer solutions, registrations (NIN, JAMB, WAEC), printing, corporate branding design, and automated VTU data/airtime services." 
+        },
+        { role: "user", content: message }
+      ],
+    });
 
-// Optional dummy fallback UI utility function to prevent breaking exceptions
-if (typeof window.showLoadingSpinner !== "function") {
-  window.showLoadingSpinner = function(show) {
-    console.log(show ? "Loading spinner active..." : "Loading spinner stopped.");
-  };
-}
+    const aiReply = completion.choices[0].message.content;
+
+    return res.status(200).json({
+      success: true,
+      reply: aiReply
+    });
+  } catch (error) {
+    console.error('AI Chat Routing Error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Error in AI Matrix Subsystem.'
+    });
+  }
+});
+
+/* =========================
+FALLBACK ROUTING FOR REFRESHES
+========================= */
+// Serves the base index page if a clean web route is entered directly into the browser address bar
+app.get("*", (req, res, next) => {
+  // If the request path contains "/api", pass it down directly to avoid intercepting server operations
+  if (req.url.startsWith('/api')) return next();
+  res.sendFile(path.resolve(process.cwd(), "..", "frontend", "index.html"));
+});
+
+/* =========================
+404 ROUTE
+========================= */
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Route Not Found"
+  });
+});
+
+app.use(errorHandler);
+
+/* =========================
+SERVER INITIALIZATION
+========================= */
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
