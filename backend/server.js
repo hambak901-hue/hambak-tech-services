@@ -4,6 +4,7 @@ import cors from "cors";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import path from "path";
+import { fileURLToPath } from "url"; // Added for strict ES Module path resolution
 import errorHandler from "./middleware/errorMiddleware.js";
 import orderRoutes from "./routes/orderRoutes.js";
 
@@ -31,13 +32,17 @@ connectDB();
 
 const app = express();
 
+// Absolute Path Configuration for ES Modules (Fixes Render Environment Path Glitches)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan("dev"));
 app.use(cookieParser());
 
-// Initialize OpenAI client instance securely using environment variables to satisfy GitHub security compliance
+// Initialize OpenAI client instance securely using environment variables
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, 
 });
@@ -54,17 +59,17 @@ app.use((req, res, next) => {
   next();
 });
 
-// 1. Serve upload folders smoothly
-app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+// 1. Serve upload folders smoothly using explicit execution paths
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// 2. Serve main frontend assets (css, js, images)
-app.use(express.static(path.resolve(process.cwd(), "..", "frontend")));
+// 2. Serve main frontend assets (css, js, images) relative to server location
+app.use(express.static(path.resolve(__dirname, "..", "frontend")));
 
 // 3. Serve pages directory seamlessly (Fixes the admin and client pages 404s)
-app.use(express.static(path.resolve(process.cwd(), "..", "frontend", "pages")));
+app.use(express.static(path.resolve(__dirname, "..", "frontend", "pages")));
 
 // 4. Custom alias routing so "/admin/admin.html" maps perfectly to your folder structure
-app.use("/admin", express.static(path.resolve(process.cwd(), "..", "frontend", "pages")));
+app.use("/admin", express.static(path.resolve(__dirname, "..", "frontend", "pages")));
 
 /* =========================
 HOME ROUTE
@@ -91,13 +96,11 @@ app.use('/api/vtu', vtuRoutes);
 // Corrected single route to handle incoming contact/order form submissions smoothly
 app.post('/api/contact', async (req, res) => {
   try {
-    // Capturing incoming payload parameters safely using fallbacks for the phone number
     const { name, email, requestType, whatsapp, phone, requirements } = req.body;
     
     // Auto-detect the phone number whether the frontend sends it as 'phone' or 'whatsapp'
     const finalPhone = whatsapp || phone;
 
-    // Log it in your Render terminal to confirm it arrived safely
     console.log(`New Dispatch Received from ${name} (${finalPhone})`);
 
     if (!finalPhone) {
@@ -108,36 +111,36 @@ app.post('/api/contact', async (req, res) => {
     }
 
     // --- MONGOOSE SAVING LOGIC ---
-    // Activated and matched to your exact Contact model keys
     const newContact = new Contact({ 
       name, 
       email, 
-      phone: finalPhone, // Securely inputs the validated phone number vector
+      phone: finalPhone, 
       message: `Type: ${requestType || "General Inquiry"}. Requirements: ${requirements || "None provided"}` 
     });
     await newContact.save();
 
     // --- RESEND EMAIL SYSTEM DISPATCH ---
-    // Instantiated safely here to guarantee process.env has fully loaded into runtime memory
-    const resend = new Resend(process.env.RESEND_API_KEY);
+    if (process.env.RESEND_API_KEY) {
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      await resend.emails.send({
+        from: "Hambak Web System <onboarding@resend.dev>",
+        to: "hambak901@gmail.com",
+        subject: `New Dispatch Received from ${name}`,
+        html: `
+          <h3>New Contact Form Submission</h3>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>WhatsApp/Phone:</strong> ${finalPhone}</p>
+          <p><strong>Email:</strong> ${email || "Not provided"}</p>
+          <p><strong>Request Type:</strong> ${requestType || "General Inquiry"}</p>
+          <p><strong>Requirements:</strong> ${requirements || "None provided"}</p>
+          <br>
+          <p><em>Logged successfully in Hambak Tech Database Systems.</em></p>
+        `
+      });
+    } else {
+      console.warn("Resend email dispatch skipped: Missing RESEND_API_KEY environment token.");
+    }
 
-    await resend.emails.send({
-      from: "Hambak Web System <onboarding@resend.dev>",
-      to: "hambak901@gmail.com",
-      subject: `New Dispatch Received from ${name}`,
-      html: `
-        <h3>New Contact Form Submission</h3>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>WhatsApp/Phone:</strong> ${finalPhone}</p>
-        <p><strong>Email:</strong> ${email || "Not provided"}</p>
-        <p><strong>Request Type:</strong> ${requestType || "General Inquiry"}</p>
-        <p><strong>Requirements:</strong> ${requirements || "None provided"}</p>
-        <br>
-        <p><em>Logged successfully in Hambak Tech Database Systems.</em></p>
-      `
-    });
-
-    // Send a successful 200 OK status back to the frontend
     return res.status(200).json({ 
       success: true, 
       message: 'Order dispatched, saved securely to the backend database, and email alert transmitted!' 
@@ -155,14 +158,20 @@ app.post('/api/contact', async (req, res) => {
 // Route to handle incoming AI Chat request entries securely
 app.post('/api/ai/chat', async (req, res) => {
   try {
-    // Upgraded fallback definition to capture both "message" and "question" inputs seamlessly
     const message = req.body.message || req.body.question;
     
-    // Log the message transmission inside the Render terminal console
     console.log(`Incoming AI Chat request processed: "${message}"`);
 
     if (!message) {
       return res.status(400).json({ success: false, message: "No question provided" });
+    }
+
+    // Protection check to prevent server crashes if the key isn't registered in Render variables yet
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(200).json({
+        success: true,
+        reply: "Hello! This is Hambak Tech Assistant. Our AI core connection is currently on standby. Please contact us directly for quick assistance."
+      });
     }
 
     // Requesting a live dynamic completion response directly from OpenAI ChatGPT Engine
@@ -197,9 +206,8 @@ FALLBACK ROUTING FOR REFRESHES
 ========================= */
 // Serves the base index page if a clean web route is entered directly into the browser address bar
 app.get("*", (req, res, next) => {
-  // If the request path contains "/api", pass it down directly to avoid intercepting server operations
   if (req.url.startsWith('/api')) return next();
-  res.sendFile(path.resolve(process.cwd(), "..", "frontend", "index.html"));
+  res.sendFile(path.resolve(__dirname, "..", "frontend", "index.html"));
 });
 
 /* =========================
