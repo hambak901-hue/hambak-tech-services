@@ -18,7 +18,8 @@ export const getDashboardStats = async (req, res) => {
       { $group: { _id: "$type", totalVolume: { $sum: "$amount" } } }
     ]);
 
-    const monetaryMatrix = { deposits: 0, vtu: 0, printing: 0, nin: 0, service_payments: 0 };
+    // Use string keys that align directly with your schema enum variants
+    const monetaryMatrix = { deposit: 0, vtu: 0, printing: 0, nin: 0, service_payment: 0 };
     financialStats.forEach(stat => {
       if (monetaryMatrix.hasOwnProperty(stat._id)) {
         monetaryMatrix[stat._id] = stat.totalVolume;
@@ -56,11 +57,10 @@ export const getAllUsers = async (req, res) => {
 };
 
 /* ==========================================================
-   ADMIN ENGINE: MANUALLY FUND USER WALLET
+   ADMIN ENGINE: MANUALLY FUND USER WALLET (FIXED ENUM)
    ========================================================== */
 export const fundUserWallet = async (req, res) => {
   try {
-    // Structural Fallback Matrix: captures 'userId', 'id', or 'user' payload maps seamlessly
     const targetUserId = req.body.userId || req.body.id || req.body.user;
     const amount = req.body.amount;
 
@@ -73,14 +73,13 @@ export const fundUserWallet = async (req, res) => {
       return res.status(404).json({ success: false, message: "Target profile node not found in system storage." });
     }
 
-    // Adjust balance parameters safely using numeric mutation vectors
     user.wallet = (Number(user.wallet) || 0) + Number(amount);
     await user.save();
 
-    // Create an audit transaction record with fallback attributes to pass validation restrictions
+    // FIXED: Changed "deposits" to "deposit" to match your strict schema enum rule
     await Transaction.create({
-      user: user._id, // References the verified MongoDB ObjectId directly from the user node
-      type: "deposits",
+      user: user._id,
+      type: "deposit", 
       amount: Number(amount),
       status: "successful",
       description: "Admin manual wallet allocation adjustment",
@@ -98,19 +97,13 @@ export const fundUserWallet = async (req, res) => {
 };
 
 /* ==========================================================
-   ADMIN ENGINE: TOGGLE ACCESS LOCKOUT (BLOCK/RESTRICT USER)
+   ADMIN ENGINE: TOGGLE ACCESS LOCKOUT
    ========================================================== */
 export const toggleUserBlock = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-
-    if (!user) {
-      return res.status(404).json({ success: false, message: "User account records missing." });
-    }
-
-    if (user.role === "admin") {
-      return res.status(403).json({ success: false, message: "Administrative clusters cannot be blocked." });
-    }
+    if (!user) return res.status(404).json({ success: false, message: "User account records missing." });
+    if (user.role === "admin") return res.status(403).json({ success: false, message: "Administrative clusters cannot be blocked." });
 
     user.isBlocked = !user.isBlocked;
     await user.save();
