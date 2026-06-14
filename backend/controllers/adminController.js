@@ -45,7 +45,6 @@ export const getDashboardStats = async (req, res) => {
    ========================================================== */
 export const getAllUsers = async (req, res) => {
   try {
-    // Frontend expects an array directly matching the .json() parsing block, let's serve it directly
     const clients = await User.find({ _id: { $ne: req.user._id } })
       .select("-password")
       .sort({ createdAt: -1 });
@@ -61,36 +60,40 @@ export const getAllUsers = async (req, res) => {
    ========================================================== */
 export const fundUserWallet = async (req, res) => {
   try {
-    const { userId, amount } = req.body;
+    // Structural Fallback Matrix: captures 'userId', 'id', or 'user' payload maps seamlessly
+    const targetUserId = req.body.userId || req.body.id || req.body.user;
+    const amount = req.body.amount;
 
-    if (!userId || !amount || isNaN(amount) || amount <= 0) {
-      return res.status(400).json({ success: false, message: "Invalid allocation amount specified." });
+    if (!targetUserId || !amount || isNaN(amount) || parseFloat(amount) <= 0) {
+      return res.status(400).json({ success: false, message: "Invalid allocation parameters or amount specified." });
     }
 
-    const user = await User.findById(userId);
+    const user = await User.findById(targetUserId);
     if (!user) {
-      return res.status(404).json({ success: false, message: "Target profile node not found." });
+      return res.status(404).json({ success: false, message: "Target profile node not found in system storage." });
     }
 
-    // Add balance to user's exact wallet field
+    // Adjust balance parameters safely using numeric mutation vectors
     user.wallet = (Number(user.wallet) || 0) + Number(amount);
     await user.save();
 
-    // Create an audit transaction record for transparency
+    // Create an audit transaction record with fallback attributes to pass validation restrictions
     await Transaction.create({
-      user: userId,
+      user: user._id, // References the verified MongoDB ObjectId directly from the user node
       type: "deposits",
       amount: Number(amount),
       status: "successful",
+      description: "Admin manual wallet allocation adjustment",
       reference: "ADM-" + Math.random().toString(36).substr(2, 9).toUpperCase()
     });
 
     return res.status(200).json({
       success: true,
-      message: `Successfully allocated ₦${amount} to ${user.name}'s ledger account balance.`
+      message: `Successfully allocated ₦${Number(amount).toLocaleString(undefined, {minimumFractionDigits: 2})} to ${user.name}'s account ledger.`
     });
   } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    console.error("Wallet funding cluster crash error:", error);
+    return res.status(500).json({ success: false, message: "Transaction database validation failed: " + error.message });
   }
 };
 
@@ -109,7 +112,6 @@ export const toggleUserBlock = async (req, res) => {
       return res.status(403).json({ success: false, message: "Administrative clusters cannot be blocked." });
     }
 
-    // Toggle logic assuming 'isBlocked' boolean property exists on your User Schema
     user.isBlocked = !user.isBlocked;
     await user.save();
 
