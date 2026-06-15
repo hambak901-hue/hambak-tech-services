@@ -76,7 +76,7 @@ export const fundUserWallet = async (req, res) => {
     user.wallet = (Number(user.wallet) || 0) + Number(amount);
     await user.save();
 
-    // FIXED: Changed "deposits" to "deposit" to match your strict schema enum rule
+    // FIXED: Using singular "deposit" explicitly to align perfectly with schema rules
     await Transaction.create({
       user: user._id,
       type: "deposit", 
