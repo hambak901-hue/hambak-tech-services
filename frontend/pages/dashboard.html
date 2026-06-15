@@ -383,12 +383,13 @@
 
       <div class="sidebar-links">
         <a id="nav-home" class="active" onclick="showSection('home-view')"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
-        <a id="nav-wallet" onclick="showSection('wallet-view')"><i class="fa-solid fa-wallet"></i> Wallet</a>
-        <a id="nav-orders" onclick="showSection('orders-view')"><i class="fa-solid fa-cart-shopping"></i> Orders Panel</a>
-        <a id="nav-nin" onclick="showSection('nin-view')"><i class="fa-solid fa-id-card"></i> NIN Services</a>
-        <a id="nav-print" onclick="showSection('print-view')"><i class="fa-solid fa-print"></i> Printing Node</a>
-        <a id="nav-training" onclick="showSection('training-view')"><i class="fa-solid fa-graduation-cap"></i> ICT Training</a>
-        <a id="nav-game" onclick="showSection('game-view')"><i class="fa-solid fa-gamepad"></i> Game Center</a>
+        <a id="nav-wallet" onclick="showSection('wallet-view')"><i class="fa-solid fa-wallet"></i> Wallet Manager</a>
+        <a id="nav-ict" onclick="showSection('ict-view')"><i class="fa-solid fa-laptop-code"></i> ICT & Tech Core</a>
+        <a id="nav-business" onclick="showSection('business-view')"><i class="fa-solid fa-briefcase"></i> Business & Print</a>
+        <a id="nav-financial" onclick="showSection('financial-view')"><i class="fa-solid fa-scale-balanced"></i> Agency Banking</a>
+        <a id="nav-marketing" onclick="showSection('marketing-view')"><i class="fa-solid fa-bullhorn"></i> Marketing Node</a>
+        <a id="nav-game" onclick="showSection('game-view')"><i class="fa-solid fa-gamepad"></i> Game Terminal</a>
+        <a id="nav-orders" onclick="showSection('orders-view')"><i class="fa-solid fa-list-check"></i> System History</a>
         
         <a href="admin.html" class="admin-block-section admin-only-tab" id="adminUsersLink"><i class="fa-solid fa-users-gear"></i> Manage Users</a>
         <a href="admin.html" class="admin-block-section admin-only-tab" id="adminServicesLink"><i class="fa-solid fa-gears"></i> Core Settings</a>
@@ -400,7 +401,7 @@
     <div class="dashboard-main">
 
       <div class="topbar">
-        <h1 id="panelTitle">Customer Dashboard</h1>
+        <h1 id="panelTitle">Ecosystem Operations Hub</h1>
         <div class="profile-box">
           <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Hambak" alt="profile">
           <div>
@@ -466,69 +467,77 @@
         </div>
       </div>
 
-      <div id="orders-view" class="app-view">
+      <div id="ict-view" class="app-view">
         <div class="module-card">
-          <h2>Ecosystem Services Order Logs</h2>
-          <table>
-            <thead><tr><th>Order ID Reference</th><th>Item System Description</th><th>Price Metric</th><th>Status Grid</th></tr></thead>
-            <tbody id="ordersLogTable">
-              <tr><td colspan="4">Querying account order indexes...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div id="nin-view" class="app-view">
-        <div class="module-card">
-          <h2>NIN Validation & Custom Modifications Form</h2>
-          <p>Deploy identity updates directly to corporate data review servers securely.</p>
-          <form class="order-form-grid" id="ninServiceForm" enctype="multipart/form-data">
+          <h2>ICT & Technology Deployment Panel</h2>
+          <p>Request Web Development, Specialized App Systems, Graphic Design Arrays, or Professional Bootcamp training.</p>
+          <form class="order-form-grid order-placement-form" id="ictOrderForm" enctype="multipart/form-data">
             <div class="form-group">
-              <label>Select Identity Target Mapping Service</label>
-              <select id="nin-service-select" required>
+              <label>Select Core Technology Service</label>
+              <select id="ict-service-select" class="service-select-node" required>
                 <option value="">-- Synchronizing Live Services... --</option>
               </select>
             </div>
-            <div class="form-group"><label>Target Processing Quantity</label><input type="number" id="nin-quantity" value="1" min="1" required></div>
-            <div class="form-group"><label>Existing 11-Digit NIN Number</label><input type="text" id="nin-number" maxlength="11" required placeholder="Enter NIN matrix number"></div>
-            <div class="form-group"><label>Target Data Correction Context Description</label><textarea id="nin-context" placeholder="State clear change variables needed (e.g., correct typing alignment mistakes)" required></textarea></div>
-            <div class="form-group"><label>Supporting Document Attachment File</label><input type="file" id="nin-file-upload"></div>
-            <button type="submit" class="submit-action-btn" id="nin-submit-btn">Deploy Request Verification</button>
+            <div class="form-group"><label>Target Run Quantities</label><input type="number" class="order-qty" value="1" min="1" required></div>
+            <div class="form-group"><label>Asset Blueprint / Reference Files</label><input type="file" class="order-file-upload"></div>
+            <div class="form-group"><label>Execution Specifications & Brief</label><textarea class="order-context" placeholder="Detail custom coding layers, branding preferences, or syllabus targets..." required></textarea></div>
+            <button type="submit" class="submit-action-btn">Submit Operational Request</button>
           </form>
         </div>
       </div>
 
-      <div id="print-view" class="app-view">
+      <div id="business-view" class="app-view">
         <div class="module-card">
-          <h2>Premium Graphic Print Scheduling Node</h2>
-          <form class="order-form-grid" id="printJobForm" enctype="multipart/form-data">
+          <h2>Business Support & Documentation Infrastructure</h2>
+          <p>Execute CAC Registrations, Document Formatting, CV Writing, or High-Volume Premium Print commands.</p>
+          <form class="order-form-grid order-placement-form" id="businessOrderForm" enctype="multipart/form-data">
             <div class="form-group">
-              <label>Target Print Configuration Mapping</label>
-              <select id="print-service-select" required>
+              <label>Select Structural Business Service</label>
+              <select id="business-service-select" class="service-select-node" required>
                 <option value="">-- Synchronizing Live Services... --</option>
               </select>
             </div>
-            <div class="form-group"><label>Target Copy Print Quantities</label><input type="number" id="print-quantity" value="1" min="1" required></div>
-            <div class="form-group"><label>Upload Document/Design Layout File Asset</label><input type="file" id="print-file-upload" required></div>
-            <div class="form-group"><label>Additional Configuration Message</label><textarea id="print-context" placeholder="Specify custom color layouts or special finish rules..."></textarea></div>
-            <button type="submit" class="submit-action-btn" id="print-submit-btn">Initialize Printing Job</button>
+            <div class="form-group"><label>Target Copy Counts</label><input type="number" class="order-qty" value="1" min="1" required></div>
+            <div class="form-group"><label>Document Upload Asset Node</label><input type="file" class="order-file-upload"></div>
+            <div class="form-group"><label>Modification Context Details</label><textarea class="order-context" placeholder="Enter clear alignment data, business options, or special styling notes..." required></textarea></div>
+            <button type="submit" class="submit-action-btn">Submit Operational Request</button>
           </form>
         </div>
       </div>
 
-      <div id="training-view" class="app-view">
+      <div id="financial-view" class="app-view">
         <div class="module-card">
-          <h2>Advanced Engineering Bootcamps Portal</h2>
-          <div class="stats-grid" style="margin-top: 20px;">
-            <div class="stat-card" style="border-top: 4px solid var(--accent-pink);">
-              <h3>Web Software Design Array</h3>
-              <p style="margin-top: 10px;">Mastering Full-stack backend structures with Javascript, Node.js development, and permanent MongoDB configurations.</p>
+          <h2>Financial & Agency Banking Portal</h2>
+          <p>Initialize VTU Subscriptions, Bulk Airtime Operations, Utility Settlements, or Ajo Cooperative Savings updates.</p>
+          <form class="order-form-grid order-placement-form" id="financialOrderForm">
+            <div class="form-group">
+              <label>Select Financial Channel Service</label>
+              <select id="financial-service-select" class="service-select-node" required>
+                <option value="">-- Synchronizing Live Services... --</option>
+              </select>
             </div>
-            <div class="stat-card" style="border-top: 4px solid var(--brand-gold);">
-              <h3>Automated Office Matrices</h3>
-              <p style="margin-top: 10px;">Designing complex inventory management models and digital automation architectures with Excel sheets.</p>
+            <div class="form-group"><label>Processing Multiplier / Quantity</label><input type="number" class="order-qty" value="1" min="1" required></div>
+            <div class="form-group"><label>Target Account / Meter / Phone Number Matrix</label><textarea class="order-context" placeholder="Supply critical recipient references carefully..." required></textarea></div>
+            <button type="submit" class="submit-action-btn">Submit Operational Request</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="marketing-view" class="app-view">
+        <div class="module-card">
+          <h2>Marketing Execution & Consultancy Matrix</h2>
+          <p>Deploy social media management parameters, digital target advertisements, or request corporate consulting runs.</p>
+          <form class="order-form-grid order-placement-form" id="marketingOrderForm">
+            <div class="form-group">
+              <label>Select Campaigns / Advisory Sector</label>
+              <select id="marketing-service-select" class="service-select-node" required>
+                <option value="">-- Synchronizing Live Services... --</option>
+              </select>
             </div>
-          </div>
+            <div class="form-group"><label>Duration (Weeks/Units)</label><input type="number" class="order-qty" value="1" min="1" required></div>
+            <div class="form-group"><label>Strategic Context Definitions</label><textarea class="order-context" placeholder="Outline specific growth business models, ad spend allocations, or operational problems..." required></textarea></div>
+            <button type="submit" class="submit-action-btn">Submit Operational Request</button>
+          </form>
         </div>
       </div>
 
@@ -540,6 +549,18 @@
             <h4>Active Machine Terminal Token: <span style="color: var(--brand-gold);" id="machineTokenRef">HBK-GAME-ACTIVE</span></h4>
             <p style="font-size: 0.9rem; color: #cbd5e1; margin-top: 10px;">Status: Operational handshake confirmation received from core server router console.</p>
           </div>
+        </div>
+      </div>
+
+      <div id="orders-view" class="app-view">
+        <div class="module-card">
+          <h2>Ecosystem Services Order Logs</h2>
+          <table>
+            <thead><tr><th>Order ID Reference</th><th>Item System Description</th><th>Price Metric</th><th>Status Grid</th></tr></thead>
+            <tbody id="ordersLogTable">
+              <tr><td colspan="4">Querying account order indexes...</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
