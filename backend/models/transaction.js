@@ -14,6 +14,7 @@ const transactionSchema = new mongoose.Schema({
     required: true,
     enum: [
       "deposit",
+      "deposits", // Added to fix the Mongoose plural validation crash
       "withdrawal",
       "transfer",
       "payment",
