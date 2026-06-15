@@ -48,13 +48,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const logoutBtn = document.getElementById("logoutBtn");
   const walletBalanceElements = document.querySelectorAll(".wallet-balance");
 
-  // DOM Elements - Service Dropdown Matrix Arrays
-  const ninServiceSelect = document.getElementById("nin-service-select");
-  const printingServiceSelect = document.getElementById("print-service-select");
+  // DOM Elements - Expanded Service Dropdown Matrix Arrays
+  const ictServiceSelect = document.getElementById("ict-service-select");
+  const businessServiceSelect = document.getElementById("business-service-select");
+  const financialServiceSelect = document.getElementById("financial-service-select");
+  const marketingServiceSelect = document.getElementById("marketing-service-select");
 
-  // DOM Elements - Transaction & Order Form Submissions
-  const ninOrderForm = document.getElementById("ninServiceForm");
-  const printingOrderForm = document.getElementById("printJobForm");
+  // DOM Elements - Form Submissions
+  const serviceOrderForm = document.getElementById("serviceOrderForm");
 
   // DOM Elements - Reactive Dynamic Tables
   const universalLogsTableBody = document.getElementById("universalLogsTableBody");
@@ -70,7 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
   async function initializeDashboard() {
     console.log("Ecosystem layout initialization sequence triggered...");
     try {
-      // Load user profile record metric
       await fetchUserProfile();
       
       // Load platform services & data streams independently
@@ -79,7 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
       
       setupEventListeners();
       
-      // FIX: Changed target check from "dashboard-view" to match your HTML's actual element "home-view"
       if (document.getElementById("home-view")) {
         window.showSection("home-view");
       }
@@ -112,7 +111,6 @@ document.addEventListener("DOMContentLoaded", () => {
         
         if (userProfile.role === "admin") {
           document.querySelectorAll(".admin-block-section").forEach(el => el.style.display = "block");
-          // Initialize Chart analytics dashboards for administrative visibility
           initAdminCharts();
         }
 
@@ -138,8 +136,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       availableServices = data.services || data || [];
 
-      if (ninServiceSelect) ninServiceSelect.innerHTML = '<option value="" disabled selected>-- Select Identity Target Mapping Service --</option>';
-      if (printingServiceSelect) printingServiceSelect.innerHTML = '<option value="" disabled selected>-- Target Print Configuration Mapping --</option>';
+      // Reset dropdown placeholders safely
+      if (ictServiceSelect) ictServiceSelect.innerHTML = '<option value="" disabled selected>-- Select ICT or Tech Service --</option>';
+      if (businessServiceSelect) businessServiceSelect.innerHTML = '<option value="" disabled selected>-- Select Business Support or Print Service --</option>';
+      if (financialServiceSelect) financialServiceSelect.innerHTML = '<option value="" disabled selected>-- Select Financial or VTU Service --</option>';
+      if (marketingServiceSelect) marketingServiceSelect.innerHTML = '<option value="" disabled selected>-- Select Marketing or Consultation --</option>';
 
       availableServices.forEach(service => {
         if (service.isActive === false) return;
@@ -147,10 +148,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const optionHTML = `<option value="${service._id}">${service.name} — ₦${Number(service.price).toLocaleString()}</option>`;
         const categoryKey = service.category ? service.category.toLowerCase() : "";
         
-        if (categoryKey.includes("nin") && ninServiceSelect) {
-          ninServiceSelect.insertAdjacentHTML("beforeend", optionHTML);
-        } else if ((categoryKey.includes("print") || categoryKey.includes("graph") || categoryKey.includes("design")) && printingServiceSelect) {
-          printingServiceSelect.insertAdjacentHTML("beforeend", optionHTML);
+        // Comprehensive matrix routing matchers based on catalog structure
+        if ((categoryKey.includes("ict") || categoryKey.includes("web") || categoryKey.includes("graph") || categoryKey.includes("software") || categoryKey.includes("computer")) && ictServiceSelect) {
+          ictServiceSelect.insertAdjacentHTML("beforeend", optionHTML);
+        } 
+        else if ((categoryKey.includes("print") || categoryKey.includes("reg") || categoryKey.includes("doc") || categoryKey.includes("cv") || categoryKey.includes("resume") || categoryKey.includes("type")) && businessServiceSelect) {
+          businessServiceSelect.insertAdjacentHTML("beforeend", optionHTML);
+        } 
+        else if ((categoryKey.includes("vtu") || categoryKey.includes("pos") || categoryKey.includes("pay") || categoryKey.includes("save") || categoryKey.includes("ajo") || categoryKey.includes("coop")) && financialServiceSelect) {
+          financialServiceSelect.insertAdjacentHTML("beforeend", optionHTML);
+        } 
+        else if ((categoryKey.includes("market") || categoryKey.includes("content") || categoryKey.includes("consult")) && marketingServiceSelect) {
+          marketingServiceSelect.insertAdjacentHTML("beforeend", optionHTML);
         }
       });
     } catch (err) {
@@ -170,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (ordersLogTable) {
         if (!Array.isArray(orders) || orders.length === 0) {
-          ordersLogTable.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">No custom operational orders found.</td></tr>`;
+          ordersLogTable.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">No operational orders found.</td></tr>`;
         } else {
           ordersLogTable.innerHTML = "";
           orders.forEach(order => {
@@ -192,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (universalLogsTableBody) {
         if (!Array.isArray(orders) || orders.length === 0) {
-          universalLogsTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">No historical records logged to server framework yet.</td></tr>`;
+          universalLogsTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">No historical records logged yet.</td></tr>`;
         } else {
           universalLogsTableBody.innerHTML = "";
           orders.slice(0, 5).forEach(order => {
@@ -213,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     } catch (err) {
-      console.error("Universal logs table compilation system crash exception handler context:", err);
+      console.error("Universal logs table compilation system crash exception:", err);
     }
   }
 
@@ -221,47 +230,34 @@ document.addEventListener("DOMContentLoaded", () => {
      3. OPERATION EVENTS AND ASYNC TRANSIT CONTROLLERS
      ========================================================================== */
   function setupEventListeners() {
-    if (ninOrderForm) {
-      ninOrderForm.addEventListener("submit", async (e) => {
+    
+    // Unified listener block dealing with structural forms dynamically
+    document.querySelectorAll(".order-placement-form").forEach(form => {
+      form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const selectedId = ninServiceSelect.value;
-        if (!selectedId) return alert("Validation Error: Please select an identity verification operational tier.");
+        
+        // Find whichever dropdown inside this specific form is being used
+        const selectElement = form.querySelector("select.service-select-node");
+        const selectedId = selectElement ? selectElement.value : null;
+        
+        if (!selectedId) return alert("Validation Error: Please select an operational service option.");
 
         const formData = new FormData();
         formData.append("serviceId", selectedId);
-        formData.append("quantity", document.getElementById("nin-quantity")?.value || 1);
-        formData.append("ninNumber", document.getElementById("nin-number")?.value || "");
-        formData.append("message", document.getElementById("nin-context")?.value || "Identity Verification Request");
+        formData.append("quantity", form.querySelector(".order-qty")?.value || 1);
+        formData.append("message", form.querySelector(".order-context")?.value || "System Service Execution Run");
         
-        const fileInput = document.getElementById("nin-file-upload");
+        const fileInput = form.querySelector(".order-file-upload");
         if (fileInput && fileInput.files[0]) formData.append("file", fileInput.files[0]);
 
-        await executeOrderPlacement(formData, ninOrderForm);
+        await executeOrderPlacement(formData, form);
       });
-    }
-
-    if (printingOrderForm) {
-      printingOrderForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const selectedId = printingServiceSelect.value;
-        if (!selectedId) return alert("Validation Error: Please highlight an output document specification template.");
-
-        const formData = new FormData();
-        formData.append("serviceId", selectedId);
-        formData.append("quantity", document.getElementById("print-quantity")?.value || 1);
-        formData.append("message", document.getElementById("print-context")?.value || "Production Media Request Layout Run");
-        
-        const fileInput = document.getElementById("print-file-upload");
-        if (fileInput && fileInput.files[0]) formData.append("file", fileInput.files[0]);
-
-        await executeOrderPlacement(formData, printingOrderForm);
-      });
-    }
+    });
 
     if (fundWalletBtn) {
       fundWalletBtn.addEventListener("click", async () => {
         const amount = fundingAmountInput?.value;
-        if (!amount || amount < 100) return alert("Validation Mismatch: Processing node requires an entry minimum limit threshold of ₦100.");
+        if (!amount || amount < 100) return alert("Validation Mismatch: Requires an entry minimum threshold of ₦100.");
 
         try {
           fundWalletBtn.disabled = true;
@@ -278,7 +274,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const data = await res.json();
           if (res.ok && data.authorization_url) {
-            // Standard smooth redirect pipeline setup
             window.location.href = data.authorization_url;
           } else {
             alert("External Gateway Warning: " + (data.message || "Initialization parameters dropped."));
@@ -305,9 +300,11 @@ document.addEventListener("DOMContentLoaded", () => {
   async function executeOrderPlacement(formData, formElement) {
     try {
       const submitBtn = formElement.querySelector('button[type="submit"]');
+      const originalText = submitBtn ? submitBtn.textContent : "Submit";
+      
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.textContent = "Deploying Matrix Network Payload...";
+        submitBtn.textContent = "Deploying Request Payload...";
       }
 
       const res = await fetch("/api/orders", {
@@ -323,15 +320,16 @@ document.addEventListener("DOMContentLoaded", () => {
         await fetchUserProfile();
         await fetchOrderHistory();
       } else {
-        alert("Transaction Failed: " + (data.message || "Database node operation validation rejected."));
+        alert("Transaction Failed: " + (data.message || "Operation validation rejected."));
       }
     } catch (err) {
-      console.error("Server order deployment structural endpoint execution error:", err);
+      console.error("Server order deployment execution error:", err);
     } finally {
       const submitBtn = formElement.querySelector('button[type="submit"]');
       if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.textContent = formElement.id === "ninServiceForm" ? "Deploy Request Verification" : "Initialize Printing Job";
+        // Revert to default text safely
+        submitBtn.textContent = "Submit Operational Request";
       }
     }
   }
@@ -346,9 +344,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* ==========================================================================
-     4. ADMIN VISUALIZATIONS (CHART.JS ATTACHMENT NODE)
-     ========================================================================== */
   function initAdminCharts() {
     const revCtx = document.getElementById('revenueChart');
     const servCtx = document.getElementById('serviceChart');
@@ -375,9 +370,9 @@ document.addEventListener("DOMContentLoaded", () => {
       new Chart(servCtx, {
         type: 'doughnut',
         data: {
-          labels: ['NIN Matrix', 'Print Node', 'ICT Array', 'Other Services'],
+          labels: ['ICT Services', 'Business Support', 'Financial Nodes', 'Digital Marketing'],
           datasets: [{
-            data: [45, 30, 15, 10],
+            data: [40, 30, 20, 10],
             backgroundColor: ['#0d47a1', '#f5b942', '#ff4081', '#081120']
           }]
         },
