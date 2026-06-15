@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HAMBAK TECH & SERVICES - SYSTEM PRODUCTION ENGINE
+   HAMBAK TECH & SERVICES - SYSTEM STABILIZATION PRODUCTION ENGINE
    ========================================================================== */
 
 // Global navigation core utility - switches view blocks instantly
@@ -9,7 +9,7 @@ window.showSection = function(sectionId) {
   // Hide all view panels
   document.querySelectorAll('.app-view').forEach(view => {
     view.classList.remove('active-view');
-    view.style.display = 'none'; // Safe backup display control
+    view.style.display = 'none';
   });
   
   // Display target selected view panel
@@ -19,7 +19,7 @@ window.showSection = function(sectionId) {
     targetView.style.display = 'block';
   }
 
-  // Handle active navigation tab highlight highlights
+  // Handle active navigation tab highlights
   document.querySelectorAll('.sidebar-links a').forEach(link => {
     link.classList.remove('active');
   });
@@ -34,11 +34,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let userProfile = null;
   let availableServices = [];
 
-  // Core Auth Token Token Check
+  // Core Auth Token Check
   const token = localStorage.getItem("token");
   if (!token) {
-    console.warn("Unauthorized state access cluster. Route redirecting to login context.");
-    // Handles adaptive paths whether running from root or /pages/ folder
+    console.warn("Unauthorized: No token found in localStorage. Redirecting to login.");
+    // Safe redirect fallback
     window.location.href = window.location.pathname.includes("/pages/") ? "login.html" : "pages/login.html";
     return;
   }
@@ -93,14 +93,16 @@ document.addEventListener("DOMContentLoaded", () => {
      2. DATA ACQUISITION & RENDERING PIPELINES
      ========================================================================== */
 
-  // Fetch Current User Records & Sync Balance Indicators
   async function fetchUserProfile() {
     try {
       const res = await fetch("/api/auth/me", {
         headers: { "Authorization": `Bearer ${token}` }
       });
       
-      if (!res.ok) return console.error("Database connection validation handshakes rejected token credentials.");
+      if (!res.ok) {
+        console.error(`Token authentication rejected by server with status: ${res.status}. Avoiding auto-redirect loop.`);
+        return; 
+      }
 
       const data = await res.json();
       userProfile = data.user || data;
@@ -109,12 +111,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (userNameEl && userProfile.name) userNameEl.textContent = userProfile.name;
         if (userRoleEl) userRoleEl.textContent = userProfile.role || "Customer";
         
-        // Unblock Admin Panel Interface switches if user status matches administrative role permissions
         if (userProfile.role === "admin") {
           document.querySelectorAll(".admin-block-section").forEach(el => el.style.display = "block");
         }
 
-        // Sync wallet token accounting metrics inside layout wrappers
         const rawWalletValue = userProfile.wallet !== undefined ? userProfile.wallet : 0;
         const formattedBalance = `₦${Number(rawWalletValue).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         
@@ -127,7 +127,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Fetch Available Services Matrix & Distribute into Dropdown Nodes
   async function fetchServices() {
     try {
       const res = await fetch("/api/services", {
@@ -158,7 +157,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Fetch Order History Logs & Build Live Tables
   async function fetchOrderHistory() {
     try {
       const res = await fetch("/api/orders/my", {
@@ -169,7 +167,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       const orders = data.orders || data || [];
 
-      // Render out logs inside primary history table tracking view panel modules
       if (ordersLogTable) {
         if (!Array.isArray(orders) || orders.length === 0) {
           ordersLogTable.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No custom operational orders found.</td></tr>`;
@@ -192,7 +189,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      // Render top logs block panel snapshot values inside root overview dashboard matrix component
       if (universalLogsTableBody) {
         if (!Array.isArray(orders) || orders.length === 0) {
           universalLogsTableBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No historical records logged to server framework yet.</td></tr>`;
@@ -224,8 +220,6 @@ document.addEventListener("DOMContentLoaded", () => {
      3. OPERATION EVENTS AND ASYNC TRANSIT CONTROLLERS
      ========================================================================== */
   function setupEventListeners() {
-    
-    // NIN Form Interceptor Pipeline Processing Node
     if (ninOrderForm) {
       ninOrderForm.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -245,7 +239,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    // Printing Job Request Processing Interceptor Matrix Node
     if (printingOrderForm) {
       printingOrderForm.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -264,11 +257,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    // Paystack Gateway Node Link Trigger Routing Matrix Execution Context
     if (fundWalletBtn) {
       fundWalletBtn.addEventListener("click", async () => {
         const amount = fundingAmountInput?.value;
-        if (!amount || amount < 100) return alert("Validation Mismatch: Processing node requires a entry minimum limit threshold of ₦100.");
+        if (!amount || amount < 100) return alert("Validation Mismatch: Processing node requires an entry minimum limit threshold of ₦100.");
 
         try {
           fundWalletBtn.disabled = true;
@@ -299,7 +291,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    // Explicit Session Termination Sequence Trigger Node
     if (logoutBtn) {
       logoutBtn.addEventListener("click", (e) => {
         e.preventDefault();
@@ -309,7 +300,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Multi-part Form Asset Processing Handler Node
   async function executeOrderPlacement(formData, formElement) {
     try {
       const submitBtn = formElement.querySelector('button[type="submit"]');
@@ -344,7 +334,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Component UI Layout Badge Utility Helper Engine Mapping
   function getStatusBadgeHTML(status) {
     switch (status) {
       case "pending": return `<span class="badge bg-warning text-dark" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Pending</span>`;
@@ -355,6 +344,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Execute Core System Run Loop
   initializeDashboard();
 });
