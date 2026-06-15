@@ -8,8 +8,8 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://js.paystack.co/v1/inline.js"></script>
   <style>
-    /* Premium brand colors preserved perfectly */
     :root {
       --primary-blue: #0d47a1;
       --deep-navy: #081120;
@@ -20,7 +20,7 @@
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Arial, sans-serif;
       background: #f5f7fb;
     }
 
@@ -36,8 +36,9 @@
       padding: 30px 20px;
       position: fixed;
       height: 100%;
-      overflow: auto;
+      overflow-y: auto;
       z-index: 100;
+      box-sizing: border-box;
     }
 
     .sidebar-logo {
@@ -47,8 +48,9 @@
 
     .sidebar-logo h2 {
       color: var(--brand-gold);
-      margin-bottom: 5px;
+      margin: 0 0 5px 0;
       font-weight: 800;
+      letter-spacing: 1px;
     }
 
     .sidebar-logo p {
@@ -56,12 +58,13 @@
       font-size: 0.75rem;
       letter-spacing: 2px;
       font-weight: bold;
+      color: #cbd5e1;
     }
 
     .sidebar-links {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 6px;
     }
 
     .sidebar-links a {
@@ -69,7 +72,7 @@
       color: #cbd5e1;
       padding: 12px 15px;
       border-radius: 12px;
-      transition: 0.3s;
+      transition: all 0.3s ease;
       display: flex;
       align-items: center;
       gap: 15px;
@@ -92,6 +95,7 @@
       margin-left: 280px;
       flex: 1;
       padding: 40px;
+      box-sizing: border-box;
     }
 
     .topbar {
@@ -106,6 +110,7 @@
     .topbar h1 {
       color: #0f172a;
       font-weight: 800;
+      margin: 0;
     }
 
     .profile-box {
@@ -124,6 +129,12 @@
       height: 45px;
       border-radius: 50%;
       border: 2px solid var(--brand-gold);
+      object-fit: cover;
+    }
+
+    .profile-box h4 {
+      margin: 0;
+      color: var(--deep-navy);
     }
 
     .app-view {
@@ -144,6 +155,7 @@
 
     .module-card h2 {
       color: var(--deep-navy);
+      margin-top: 0;
       margin-bottom: 20px;
       font-weight: 800;
       border-left: 5px solid var(--primary-blue);
@@ -172,12 +184,13 @@
 
     .stat-card h2 {
       font-size: 2.2rem;
-      margin-bottom: 5px;
+      margin: 0 0 5px 0;
       color: #0f172a;
       font-weight: 800;
     }
 
     .stat-card p {
+      margin: 0;
       color: #64748b;
       font-weight: 600;
     }
@@ -190,6 +203,11 @@
       margin-bottom: 40px;
       box-shadow: 0 15px 40px rgba(13, 71, 161, 0.25);
       border-bottom: 4px solid var(--brand-gold);
+    }
+
+    .wallet-card h3 {
+      margin-top: 0;
+      font-weight: 600;
     }
 
     .wallet-balance {
@@ -205,9 +223,17 @@
       cursor: pointer;
       font-weight: bold;
       margin-right: 10px;
+      transition: background 0.2s ease;
     }
 
-    .deposit-btn { background: var(--brand-gold); color: var(--deep-navy); }
+    .deposit-btn { 
+      background: var(--brand-gold); 
+      color: var(--deep-navy); 
+    }
+    
+    .deposit-btn:hover {
+      background: #e0aa34;
+    }
 
     .funding-form-wrapper {
       background: rgba(255, 255, 255, 0.08);
@@ -259,9 +285,10 @@
       border-radius: 10px;
       outline: none;
       font-size: 1rem;
+      font-family: inherit;
     }
 
-    .form-group input:focus {
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
       border-color: var(--primary-blue);
     }
 
@@ -274,6 +301,7 @@
       cursor: pointer;
       font-weight: 700;
       margin-top: 20px;
+      transition: background 0.2s ease;
     }
 
     .submit-action-btn:hover { background: #1565c0; }
@@ -292,6 +320,19 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     }
 
+    .table-box {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .table-box h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: var(--deep-navy);
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -307,6 +348,7 @@
     table th {
       background: var(--primary-blue);
       color: white;
+      font-weight: 600;
     }
 
     .notice {
@@ -315,6 +357,8 @@
       background: #f8fafc;
       margin-bottom: 15px;
       border-radius: 10px;
+      font-weight: 500;
+      color: #334155;
     }
 
     .admin-block-section { display: none; }
