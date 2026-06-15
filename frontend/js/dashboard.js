@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HAMBAK TECH & SERVICES - PREMIUM ENGINE
+   HAMBAK TECH & SERVICES - STABLE DASHBOARD ENGINE
    ========================================================================== */
 
 // Global navigation utility attached directly to window to handle onclick events from sidebar
@@ -40,15 +40,15 @@ document.addEventListener("DOMContentLoaded", () => {
   // Select all instances of wallet balance containers across tabs
   const walletBalanceElements = document.querySelectorAll(".wallet-balance");
 
-  // DOM Elements - Service Dropdown Selectors (Matched perfectly to HTML)
+  // DOM Elements - Service Dropdown Selectors
   const ninServiceSelect = document.getElementById("nin-service-select");
   const printingServiceSelect = document.getElementById("print-service-select");
 
-  // DOM Elements - Order Submission Forms (Matched perfectly to HTML)
+  // DOM Elements - Order Submission Forms
   const ninOrderForm = document.getElementById("ninServiceForm");
   const printingOrderForm = document.getElementById("printJobForm");
 
-  // DOM Elements - History Visualizer Tables (Matched perfectly to HTML)
+  // DOM Elements - History Visualizer Tables
   const universalLogsTableBody = document.getElementById("universalLogsTableBody");
   const ordersLogTable = document.getElementById("ordersLogTable");
 
@@ -56,7 +56,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const fundWalletBtn = document.getElementById("fund-wallet-btn");
   const fundingAmountInput = document.getElementById("funding-amount-input");
 
-  // Absolute Security Guard Gate
+  /* ==========================================================================
+     CRITICAL SECURITY RULE: Only kick to login if the token doesn't exist at all.
+     ========================================================================== */
   if (!token) {
     window.location.href = "/login.html";
     return;
@@ -67,15 +69,16 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================================================================== */
   async function initializeDashboard() {
     try {
-      // Fetch user profile first. If it succeeds, load other visual arrays safely.
-      const profileLoaded = await fetchUserProfile();
-      if (profileLoaded) {
-        await fetchServices();
-        await fetchOrderHistory();
-        setupEventListeners();
-      }
+      // Fetch user profile first.
+      await fetchUserProfile();
+      
+      // Load other data tracks independently so one error doesn't break the layout
+      fetchServices().catch(err => console.error("Non-blocking services log:", err));
+      fetchOrderHistory().catch(err => console.error("Non-blocking history log:", err));
+      
+      setupEventListeners();
     } catch (error) {
-      console.error("Dashboard initialization failure context:", error);
+      console.error("Dashboard core loop error:", error);
     }
   }
 
@@ -83,19 +86,22 @@ document.addEventListener("DOMContentLoaded", () => {
      2. DATA ACQUISITION & RENDER PIPELINES
      ========================================================================== */
 
-  // Fetch Current User Metrics - Formatted Defensively Against Dropouts
+  // Fetch Current User Metrics
   async function fetchUserProfile() {
     try {
       const res = await fetch("/api/auth/me", {
         headers: { "Authorization": `Bearer ${token}` }
       });
       
+      if (!res.ok) {
+        console.warn(`Profile ping returned status: ${res.status}. Keeping session active.`);
+        return;
+      }
+
       const data = await res.json();
+      userProfile = data.user || data;
       
-      // Resilient check: Accept if standard success true or if user profile object directly exists
-      if (res.ok || data.success || data.user) {
-        userProfile = data.user || data;
-        
+      if (userProfile) {
         // Populate layout parameters safely
         if (userNameEl && userProfile.name) userNameEl.textContent = userProfile.name;
         if (userRoleEl) userRoleEl.textContent = userProfile.role || "Customer";
@@ -111,17 +117,9 @@ document.addEventListener("DOMContentLoaded", () => {
         walletBalanceElements.forEach(el => {
           el.textContent = formattedBalance;
         });
-
-        return true; // Execution cleared successfully
-      } else {
-        console.warn("Server validation handshake denied credentials.");
-        handleAuthExpiry();
-        return false;
       }
     } catch (err) {
-      console.error("Profile endpoint sync mapping exception caught:", err);
-      // Don't log out on generic temporary network timeouts to avoid annoying loops
-      return false;
+      console.error("Profile endpoint connection exception bypassed to maintain session stability:", err);
     }
   }
 
@@ -131,8 +129,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const res = await fetch("/api/services", {
         headers: { "Authorization": `Bearer ${token}` }
       });
+      if (!res.ok) return;
+
       const data = await res.json();
-      
       availableServices = data.services || data || [];
 
       // Clear existing placeholders cleanly
@@ -153,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     } catch (err) {
-      console.error("Service matrix population pipeline blocked:", err);
+      console.error("Service matrix population pipeline error:", err);
     }
   }
 
@@ -163,6 +162,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const res = await fetch("/api/orders/my", {
         headers: { "Authorization": `Bearer ${token}` }
       });
+      if (!res.ok) {
+        if (ordersLogTable) ordersLogTable.innerHTML = `<tr><td colspan="4" class="text-center text-muted">History currently unavailable (Server Error).</td></tr>`;
+        return;
+      }
+
       const data = await res.json();
       const orders = data.orders || data || [];
 
@@ -195,7 +199,6 @@ document.addEventListener("DOMContentLoaded", () => {
           universalLogsTableBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No historical records logged to server framework yet.</td></tr>`;
         } else {
           universalLogsTableBody.innerHTML = "";
-          // Take up to recent 5 entries
           orders.slice(0, 5).forEach(order => {
             const serviceCategory = order.service ? (order.service.category || "General").toUpperCase() : "GENERAL";
             const statusBadge = getStatusBadgeHTML(order.status);
@@ -362,11 +365,6 @@ document.addEventListener("DOMContentLoaded", () => {
       case "cancelled": return `<span class="badge bg-danger text-white" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Cancelled</span>`;
       default: return `<span class="badge bg-secondary" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Unknown</span>`;
     }
-  }
-
-  function handleAuthExpiry() {
-    localStorage.clear();
-    window.location.href = "/login.html";
   }
 
   // Run Ecosystem System Loops
