@@ -1,103 +1,106 @@
 /* ==========================================================================
-   HAMBAK TECH & SERVICES - ANTI-LOOP STABLE ENGINE
+   HAMBAK TECH & SERVICES - SYSTEM PRODUCTION ENGINE
    ========================================================================== */
 
-// Global navigation utility attached directly to window to handle onclick events from sidebar
+// Global navigation core utility - switches view blocks instantly
 window.showSection = function(sectionId) {
-  // Hide all views
+  console.log("Switching view module target to:", sectionId);
+  
+  // Hide all view panels
   document.querySelectorAll('.app-view').forEach(view => {
     view.classList.remove('active-view');
+    view.style.display = 'none'; // Safe backup display control
   });
   
-  // Show target view
+  // Display target selected view panel
   const targetView = document.getElementById(sectionId);
   if (targetView) {
     targetView.classList.add('active-view');
+    targetView.style.display = 'block';
   }
 
-  // Manage sidebar link highlight states
+  // Handle active navigation tab highlight highlights
   document.querySelectorAll('.sidebar-links a').forEach(link => {
     link.classList.remove('active');
   });
   
-  // Find matching nav element based on view suffix
   const navId = "nav-" + sectionId.split('-')[0];
   const activeLink = document.getElementById(navId);
   if (activeLink) activeLink.classList.add('active');
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Global State Containers
+  // Global Application State Lifecycle Containers
   let userProfile = null;
   let availableServices = [];
 
-  // DOM Elements - Navigation & Core UI
+  // Core Auth Token Token Check
   const token = localStorage.getItem("token");
+  if (!token) {
+    console.warn("Unauthorized state access cluster. Route redirecting to login context.");
+    // Handles adaptive paths whether running from root or /pages/ folder
+    window.location.href = window.location.pathname.includes("/pages/") ? "login.html" : "pages/login.html";
+    return;
+  }
+
+  // DOM Elements - User Indicators
   const userNameEl = document.getElementById("userName");
   const userRoleEl = document.getElementById("userRole");
   const logoutBtn = document.getElementById("logoutBtn");
-  
-  // Select all instances of wallet balance containers across tabs
   const walletBalanceElements = document.querySelectorAll(".wallet-balance");
 
-  // DOM Elements - Service Dropdown Selectors
+  // DOM Elements - Service Dropdown Matrix Arrays
   const ninServiceSelect = document.getElementById("nin-service-select");
   const printingServiceSelect = document.getElementById("print-service-select");
 
-  // DOM Elements - Order Submission Forms
+  // DOM Elements - Transaction & Order Form Submissions
   const ninOrderForm = document.getElementById("ninServiceForm");
   const printingOrderForm = document.getElementById("printJobForm");
 
-  // DOM Elements - History Visualizer Tables
+  // DOM Elements - Reactive Dynamic Tables
   const universalLogsTableBody = document.getElementById("universalLogsTableBody");
   const ordersLogTable = document.getElementById("ordersLogTable");
 
-  // DOM Elements - Wallet Funding
+  // DOM Elements - Financial Action Components
   const fundWalletBtn = document.getElementById("fund-wallet-btn");
   const fundingAmountInput = document.getElementById("funding-amount-input");
-
-  /* ==========================================================================
-     ANTI-LOOP SHIELD: Redirects disabled during debug to isolate errors.
-     ========================================================================== */
-  if (!token) {
-    console.error("CRITICAL: Token is missing from localStorage!");
-    // window.location.href = "/login.html"; // DISABLED TO KILL THE LOOP
-    return;
-  }
 
   /* ==========================================================================
      1. INITIALIZATION DISPATCHER
      ========================================================================== */
   async function initializeDashboard() {
-    console.log("Initializing dashboard modules safely...");
+    console.log("Ecosystem layout initialization sequence triggered...");
     try {
+      // Load user profile record metric
       await fetchUserProfile();
       
-      // Load tables safely without cascading failures
-      fetchServices().catch(err => console.error("Non-blocking services err:", err));
-      fetchOrderHistory().catch(err => console.error("Non-blocking history err:", err));
+      // Load platform services & data streams independently
+      fetchServices().catch(e => console.error("Non-blocking platform service loading fault:", e));
+      fetchOrderHistory().catch(e => console.error("Non-blocking dashboard table loading fault:", e));
       
       setupEventListeners();
+      
+      // Default initialization view screen assignment state configuration trigger
+      if (document.getElementById("dashboard-view")) {
+        window.showSection("dashboard-view");
+      }
     } catch (error) {
-      console.error("Dashboard core layout loop error:", error);
+      console.error("Critical ecosystem initialization engine freeze:", error);
     }
   }
 
   /* ==========================================================================
-     2. DATA ACQUISITION & RENDER PIPELINES
+     2. DATA ACQUISITION & RENDERING PIPELINES
      ========================================================================== */
 
-  // Fetch Current User Metrics
+  // Fetch Current User Records & Sync Balance Indicators
   async function fetchUserProfile() {
     try {
       const res = await fetch("/api/auth/me", {
         headers: { "Authorization": `Bearer ${token}` }
       });
       
-      if (!res.ok) {
-        console.warn(`Profile route returned status ${res.status}. Anti-loop mechanism activated.`);
-        return;
-      }
+      if (!res.ok) return console.error("Database connection validation handshakes rejected token credentials.");
 
       const data = await res.json();
       userProfile = data.user || data;
@@ -106,22 +109,25 @@ document.addEventListener("DOMContentLoaded", () => {
         if (userNameEl && userProfile.name) userNameEl.textContent = userProfile.name;
         if (userRoleEl) userRoleEl.textContent = userProfile.role || "Customer";
         
+        // Unblock Admin Panel Interface switches if user status matches administrative role permissions
         if (userProfile.role === "admin") {
           document.querySelectorAll(".admin-block-section").forEach(el => el.style.display = "block");
         }
 
+        // Sync wallet token accounting metrics inside layout wrappers
         const rawWalletValue = userProfile.wallet !== undefined ? userProfile.wallet : 0;
         const formattedBalance = `₦${Number(rawWalletValue).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        
         walletBalanceElements.forEach(el => {
           el.textContent = formattedBalance;
         });
       }
     } catch (err) {
-      console.error("Profile payload sync failed, bypassing redirect:", err);
+      console.error("Infrastructure pipeline profile data retrieval exception:", err);
     }
   }
 
-  // Fetch Active System Services
+  // Fetch Available Services Matrix & Distribute into Dropdown Nodes
   async function fetchServices() {
     try {
       const res = await fetch("/api/services", {
@@ -148,11 +154,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     } catch (err) {
-      console.error("Service collection mapping error:", err);
+      console.error("Failed handling active operational product loop distribution parsing:", err);
     }
   }
 
-  // Fetch Logged Order Indexes
+  // Fetch Order History Logs & Build Live Tables
   async function fetchOrderHistory() {
     try {
       const res = await fetch("/api/orders/my", {
@@ -163,6 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       const orders = data.orders || data || [];
 
+      // Render out logs inside primary history table tracking view panel modules
       if (ordersLogTable) {
         if (!Array.isArray(orders) || orders.length === 0) {
           ordersLogTable.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No custom operational orders found.</td></tr>`;
@@ -185,9 +192,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
+      // Render top logs block panel snapshot values inside root overview dashboard matrix component
       if (universalLogsTableBody) {
         if (!Array.isArray(orders) || orders.length === 0) {
-          universalLogsTableBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No historical records logged yet.</td></tr>`;
+          universalLogsTableBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No historical records logged to server framework yet.</td></tr>`;
         } else {
           universalLogsTableBody.innerHTML = "";
           orders.slice(0, 5).forEach(order => {
@@ -208,25 +216,27 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     } catch (err) {
-      console.error("System logs rendering error:", err);
+      console.error("Universal logs table compilation system crash exception handler context:", err);
     }
   }
 
   /* ==========================================================================
-     3. ASYNC FORM INTERFACE CONTROLLERS
+     3. OPERATION EVENTS AND ASYNC TRANSIT CONTROLLERS
      ========================================================================== */
   function setupEventListeners() {
+    
+    // NIN Form Interceptor Pipeline Processing Node
     if (ninOrderForm) {
       ninOrderForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const selectedId = ninServiceSelect.value;
-        if (!selectedId) return alert("Validation Error: Choose a service.");
+        if (!selectedId) return alert("Validation Error: Please select an identity verification operational tier.");
 
         const formData = new FormData();
         formData.append("serviceId", selectedId);
         formData.append("quantity", document.getElementById("nin-quantity")?.value || 1);
         formData.append("ninNumber", document.getElementById("nin-number")?.value || "");
-        formData.append("message", document.getElementById("nin-context")?.value || "Identity processing");
+        formData.append("message", document.getElementById("nin-context")?.value || "Identity Verification Request");
         
         const fileInput = document.getElementById("nin-file-upload");
         if (fileInput && fileInput.files[0]) formData.append("file", fileInput.files[0]);
@@ -235,16 +245,17 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
+    // Printing Job Request Processing Interceptor Matrix Node
     if (printingOrderForm) {
       printingOrderForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const selectedId = printingServiceSelect.value;
-        if (!selectedId) return alert("Validation Error: Choose a print configuration.");
+        if (!selectedId) return alert("Validation Error: Please highlight an output document specification template.");
 
         const formData = new FormData();
         formData.append("serviceId", selectedId);
         formData.append("quantity", document.getElementById("print-quantity")?.value || 1);
-        formData.append("message", document.getElementById("print-context")?.value || "Asset Setup");
+        formData.append("message", document.getElementById("print-context")?.value || "Production Media Request Layout Run");
         
         const fileInput = document.getElementById("print-file-upload");
         if (fileInput && fileInput.files[0]) formData.append("file", fileInput.files[0]);
@@ -253,14 +264,15 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
+    // Paystack Gateway Node Link Trigger Routing Matrix Execution Context
     if (fundWalletBtn) {
       fundWalletBtn.addEventListener("click", async () => {
         const amount = fundingAmountInput?.value;
-        if (!amount || amount < 100) return alert("Minimum threshold is ₦100.");
+        if (!amount || amount < 100) return alert("Validation Mismatch: Processing node requires a entry minimum limit threshold of ₦100.");
 
         try {
           fundWalletBtn.disabled = true;
-          fundWalletBtn.textContent = "Processing...";
+          fundWalletBtn.textContent = "Deploying Payment Vector...";
 
           const res = await fetch("/api/transactions/paystack/initialize", {
             method: "POST",
@@ -275,33 +287,35 @@ document.addEventListener("DOMContentLoaded", () => {
           if (res.ok && data.authorization_url) {
             window.location.href = data.authorization_url;
           } else {
-            alert("Gateway error: " + (data.message || "Initialization rejected."));
+            alert("External Gateway Warning: " + (data.message || "Initialization parameters dropped."));
             fundWalletBtn.disabled = false;
             fundWalletBtn.textContent = "Initialize Checkout";
           }
         } catch (err) {
-          console.error("Payment setup exception:", err);
+          console.error("Gateway verification exception:", err);
           fundWalletBtn.disabled = false;
           fundWalletBtn.textContent = "Initialize Checkout";
         }
       });
     }
 
+    // Explicit Session Termination Sequence Trigger Node
     if (logoutBtn) {
       logoutBtn.addEventListener("click", (e) => {
         e.preventDefault();
         localStorage.clear();
-        window.location.href = "/login.html";
+        window.location.href = window.location.pathname.includes("/pages/") ? "login.html" : "pages/login.html";
       });
     }
   }
 
+  // Multi-part Form Asset Processing Handler Node
   async function executeOrderPlacement(formData, formElement) {
     try {
       const submitBtn = formElement.querySelector('button[type="submit"]');
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.textContent = "Deploying...";
+        submitBtn.textContent = "Deploying Matrix Network Payload...";
       }
 
       const res = await fetch("/api/orders", {
@@ -312,15 +326,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const data = await res.json();
       if (res.ok && data.success) {
-        alert("Success: " + data.message);
+        alert("Ecosystem Success: " + data.message);
         formElement.reset();
         await fetchUserProfile();
         await fetchOrderHistory();
       } else {
-        alert("Failed: " + (data.message || "Order rejected."));
+        alert("Transaction Failed: " + (data.message || "Database node operation validation rejected."));
       }
     } catch (err) {
-      console.error("Order setup server error:", err);
+      console.error("Server order deployment structural endpoint execution error:", err);
     } finally {
       const submitBtn = formElement.querySelector('button[type="submit"]');
       if (submitBtn) {
@@ -330,15 +344,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Component UI Layout Badge Utility Helper Engine Mapping
   function getStatusBadgeHTML(status) {
     switch (status) {
-      case "pending": return `<span class="badge bg-warning text-dark" style="padding:4px 8px; border-radius:5px;">Pending</span>`;
-      case "processing": return `<span class="badge bg-info text-white" style="padding:4px 8px; border-radius:5px;">Processing</span>`;
-      case "completed": return `<span class="badge bg-success text-white" style="padding:4px 8px; border-radius:5px;">Completed</span>`;
-      case "cancelled": return `<span class="badge bg-danger text-white" style="padding:4px 8px; border-radius:5px;">Cancelled</span>`;
-      default: return `<span class="badge bg-secondary" style="padding:4px 8px; border-radius:5px;">Unknown</span>`;
+      case "pending": return `<span class="badge bg-warning text-dark" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Pending</span>`;
+      case "processing": return `<span class="badge bg-info text-white" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Processing</span>`;
+      case "completed": return `<span class="badge bg-success text-white" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Completed</span>`;
+      case "cancelled": return `<span class="badge bg-danger text-white" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Cancelled</span>`;
+      default: return `<span class="badge bg-secondary text-white" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Unknown</span>`;
     }
   }
 
+  // Execute Core System Run Loop
   initializeDashboard();
 });
