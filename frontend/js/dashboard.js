@@ -1,6 +1,30 @@
 /* ==========================================================================
-   HAMBAK TECH & SERVICES - CORE DASHBOARD ENGINE
+   HAMBAK TECH & SERVICES - ALLIGNED CORE DASHBOARD ENGINE
    ========================================================================== */
+
+// Global navigation utility attached directly to window to handle onclick events from sidebar
+window.showSection = function(sectionId) {
+  // Hide all views
+  document.querySelectorAll('.app-view').forEach(view => {
+    view.classList.remove('active-view');
+  });
+  
+  // Show target view
+  const targetView = document.getElementById(sectionId);
+  if (targetView) {
+    targetView.classList.add('active-view');
+  }
+
+  // Manage sidebar link highlight states
+  document.querySelectorAll('.sidebar-links a').forEach(link => {
+    link.classList.remove('active');
+  });
+  
+  // Find matching nav element based on view suffix
+  const navId = "nav-" + sectionId.split('-')[0];
+  const activeLink = document.getElementById(navId);
+  if (activeLink) activeLink.classList.add('active');
+};
 
 document.addEventListener("DOMContentLoaded", () => {
   // Global State Containers
@@ -10,20 +34,27 @@ document.addEventListener("DOMContentLoaded", () => {
   // DOM Elements - Navigation & Core UI
   const token = localStorage.getItem("token");
   const userNameEl = document.getElementById("userName");
-  const userWalletEl = document.getElementById("userWallet");
+  const userRoleEl = document.getElementById("userRole");
   const logoutBtn = document.getElementById("logoutBtn");
+  
+  // Select all instances of wallet balance containers across tabs
+  const walletBalanceElements = document.querySelectorAll(".wallet-balance");
 
-  // DOM Elements - Service Dropdown Selectors
-  const ninServiceSelect = document.getElementById("ninServiceSelect");
-  const printingServiceSelect = document.getElementById("printingServiceSelect");
+  // DOM Elements - Service Dropdown Selectors (Matched perfectly to HTML)
+  const ninServiceSelect = document.getElementById("nin-service-select");
+  const printingServiceSelect = document.getElementById("print-service-select");
 
-  // DOM Elements - Order Submission Forms
-  const ninOrderForm = document.getElementById("ninOrderForm");
-  const printingOrderForm = document.getElementById("printingOrderForm");
+  // DOM Elements - Order Submission Forms (Matched perfectly to HTML)
+  const ninOrderForm = document.getElementById("ninServiceForm");
+  const printingOrderForm = document.getElementById("printJobForm");
 
-  // DOM Elements - History Visualizer Tables
-  const orderHistoryTable = document.getElementById("orderHistoryTable");
-  const transactionHistoryTable = document.getElementById("transactionHistoryTable");
+  // DOM Elements - History Visualizer Tables (Matched perfectly to HTML)
+  const universalLogsTableBody = document.getElementById("universalLogsTableBody");
+  const ordersLogTable = document.getElementById("ordersLogTable");
+
+  // DOM Elements - Wallet Funding
+  const fundWalletBtn = document.getElementById("fund-wallet-btn");
+  const fundingAmountInput = document.getElementById("funding-amount-input");
 
   // Absolute Security Guard Gate
   if (!token) {
@@ -39,7 +70,6 @@ document.addEventListener("DOMContentLoaded", () => {
       await fetchUserProfile();
       await fetchServices();
       await fetchOrderHistory();
-      await fetchTransactionHistory();
       setupEventListeners();
     } catch (error) {
       console.error("Dashboard initialization failure context:", error);
@@ -59,8 +89,22 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       if (res.ok && data.success) {
         userProfile = data.user;
+        
+        // Populate layout parameters
         if (userNameEl) userNameEl.textContent = userProfile.name;
-        if (userWalletEl) userWalletEl.textContent = `₦${Number(userProfile.wallet).toLocaleString()}`;
+        if (userRoleEl) userRoleEl.textContent = userProfile.role || "Customer";
+        
+        // Sync role visibility controls for Admins if needed
+        if (userProfile.role === "admin") {
+          document.querySelectorAll(".admin-block-section").forEach(el => el.style.display = "block");
+        }
+
+        // Broadcast wallet values across all UI containers
+        const formattedBalance = `₦${Number(userProfile.wallet || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        walletBalanceElements.forEach(el => {
+          el.textContent = formattedBalance;
+        });
+
       } else {
         handleAuthExpiry();
       }
@@ -77,24 +121,22 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       const data = await res.json();
       
-      // Handle array payload whether nested in data.services or directly as data
       availableServices = data.services || data || [];
 
-      // Clear existing select placeholders
-      if (ninServiceSelect) ninServiceSelect.innerHTML = '<option value="" disabled selected>-- Select NIN Service --</option>';
-      if (printingServiceSelect) printingServiceSelect.innerHTML = '<option value="" disabled selected>-- Select Material Variant --</option>';
+      // Clear existing placeholders cleanly
+      if (ninServiceSelect) ninServiceSelect.innerHTML = '<option value="" disabled selected>-- Select Identity Target Mapping Service --</option>';
+      if (printingServiceSelect) printingServiceSelect.innerHTML = '<option value="" disabled selected>-- Target Print Configuration Mapping --</option>';
 
-      // Loop and distribute data vectors into respective category select options
       availableServices.forEach(service => {
-        if (!service.isActive) return; // Skip decommissioned elements
+        if (service.isActive === false) return; // Skip decommissioned models
 
         const optionHTML = `<option value="${service._id}">${service.name} — ₦${Number(service.price).toLocaleString()}</option>`;
-        
         const categoryKey = service.category ? service.category.toLowerCase() : "";
         
+        // Distribute items logically into respective selects based on category string tags
         if (categoryKey.includes("nin") && ninServiceSelect) {
           ninServiceSelect.insertAdjacentHTML("beforeend", optionHTML);
-        } else if ((categoryKey.includes("print") || categoryKey.includes("graph")) && printingServiceSelect) {
+        } else if ((categoryKey.includes("print") || categoryKey.includes("graph") || categoryKey.includes("design")) && printingServiceSelect) {
           printingServiceSelect.insertAdjacentHTML("beforeend", optionHTML);
         }
       });
@@ -103,79 +145,63 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Fetch Client Specific Order History Records
+  // Fetch Logged Order Indexes
   async function fetchOrderHistory() {
-    if (!orderHistoryTable) return;
     try {
       const res = await fetch("/api/orders/my", {
         headers: { "Authorization": `Bearer ${token}` }
       });
       const data = await res.json();
-      const orders = data.orders || [];
+      const orders = data.orders || data || [];
 
-      if (orders.length === 0) {
-        orderHistoryTable.innerHTML = `<tr><td colspan="6" class="text-center text-muted">No active order parameters recorded.</td></tr>`;
-        return;
+      // Update dedicated Orders View Table
+      if (ordersLogTable) {
+        if (orders.length === 0) {
+          ordersLogTable.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No custom operational orders found.</td></tr>`;
+        } else {
+          ordersLogTable.innerHTML = "";
+          orders.forEach(order => {
+            const serviceName = order.service ? order.service.name : "Custom Ecosystem Task";
+            const statusBadge = getStatusBadgeHTML(order.status);
+            const row = `
+              <tr>
+                <td><strong>#${order._id.substring(order._id.length - 8).toUpperCase()}</strong></td>
+                <td>${serviceName}</td>
+                <td>₦${Number(order.amount || 0).toLocaleString()}</td>
+                <td>${statusBadge}</td>
+              </tr>
+            `;
+            ordersLogTable.insertAdjacentHTML("beforeend", row);
+          });
+        }
       }
 
-      orderHistoryTable.innerHTML = "";
-      orders.forEach(order => {
-        const serviceName = order.service ? order.service.name : "Custom Request Service";
-        const fileLink = order.file ? `<a href="${order.file}" target="_blank" class="btn-link">View Slip</a>` : `<span class="text-muted">None</span>`;
-        const statusBadge = getStatusBadgeHTML(order.status);
-
-        const row = `
-          <tr>
-            <td><strong>${order._id.substring(order._id.length - 8).toUpperCase()}</strong></td>
-            <td>${serviceName}</td>
-            <td>${order.quantity || 1}</td>
-            <td>₦${Number(order.amount).toLocaleString()}</td>
-            <td>${statusBadge}</td>
-            <td>${fileLink}</td>
-          </tr>
-        `;
-        orderHistoryTable.insertAdjacentHTML("beforeend", row);
-      });
-    } catch (err) {
-      console.error("Order history ledger rendering error:", err);
-    }
-  }
-
-  // Fetch Wallet Transaction Log footprints
-  async function fetchTransactionHistory() {
-    if (!transactionHistoryTable) return;
-    try {
-      const res = await fetch("/api/transactions/my", {
-        headers: { "Authorization": `Bearer ${token}` }
-      });
-      const data = await res.json();
-      const transactions = data.transactions || data || [];
-
-      if (transactions.length === 0) {
-        transactionHistoryTable.innerHTML = `<tr><td colspan="5" class="text-center text-muted">No ledger balance mutations found.</td></tr>`;
-        return;
+      // Update Recent Universal System logs preview inside main view dashboard
+      if (universalLogsTableBody) {
+        if (orders.length === 0) {
+          universalLogsTableBody.innerHTML = `<tr><td colspan="4">No historical records logged to server framework yet.</td></tr>`;
+        } else {
+          universalLogsTableBody.innerHTML = "";
+          // Take up to recent 5 entries
+          orders.slice(0, 5).forEach(order => {
+            const serviceCategory = order.service ? (order.service.category || "General").toUpperCase() : "GENERAL";
+            const statusBadge = getStatusBadgeHTML(order.status);
+            const orderDate = order.createdAt ? new Date(order.createdAt).toLocaleDateString() : "Recent";
+            const row = `
+              <tr>
+                <td><strong>${serviceCategory}</strong></td>
+                <td>₦${Number(order.amount || 0).toLocaleString()}</td>
+                <td>${statusBadge}</td>
+                <td>${orderDate}</td>
+              </tr>
+            `;
+            universalLogsTableBody.insertAdjacentHTML("beforeend", row);
+          });
+        }
       }
 
-      transactionHistoryTable.innerHTML = "";
-      transactions.forEach(tx => {
-        const dateStr = tx.createdAt ? new Date(tx.createdAt).toLocaleDateString() : "-";
-        const typeBadge = tx.type === "deposit" || tx.type === "refund" 
-          ? `<span class="badge bg-success">Credit</span>` 
-          : `<span class="badge bg-danger">Debit</span>`;
-
-        const row = `
-          <tr>
-            <td>${dateStr}</td>
-            <td><small class="text-muted">${tx.reference || "N/A"}</small></td>
-            <td>${tx.description || "System processing execution fee"}</td>
-            <td>${typeBadge}</td>
-            <td><strong>₦${Number(tx.amount).toLocaleString()}</strong></td>
-          </tr>
-        `;
-        transactionHistoryTable.insertAdjacentHTML("beforeend", row);
-      });
     } catch (err) {
-      console.error("Transaction profile ledger visualization failure:", err);
+      console.error("System logs parsing runtime exception:", err);
     }
   }
 
@@ -184,53 +210,90 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================================================================== */
   function setupEventListeners() {
     
-    // NIN Form Interceptor Pipeline
+    // NIN Form Pipeline Interceptor
     if (ninOrderForm) {
       ninOrderForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const selectedId = ninServiceSelect.value;
-        if (!selectedId) return alert("Validation Error: Please select an active NIN Service variant profile.");
+        if (!selectedId) return alert("Validation Error: Please highlight a valid identity operations target service!");
 
         const formData = new FormData();
         formData.append("serviceId", selectedId);
-        formData.append("quantity", 1);
-        formData.append("message", document.getElementById("ninMessage")?.value || "NIN Management Pipeline Dispatch");
+        formData.append("quantity", document.getElementById("nin-quantity")?.value || 1);
+        formData.append("ninNumber", document.getElementById("nin-number")?.value || "");
+        formData.append("message", document.getElementById("nin-context")?.value || "Identity Pipeline processing");
         
-        const fileInput = document.getElementById("ninFile");
+        const fileInput = document.getElementById("nin-file-upload");
         if (fileInput && fileInput.files[0]) {
           formData.append("file", fileInput.files[0]);
         }
 
-        await executeOrderPlacement(formData);
+        await executeOrderPlacement(formData, ninOrderForm);
       });
     }
 
-    // Printing Node Form Interceptor Pipeline
+    // Printing Node Form Pipeline Interceptor
     if (printingOrderForm) {
       printingOrderForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const selectedId = printingServiceSelect.value;
-        if (!selectedId) return alert("Validation Error: Please choose your material production spec profile.");
-
-        const qty = document.getElementById("printQty")?.value || 1;
+        if (!selectedId) return alert("Validation Error: Please select an asset printing scale option.");
 
         const formData = new FormData();
         formData.append("serviceId", selectedId);
-        formData.append("quantity", qty);
-        formData.append("message", document.getElementById("printMessage")?.value || "Corporate Printing Request Sequence");
+        formData.append("quantity", document.getElementById("print-quantity")?.value || 1);
+        formData.append("message", document.getElementById("print-context")?.value || "Production Layout Asset Setup");
         
-        const fileInput = document.getElementById("printFile");
+        const fileInput = document.getElementById("print-file-upload");
         if (fileInput && fileInput.files[0]) {
           formData.append("file", fileInput.files[0]);
         }
 
-        await executeOrderPlacement(formData);
+        await executeOrderPlacement(formData, printingOrderForm);
       });
     }
 
-    // Session Termination Sequence
+    // Paystack Gateway Funding Routine
+    if (fundWalletBtn) {
+      fundWalletBtn.addEventListener("click", async () => {
+        const amount = fundingAmountInput?.value;
+        if (!amount || amount < 100) return alert("Validation Error: Minimum ecosystem funding amount threshold is ₦100.");
+
+        try {
+          fundWalletBtn.disabled = true;
+          fundWalletBtn.textContent = "Processing Node...";
+
+          const res = await fetch("/api/transactions/paystack/initialize", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({ amount: Number(amount) })
+          });
+
+          const data = await res.json();
+          if (res.ok && data.authorization_url) {
+            // Redirect smoothly to secure Paystack transaction framework interface
+            window.location.href = data.authorization_url;
+          } else {
+            alert("Gateway Node Rejection: " + (data.message || "Could not initialize checkout gateway routing."));
+            fundWalletBtn.disabled = false;
+            fundWalletBtn.textContent = "Initialize Checkout";
+          }
+        } catch (err) {
+          console.error("Payment initialization gateway processing error:", err);
+          alert("Network Routing Exception: Failed to secure endpoint handshake.");
+          fundWalletBtn.disabled = false;
+          fundWalletBtn.textContent = "Initialize Checkout";
+        }
+      });
+    }
+
+    // Session Destruction Sequence
     if (logoutBtn) {
-      logoutBtn.addEventListener("click", () => {
+      logoutBtn.addEventListener("click", (e) => {
+        e.preventDefault();
         localStorage.clear();
         window.location.href = "/login.html";
       });
@@ -238,36 +301,41 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Unified Request Transmitter Matrix
-  async function executeOrderPlacement(formData) {
+  async function executeOrderPlacement(formData, formElement) {
     try {
-      const submitButtons = document.querySelectorAll('button[type="submit"]');
-      submitButtons.forEach(btn => btn.disabled = true); // Prevent double debit balance anomalies
+      const submitBtn = formElement.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Deploying Matrix...";
+      }
 
       const res = await fetch("/api/orders", {
         method: "POST",
-        headers: { "Authorization": `Bearer ${token}` }, // Form-data sets content-type dynamically
+        headers: { "Authorization": `Bearer ${token}` }, // Form-data boundary headers build dynamically
         body: formData
       });
 
       const data = await res.json();
       
       if (res.ok && data.success) {
-        alert("Success: " + data.message);
-        // Refresh interface to sync balance counters and lists instantly
-        ninOrderForm?.reset();
-        printingOrderForm?.reset();
+        alert("Ecosystem Success: " + data.message);
+        formElement.reset();
+        
+        // Instant structural balance mapping updates
         await fetchUserProfile();
         await fetchOrderHistory();
-        await fetchTransactionHistory();
       } else {
-        alert("Order Processing Rejection: " + (data.message || "Ecosystem execution error maps."));
+        alert("Transaction Aborted: " + (data.message || "Database engine denied order authorization metrics."));
       }
     } catch (err) {
       console.error("Infrastructure transport failure on checkout:", err);
       alert("Network Error: Operations processing framework connection failed.");
     } finally {
-      const submitButtons = document.querySelectorAll('button[type="submit"]');
-      submitButtons.forEach(btn => btn.disabled = false);
+      const submitBtn = formElement.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = formElement.id === "ninServiceForm" ? "Deploy Request Verification" : "Initialize Printing Job";
+      }
     }
   }
 
@@ -276,11 +344,11 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================================================================== */
   function getStatusBadgeHTML(status) {
     switch (status) {
-      case "pending": return `<span class="badge bg-warning text-dark">Pending</span>`;
-      case "processing": return `<span class="badge bg-info text-white">Processing</span>`;
-      case "completed": return `<span class="badge bg-success text-white">Completed</span>`;
-      case "cancelled": return `<span class="badge bg-danger text-white">Cancelled</span>`;
-      default: return `<span class="badge bg-secondary">Unknown</span>`;
+      case "pending": return `<span class="badge bg-warning text-dark" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Pending</span>`;
+      case "processing": return `<span class="badge bg-info text-white" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Processing</span>`;
+      case "completed": return `<span class="badge bg-success text-white" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Completed</span>`;
+      case "cancelled": return `<span class="badge bg-danger text-white" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Cancelled</span>`;
+      default: return `<span class="badge bg-secondary" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Unknown</span>`;
     }
   }
 
@@ -289,6 +357,6 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "/login.html";
   }
 
-  // Trigger Ecosystem Engine Execution
+  // Run Ecosystem System Loops
   initializeDashboard();
 });
