@@ -177,10 +177,15 @@ export const verifyPaystackDeposit = async (req, res, next) => {
    ========================================================== */
 export const createTransaction = async (req, res) => {
   try {
-    const { type, amount, description, paymentMethod } = req.body;
+    let { type, amount, description, paymentMethod } = req.body;
 
     if (!type || !amount) {
       return res.status(400).json({ success: false, message: "Amount and transactional type tracking required." });
+    }
+
+    // SANITIZATION GATEWAY: Turn legacy 'wallet_funding' requests into correct 'deposit' type
+    if (type === "wallet_funding") {
+      type = "deposit";
     }
 
     const userId = req.user._id || req.user.id;
@@ -202,7 +207,7 @@ export const createTransaction = async (req, res) => {
 
     const transaction = await Transaction.create({
       user: userId,
-      type,
+      type, // Strictly validated against schema enum rules
       amount: Number(amount),
       description: description || `${type} processing record`,
       paymentMethod: paymentMethod || "wallet",
@@ -211,19 +216,19 @@ export const createTransaction = async (req, res) => {
     });
 
     /* UPDATE BALANCES DYNAMICALLY IN DB */
-    if (type === "wallet_funding" || type === "deposit" || type === "refund") {
+    if (type === "deposit" || type === "refund") {
       await User.findByIdAndUpdate(userId, { $inc: { wallet: Number(amount) } });
     } else {
       await User.findByIdAndUpdate(userId, { $inc: { wallet: -Number(amount) } });
     }
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "Transaction logged and balance synchronized successfully",
       transaction
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -234,13 +239,13 @@ export const getMyTransactions = async (req, res) => {
   try {
     const userId = req.user._id || req.user.id;
     const transactions = await Transaction.find({ user: userId }).sort({ createdAt: -1 });
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       count: transactions.length,
       transactions
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -253,12 +258,12 @@ export const getAllTransactions = async (req, res) => {
       .populate("user", "name email phone")
       .sort({ createdAt: -1 });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       count: transactions.length,
       transactions
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
