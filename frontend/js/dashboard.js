@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HAMBAK TECH & SERVICES - STABLE DASHBOARD ENGINE
+   HAMBAK TECH & SERVICES - ANTI-LOOP STABLE ENGINE
    ========================================================================== */
 
 // Global navigation utility attached directly to window to handle onclick events from sidebar
@@ -57,10 +57,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const fundingAmountInput = document.getElementById("funding-amount-input");
 
   /* ==========================================================================
-     CRITICAL SECURITY RULE: Only kick to login if the token doesn't exist at all.
+     ANTI-LOOP SHIELD: Redirects disabled during debug to isolate errors.
      ========================================================================== */
   if (!token) {
-    window.location.href = "/login.html";
+    console.error("CRITICAL: Token is missing from localStorage!");
+    // window.location.href = "/login.html"; // DISABLED TO KILL THE LOOP
     return;
   }
 
@@ -68,17 +69,17 @@ document.addEventListener("DOMContentLoaded", () => {
      1. INITIALIZATION DISPATCHER
      ========================================================================== */
   async function initializeDashboard() {
+    console.log("Initializing dashboard modules safely...");
     try {
-      // Fetch user profile first.
       await fetchUserProfile();
       
-      // Load other data tracks independently so one error doesn't break the layout
-      fetchServices().catch(err => console.error("Non-blocking services log:", err));
-      fetchOrderHistory().catch(err => console.error("Non-blocking history log:", err));
+      // Load tables safely without cascading failures
+      fetchServices().catch(err => console.error("Non-blocking services err:", err));
+      fetchOrderHistory().catch(err => console.error("Non-blocking history err:", err));
       
       setupEventListeners();
     } catch (error) {
-      console.error("Dashboard core loop error:", error);
+      console.error("Dashboard core layout loop error:", error);
     }
   }
 
@@ -94,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       
       if (!res.ok) {
-        console.warn(`Profile ping returned status: ${res.status}. Keeping session active.`);
+        console.warn(`Profile route returned status ${res.status}. Anti-loop mechanism activated.`);
         return;
       }
 
@@ -102,16 +103,13 @@ document.addEventListener("DOMContentLoaded", () => {
       userProfile = data.user || data;
       
       if (userProfile) {
-        // Populate layout parameters safely
         if (userNameEl && userProfile.name) userNameEl.textContent = userProfile.name;
         if (userRoleEl) userRoleEl.textContent = userProfile.role || "Customer";
         
-        // Sync role visibility controls for Admins if needed
         if (userProfile.role === "admin") {
           document.querySelectorAll(".admin-block-section").forEach(el => el.style.display = "block");
         }
 
-        // Broadcast wallet values across all UI containers safely
         const rawWalletValue = userProfile.wallet !== undefined ? userProfile.wallet : 0;
         const formattedBalance = `₦${Number(rawWalletValue).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         walletBalanceElements.forEach(el => {
@@ -119,11 +117,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     } catch (err) {
-      console.error("Profile endpoint connection exception bypassed to maintain session stability:", err);
+      console.error("Profile payload sync failed, bypassing redirect:", err);
     }
   }
 
-  // Fetch Active System Services & Populate Forms Dynamically
+  // Fetch Active System Services
   async function fetchServices() {
     try {
       const res = await fetch("/api/services", {
@@ -134,17 +132,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       availableServices = data.services || data || [];
 
-      // Clear existing placeholders cleanly
       if (ninServiceSelect) ninServiceSelect.innerHTML = '<option value="" disabled selected>-- Select Identity Target Mapping Service --</option>';
       if (printingServiceSelect) printingServiceSelect.innerHTML = '<option value="" disabled selected>-- Target Print Configuration Mapping --</option>';
 
       availableServices.forEach(service => {
-        if (service.isActive === false) return; // Skip decommissioned models
+        if (service.isActive === false) return;
 
         const optionHTML = `<option value="${service._id}">${service.name} — ₦${Number(service.price).toLocaleString()}</option>`;
         const categoryKey = service.category ? service.category.toLowerCase() : "";
         
-        // Distribute items logically into respective selects based on category string tags
         if (categoryKey.includes("nin") && ninServiceSelect) {
           ninServiceSelect.insertAdjacentHTML("beforeend", optionHTML);
         } else if ((categoryKey.includes("print") || categoryKey.includes("graph") || categoryKey.includes("design")) && printingServiceSelect) {
@@ -152,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     } catch (err) {
-      console.error("Service matrix population pipeline error:", err);
+      console.error("Service collection mapping error:", err);
     }
   }
 
@@ -162,15 +158,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const res = await fetch("/api/orders/my", {
         headers: { "Authorization": `Bearer ${token}` }
       });
-      if (!res.ok) {
-        if (ordersLogTable) ordersLogTable.innerHTML = `<tr><td colspan="4" class="text-center text-muted">History currently unavailable (Server Error).</td></tr>`;
-        return;
-      }
+      if (!res.ok) return;
 
       const data = await res.json();
       const orders = data.orders || data || [];
 
-      // Update dedicated Orders View Table
       if (ordersLogTable) {
         if (!Array.isArray(orders) || orders.length === 0) {
           ordersLogTable.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No custom operational orders found.</td></tr>`;
@@ -193,10 +185,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      // Update Recent Universal System logs preview inside main view dashboard
       if (universalLogsTableBody) {
         if (!Array.isArray(orders) || orders.length === 0) {
-          universalLogsTableBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No historical records logged to server framework yet.</td></tr>`;
+          universalLogsTableBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No historical records logged yet.</td></tr>`;
         } else {
           universalLogsTableBody.innerHTML = "";
           orders.slice(0, 5).forEach(order => {
@@ -216,9 +207,8 @@ document.addEventListener("DOMContentLoaded", () => {
           });
         }
       }
-
     } catch (err) {
-      console.error("System logs parsing runtime exception:", err);
+      console.error("System logs rendering error:", err);
     }
   }
 
@@ -226,59 +216,51 @@ document.addEventListener("DOMContentLoaded", () => {
      3. ASYNC FORM INTERFACE CONTROLLERS
      ========================================================================== */
   function setupEventListeners() {
-    
-    // NIN Form Pipeline Interceptor
     if (ninOrderForm) {
       ninOrderForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const selectedId = ninServiceSelect.value;
-        if (!selectedId) return alert("Validation Error: Please highlight a valid identity operations target service!");
+        if (!selectedId) return alert("Validation Error: Choose a service.");
 
         const formData = new FormData();
         formData.append("serviceId", selectedId);
         formData.append("quantity", document.getElementById("nin-quantity")?.value || 1);
         formData.append("ninNumber", document.getElementById("nin-number")?.value || "");
-        formData.append("message", document.getElementById("nin-context")?.value || "Identity Pipeline processing");
+        formData.append("message", document.getElementById("nin-context")?.value || "Identity processing");
         
         const fileInput = document.getElementById("nin-file-upload");
-        if (fileInput && fileInput.files[0]) {
-          formData.append("file", fileInput.files[0]);
-        }
+        if (fileInput && fileInput.files[0]) formData.append("file", fileInput.files[0]);
 
         await executeOrderPlacement(formData, ninOrderForm);
       });
     }
 
-    // Printing Node Form Pipeline Interceptor
     if (printingOrderForm) {
       printingOrderForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const selectedId = printingServiceSelect.value;
-        if (!selectedId) return alert("Validation Error: Please select an asset printing scale option.");
+        if (!selectedId) return alert("Validation Error: Choose a print configuration.");
 
         const formData = new FormData();
         formData.append("serviceId", selectedId);
         formData.append("quantity", document.getElementById("print-quantity")?.value || 1);
-        formData.append("message", document.getElementById("print-context")?.value || "Production Layout Asset Setup");
+        formData.append("message", document.getElementById("print-context")?.value || "Asset Setup");
         
         const fileInput = document.getElementById("print-file-upload");
-        if (fileInput && fileInput.files[0]) {
-          formData.append("file", fileInput.files[0]);
-        }
+        if (fileInput && fileInput.files[0]) formData.append("file", fileInput.files[0]);
 
         await executeOrderPlacement(formData, printingOrderForm);
       });
     }
 
-    // Paystack Gateway Funding Routine
     if (fundWalletBtn) {
       fundWalletBtn.addEventListener("click", async () => {
         const amount = fundingAmountInput?.value;
-        if (!amount || amount < 100) return alert("Validation Error: Minimum ecosystem funding amount threshold is ₦100.");
+        if (!amount || amount < 100) return alert("Minimum threshold is ₦100.");
 
         try {
           fundWalletBtn.disabled = true;
-          fundWalletBtn.textContent = "Processing Node...";
+          fundWalletBtn.textContent = "Processing...";
 
           const res = await fetch("/api/transactions/paystack/initialize", {
             method: "POST",
@@ -293,20 +275,18 @@ document.addEventListener("DOMContentLoaded", () => {
           if (res.ok && data.authorization_url) {
             window.location.href = data.authorization_url;
           } else {
-            alert("Gateway Node Rejection: " + (data.message || "Could not initialize checkout gateway routing."));
+            alert("Gateway error: " + (data.message || "Initialization rejected."));
             fundWalletBtn.disabled = false;
             fundWalletBtn.textContent = "Initialize Checkout";
           }
         } catch (err) {
-          console.error("Payment initialization gateway processing error:", err);
-          alert("Network Routing Exception: Failed to secure endpoint handshake.");
+          console.error("Payment setup exception:", err);
           fundWalletBtn.disabled = false;
           fundWalletBtn.textContent = "Initialize Checkout";
         }
       });
     }
 
-    // Session Destruction Sequence
     if (logoutBtn) {
       logoutBtn.addEventListener("click", (e) => {
         e.preventDefault();
@@ -316,13 +296,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Unified Request Transmitter Matrix
   async function executeOrderPlacement(formData, formElement) {
     try {
       const submitBtn = formElement.querySelector('button[type="submit"]');
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.textContent = "Deploying Matrix...";
+        submitBtn.textContent = "Deploying...";
       }
 
       const res = await fetch("/api/orders", {
@@ -332,19 +311,16 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const data = await res.json();
-      
       if (res.ok && data.success) {
-        alert("Ecosystem Success: " + data.message);
+        alert("Success: " + data.message);
         formElement.reset();
-        
         await fetchUserProfile();
         await fetchOrderHistory();
       } else {
-        alert("Transaction Aborted: " + (data.message || "Database engine denied order authorization metrics."));
+        alert("Failed: " + (data.message || "Order rejected."));
       }
     } catch (err) {
-      console.error("Infrastructure transport failure on checkout:", err);
-      alert("Network Error: Operations processing framework connection failed.");
+      console.error("Order setup server error:", err);
     } finally {
       const submitBtn = formElement.querySelector('button[type="submit"]');
       if (submitBtn) {
@@ -354,19 +330,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* ==========================================================================
-     4. COMPONENT FALLBACK UTILITIES
-     ========================================================================== */
   function getStatusBadgeHTML(status) {
     switch (status) {
-      case "pending": return `<span class="badge bg-warning text-dark" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Pending</span>`;
-      case "processing": return `<span class="badge bg-info text-white" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Processing</span>`;
-      case "completed": return `<span class="badge bg-success text-white" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Completed</span>`;
-      case "cancelled": return `<span class="badge bg-danger text-white" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Cancelled</span>`;
-      default: return `<span class="badge bg-secondary" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Unknown</span>`;
+      case "pending": return `<span class="badge bg-warning text-dark" style="padding:4px 8px; border-radius:5px;">Pending</span>`;
+      case "processing": return `<span class="badge bg-info text-white" style="padding:4px 8px; border-radius:5px;">Processing</span>`;
+      case "completed": return `<span class="badge bg-success text-white" style="padding:4px 8px; border-radius:5px;">Completed</span>`;
+      case "cancelled": return `<span class="badge bg-danger text-white" style="padding:4px 8px; border-radius:5px;">Cancelled</span>`;
+      default: return `<span class="badge bg-secondary" style="padding:4px 8px; border-radius:5px;">Unknown</span>`;
     }
   }
 
-  // Run Ecosystem System Loops
   initializeDashboard();
 });
