@@ -111,7 +111,6 @@ if (authForm) {
 
         if (response.ok || data.success) {
           alert("Registration Successful!");
-          // Safe form presentation switch back to login parameters
           loginMode = false; 
           toggleForm.click(); 
           if (emailField) emailField.value = inputIdentityValue;
@@ -148,8 +147,10 @@ if (authForm) {
         const data = await response.json();
 
         if (response.ok || data.success) {
-          localStorage.setItem("hambak_user", JSON.stringify(data.user));
-          localStorage.setItem("hambak_token", data.token);
+          // KEY SYNC CORRECTION: Save using identical keys expected by your dashboard layout engine
+          localStorage.setItem("user", JSON.stringify(data.user));
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("role", data.user?.role || "customer");
 
           alert("Access Granted! Proceeding to Dashboard Area.");
 
