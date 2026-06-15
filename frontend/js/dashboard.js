@@ -14,8 +14,7 @@ if (!token) {
 }
 
 const getHeaders = () => ({
-    "Authorization": `Bearer ${token}`,
-    "Content-Type": "application/json"
+    "Authorization": `Bearer ${token}`
 });
 
 // 2. Global View-Switching Node Router Matrix
@@ -38,7 +37,10 @@ window.showSection = function(sectionId) {
 // 3. Main Dashboard Engine Initialization
 async function loadUserDashboardEngine() {
     try {
-        const response = await fetch(`${LIVE_API_URL}/auth/me`, { method: "GET", headers: getHeaders() });
+        const response = await fetch(`${LIVE_API_URL}/auth/me`, { 
+            method: "GET", 
+            headers: { ...getHeaders(), "Content-Type": "application/json" } 
+        });
         const data = await response.json();
 
         if (response.ok && data) {
@@ -61,15 +63,16 @@ async function loadUserDashboardEngine() {
             if (activeUser.role === "admin") {
                 document.getElementById("panelTitle").innerText = "Root Admin Terminal Control";
                 document.querySelectorAll(".admin-block-section").forEach(section => { section.style.display = "block"; });
-                initializeAnalyticsCharts(); // Build graphs if root metrics are unlocked
+                initializeAnalyticsCharts(); 
             } else {
                 document.getElementById("panelTitle").innerText = "Customer Account Dashboard";
                 document.querySelectorAll(".admin-block-section").forEach(section => { section.style.display = "none"; });
             }
             
-            // Core Sub-Log Synchronizations
+            // Core Sub-Log Synchronizations & Dynamic Dropdown Fetching
             loadLocalTransactions();
             loadServiceOrderLogs();
+            fetchAvailableServices();
 
         } else {
             handleLogoutAction();
@@ -91,13 +94,48 @@ async function loadUserDashboardEngine() {
     }
 }
 
-// 4. Charting Initialization Vector (Chart.js Module)
+// 4. Fetch available services directly from Mongo and flesh out select dropdown items dynamically
+async function fetchAvailableServices() {
+    try {
+        const response = await fetch(`${LIVE_API_URL}/services`, { 
+            method: "GET", 
+            headers: { ...getHeaders(), "Content-Type": "application/json" } 
+        });
+        const services = await response.json();
+
+        const ninSelect = document.getElementById("nin-service-select");
+        const printSelect = document.getElementById("print-service-select");
+
+        if (!response.ok) return;
+
+        if (ninSelect) {
+            ninSelect.innerHTML = '<option value="">-- Select Identity Task Type --</option>';
+            // Filter down matching category entries from database array logs
+            const ninItems = services.filter(s => s.category.toLowerCase().includes("nin") || s.category.toLowerCase().includes("identity"));
+            ninItems.forEach(s => {
+                ninSelect.innerHTML += `<option value="${s._id}">₦${s.price.toLocaleString()} - ${s.name}</option>`;
+            });
+        }
+
+        if (printSelect) {
+            printSelect.innerHTML = '<option value="">-- Select Layout Print Configuration --</option>';
+            const printItems = services.filter(s => s.category.toLowerCase().includes("print") || s.category.toLowerCase().includes("graphics"));
+            printItems.forEach(s => {
+                printSelect.innerHTML += `<option value="${s._id}">₦${s.price.toLocaleString()} - ${s.name}</option>`;
+            });
+        }
+
+    } catch (err) {
+        console.error("Dynamic dropdown construction failure:", err);
+    }
+}
+
+// 5. Charting Initialization Vector (Chart.js Module)
 function initializeAnalyticsCharts() {
     const ctxRevenue = document.getElementById("revenueChart");
     const ctxService = document.getElementById("serviceChart");
     
     if (ctxRevenue && ctxService) {
-        // Clear any old instances to prevent layout bugs
         if (window.revenueChartInstance) window.revenueChartInstance.destroy();
         if (window.serviceChartInstance) window.serviceChartInstance.destroy();
 
@@ -130,10 +168,12 @@ function initializeAnalyticsCharts() {
     }
 }
 
-// 5. Load Account Wallet Ledger History Logs
+// 6. Load Account Wallet Ledger History Logs
 async function loadLocalTransactions() {
     try {
-        const res = await fetch(`${LIVE_API_URL}/transactions/my`, { headers: getHeaders() });
+        const res = await fetch(`${LIVE_API_URL}/transactions/my`, { 
+            headers: { ...getHeaders(), "Content-Type": "application/json" } 
+        });
         const data = await res.json();
         const tbody = document.getElementById("universalLogsTableBody");
         
@@ -156,20 +196,23 @@ async function loadLocalTransactions() {
     }
 }
 
-// 6. Load Operations Order Logs Array
+// 7. Load Operations Order Logs Array
 async function loadServiceOrderLogs() {
     try {
-        const res = await fetch(`${LIVE_API_URL}/orders/my`, { headers: getHeaders() });
+        const res = await fetch(`${LIVE_API_URL}/orders/my`, { 
+            headers: { ...getHeaders(), "Content-Type": "application/json" } 
+        });
         const data = await res.json();
         const orderTable = document.getElementById("ordersLogTable");
 
         if (data.success && data.orders && data.orders.length > 0) {
             orderTable.innerHTML = "";
             data.orders.forEach(order => {
+                const displayCategory = order.service && order.service.name ? order.service.name : "Custom Request";
                 orderTable.innerHTML += `<tr>
                     <td><code>${order._id.substring(14)}</code></td>
-                    <td><strong>${order.category}</strong> - ${order.details || 'Task specifications stashed.'}</td>
-                    <td>₦${Number(order.cost || 0).toLocaleString(undefined, {minimumFractionDigits:2})}</td>
+                    <td><strong>${displayCategory}</strong> - ${order.message || 'Task specifications stashed.'}</td>
+                    <td>₦${Number(order.amount || 0).toLocaleString(undefined, {minimumFractionDigits:2})}</td>
                     <td style="font-weight:bold; text-transform:uppercase;">${order.status}</td>
                 </tr>`;
             });
@@ -181,7 +224,7 @@ async function loadServiceOrderLogs() {
     }
 }
 
-// 7. Interactive Paystack Verification Node Interceptor
+// 8. Interactive Paystack Verification Node Interceptor
 document.getElementById("fund-wallet-btn").addEventListener("click", async (e) => {
     e.preventDefault();
     const amountInput = document.getElementById("funding-amount-input").value.trim();
@@ -199,7 +242,7 @@ document.getElementById("fund-wallet-btn").addEventListener("click", async (e) =
 
         const response = await fetch(`${LIVE_API_URL}/transactions/paystack/initialize`, {
             method: "POST",
-            headers: getHeaders(),
+            headers: { ...getHeaders(), "Content-Type": "application/json" },
             body: JSON.stringify({ amount: parsedAmount })
         });
         const result = await response.json();
@@ -219,7 +262,7 @@ document.getElementById("fund-wallet-btn").addEventListener("click", async (e) =
     }
 });
 
-// 8. Checking Direct Payment Callback Redirection Verifications
+// 9. Checking Direct Payment Callback Redirection Verifications
 async function checkPaymentCallback() {
     const urlParams = new URLSearchParams(window.location.search);
     const reference = urlParams.get("reference");
@@ -231,7 +274,7 @@ async function checkPaymentCallback() {
             
             const response = await fetch(`${LIVE_API_URL}/transactions/paystack/verify`, {
                 method: "POST",
-                headers: getHeaders(),
+                headers: { ...getHeaders(), "Content-Type": "application/json" },
                 body: JSON.stringify({ reference })
             });
             const verification = await response.json();
@@ -240,7 +283,7 @@ async function checkPaymentCallback() {
                 alert(`Success! Ledger modification acknowledged: ${verification.message}`);
                 loadUserDashboardEngine();
             } else {
-                alert("Sovereign payment confirmation failed: " + verification.message);
+                alert("Sovere payment confirmation failed: " + verification.message);
             }
         } catch (error) {
             console.error("Verification processing error context:", error);
@@ -248,64 +291,92 @@ async function checkPaymentCallback() {
     }
 }
 
-// 9. Form Processing: NIN Validation Data Streams
+// 10. Form Processing: Intercept Submission and stream via FormData to the actual backend route: /api/orders
 document.getElementById("ninServiceForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const category = document.getElementById("nin-category").value;
-    const idNumber = document.getElementById("nin-number").value.trim();
-    const description = document.getElementById("nin-context").value.trim();
+    const serviceId = document.getElementById("nin-service-select").value;
+    const quantity = document.getElementById("nin-quantity").value;
+    const ninNum = document.getElementById("nin-number").value.trim();
+    const context = document.getElementById("nin-context").value.trim();
+    const fileInput = document.getElementById("nin-file-upload");
     const btn = document.getElementById("nin-submit-btn");
 
+    if(!serviceId) { alert("Please select a valid mapped Identity modification service type."); return; }
+
     try {
-        btn.innerText = "Staging Form Vector..."; 
+        btn.innerText = "Uploading Payload Data Vector..."; 
         btn.disabled = true;
-        const res = await fetch(`${LIVE_API_URL}/services/nin`, {
+
+        // Bundle everything into a native multi-part data payload for upload
+        const orderData = new FormData();
+        orderData.append("serviceId", serviceId);
+        orderData.append("quantity", quantity);
+        orderData.append("message", `NIN Reference: ${ninNum} | Context Notes: ${context}`);
+        if(fileInput.files.length > 0) {
+            orderData.append("file", fileInput.files[0]); // Intercepts file binary and hits multer flawlessly
+        }
+
+        const res = await fetch(`${LIVE_API_URL}/orders`, {
             method: "POST",
-            headers: getHeaders(),
-            body: JSON.stringify({ category, idNumber, description })
+            headers: getHeaders(), // Let browser auto-set boundary limits securely without explicit JSON strings
+            body: orderData
         });
+        
         const output = await res.json();
-        if (res.ok) {
-            alert("Identity workflow task securely injected into Mongo cluster line.");
+        if (res.ok && output.success) {
+            alert("Identity workflow order queued up and wallet funds deducted successfully!");
             document.getElementById("ninServiceForm").reset();
-            loadServiceOrderLogs();
+            loadUserDashboardEngine();
         } else { 
-            alert(`Operation rejected: ${output.message}`); 
+            alert(`Operation rejected by core router: ${output.message}`); 
         }
     } catch (err) { 
-        alert("Server network connection decoupled."); 
+        alert("Server validation network connection lost."); 
     } finally { 
         btn.innerText = "Deploy Request Verification"; 
         btn.disabled = false; 
     }
 });
 
-// 10. Form Processing: Premium Print Mapping Scheduling Node
+// 11. Form Processing: Premium Graphic Printing Pipeline
 document.getElementById("printJobForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const itemType = document.getElementById("print-item-type").value;
+    const serviceId = document.getElementById("print-service-select").value;
     const quantity = document.getElementById("print-quantity").value;
-    const layoutUrl = document.getElementById("print-drive-url").value.trim();
+    const context = document.getElementById("print-context").value.trim();
+    const fileInput = document.getElementById("print-file-upload");
     const btn = document.getElementById("print-submit-btn");
 
+    if(!serviceId) { alert("Please select a valid print node style configuration."); return; }
+
     try {
-        btn.innerText = "Allocating Layout Memory..."; 
+        btn.innerText = "Streaming Structural Layout Matrix..."; 
         btn.disabled = true;
-        const res = await fetch(`${LIVE_API_URL}/services/printing`, {
+
+        const orderData = new FormData();
+        orderData.append("serviceId", serviceId);
+        orderData.append("quantity", quantity);
+        orderData.append("message", context || "Standard automated high-fidelity layout execution.");
+        if(fileInput.files.length > 0) {
+            orderData.append("file", fileInput.files[0]);
+        }
+
+        const res = await fetch(`${LIVE_API_URL}/orders`, {
             method: "POST",
             headers: getHeaders(),
-            body: JSON.stringify({ itemType, quantity, layoutUrl })
+            body: orderData
         });
+        
         const output = await res.json();
-        if (res.ok) {
-            alert("Layout allocation map built. Print node job scheduled.");
+        if (res.ok && output.success) {
+            alert("Layout verified and print task scheduled. Wallet balance adjusted.");
             document.getElementById("printJobForm").reset();
-            loadServiceOrderLogs();
+            loadUserDashboardEngine();
         } else { 
-            alert(`Operation rejected: ${output.message}`); 
+            alert(`Execution rejected by core matrix: ${output.message}`); 
         }
     } catch (err) { 
-        alert("Server network connection decoupled."); 
+        alert("Print engine communication decoupled."); 
     } finally { 
         btn.innerText = "Initialize Printing Job"; 
         btn.disabled = false; 
