@@ -336,14 +336,16 @@
           const response = await fetch(`${BASE_URL}/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ loginIdentity: inputIdentityValue, password }) // <-- FIXED FOR LAUNCH
+            body: JSON.stringify({ loginIdentity: inputIdentityValue, password })
           });
 
           const data = await response.json();
 
           if (response.ok || data.success) {
-            localStorage.setItem("hambak_user", JSON.stringify(data.user));
-            localStorage.setItem("hambak_token", data.token);
+            // KEY SYNC CORRECTION: Match exactly what the stable dashboard.js looks for
+            localStorage.setItem("user", JSON.stringify(data.user));
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("role", data.user?.role || "customer");
 
             alert("Access Granted! Proceeding to Dashboard Area.");
 
