@@ -1,5 +1,5 @@
-import Order from "../models/Order.js";         // Verified PascalCase path
-import Service from "../models/Service.js";     // Verified PascalCase path
+import Order from "../models/order.js";         // Verified PascalCase path
+import Service from "../models/service.js";     // Verified PascalCase path
 import User from "../models/userModel.js";      // Linked to your unified account schema file
 import Transaction from "../models/transaction.js";
 
