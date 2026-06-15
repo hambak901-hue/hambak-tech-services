@@ -1,6 +1,6 @@
-import Order from "../models/order.js";
-import Service from "../models/service.js";
-import User from "../models/userModel.js";
+import Order from "../models/Order.js";         // Verified PascalCase path
+import Service from "../models/Service.js";     // Verified PascalCase path
+import User from "../models/userModel.js";      // Linked to your unified account schema file
 import Transaction from "../models/transaction.js";
 
 /* ==========================================================
@@ -23,7 +23,7 @@ export const placeNewOrder = async (req, res) => {
     const computedTotalCost = serviceAsset.price * orderQuantity;
     const clientAccountID = req.user._id;
 
-    // 1. Double check financial liquidity limits inside user balance profiles
+    // 1. Verify liquidity profiles within core data sheets
     const customerProfile = await User.findById(clientAccountID);
     if (customerProfile.wallet < computedTotalCost) {
       return res.status(400).json({
@@ -32,16 +32,16 @@ export const placeNewOrder = async (req, res) => {
       });
     }
 
-    // 2. Isolate file references uploaded via multer pipeline
+    // 2. Safely isolate path details extracted via multipart form processor
     const documentAssetPath = req.file ? `/uploads/${req.file.filename}` : "";
 
-    // 3. Process the ledger balance deduction atomically
+    // 3. Commit ledger financial updates
     customerProfile.wallet -= computedTotalCost;
     await customerProfile.save();
 
     const orderReferenceCode = `HTS-ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-    // 4. Record transactional history entry footprint
+    // 4. Trace atomic footprints with financial tracking indices
     await Transaction.create({
       user: clientAccountID,
       type: "service_payment",
@@ -52,7 +52,7 @@ export const placeNewOrder = async (req, res) => {
       paymentMethod: "wallet"
     });
 
-    // 5. Generate and queue standard tracking orders inside database logs
+    // 5. Build tracking records seamlessly inside database collections
     const serviceOrder = await Order.create({
       user: clientAccountID,
       customerName: customerName || customerProfile.name,
@@ -62,7 +62,7 @@ export const placeNewOrder = async (req, res) => {
       quantity: orderQuantity,
       amount: computedTotalCost,
       message: message || "Standard automated operations request sequence.",
-      file: documentAssetPath,
+      file: documentAssetPath, // Saves perfectly to your unified directory tracking
       status: "pending"
     });
 
@@ -114,7 +114,7 @@ export const updateOrderStatus = async (req, res) => {
       return res.status(404).json({ success: false, message: "Target order reference dataset missing." });
     }
 
-    // Strategic fallback rule: If order is explicitly cancelled, return locked funds back into profile ledger
+    // Dynamic processing rule: Re-inflate client's wallet balances if order drops to canceled status
     if (status === "cancelled" && executionOrder.status !== "cancelled") {
       const associatedClient = await User.findById(executionOrder.user);
       if (associatedClient) {
