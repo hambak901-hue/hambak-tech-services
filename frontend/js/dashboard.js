@@ -1,400 +1,294 @@
-/**
- * ==========================================================================
- * HAMBAK TECH & SERVICES - PREMIUM WORKSPACE DASHBOARD ENGINE
- * Location: frontend/js/dashboard.js
- * ==========================================================================
- */
+/* ==========================================================================
+   HAMBAK TECH & SERVICES - CORE DASHBOARD ENGINE
+   ========================================================================== */
 
-const token = localStorage.getItem("hambak_token");
-const LIVE_API_URL = "https://hambak-tech-services.onrender.com/api";
-
-// 1. Guard Protection Clause
-if (!token) {
-    window.location.href = "login.html";
-}
-
-const getHeaders = () => ({
-    "Authorization": `Bearer ${token}`
-});
-
-// 2. Global View-Switching Node Router Matrix
-window.showSection = function(sectionId) {
-    document.querySelectorAll('.app-view').forEach(view => { 
-        view.classList.remove('active-view'); 
-    });
-    document.querySelectorAll('.sidebar-links a').forEach(link => { 
-        link.classList.remove('active'); 
-    });
-    
-    const targetView = document.getElementById(sectionId);
-    if (targetView) targetView.classList.add('active-view');
-    
-    const componentId = sectionId.split('-')[0];
-    const targetNavLink = document.getElementById(`nav-${componentId}`);
-    if (targetNavLink) targetNavLink.classList.add('active');
-};
-
-// 3. Main Dashboard Engine Initialization
-async function loadUserDashboardEngine() {
-    try {
-        const response = await fetch(`${LIVE_API_URL}/auth/me`, { 
-            method: "GET", 
-            headers: { ...getHeaders(), "Content-Type": "application/json" } 
-        });
-        const data = await response.json();
-
-        if (response.ok && data) {
-            const activeUser = data.user ? data.user : data;
-            if (!activeUser.role) { throw new Error("Format misalignment."); }
-
-            // Populate text parameters safely
-            document.getElementById("userName").innerText = activeUser.name || "Hambak Customer";
-            document.getElementById("userRole").innerText = activeUser.role;
-            
-            // Sync wallet currency format elements uniformly
-            const walletVal = activeUser.wallet !== undefined ? activeUser.wallet : 0;
-            document.querySelectorAll(".wallet-balance").forEach(block => {
-                block.innerHTML = `₦${Number(walletVal).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-            });
-
-            localStorage.setItem("hambak_user", JSON.stringify(activeUser));
-
-            // Role Elevation Visibility Modifiers
-            if (activeUser.role === "admin") {
-                document.getElementById("panelTitle").innerText = "Root Admin Terminal Control";
-                document.querySelectorAll(".admin-block-section").forEach(section => { section.style.display = "block"; });
-                initializeAnalyticsCharts(); 
-            } else {
-                document.getElementById("panelTitle").innerText = "Customer Account Dashboard";
-                document.querySelectorAll(".admin-block-section").forEach(section => { section.style.display = "none"; });
-            }
-            
-            // Core Sub-Log Synchronizations & Dynamic Dropdown Fetching
-            loadLocalTransactions();
-            loadServiceOrderLogs();
-            fetchAvailableServices();
-
-        } else {
-            handleLogoutAction();
-        }
-    } catch (error) {
-        console.error("Graceful recovery mode launched:", error);
-        const localCachedUser = localStorage.getItem("hambak_user");
-        if (localCachedUser) {
-            const user = JSON.parse(localCachedUser);
-            document.getElementById("userName").innerText = user.name;
-            document.getElementById("userRole").innerText = user.role;
-            if (user.role === "admin") {
-                document.querySelectorAll(".admin-block-section").forEach(s => s.style.display = "block");
-                initializeAnalyticsCharts();
-            }
-        } else {
-            handleLogoutAction();
-        }
-    }
-}
-
-// 4. Fetch available services directly from Mongo and flesh out select dropdown items dynamically
-async function fetchAvailableServices() {
-    try {
-        const response = await fetch(`${LIVE_API_URL}/services`, { 
-            method: "GET", 
-            headers: { ...getHeaders(), "Content-Type": "application/json" } 
-        });
-        const services = await response.json();
-
-        const ninSelect = document.getElementById("nin-service-select");
-        const printSelect = document.getElementById("print-service-select");
-
-        if (!response.ok) return;
-
-        if (ninSelect) {
-            ninSelect.innerHTML = '<option value="">-- Select Identity Task Type --</option>';
-            // Filter down matching category entries from database array logs
-            const ninItems = services.filter(s => s.category.toLowerCase().includes("nin") || s.category.toLowerCase().includes("identity"));
-            ninItems.forEach(s => {
-                ninSelect.innerHTML += `<option value="${s._id}">₦${s.price.toLocaleString()} - ${s.name}</option>`;
-            });
-        }
-
-        if (printSelect) {
-            printSelect.innerHTML = '<option value="">-- Select Layout Print Configuration --</option>';
-            const printItems = services.filter(s => s.category.toLowerCase().includes("print") || s.category.toLowerCase().includes("graphics"));
-            printItems.forEach(s => {
-                printSelect.innerHTML += `<option value="${s._id}">₦${s.price.toLocaleString()} - ${s.name}</option>`;
-            });
-        }
-
-    } catch (err) {
-        console.error("Dynamic dropdown construction failure:", err);
-    }
-}
-
-// 5. Charting Initialization Vector (Chart.js Module)
-function initializeAnalyticsCharts() {
-    const ctxRevenue = document.getElementById("revenueChart");
-    const ctxService = document.getElementById("serviceChart");
-    
-    if (ctxRevenue && ctxService) {
-        if (window.revenueChartInstance) window.revenueChartInstance.destroy();
-        if (window.serviceChartInstance) window.serviceChartInstance.destroy();
-
-        window.revenueChartInstance = new Chart(ctxRevenue, {
-            type: "line",
-            data: {
-                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-                datasets: [{ 
-                    label: "Gross Revenue Index", 
-                    data: [12000, 19000, 30000, 25000, 42000, 50000], 
-                    borderColor: "#0d47a1", 
-                    borderWidth: 3, 
-                    tension: 0.4, 
-                    fill: false 
-                }]
-            }
-        });
-
-        window.serviceChartInstance = new Chart(ctxService, {
-            type: "doughnut",
-            data: {
-                labels: ["NIN", "Printing", "Training", "VTU"],
-                datasets: [{ 
-                    data: [25, 20, 35, 20], 
-                    backgroundColor: ["#0d47a1", "#f5b942", "#ff4081", "#081120"], 
-                    borderWidth: 2 
-                }]
-            }
-        });
-    }
-}
-
-// 6. Load Account Wallet Ledger History Logs
-async function loadLocalTransactions() {
-    try {
-        const res = await fetch(`${LIVE_API_URL}/transactions/my`, { 
-            headers: { ...getHeaders(), "Content-Type": "application/json" } 
-        });
-        const data = await res.json();
-        const tbody = document.getElementById("universalLogsTableBody");
-        
-        if (data.success && data.transactions && data.transactions.length > 0) {
-            tbody.innerHTML = "";
-            data.transactions.slice(0, 5).forEach(tx => {
-                const color = tx.status === 'successful' ? '#25d366' : (tx.status === 'pending' ? '#f5b942' : '#ff4081');
-                tbody.innerHTML += `<tr>
-                    <td><span style="text-transform:uppercase; font-weight:bold;">${tx.type}</span> - ${tx.description || 'Service Execution'}</td>
-                    <td>₦${Number(tx.amount).toLocaleString(undefined, {minimumFractionDigits:2})}</td>
-                    <td style="color:${color}; font-weight:bold; text-transform:capitalize;">${tx.status}</td>
-                    <td>${new Date(tx.createdAt).toLocaleDateString()}</td>
-                </tr>`;
-            });
-        } else {
-            tbody.innerHTML = `<tr><td colspan="4">No payment transaction profiles logged onto this account profile.</td></tr>`;
-        }
-    } catch (err) {
-        document.getElementById("universalLogsTableBody").innerHTML = `<tr><td colspan="4">Offline caching active. Awaiting network routing link.</td></tr>`;
-    }
-}
-
-// 7. Load Operations Order Logs Array
-async function loadServiceOrderLogs() {
-    try {
-        const res = await fetch(`${LIVE_API_URL}/orders/my`, { 
-            headers: { ...getHeaders(), "Content-Type": "application/json" } 
-        });
-        const data = await res.json();
-        const orderTable = document.getElementById("ordersLogTable");
-
-        if (data.success && data.orders && data.orders.length > 0) {
-            orderTable.innerHTML = "";
-            data.orders.forEach(order => {
-                const displayCategory = order.service && order.service.name ? order.service.name : "Custom Request";
-                orderTable.innerHTML += `<tr>
-                    <td><code>${order._id.substring(14)}</code></td>
-                    <td><strong>${displayCategory}</strong> - ${order.message || 'Task specifications stashed.'}</td>
-                    <td>₦${Number(order.amount || 0).toLocaleString(undefined, {minimumFractionDigits:2})}</td>
-                    <td style="font-weight:bold; text-transform:uppercase;">${order.status}</td>
-                </tr>`;
-            });
-        } else {
-            orderTable.innerHTML = `<tr><td colspan="4">No dynamic customized service orders logged onto this account.</td></tr>`;
-        }
-    } catch (err) {
-        console.log("Order history bypassing complete.");
-    }
-}
-
-// 8. Interactive Paystack Verification Node Interceptor
-document.getElementById("fund-wallet-btn").addEventListener("click", async (e) => {
-    e.preventDefault();
-    const amountInput = document.getElementById("funding-amount-input").value.trim();
-    const parsedAmount = parseFloat(amountInput);
-
-    if (!parsedAmount || parsedAmount < 100 || isNaN(parsedAmount)) {
-        alert("Please specify a valid transaction target (Minimum entry threshold: ₦100).");
-        return;
-    }
-
-    try {
-        const fundBtn = document.getElementById("fund-wallet-btn");
-        fundBtn.innerText = "Staging Node Securely...";
-        fundBtn.disabled = true;
-
-        const response = await fetch(`${LIVE_API_URL}/transactions/paystack/initialize`, {
-            method: "POST",
-            headers: { ...getHeaders(), "Content-Type": "application/json" },
-            body: JSON.stringify({ amount: parsedAmount })
-        });
-        const result = await response.json();
-        
-        if (result.success && result.authorization_url) {
-            localStorage.setItem("pending_funding_reference", result.reference);
-            window.location.href = result.authorization_url;
-        } else {
-            alert("Payment gateway communication breakdown: " + result.message);
-            fundBtn.innerText = "Initialize Checkout";
-            fundBtn.disabled = false;
-        }
-    } catch (error) {
-        alert("Critical runtime communication failure with transaction infrastructure.");
-        document.getElementById("fund-wallet-btn").innerText = "Initialize Checkout";
-        document.getElementById("fund-wallet-btn").disabled = false;
-    }
-});
-
-// 9. Checking Direct Payment Callback Redirection Verifications
-async function checkPaymentCallback() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const reference = urlParams.get("reference");
-
-    if (reference) {
-        try {
-            window.history.replaceState({}, document.title, window.location.pathname);
-            alert("Verifying allocation verification hashes with Paystack Engine...");
-            
-            const response = await fetch(`${LIVE_API_URL}/transactions/paystack/verify`, {
-                method: "POST",
-                headers: { ...getHeaders(), "Content-Type": "application/json" },
-                body: JSON.stringify({ reference })
-            });
-            const verification = await response.json();
-            
-            if (verification.success) {
-                alert(`Success! Ledger modification acknowledged: ${verification.message}`);
-                loadUserDashboardEngine();
-            } else {
-                alert("Sovere payment confirmation failed: " + verification.message);
-            }
-        } catch (error) {
-            console.error("Verification processing error context:", error);
-        }
-    }
-}
-
-// 10. Form Processing: Intercept Submission and stream via FormData to the actual backend route: /api/orders
-document.getElementById("ninServiceForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const serviceId = document.getElementById("nin-service-select").value;
-    const quantity = document.getElementById("nin-quantity").value;
-    const ninNum = document.getElementById("nin-number").value.trim();
-    const context = document.getElementById("nin-context").value.trim();
-    const fileInput = document.getElementById("nin-file-upload");
-    const btn = document.getElementById("nin-submit-btn");
-
-    if(!serviceId) { alert("Please select a valid mapped Identity modification service type."); return; }
-
-    try {
-        btn.innerText = "Uploading Payload Data Vector..."; 
-        btn.disabled = true;
-
-        // Bundle everything into a native multi-part data payload for upload
-        const orderData = new FormData();
-        orderData.append("serviceId", serviceId);
-        orderData.append("quantity", quantity);
-        orderData.append("message", `NIN Reference: ${ninNum} | Context Notes: ${context}`);
-        if(fileInput.files.length > 0) {
-            orderData.append("file", fileInput.files[0]); // Intercepts file binary and hits multer flawlessly
-        }
-
-        const res = await fetch(`${LIVE_API_URL}/orders`, {
-            method: "POST",
-            headers: getHeaders(), // Let browser auto-set boundary limits securely without explicit JSON strings
-            body: orderData
-        });
-        
-        const output = await res.json();
-        if (res.ok && output.success) {
-            alert("Identity workflow order queued up and wallet funds deducted successfully!");
-            document.getElementById("ninServiceForm").reset();
-            loadUserDashboardEngine();
-        } else { 
-            alert(`Operation rejected by core router: ${output.message}`); 
-        }
-    } catch (err) { 
-        alert("Server validation network connection lost."); 
-    } finally { 
-        btn.innerText = "Deploy Request Verification"; 
-        btn.disabled = false; 
-    }
-});
-
-// 11. Form Processing: Premium Graphic Printing Pipeline
-document.getElementById("printJobForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const serviceId = document.getElementById("print-service-select").value;
-    const quantity = document.getElementById("print-quantity").value;
-    const context = document.getElementById("print-context").value.trim();
-    const fileInput = document.getElementById("print-file-upload");
-    const btn = document.getElementById("print-submit-btn");
-
-    if(!serviceId) { alert("Please select a valid print node style configuration."); return; }
-
-    try {
-        btn.innerText = "Streaming Structural Layout Matrix..."; 
-        btn.disabled = true;
-
-        const orderData = new FormData();
-        orderData.append("serviceId", serviceId);
-        orderData.append("quantity", quantity);
-        orderData.append("message", context || "Standard automated high-fidelity layout execution.");
-        if(fileInput.files.length > 0) {
-            orderData.append("file", fileInput.files[0]);
-        }
-
-        const res = await fetch(`${LIVE_API_URL}/orders`, {
-            method: "POST",
-            headers: getHeaders(),
-            body: orderData
-        });
-        
-        const output = await res.json();
-        if (res.ok && output.success) {
-            alert("Layout verified and print task scheduled. Wallet balance adjusted.");
-            document.getElementById("printJobForm").reset();
-            loadUserDashboardEngine();
-        } else { 
-            alert(`Execution rejected by core matrix: ${output.message}`); 
-        }
-    } catch (err) { 
-        alert("Print engine communication decoupled."); 
-    } finally { 
-        btn.innerText = "Initialize Printing Job"; 
-        btn.disabled = false; 
-    }
-});
-
-function handleLogoutAction() {
-    localStorage.clear();
-    window.location.href = "login.html";
-}
-
-document.getElementById("logoutBtn").addEventListener("click", (e) => {
-    e.preventDefault();
-    handleLogoutAction();
-});
-
-// Run Core Startup Sequence
 document.addEventListener("DOMContentLoaded", () => {
-    loadUserDashboardEngine();
-    checkPaymentCallback();
+  // Global State Containers
+  let userProfile = null;
+  let availableServices = [];
+
+  // DOM Elements - Navigation & Core UI
+  const token = localStorage.getItem("token");
+  const userNameEl = document.getElementById("userName");
+  const userWalletEl = document.getElementById("userWallet");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  // DOM Elements - Service Dropdown Selectors
+  const ninServiceSelect = document.getElementById("ninServiceSelect");
+  const printingServiceSelect = document.getElementById("printingServiceSelect");
+
+  // DOM Elements - Order Submission Forms
+  const ninOrderForm = document.getElementById("ninOrderForm");
+  const printingOrderForm = document.getElementById("printingOrderForm");
+
+  // DOM Elements - History Visualizer Tables
+  const orderHistoryTable = document.getElementById("orderHistoryTable");
+  const transactionHistoryTable = document.getElementById("transactionHistoryTable");
+
+  // Absolute Security Guard Gate
+  if (!token) {
+    window.location.href = "/login.html";
+    return;
+  }
+
+  /* ==========================================================================
+     1. INITIALIZATION DISPATCHER
+     ========================================================================== */
+  async function initializeDashboard() {
+    try {
+      await fetchUserProfile();
+      await fetchServices();
+      await fetchOrderHistory();
+      await fetchTransactionHistory();
+      setupEventListeners();
+    } catch (error) {
+      console.error("Dashboard initialization failure context:", error);
+    }
+  }
+
+  /* ==========================================================================
+     2. DATA ACQUISITION & RENDER PIPELINES
+     ========================================================================== */
+
+  // Fetch Current User Metrics
+  async function fetchUserProfile() {
+    try {
+      const res = await fetch("/api/auth/me", {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        userProfile = data.user;
+        if (userNameEl) userNameEl.textContent = userProfile.name;
+        if (userWalletEl) userWalletEl.textContent = `₦${Number(userProfile.wallet).toLocaleString()}`;
+      } else {
+        handleAuthExpiry();
+      }
+    } catch (err) {
+      console.error("Profile endpoint sync mapping exception:", err);
+    }
+  }
+
+  // Fetch Active System Services & Populate Forms Dynamically
+  async function fetchServices() {
+    try {
+      const res = await fetch("/api/services", {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      const data = await res.json();
+      
+      // Handle array payload whether nested in data.services or directly as data
+      availableServices = data.services || data || [];
+
+      // Clear existing select placeholders
+      if (ninServiceSelect) ninServiceSelect.innerHTML = '<option value="" disabled selected>-- Select NIN Service --</option>';
+      if (printingServiceSelect) printingServiceSelect.innerHTML = '<option value="" disabled selected>-- Select Material Variant --</option>';
+
+      // Loop and distribute data vectors into respective category select options
+      availableServices.forEach(service => {
+        if (!service.isActive) return; // Skip decommissioned elements
+
+        const optionHTML = `<option value="${service._id}">${service.name} — ₦${Number(service.price).toLocaleString()}</option>`;
+        
+        const categoryKey = service.category ? service.category.toLowerCase() : "";
+        
+        if (categoryKey.includes("nin") && ninServiceSelect) {
+          ninServiceSelect.insertAdjacentHTML("beforeend", optionHTML);
+        } else if ((categoryKey.includes("print") || categoryKey.includes("graph")) && printingServiceSelect) {
+          printingServiceSelect.insertAdjacentHTML("beforeend", optionHTML);
+        }
+      });
+    } catch (err) {
+      console.error("Service matrix population pipeline blocked:", err);
+    }
+  }
+
+  // Fetch Client Specific Order History Records
+  async function fetchOrderHistory() {
+    if (!orderHistoryTable) return;
+    try {
+      const res = await fetch("/api/orders/my", {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      const data = await res.json();
+      const orders = data.orders || [];
+
+      if (orders.length === 0) {
+        orderHistoryTable.innerHTML = `<tr><td colspan="6" class="text-center text-muted">No active order parameters recorded.</td></tr>`;
+        return;
+      }
+
+      orderHistoryTable.innerHTML = "";
+      orders.forEach(order => {
+        const serviceName = order.service ? order.service.name : "Custom Request Service";
+        const fileLink = order.file ? `<a href="${order.file}" target="_blank" class="btn-link">View Slip</a>` : `<span class="text-muted">None</span>`;
+        const statusBadge = getStatusBadgeHTML(order.status);
+
+        const row = `
+          <tr>
+            <td><strong>${order._id.substring(order._id.length - 8).toUpperCase()}</strong></td>
+            <td>${serviceName}</td>
+            <td>${order.quantity || 1}</td>
+            <td>₦${Number(order.amount).toLocaleString()}</td>
+            <td>${statusBadge}</td>
+            <td>${fileLink}</td>
+          </tr>
+        `;
+        orderHistoryTable.insertAdjacentHTML("beforeend", row);
+      });
+    } catch (err) {
+      console.error("Order history ledger rendering error:", err);
+    }
+  }
+
+  // Fetch Wallet Transaction Log footprints
+  async function fetchTransactionHistory() {
+    if (!transactionHistoryTable) return;
+    try {
+      const res = await fetch("/api/transactions/my", {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      const data = await res.json();
+      const transactions = data.transactions || data || [];
+
+      if (transactions.length === 0) {
+        transactionHistoryTable.innerHTML = `<tr><td colspan="5" class="text-center text-muted">No ledger balance mutations found.</td></tr>`;
+        return;
+      }
+
+      transactionHistoryTable.innerHTML = "";
+      transactions.forEach(tx => {
+        const dateStr = tx.createdAt ? new Date(tx.createdAt).toLocaleDateString() : "-";
+        const typeBadge = tx.type === "deposit" || tx.type === "refund" 
+          ? `<span class="badge bg-success">Credit</span>` 
+          : `<span class="badge bg-danger">Debit</span>`;
+
+        const row = `
+          <tr>
+            <td>${dateStr}</td>
+            <td><small class="text-muted">${tx.reference || "N/A"}</small></td>
+            <td>${tx.description || "System processing execution fee"}</td>
+            <td>${typeBadge}</td>
+            <td><strong>₦${Number(tx.amount).toLocaleString()}</strong></td>
+          </tr>
+        `;
+        transactionHistoryTable.insertAdjacentHTML("beforeend", row);
+      });
+    } catch (err) {
+      console.error("Transaction profile ledger visualization failure:", err);
+    }
+  }
+
+  /* ==========================================================================
+     3. ASYNC FORM INTERFACE CONTROLLERS
+     ========================================================================== */
+  function setupEventListeners() {
+    
+    // NIN Form Interceptor Pipeline
+    if (ninOrderForm) {
+      ninOrderForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const selectedId = ninServiceSelect.value;
+        if (!selectedId) return alert("Validation Error: Please select an active NIN Service variant profile.");
+
+        const formData = new FormData();
+        formData.append("serviceId", selectedId);
+        formData.append("quantity", 1);
+        formData.append("message", document.getElementById("ninMessage")?.value || "NIN Management Pipeline Dispatch");
+        
+        const fileInput = document.getElementById("ninFile");
+        if (fileInput && fileInput.files[0]) {
+          formData.append("file", fileInput.files[0]);
+        }
+
+        await executeOrderPlacement(formData);
+      });
+    }
+
+    // Printing Node Form Interceptor Pipeline
+    if (printingOrderForm) {
+      printingOrderForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const selectedId = printingServiceSelect.value;
+        if (!selectedId) return alert("Validation Error: Please choose your material production spec profile.");
+
+        const qty = document.getElementById("printQty")?.value || 1;
+
+        const formData = new FormData();
+        formData.append("serviceId", selectedId);
+        formData.append("quantity", qty);
+        formData.append("message", document.getElementById("printMessage")?.value || "Corporate Printing Request Sequence");
+        
+        const fileInput = document.getElementById("printFile");
+        if (fileInput && fileInput.files[0]) {
+          formData.append("file", fileInput.files[0]);
+        }
+
+        await executeOrderPlacement(formData);
+      });
+    }
+
+    // Session Termination Sequence
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", () => {
+        localStorage.clear();
+        window.location.href = "/login.html";
+      });
+    }
+  }
+
+  // Unified Request Transmitter Matrix
+  async function executeOrderPlacement(formData) {
+    try {
+      const submitButtons = document.querySelectorAll('button[type="submit"]');
+      submitButtons.forEach(btn => btn.disabled = true); // Prevent double debit balance anomalies
+
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${token}` }, // Form-data sets content-type dynamically
+        body: formData
+      });
+
+      const data = await res.json();
+      
+      if (res.ok && data.success) {
+        alert("Success: " + data.message);
+        // Refresh interface to sync balance counters and lists instantly
+        ninOrderForm?.reset();
+        printingOrderForm?.reset();
+        await fetchUserProfile();
+        await fetchOrderHistory();
+        await fetchTransactionHistory();
+      } else {
+        alert("Order Processing Rejection: " + (data.message || "Ecosystem execution error maps."));
+      }
+    } catch (err) {
+      console.error("Infrastructure transport failure on checkout:", err);
+      alert("Network Error: Operations processing framework connection failed.");
+    } finally {
+      const submitButtons = document.querySelectorAll('button[type="submit"]');
+      submitButtons.forEach(btn => btn.disabled = false);
+    }
+  }
+
+  /* ==========================================================================
+     4. COMPONENT FALLBACK UTILITIES
+     ========================================================================== */
+  function getStatusBadgeHTML(status) {
+    switch (status) {
+      case "pending": return `<span class="badge bg-warning text-dark">Pending</span>`;
+      case "processing": return `<span class="badge bg-info text-white">Processing</span>`;
+      case "completed": return `<span class="badge bg-success text-white">Completed</span>`;
+      case "cancelled": return `<span class="badge bg-danger text-white">Cancelled</span>`;
+      default: return `<span class="badge bg-secondary">Unknown</span>`;
+    }
+  }
+
+  function handleAuthExpiry() {
+    localStorage.removeItem("token");
+    window.location.href = "/login.html";
+  }
+
+  // Trigger Ecosystem Engine Execution
+  initializeDashboard();
 });
