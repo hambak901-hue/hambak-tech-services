@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HAMBAK TECH & SERVICES - ALLIGNED CORE DASHBOARD ENGINE
+   HAMBAK TECH & SERVICES - PREMIUM ENGINE
    ========================================================================== */
 
 // Global navigation utility attached directly to window to handle onclick events from sidebar
@@ -67,10 +67,13 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================================================================== */
   async function initializeDashboard() {
     try {
-      await fetchUserProfile();
-      await fetchServices();
-      await fetchOrderHistory();
-      setupEventListeners();
+      // Fetch user profile first. If it succeeds, load other visual arrays safely.
+      const profileLoaded = await fetchUserProfile();
+      if (profileLoaded) {
+        await fetchServices();
+        await fetchOrderHistory();
+        setupEventListeners();
+      }
     } catch (error) {
       console.error("Dashboard initialization failure context:", error);
     }
@@ -80,18 +83,21 @@ document.addEventListener("DOMContentLoaded", () => {
      2. DATA ACQUISITION & RENDER PIPELINES
      ========================================================================== */
 
-  // Fetch Current User Metrics
+  // Fetch Current User Metrics - Formatted Defensively Against Dropouts
   async function fetchUserProfile() {
     try {
       const res = await fetch("/api/auth/me", {
         headers: { "Authorization": `Bearer ${token}` }
       });
+      
       const data = await res.json();
-      if (res.ok && data.success) {
-        userProfile = data.user;
+      
+      // Resilient check: Accept if standard success true or if user profile object directly exists
+      if (res.ok || data.success || data.user) {
+        userProfile = data.user || data;
         
-        // Populate layout parameters
-        if (userNameEl) userNameEl.textContent = userProfile.name;
+        // Populate layout parameters safely
+        if (userNameEl && userProfile.name) userNameEl.textContent = userProfile.name;
         if (userRoleEl) userRoleEl.textContent = userProfile.role || "Customer";
         
         // Sync role visibility controls for Admins if needed
@@ -99,17 +105,23 @@ document.addEventListener("DOMContentLoaded", () => {
           document.querySelectorAll(".admin-block-section").forEach(el => el.style.display = "block");
         }
 
-        // Broadcast wallet values across all UI containers
-        const formattedBalance = `₦${Number(userProfile.wallet || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        // Broadcast wallet values across all UI containers safely
+        const rawWalletValue = userProfile.wallet !== undefined ? userProfile.wallet : 0;
+        const formattedBalance = `₦${Number(rawWalletValue).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         walletBalanceElements.forEach(el => {
           el.textContent = formattedBalance;
         });
 
+        return true; // Execution cleared successfully
       } else {
+        console.warn("Server validation handshake denied credentials.");
         handleAuthExpiry();
+        return false;
       }
     } catch (err) {
-      console.error("Profile endpoint sync mapping exception:", err);
+      console.error("Profile endpoint sync mapping exception caught:", err);
+      // Don't log out on generic temporary network timeouts to avoid annoying loops
+      return false;
     }
   }
 
@@ -156,18 +168,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Update dedicated Orders View Table
       if (ordersLogTable) {
-        if (orders.length === 0) {
+        if (!Array.isArray(orders) || orders.length === 0) {
           ordersLogTable.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No custom operational orders found.</td></tr>`;
         } else {
           ordersLogTable.innerHTML = "";
           orders.forEach(order => {
             const serviceName = order.service ? order.service.name : "Custom Ecosystem Task";
             const statusBadge = getStatusBadgeHTML(order.status);
+            const orderAmount = order.amount || 0;
             const row = `
               <tr>
                 <td><strong>#${order._id.substring(order._id.length - 8).toUpperCase()}</strong></td>
                 <td>${serviceName}</td>
-                <td>₦${Number(order.amount || 0).toLocaleString()}</td>
+                <td>₦${Number(orderAmount).toLocaleString()}</td>
                 <td>${statusBadge}</td>
               </tr>
             `;
@@ -178,8 +191,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Update Recent Universal System logs preview inside main view dashboard
       if (universalLogsTableBody) {
-        if (orders.length === 0) {
-          universalLogsTableBody.innerHTML = `<tr><td colspan="4">No historical records logged to server framework yet.</td></tr>`;
+        if (!Array.isArray(orders) || orders.length === 0) {
+          universalLogsTableBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No historical records logged to server framework yet.</td></tr>`;
         } else {
           universalLogsTableBody.innerHTML = "";
           // Take up to recent 5 entries
@@ -187,10 +200,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const serviceCategory = order.service ? (order.service.category || "General").toUpperCase() : "GENERAL";
             const statusBadge = getStatusBadgeHTML(order.status);
             const orderDate = order.createdAt ? new Date(order.createdAt).toLocaleDateString() : "Recent";
+            const orderAmount = order.amount || 0;
             const row = `
               <tr>
                 <td><strong>${serviceCategory}</strong></td>
-                <td>₦${Number(order.amount || 0).toLocaleString()}</td>
+                <td>₦${Number(orderAmount).toLocaleString()}</td>
                 <td>${statusBadge}</td>
                 <td>${orderDate}</td>
               </tr>
@@ -274,7 +288,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const data = await res.json();
           if (res.ok && data.authorization_url) {
-            // Redirect smoothly to secure Paystack transaction framework interface
             window.location.href = data.authorization_url;
           } else {
             alert("Gateway Node Rejection: " + (data.message || "Could not initialize checkout gateway routing."));
@@ -311,7 +324,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const res = await fetch("/api/orders", {
         method: "POST",
-        headers: { "Authorization": `Bearer ${token}` }, // Form-data boundary headers build dynamically
+        headers: { "Authorization": `Bearer ${token}` },
         body: formData
       });
 
@@ -321,7 +334,6 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Ecosystem Success: " + data.message);
         formElement.reset();
         
-        // Instant structural balance mapping updates
         await fetchUserProfile();
         await fetchOrderHistory();
       } else {
@@ -353,7 +365,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function handleAuthExpiry() {
-    localStorage.removeItem("token");
+    localStorage.clear();
     window.location.href = "/login.html";
   }
 
