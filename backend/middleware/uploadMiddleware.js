@@ -20,14 +20,15 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = /jpg|jpeg|png|webp/;
+  // Upgraded to seamlessly allow standard document assets for your printing node
+  const allowedTypes = /jpg|jpeg|png|webp|pdf|doc|docx/;
   const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = allowedTypes.test(file.mimetype);
 
   if (extname && mimetype) {
     cb(null, true);
   } else {
-    cb(new Error("File Upload Restricted: Only standard web image formats are allowed."));
+    cb(new Error("File Upload Restricted: Only standard images (.jpg, .png, .webp) and documents (.pdf, .docx) are allowed."));
   }
 };
 
@@ -35,7 +36,7 @@ const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB Limit Max
+    fileSize: 10 * 1024 * 1024 // Increased to 10MB to accommodate heavy document uploads easily
   }
 });
 
