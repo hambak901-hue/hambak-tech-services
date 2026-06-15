@@ -38,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
   if (!token) {
     console.warn("Unauthorized: No token found in localStorage. Redirecting to login.");
-    // Safe redirect fallback
     window.location.href = window.location.pathname.includes("/pages/") ? "login.html" : "pages/login.html";
     return;
   }
@@ -80,9 +79,9 @@ document.addEventListener("DOMContentLoaded", () => {
       
       setupEventListeners();
       
-      // Default initialization view screen assignment state configuration trigger
-      if (document.getElementById("dashboard-view")) {
-        window.showSection("dashboard-view");
+      // FIX: Changed target check from "dashboard-view" to match your HTML's actual element "home-view"
+      if (document.getElementById("home-view")) {
+        window.showSection("home-view");
       }
     } catch (error) {
       console.error("Critical ecosystem initialization engine freeze:", error);
@@ -113,6 +112,8 @@ document.addEventListener("DOMContentLoaded", () => {
         
         if (userProfile.role === "admin") {
           document.querySelectorAll(".admin-block-section").forEach(el => el.style.display = "block");
+          // Initialize Chart analytics dashboards for administrative visibility
+          initAdminCharts();
         }
 
         const rawWalletValue = userProfile.wallet !== undefined ? userProfile.wallet : 0;
@@ -169,7 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (ordersLogTable) {
         if (!Array.isArray(orders) || orders.length === 0) {
-          ordersLogTable.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No custom operational orders found.</td></tr>`;
+          ordersLogTable.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">No custom operational orders found.</td></tr>`;
         } else {
           ordersLogTable.innerHTML = "";
           orders.forEach(order => {
@@ -191,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (universalLogsTableBody) {
         if (!Array.isArray(orders) || orders.length === 0) {
-          universalLogsTableBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No historical records logged to server framework yet.</td></tr>`;
+          universalLogsTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">No historical records logged to server framework yet.</td></tr>`;
         } else {
           universalLogsTableBody.innerHTML = "";
           orders.slice(0, 5).forEach(order => {
@@ -277,6 +278,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const data = await res.json();
           if (res.ok && data.authorization_url) {
+            // Standard smooth redirect pipeline setup
             window.location.href = data.authorization_url;
           } else {
             alert("External Gateway Warning: " + (data.message || "Initialization parameters dropped."));
@@ -336,11 +338,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function getStatusBadgeHTML(status) {
     switch (status) {
-      case "pending": return `<span class="badge bg-warning text-dark" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Pending</span>`;
-      case "processing": return `<span class="badge bg-info text-white" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Processing</span>`;
-      case "completed": return `<span class="badge bg-success text-white" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Completed</span>`;
-      case "cancelled": return `<span class="badge bg-danger text-white" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Cancelled</span>`;
-      default: return `<span class="badge bg-secondary text-white" style="padding:4px 8px; border-radius:5px; font-size:0.85rem;">Unknown</span>`;
+      case "pending": return `<span style="background-color:#f5b942; color:#081120; padding:4px 10px; border-radius:12px; font-size:0.85rem; font-weight:bold; display:inline-block;">Pending</span>`;
+      case "processing": return `<span style="background-color:#0d47a1; color:white; padding:4px 10px; border-radius:12px; font-size:0.85rem; font-weight:bold; display:inline-block;">Processing</span>`;
+      case "completed": return `<span style="background-color:#10b981; color:white; padding:4px 10px; border-radius:12px; font-size:0.85rem; font-weight:bold; display:inline-block;">Completed</span>`;
+      case "cancelled": return `<span style="background-color:#ff4081; color:white; padding:4px 10px; border-radius:12px; font-size:0.85rem; font-weight:bold; display:inline-block;">Cancelled</span>`;
+      default: return `<span style="background-color:#64748b; color:white; padding:4px 10px; border-radius:12px; font-size:0.85rem; font-weight:bold; display:inline-block;">Unknown</span>`;
+    }
+  }
+
+  /* ==========================================================================
+     4. ADMIN VISUALIZATIONS (CHART.JS ATTACHMENT NODE)
+     ========================================================================== */
+  function initAdminCharts() {
+    const revCtx = document.getElementById('revenueChart');
+    const servCtx = document.getElementById('serviceChart');
+
+    if (revCtx) {
+      new Chart(revCtx, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [{
+            label: 'Ecosystem Revenue (₦)',
+            data: [120000, 190000, 270000, 320000, 400000, 450000],
+            borderColor: '#0d47a1',
+            backgroundColor: 'rgba(13, 71, 161, 0.1)',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+      });
+    }
+
+    if (servCtx) {
+      new Chart(servCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['NIN Matrix', 'Print Node', 'ICT Array', 'Other Services'],
+          datasets: [{
+            data: [45, 30, 15, 10],
+            backgroundColor: ['#0d47a1', '#f5b942', '#ff4081', '#081120']
+          }]
+        },
+        options: { responsive: true }
+      });
     }
   }
 
