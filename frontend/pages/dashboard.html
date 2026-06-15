@@ -9,9 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* ==========================================================================
-       PREMIUM BRAND DESIGN & VARIABLE INTERFACES
-       ========================================================================== */
+    /* Premium brand colors preserved perfectly */
     :root {
       --primary-blue: #0d47a1;
       --deep-navy: #081120;
@@ -31,7 +29,6 @@
       min-height: 100vh;
     }
 
-    /* SIDEBAR ELEMENT */
     .sidebar {
       width: 280px;
       background: var(--deep-navy);
@@ -91,14 +88,12 @@
       background: rgba(245, 185, 66, 0.05);
     }
 
-    /* MAIN CONTAINER */
     .dashboard-main {
       margin-left: 280px;
       flex: 1;
       padding: 40px;
     }
 
-    /* TOPBAR */
     .topbar {
       display: flex;
       justify-content: space-between;
@@ -131,7 +126,6 @@
       border: 2px solid var(--brand-gold);
     }
 
-    /* SINGLE PAGE APPLICATION VIEW SYSTEM */
     .app-view {
       display: none;
     }
@@ -140,7 +134,6 @@
       display: block;
     }
 
-    /* SECTIONAL MODULE CARDS */
     .module-card {
       background: white;
       padding: 30px;
@@ -157,7 +150,6 @@
       padding-left: 15px;
     }
 
-    /* STATS METRIC MATRIX */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -190,7 +182,6 @@
       font-weight: 600;
     }
 
-    /* WALLET CARD SPECIFICATIONS */
     .wallet-card {
       background: linear-gradient(135deg, var(--primary-blue), #1565c0);
       color: white;
@@ -218,7 +209,6 @@
 
     .deposit-btn { background: var(--brand-gold); color: var(--deep-navy); }
 
-    /* INPUT UTILITIES */
     .funding-form-wrapper {
       background: rgba(255, 255, 255, 0.08);
       padding: 20px;
@@ -245,7 +235,6 @@
       border-color: var(--brand-gold);
     }
 
-    /* SERVICE ORDER GRID MODAL FORM DESIGN */
     .order-form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -289,7 +278,6 @@
 
     .submit-action-btn:hover { background: #1565c0; }
 
-    /* CHARTS CONTAINER */
     .chart-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -358,8 +346,8 @@
         <a id="nav-training" onclick="showSection('training-view')"><i class="fa-solid fa-graduation-cap"></i> ICT Training</a>
         <a id="nav-game" onclick="showSection('game-view')"><i class="fa-solid fa-gamepad"></i> Game Center</a>
         
-        <a href="pages/admin.html" class="admin-block-section admin-only-tab" id="adminUsersLink"><i class="fa-solid fa-users-gear"></i> Manage Users</a>
-        <a href="pages/admin.html" class="admin-block-section admin-only-tab" id="adminServicesLink"><i class="fa-solid fa-gears"></i> Core Settings</a>
+        <a href="admin.html" class="admin-block-section admin-only-tab" id="adminUsersLink"><i class="fa-solid fa-users-gear"></i> Manage Users</a>
+        <a href="admin.html" class="admin-block-section admin-only-tab" id="adminServicesLink"><i class="fa-solid fa-gears"></i> Core Settings</a>
         
         <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
       </div>
@@ -450,13 +438,17 @@
         <div class="module-card">
           <h2>NIN Validation & Custom Modifications Form</h2>
           <p>Deploy identity updates directly to corporate data review servers securely.</p>
-          <form class="order-form-grid" id="ninServiceForm">
+          <form class="order-form-grid" id="ninServiceForm" enctype="multipart/form-data">
             <div class="form-group">
-              <label>Select Identity Modification Category</label>
-              <select id="nin-category"><option>NIN Slip Re-Print</option><option>Date of Birth Correction</option><option>Name/Phone Alignment Fix</option></select>
+              <label>Select Identity Target Mapping Service</label>
+              <select id="nin-service-select" required>
+                <option value="">-- Synchronizing Live Services... --</option>
+              </select>
             </div>
+            <div class="form-group"><label>Target Processing Quantity</label><input type="number" id="nin-quantity" value="1" min="1" required></div>
             <div class="form-group"><label>Existing 11-Digit NIN Number</label><input type="text" id="nin-number" maxlength="11" required placeholder="Enter NIN matrix number"></div>
-            <div class="form-group"><label>Target Data Correction Context Description</label><textarea id="nin-context" placeholder="State clear change variables needed" required></textarea></div>
+            <div class="form-group"><label>Target Data Correction Context Description</label><textarea id="nin-context" placeholder="State clear change variables needed (e.g., correct typing alignment mistakes)" required></textarea></div>
+            <div class="form-group"><label>Supporting Document Attachment File</label><input type="file" id="nin-file-upload"></div>
             <button type="submit" class="submit-action-btn" id="nin-submit-btn">Deploy Request Verification</button>
           </form>
         </div>
@@ -465,13 +457,16 @@
       <div id="print-view" class="app-view">
         <div class="module-card">
           <h2>Premium Graphic Print Scheduling Node</h2>
-          <form class="order-form-grid" id="printJobForm">
+          <form class="order-form-grid" id="printJobForm" enctype="multipart/form-data">
             <div class="form-group">
-              <label>Target Print Item Type</label>
-              <select id="print-item-type"><option>Business Stationery Brand Assets</option><option>Corporate Identification Cards</option><option>Flyer Handouts / Custom Banners</option></select>
+              <label>Target Print Configuration Mapping</label>
+              <select id="print-service-select" required>
+                <option value="">-- Synchronizing Live Services... --</option>
+              </select>
             </div>
             <div class="form-group"><label>Target Copy Print Quantities</label><input type="number" id="print-quantity" value="1" min="1" required></div>
-            <div class="form-group"><label>Upload Document/Design Layout Drive Link</label><input type="url" id="print-drive-url" placeholder="Paste structural image URL link asset" required></div>
+            <div class="form-group"><label>Upload Document/Design Layout File Asset</label><input type="file" id="print-file-upload" required></div>
+            <div class="form-group"><label>Additional Configuration Message</label><textarea id="print-context" placeholder="Specify custom color layouts or special finish rules..."></textarea></div>
             <button type="submit" class="submit-action-btn" id="print-submit-btn">Initialize Printing Job</button>
           </form>
         </div>
@@ -512,770 +507,7 @@
 
     </div>
   </div>
-
-  <script>
-    const ctxRevenue = document.getElementById("revenueChart");
-    const ctxService = document.getElementById("serviceChart");
-    if (ctxRevenue && ctxService) {
-      new Chart(ctxRevenue, {
-        type: "line",
-        data: {
-          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-          datasets: [{ label: "Gross Revenue Index", data: [12000, 19000, 30000, 25000, 42000, 50000], borderColor: "#0d47a1", borderWidth: 3, tension: 0.4, fill: false }]
-        }
-      });
-      new Chart(ctxService, {
-        type: "doughnut",
-        data: {
-          labels: ["NIN", "Printing", "Training", "VTU"],
-          datasets: [{ data: [25, 20, 35, 20], backgroundColor: ["#0d47a1", "#f5b942", "#ff4081", "#081120"], borderWidth: 2 }]
-        }
-      });
-    }
-  </script>
-
-  <script>
-    function showSection(sectionId) {
-      document.querySelectorAll('.app-view').forEach(view => { view.classList.remove('active-view'); });
-      document.querySelectorAll('.sidebar-links a').forEach(link => { link.classList.remove('active'); });
-      
-      const targetView = document.getElementById(sectionId);
-      if(targetView) targetView.classList.add('active-view');
-      
-      const componentId = sectionId.split('-')[0];
-      const targetNavLink = document.getElementById(`nav-${componentId}`);
-      if(targetNavLink) targetNavLink.classList.add('active');
-    }
-  </script>
-
-  <script>
-    const token = localStorage.getItem("hambak_token");
-    const LIVE_API_URL = "https://hambak-tech-services.onrender.com/api";
-
-    if (!token) { window.location.href = "login.html"; }
-
-    const getHeaders = () => ({
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    });
-
-    // Main Engine Loader
-    async function loadUserDashboardEngine() {
-      try {
-        const response = await fetch(`${LIVE_API_URL}/auth/me`, { method: "GET", headers: getHeaders() });
-        const data = await response.json();
-
-        if (response.ok && data) {
-          const activeUser = data.user ? data.user : data;
-          if (!activeUser.role) { throw new Error("Format misalignment."); }
-
-          document.getElementById("userName").innerHTML = activeUser.name || "Hambak Customer";
-          document.getElementById("userRole").innerHTML = activeUser.role;
-          
-          const walletVal = activeUser.wallet !== undefined ? activeUser.wallet : 0;
-          document.querySelectorAll(".wallet-balance").forEach(block => {
-            block.innerHTML = `₦${Number(walletVal).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-          });
-
-          localStorage.setItem("hambak_user", JSON.stringify(activeUser));
-
-          if (activeUser.role === "admin") {
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 40px;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .topbar h1 {
-      color: #0f172a;
-      font-weight: 800;
-    }
-
-    .profile-box {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      background: white;
-      padding: 10px 25px;
-      border-radius: 50px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-      border: 1px solid var(--soft-peach);
-    }
-
-    .profile-box img {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      border: 2px solid var(--brand-gold);
-    }
-
-    /* SINGLE PAGE APPLICATION VIEW SYSTEM */
-    .app-view {
-      display: none;
-    }
-
-    .app-view.active-view {
-      display: block;
-    }
-
-    /* SECTIONAL MODULE CARDS */
-    .module-card {
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-      margin-bottom: 30px;
-    }
-
-    .module-card h2 {
-      color: var(--deep-navy);
-      margin-bottom: 20px;
-      font-weight: 800;
-      border-left: 5px solid var(--primary-blue);
-      padding-left: 15px;
-    }
-
-    /* STATS METRIC MATRIX */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 25px;
-      margin-bottom: 40px;
-    }
-
-    .stat-card {
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    }
-
-    .stat-card i {
-      font-size: 2rem;
-      margin-bottom: 15px;
-      color: var(--primary-blue);
-    }
-
-    .stat-card h2 {
-      font-size: 2.2rem;
-      margin-bottom: 5px;
-      color: #0f172a;
-      font-weight: 800;
-    }
-
-    .stat-card p {
-      color: #64748b;
-      font-weight: 600;
-    }
-
-    /* WALLET CARD SPECIFICATIONS */
-    .wallet-card {
-      background: linear-gradient(135deg, var(--primary-blue), #1565c0);
-      color: white;
-      padding: 35px;
-      border-radius: 25px;
-      margin-bottom: 40px;
-      box-shadow: 0 15px 40px rgba(13, 71, 161, 0.25);
-      border-bottom: 4px solid var(--brand-gold);
-    }
-
-    .wallet-balance {
-      font-size: 3rem;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-
-    .wallet-actions button {
-      padding: 14px 30px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      margin-right: 10px;
-    }
-
-    .deposit-btn { background: var(--brand-gold); color: var(--deep-navy); }
-
-    /* INPUT UTILITIES */
-    .funding-form-wrapper {
-      background: rgba(255, 255, 255, 0.08);
-      padding: 20px;
-      border-radius: 15px;
-      margin-top: 15px;
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .funding-form-wrapper input {
-      padding: 14px;
-      border: 2px solid transparent;
-      border-radius: 10px;
-      outline: none;
-      font-size: 1.1rem;
-      font-weight: bold;
-      flex: 1;
-      min-width: 200px;
-    }
-    
-    .funding-form-wrapper input:focus {
-      border-color: var(--brand-gold);
-    }
-
-    /* SERVICE ORDER GRID MODAL FORM DESIGN */
-    .order-form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .form-group label {
-      font-weight: 700;
-      color: #475569;
-    }
-
-    .form-group input, .form-group select, .form-group textarea {
-      padding: 14px;
-      border: 1px solid #cbd5e1;
-      border-radius: 10px;
-      outline: none;
-      font-size: 1rem;
-    }
-
-    .form-group input:focus {
-      border-color: var(--primary-blue);
-    }
-
-    .submit-action-btn {
-      background: var(--primary-blue);
-      color: white;
-      padding: 14px 28px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 700;
-      margin-top: 20px;
-    }
-
-    .submit-action-btn:hover { background: #1565c0; }
-
-    /* CHARTS CONTAINER */
-    .chart-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 30px;
-      margin-bottom: 40px;
-    }
-
-    .chart-card {
-      background: white;
-      padding: 25px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
-
-    table th, table td {
-      padding: 16px;
-      text-align: left;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    table th {
-      background: var(--primary-blue);
-      color: white;
-    }
-
-    .notice {
-      padding: 15px;
-      border-left: 5px solid var(--accent-pink);
-      background: #f8fafc;
-      margin-bottom: 15px;
-      border-radius: 10px;
-    }
-
-    .admin-block-section { display: none; }
-
-    @media(max-width:900px) {
-      .dashboard { flex-direction: column; }
-      .sidebar { position: relative; width: 100%; height: auto; padding: 20px; }
-      .dashboard-main { margin-left: 0; padding: 20px; }
-    }
-  </style>
-</head>
-
-<body>
-
-  <div class="dashboard">
-
-    <div class="sidebar">
-      <div class="sidebar-logo">
-        <h2>HAMBAK</h2>
-        <p>TECH & SERVICES</p>
-      </div>
-
-      <div class="sidebar-links">
-        <a id="nav-home" class="active" onclick="showSection('home-view')"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
-        <a id="nav-wallet" onclick="showSection('wallet-view')"><i class="fa-solid fa-wallet"></i> Wallet</a>
-        <a id="nav-orders" onclick="showSection('orders-view')"><i class="fa-solid fa-cart-shopping"></i> Orders Panel</a>
-        <a id="nav-nin" onclick="showSection('nin-view')"><i class="fa-solid fa-id-card"></i> NIN Services</a>
-        <a id="nav-print" onclick="showSection('print-view')"><i class="fa-solid fa-print"></i> Printing Node</a>
-        <a id="nav-training" onclick="showSection('training-view')"><i class="fa-solid fa-graduation-cap"></i> ICT Training</a>
-        <a id="nav-game" onclick="showSection('game-view')"><i class="fa-solid fa-gamepad"></i> Game Center</a>
-        
-        <a href="pages/admin.html" class="admin-block-section admin-only-tab" id="adminUsersLink"><i class="fa-solid fa-users-gear"></i> Manage Users</a>
-        <a href="pages/admin.html" class="admin-block-section admin-only-tab" id="adminServicesLink"><i class="fa-solid fa-gears"></i> Core Settings</a>
-        
-        <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-      </div>
-    </div>
-
-    <div class="dashboard-main">
-
-      <div class="topbar">
-        <h1 id="panelTitle">Customer Dashboard</h1>
-        <div class="profile-box">
-          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Hambak" alt="profile">
-          <div>
-            <h4 id="userName">Loading Name Parameters...</h4>
-            <small id="userRole" style="text-transform: uppercase; font-weight: bold; color: var(--primary-blue);">Customer</small>
-          </div>
-        </div>
-      </div>
-
-      <div id="home-view" class="app-view active-view">
-        <div class="wallet-card">
-          <h3>Available Wallet Balance</h3>
-          <div class="wallet-balance">₦0.00</div>
-          <div class="wallet-actions">
-            <button class="deposit-btn" onclick="showSection('wallet-view')">Deposit Cash</button>
-          </div>
-        </div>
-
-        <div id="adminAnalyticsSection" class="admin-block-section">
-          <div class="stats-grid">
-            <div class="stat-card"><i class="fa-solid fa-cart-shopping"></i><h2>150</h2><p>Total Server Orders</p></div>
-            <div class="stat-card"><i class="fa-solid fa-money-bill-wave"></i><h2>₦450K</h2><p>Ecosystem Revenue</p></div>
-            <div class="stat-card"><i class="fa-solid fa-users"></i><h2>85</h2><p>Active Clients</p></div>
-            <div class="stat-card"><i class="fa-solid fa-chart-column"></i><h2>92%</h2><p>Growth Scale</p></div>
-          </div>
-          <div class="chart-grid">
-            <div class="chart-card"><h3>Revenue Graph</h3><canvas id="revenueChart"></canvas></div>
-            <div class="chart-card"><h3>Deployment Metrics</h3><canvas id="serviceChart"></canvas></div>
-          </div>
-        </div>
-
-        <div class="table-box">
-          <h2>Recent Universal System Logs</h2>
-          <table>
-            <thead><tr><th>Service Category</th><th>Amount</th><th>Status</th><th>Date Logged</th></tr></thead>
-            <tbody id="universalLogsTableBody">
-              <tr><td colspan="4">Synchronizing system logs...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div id="wallet-view" class="app-view">
-        <div class="module-card">
-          <h2>My Hambak Wallet Balance Manager</h2>
-          <div class="wallet-balance" style="color: var(--deep-navy);">₦0.00</div>
-          <p style="color: #64748b; margin-bottom: 20px;">Add funds securely via automated payment processing channels to execute technical services instantly.</p>
-          
-          <div style="background: linear-gradient(135deg, var(--deep-navy), #112240); padding: 25px; border-radius: 15px; margin-bottom: 25px; border-left: 5px solid var(--brand-gold);">
-            <h3 style="color: white; margin-bottom: 10px;"><i class="fa-solid fa-credit-card" style="color: var(--brand-gold);"></i> Automated Online Funding</h3>
-            <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 15px;">Enter your target amount to initialize the secure Paystack checkout portal system.</p>
-            <div class="funding-form-wrapper">
-              <input type="number" id="funding-amount-input" min="100" placeholder="Enter Amount (e.g. 2500)" required>
-              <button class="deposit-btn" id="fund-wallet-btn" style="padding: 14px 28px; border-radius: 10px; font-weight: bold; cursor: pointer;">Initialize Checkout</button>
-            </div>
-          </div>
-
-          <div style="background: #f8fafc; padding: 20px; border-radius: 12px; color: var(--deep-navy); border: 1px solid #cbd5e1;">
-            <strong>Manual Bank Deposit Backup Node:</strong><br>
-            Wema Bank Account Number: <span style="font-weight: 800; color: var(--primary-blue);">9928174621</span><br>
-            Account Reference Name: <span style="font-weight: 800;">HAMBAK TECH - Payments Matrix</span>
-          </div>
-        </div>
-      </div>
-
-      <div id="orders-view" class="app-view">
-        <div class="module-card">
-          <h2>Ecosystem Services Order Logs</h2>
-          <table>
-            <thead><tr><th>Order ID Reference</th><th>Item System Description</th><th>Price Metric</th><th>Status Grid</th></tr></thead>
-            <tbody id="ordersLogTable">
-              <tr><td colspan="4">Querying account order indexes...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div id="nin-view" class="app-view">
-        <div class="module-card">
-          <h2>NIN Validation & Custom Modifications Form</h2>
-          <p>Deploy identity updates directly to corporate data review servers securely.</p>
-          <form class="order-form-grid" id="ninServiceForm">
-            <div class="form-group">
-              <label>Select Identity Modification Category</label>
-              <select id="nin-category"><option>NIN Slip Re-Print</option><option>Date of Birth Correction</option><option>Name/Phone Alignment Fix</option></select>
-            </div>
-            <div class="form-group"><label>Existing 11-Digit NIN Number</label><input type="text" id="nin-number" maxlength="11" required placeholder="Enter NIN matrix number"></div>
-            <div class="form-group"><label>Target Data Correction Context Description</label><textarea id="nin-context" placeholder="State clear change variables needed" required></textarea></div>
-            <button type="submit" class="submit-action-btn" id="nin-submit-btn">Deploy Request Verification</button>
-          </form>
-        </div>
-      </div>
-
-      <div id="print-view" class="app-view">
-        <div class="module-card">
-          <h2>Premium Graphic Print Scheduling Node</h2>
-          <form class="order-form-grid" id="printJobForm">
-            <div class="form-group">
-              <label>Target Print Item Type</label>
-              <select id="print-item-type"><option>Business Stationery Brand Assets</option><option>Corporate Identification Cards</option><option>Flyer Handouts / Custom Banners</option></select>
-            </div>
-            <div class="form-group"><label>Target Copy Print Quantities</label><input type="number" id="print-quantity" value="1" min="1" required></div>
-            <div class="form-group"><label>Upload Document/Design Layout Drive Link</label><input type="url" id="print-drive-url" placeholder="Paste structural image URL link asset" required></div>
-            <button type="submit" class="submit-action-btn" id="print-submit-btn">Initialize Printing Job</button>
-          </form>
-        </div>
-      </div>
-
-      <div id="training-view" class="app-view">
-        <div class="module-card">
-          <h2>Advanced Engineering Bootcamps Portal</h2>
-          <div class="stats-grid" style="margin-top: 20px;">
-            <div class="stat-card" style="border-top: 4px solid var(--accent-pink);">
-              <h3>Web Software Design Array</h3>
-              <p style="margin-top: 10px;">Mastering Full-stack backend structures with Javascript, Node.js development, and permanent MongoDB configurations.</p>
-            </div>
-            <div class="stat-card" style="border-top: 4px solid var(--brand-gold);">
-              <h3>Automated Office Matrices</h3>
-              <p style="margin-top: 10px;">Designing complex inventory management models and digital automation architectures with Excel sheets.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="game-view" class="app-view">
-        <div class="module-card">
-          <h2>PanCafe Automated Game Server Client Node</h2>
-          <p style="margin-bottom: 20px;">Track timing access credits across Hambak cyber workspace terminals directly.</p>
-          <div style="background: var(--deep-navy); color: white; padding: 25px; border-radius: 15px;">
-            <h4>Active Machine Terminal Token: <span style="color: var(--brand-gold);" id="machineTokenRef">HBK-GAME-ACTIVE</span></h4>
-            <p style="font-size: 0.9rem; color: #cbd5e1; margin-top: 10px;">Status: Operational handshake confirmation received from core server router console.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="notifications" style="margin-top: 30px;">
-        <h2>Live System Notifications Area</h2>
-        <div class="notice">Welcome to your updated premium workspace dashboard panel safely.</div>
-        <div class="notice">VTU automated electronic service connections are live and active.</div>
-      </div>
-
-    </div>
-  </div>
-
-  <script>
-    const ctxRevenue = document.getElementById("revenueChart");
-    const ctxService = document.getElementById("serviceChart");
-    if (ctxRevenue && ctxService) {
-      new Chart(ctxRevenue, {
-        type: "line",
-        data: {
-          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-          datasets: [{ label: "Gross Revenue Index", data: [12000, 19000, 30000, 25000, 42000, 50000], borderColor: "#0d47a1", borderWidth: 3, tension: 0.4, fill: false }]
-        }
-      });
-      new Chart(ctxService, {
-        type: "doughnut",
-        data: {
-          labels: ["NIN", "Printing", "Training", "VTU"],
-          datasets: [{ data: [25, 20, 35, 20], backgroundColor: ["#0d47a1", "#f5b942", "#ff4081", "#081120"], borderWidth: 2 }]
-        }
-      });
-    }
-  </script>
-
-  <script>
-    function showSection(sectionId) {
-      document.querySelectorAll('.app-view').forEach(view => { view.classList.remove('active-view'); });
-      document.querySelectorAll('.sidebar-links a').forEach(link => { link.classList.remove('active'); });
-      
-      const targetView = document.getElementById(sectionId);
-      if(targetView) targetView.classList.add('active-view');
-      
-      const componentId = sectionId.split('-')[0];
-      const targetNavLink = document.getElementById(`nav-${componentId}`);
-      if(targetNavLink) targetNavLink.classList.add('active');
-    }
-  </script>
-
-  <script>
-    const token = localStorage.getItem("hambak_token");
-    const LIVE_API_URL = "https://hambak-tech-services.onrender.com/api";
-
-    if (!token) { window.location.href = "login.html"; }
-
-    const getHeaders = () => ({
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    });
-
-    // Main Engine Loader
-    async function loadUserDashboardEngine() {
-      try {
-        const response = await fetch(`${LIVE_API_URL}/auth/me`, { method: "GET", headers: getHeaders() });
-        const data = await response.json();
-
-        if (response.ok && data) {
-          const activeUser = data.user ? data.user : data;
-          if (!activeUser.role) { throw new Error("Format misalignment."); }
-
-          document.getElementById("userName").innerHTML = activeUser.name || "Hambak Customer";
-          document.getElementById("userRole").innerHTML = activeUser.role;
-          
-          const walletVal = activeUser.wallet !== undefined ? activeUser.wallet : 0;
-          document.querySelectorAll(".wallet-balance").forEach(block => {
-            block.innerHTML = `₦${Number(walletVal).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-          });
-
-          localStorage.setItem("hambak_user", JSON.stringify(activeUser));
-
-          if (activeUser.role === "admin") {
-            document.getElementById("panelTitle").innerHTML = "Root Admin Terminal Control";
-            document.querySelectorAll(".admin-block-section").forEach(section => { section.style.display = "block"; });
-          } else {
-            document.getElementById("panelTitle").innerHTML = "Customer Account Dashboard";
-            document.querySelectorAll(".admin-block-section").forEach(section => { section.style.display = "none"; });
-          }
-          
-          // Execute Sub-log Queries
-          loadLocalTransactions();
-          loadServiceOrderLogs();
-
-        } else {
-          localStorage.clear();
-          window.location.href = "login.html";
-        }
-      } catch (error) {
-        console.error("Graceful recovery mode launched:", error);
-        const localCachedUser = localStorage.getItem("hambak_user");
-        if (localCachedUser) {
-          const user = JSON.parse(localCachedUser);
-          document.getElementById("userName").innerHTML = user.name;
-          document.getElementById("userRole").innerHTML = user.role;
-          if (user.role === "admin") {
-            document.querySelectorAll(".admin-block-section").forEach(s => s.style.display = "block");
-          }
-        } else {
-          localStorage.clear();
-          window.location.href = "login.html";
-        }
-      }
-    }
-
-    // Load Wallet History Logs
-    async function loadLocalTransactions() {
-      try {
-        const res = await fetch(`${LIVE_API_URL}/transactions/my`, { headers: getHeaders() });
-        const data = await res.json();
-        const tbody = document.getElementById("universalLogsTableBody");
-        
-        if (data.success && data.transactions && data.transactions.length > 0) {
-          tbody.innerHTML = "";
-          data.transactions.slice(0, 5).forEach(tx => {
-            const color = tx.status === 'successful' ? '#25d366' : (tx.status === 'pending' ? '#f5b942' : '#ff4081');
-            tbody.innerHTML += `<tr>
-              <td><span style="text-transform:uppercase; font-weight:bold;">${tx.type}</span> - ${tx.description || 'Service Execution'}</td>
-              <td>₦${Number(tx.amount).toLocaleString(undefined, {minimumFractionDigits:2})}</td>
-              <td style="color:${color}; font-weight:bold; text-transform:capitalize;">${tx.status}</td>
-              <td>${new Date(tx.createdAt).toLocaleDateString()}</td>
-            </tr>`;
-          });
-        } else {
-          tbody.innerHTML = `<tr><td colspan="4">No payment transaction profiles logged onto this account profile.</td></tr>`;
-        }
-      } catch (err) {
-        document.getElementById("universalLogsTableBody").innerHTML = `<tr><td colspan="4">Offline caching active. Awaiting network routing link.</td></tr>`;
-      }
-    }
-
-    // Load Customized Operations Order Tracking Logs
-    async function loadServiceOrderLogs() {
-      try {
-        const res = await fetch(`${LIVE_API_URL}/orders/my`, { headers: getHeaders() }); // Assuming orders profile endpoint
-        const data = await res.json();
-        const orderTable = document.getElementById("ordersLogTable");
-
-        if (data.success && data.orders && data.orders.length > 0) {
-          orderTable.innerHTML = "";
-          data.orders.forEach(order => {
-            orderTable.innerHTML += `<tr>
-              <td><code>${order._id.substring(14)}</code></td>
-              <td><strong>${order.category}</strong> - ${order.details || 'Task specifications stashed.'}</td>
-              <td>₦${Number(order.cost || 0).toLocaleString(undefined, {minimumFractionDigits:2})}</td>
-              <td><span style="font-weight:bold; text-transform:uppercase;">${order.status}</span></td>
-            </tr>`;
-          });
-        } else {
-          orderTable.innerHTML = `<tr><td colspan="4">No dynamic customized service orders logged onto this account.</td></tr>`;
-        }
-      } catch (err) {
-        console.log("Order history bypassing complete.");
-      }
-    }
-
-    // Integrated Paystack Interactive Trigger Node
-    document.getElementById("fund-wallet-btn").addEventListener("click", async (e) => {
-      e.preventDefault();
-      const amountInput = document.getElementById("funding-amount-input").value.trim();
-      const parsedAmount = parseFloat(amountInput);
-
-      if (!parsedAmount || parsedAmount < 100 || isNaN(parsedAmount)) {
-        alert("Please specify a valid transaction target (Minimum entry threshold: ₦100).");
-        return;
-      }
-
-      try {
-        document.getElementById("fund-wallet-btn").innerText = "Staging Node Securely...";
-        document.getElementById("fund-wallet-btn").disabled = true;
-
-        const response = await fetch(`${LIVE_API_URL}/transactions/paystack/initialize`, {
-          method: "POST",
-          headers: getHeaders(),
-          body: JSON.stringify({ amount: parsedAmount })
-        });
-        const result = await response.json();
-        
-        if (result.success && result.authorization_url) {
-          localStorage.setItem("pending_funding_reference", result.reference);
-          window.location.href = result.authorization_url;
-        } else {
-          alert("Payment gateway communication breakdown: " + result.message);
-          document.getElementById("fund-wallet-btn").innerText = "Initialize Checkout";
-          document.getElementById("fund-wallet-btn").disabled = false;
-        }
-      } catch (error) {
-        alert("Critical runtime communication failure with transaction infrastructure.");
-        document.getElementById("fund-wallet-btn").innerText = "Initialize Checkout";
-        document.getElementById("fund-wallet-btn").disabled = false;
-      }
-    });
-
-    // Verification Router Callback Verification Checks
-    async function checkPaymentCallback() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const reference = urlParams.get("reference");
-
-      if (reference) {
-        try {
-          window.history.replaceState({}, document.title, window.location.pathname);
-          alert("Verifying allocation verification hashes with Paystack Engine...");
-          
-          const response = await fetch(`${LIVE_API_URL}/transactions/paystack/verify`, {
-            method: "POST",
-            headers: getHeaders(),
-            body: JSON.stringify({ reference })
-          });
-          const verification = await response.json();
-          
-          if (verification.success) {
-            alert(`Success! Ledger modification acknowledged: ${verification.message}`);
-            loadUserDashboardEngine();
-          } else {
-            alert("Sovereign payment confirmation failed: " + verification.message);
-          }
-        } catch (error) {
-          console.error("Verification processing error context:", error);
-        }
-      }
-    }
-
-    // Dynamic Server Form Dispatches: NIN Identity Form
-    document.getElementById("ninServiceForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const category = document.getElementById("nin-category").value;
-      const idNumber = document.getElementById("nin-number").value.trim();
-      const description = document.getElementById("nin-context").value.trim();
-      const btn = document.getElementById("nin-submit-btn");
-
-      try {
-        btn.innerText = "Staging Form Vector..."; btn.disabled = true;
-        const res = await fetch(`${LIVE_API_URL}/services/nin`, {
-          method: "POST",
-          headers: getHeaders(),
-          body: JSON.stringify({ category, idNumber, description })
-        });
-        const output = await res.json();
-        if(res.ok) {
-          alert("Identity workflow task securely injected into Mongo cluster line.");
-          document.getElementById("ninServiceForm").reset();
-          loadServiceOrderLogs();
-        } else { alert(`Operation rejected: ${output.message}`); }
-      } catch (err) { alert("Server network connection decoupled."); }
-      finally { btn.innerText = "Deploy Request Verification"; btn.disabled = false; }
-    });
-
-    // Dynamic Server Form Dispatches: High-Fidelity Printing Form
-    document.getElementById("printJobForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const itemType = document.getElementById("print-item-type").value;
-      const quantity = document.getElementById("print-quantity").value;
-      const layoutUrl = document.getElementById("print-drive-url").value.trim();
-      const btn = document.getElementById("print-submit-btn");
-
-      try {
-        btn.innerText = "Allocating Layout Memory..."; btn.disabled = true;
-        const res = await fetch(`${LIVE_API_URL}/services/printing`, {
-          method: "POST",
-          headers: getHeaders(),
-          body: JSON.stringify({ itemType, quantity, layoutUrl })
-        });
-        const output = await res.json();
-        if(res.ok) {
-          alert("Layout allocation map built. Print node job scheduled.");
-          document.getElementById("printJobForm").reset();
-          loadServiceOrderLogs();
-        } else { alert(`Operation rejected: ${output.message}`); }
-      } catch (err) { alert("Server network connection decoupled."); }
-      finally { btn.innerText = "Initialize Printing Job"; btn.disabled = false; }
-    });
-
-    // Core Initialization Triggers
-    loadUserDashboardEngine();
-    checkPaymentCallback();
-
-    document.getElementById("logoutBtn").addEventListener("click", (e) => {
-      e.preventDefault();
-      localStorage.clear();
-      window.location.href = "login.html";
-    });
-  </script>
-  
-    <script src="../js/apiMatrix.js"></script>
-
-  <script src="../js/app.js"></script>
 
   <script src="../js/dashboard.js"></script>
 </body>
-  
 </html>
