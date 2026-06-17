@@ -554,9 +554,26 @@
 
       <div id="orders-view" class="app-view">
         <div class="module-card">
-          <h2>Ecosystem Services Order Logs</h2>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+            <h2>Ecosystem Services Order Logs</h2>
+            <div>
+              <button onclick="printHistoryLog()" style="background: #0d47a1; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-right: 10px;">
+                <i class="fa-solid fa-print"></i> Print Records Area
+              </button>
+              <button onclick="alert('Exporting manifest spreadsheet data...')" style="background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                <i class="fa-solid fa-file-excel"></i> Export Report
+              </button>
+            </div>
+          </div>
           <table>
-            <thead><tr><th>Order ID Reference</th><th>Item System Description</th><th>Price Metric</th><th>Status Grid</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Order ID Reference</th>
+                <th>Item System Description</th>
+                <th>Price Metric</th>
+                <th>Status Grid</th>
+              </tr>
+            </thead>
             <tbody id="ordersLogTable">
               <tr><td colspan="4">Querying account order indexes...</td></tr>
             </tbody>
@@ -575,4 +592,5 @@
 
   <script src="../js/dashboard.js"></script>
 </body>
+
 </html>
