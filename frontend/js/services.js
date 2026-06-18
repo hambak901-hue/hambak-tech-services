@@ -1,25 +1,23 @@
 /* ==========================================================
-   HAMBAK TECH SERVICES: SERVICES RENDER ENGINE
+   HAMBAK TECH SERVICES: SERVICES RENDER ENGINE (FIXED ARRAY SYNC)
    ========================================================== */
 async function loadServices() {
   try {
     const servicesContainer = document.getElementById("servicesContainer");
-    if (!servicesContainer) return; // Guard clause against multi-page execution crashes
-
-    // Use unified matrix architecture layer instead of detached string endpoints
-    if (!window.API || !window.API.services) {
-      console.error("API Engine Missing: Ensure apiMatrix.js loads before services.js");
-      return;
-    }
+    if (!servicesContainer) return; 
 
     servicesContainer.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px;"><p>Syncing catalog matrix...</p></div>`;
 
-    const data = await window.API.services.getAll();
+    // Fetch directly from your backend route natively to handle the raw array
+    const response = await fetch("https://hambak-tech-services.onrender.com/api/services");
+    if (!response.ok) throw new Error("Network response was not ok");
+    
+    const servicesArray = await response.json();
     servicesContainer.innerHTML = "";
 
-    if (data && data.services && data.services.length > 0) {
-      data.services.forEach(service => {
-        // Determine icons dynamically based on category
+    // FIXED: Directly check if response is a valid array
+    if (Array.isArray(servicesArray) && servicesArray.length > 0) {
+      servicesArray.forEach(service => {
         let iconClass = "fas fa-laptop-code";
         const category = service.category ? service.category.toLowerCase() : "";
         
@@ -34,7 +32,7 @@ async function loadServices() {
             <div class="service-icon-wrapper"><i class="${iconClass}"></i></div>
             <h3>${service.name}</h3>
             <p>${service.description || 'Premium digital utility processing service.'}</p>
-            <span class="price-tag">₦${service.price.toLocaleString()}</span>
+            <span class="price-tag">₦${Number(service.price).toLocaleString()}</span>
             <button class="service-btn" onclick="initiateOrderPlacement('${service._id}', ${service.price})">
               Order Service
             </button>
@@ -57,11 +55,8 @@ async function loadServices() {
   }
 }
 
-// Window attachment point to tie into order modal forms later
 window.initiateOrderPlacement = (serviceId, price) => {
   console.log(`Routing interaction flow to service ID: ${serviceId} with price ₦${price}`);
-  // Custom hook point for triggering checkout system overlays
 };
 
-// Fire on document context generation
 document.addEventListener("DOMContentLoaded", loadServices);
