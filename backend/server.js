@@ -82,6 +82,20 @@ app.get("/", (req, res) => {
 });
 
 /* =========================
+API DYNAMIC REFRESH HEADERS MIDDLEWARE
+========================= */
+// Fixed: Placed above all endpoints so it naturally handles cache-busting for all API data syncs
+app.use("/api", (req, res, next) => {
+  res.set({
+    "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+    "Pragma": "no-cache",
+    "Expires": "0",
+    "Surrogate-Control": "no-store"
+  });
+  next();
+});
+
+/* =========================
 API ROUTES
 ========================= */
 app.use("/api/auth", authRoutes);
