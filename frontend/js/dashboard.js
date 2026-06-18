@@ -694,35 +694,42 @@
         }
       }
 
-      async function fetchUserProfile() {
-        try {
-          const res = await fetch("/api/auth/me", { headers: { "Authorization": `Bearer ${token}` } });
-          if (!res.ok) return;
-          const data = await res.json();
-          userProfile = data.user || data;
-          
-          if (userProfile) {
-            if (userNameEl) userNameEl.textContent = userProfile.name || "Hambak User";
-            if (userRoleEl) userRoleEl.textContent = userProfile.role || "Customer";
-            
-            // Handle Admin Block visibility dynamically
-            if (userProfile.role && userProfile.role.toLowerCase() === 'admin') {
-              document.getElementById("adminAnalyticsSection")?.classList.add("show-admin-flex");
-              document.getElementById("adminUsersLink")?.classList.add("show-admin-nav");
-              document.getElementById("adminServicesLink")?.classList.add("show-admin-nav");
-              initializeCharts(); // Load analytical modules for administrators
-            }
-
-            const rawWallet = userProfile.wallet !== undefined ? userProfile.wallet : 0;
-            walletBalanceElements.forEach(el => {
-              el.textContent = `₦${Number(rawWallet).toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
-            });
-          }
-        } catch (err) {
-          console.error("Profile parsing issue:", err);
-        }
+     async function fetchUserProfile() {
+  try {
+    // FIXED: Changed endpoint from "/api/auth/me" to "/api/users/profile" to match your server logs
+    const res = await fetch("/api/users/profile", { 
+      headers: { "Authorization": `Bearer ${token}` } 
+    });
+    
+    if (!res.ok) {
+      console.error("Profile fetch failed with status:", res.status);
+      return;
+    }
+    
+    const data = await res.json();
+    userProfile = data.user || data;
+    
+    if (userProfile) {
+      if (userNameEl) userNameEl.textContent = userProfile.name || "Hambak User";
+      if (userRoleEl) userRoleEl.textContent = userProfile.role || "Customer";
+      
+      // Dynamic Admin Section Toggle
+      if (userProfile.role && userProfile.role.toLowerCase() === 'admin') {
+        document.getElementById("adminAnalyticsSection")?.classList.add("show-admin-flex");
+        document.getElementById("adminUsersLink")?.classList.add("show-admin-nav");
+        document.getElementById("adminServicesLink")?.classList.add("show-admin-nav");
+        if (typeof initializeCharts === "function") initializeCharts(); 
       }
 
+      const rawWallet = userProfile.wallet !== undefined ? userProfile.wallet : 0;
+      walletBalanceElements.forEach(el => {
+        el.textContent = `₦${Number(rawWallet).toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+      });
+    }
+  } catch (err) {
+    console.error("Profile parsing issue:", err);
+  }
+}
       async function fetchServices() {
         try {
           const res = await fetch("/api/services", { headers: { "Authorization": `Bearer ${token}` } });
