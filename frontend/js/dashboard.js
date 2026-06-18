@@ -99,11 +99,12 @@ async function fetchUserProfile() {
       if (userNameEl) userNameEl.textContent = userProfile.name || "Hambak User";
       if (userRoleEl) userRoleEl.textContent = userProfile.role || "Customer";
 
-      // Toggle Admin Visibility blocks based on security profile roles
+      // Add inside your fetchUserProfile() function right where role validation succeeds:
       if (userProfile.role && userProfile.role.toLowerCase() === 'admin') {
-        document.querySelectorAll(".admin-block-section").forEach(el => {
-          el.style.display = "block";
-        });
+          document.querySelectorAll(".admin-block-section, .admin-only-tab").forEach(el => {
+              el.style.setProperty('display', 'block', 'important');
+          });
+      }
         // Run analytical reporting calculations safely if Chart.js structure exists
         if (typeof initializeCharts === "function") {
           initializeCharts();
