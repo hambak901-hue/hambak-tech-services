@@ -940,3 +940,8 @@ a{
   margin-bottom: 30px;
   font-size: 1.1rem;
 }
+
+/* Security Protection Block Layer */
+.admin-block-section, .admin-only-tab {
+    display: none !important;
+}
