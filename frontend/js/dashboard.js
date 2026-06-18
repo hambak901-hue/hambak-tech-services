@@ -1,886 +1,399 @@
-<!DOCTYPE html>
-<html lang="en">
+/**
+ * HAMBAK TECH & SERVICES - Advanced Dashboard Management Script
+ * Ecosystem Operations Infrastructure
+ */
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Advanced Dashboard | HAMBAK TECH & SERVICES</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://js.paystack.co/v1/inline.js"></script>
-  <style>
-    :root {
-      --primary-blue: #0d47a1;
-      --deep-navy: #081120;
-      --brand-gold: #f5b942;
-      --soft-peach: #ffdfd3;
-      --accent-pink: #ff4081;
+// --- Global Application State Nodes ---
+let userProfile = null;
+let allServicesArray = [];
+const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+
+// --- DOM Selector Elements ---
+const userNameEl = document.getElementById("userName");
+const userRoleEl = document.getElementById("userRole");
+const panelTitleEl = document.getElementById("panelTitle");
+const walletBalanceElements = document.querySelectorAll(".wallet-balance");
+const universalLogsTableBody = document.getElementById("universalLogsTableBody");
+const ordersLogTable = document.getElementById("ordersLogTable");
+const serviceSelectElements = document.querySelectorAll(".service-select-node");
+
+// --- Initialization Hook ---
+document.addEventListener("DOMContentLoaded", () => {
+  // Guard clause: Redirect to login if user session token is completely missing
+  if (!token) {
+    alert("Operational Session Expired or Invalid. Redirecting to Authentication Node...");
+    window.location.href = "login.html";
+    return;
+  }
+
+  // Initialize Core Services & Profiles
+  fetchUserProfile();
+  fetchSystemServices();
+  setupOrderForms();
+  setupWalletFunding();
+  setupLogout();
+});
+
+// --- View Switching Navigation Logic ---
+function showSection(viewId) {
+  // Hide all view blocks safely
+  document.querySelectorAll(".app-view").forEach(view => {
+    view.classList.remove("active-view");
+  });
+
+  // Display targeted view panel
+  const targetView = document.getElementById(viewId);
+  if (targetView) {
+    targetView.classList.add("active-view");
+  }
+
+  // Update Left Sidebar Links active indicators
+  document.querySelectorAll(".sidebar-links a").forEach(link => {
+    link.classList.remove("active");
+  });
+
+  // Map view strings back to their triggers for UI consistency
+  const activeNavLink = document.querySelector(`[onclick="showSection('${viewId}')"]`);
+  if (activeNavLink) activeNavLink.classList.add("active");
+
+  // Dynamically change header panel title string contextual maps
+  const titleMap = {
+    'home-view': 'Ecosystem Operations Hub',
+    'wallet-view': 'Financial Asset & Wallet Manager',
+    'ict-view': 'ICT Core & Technology Solutions Node',
+    'business-view': 'Corporate Business & High-Volume Print Center',
+    'financial-view': 'Agency Banking & Micro-Transactions Matrix',
+    'marketing-view': 'Campaign Deployment & Advisory Matrix',
+    'game-view': 'PanCafe Automated Client Node Console',
+    'orders-view': 'Ecosystem Operational Order Logs'
+  };
+  if (panelTitleEl && titleMap[viewId]) {
+    panelTitleEl.textContent = titleMap[viewId];
+  }
+}
+
+// --- Fetch User Profile Data from Core API Endpoint ---
+async function fetchUserProfile() {
+  try {
+    // FIXED: Points precisely to your real backend route endpoint verified in the logs
+    const res = await fetch("/api/users/profile", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (res.status === 401 || res.status === 403) {
+      handleSessionTimeout();
+      return;
     }
 
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f5f7fb;
-    }
-
-    .dashboard {
-      display: flex;
-      min-height: 100vh;
-    }
-
-    .sidebar {
-      width: 280px;
-      background: var(--deep-navy);
-      color: white;
-      padding: 30px 20px;
-      position: fixed;
-      height: 100%;
-      overflow-y: auto;
-      z-index: 100;
-      box-sizing: border-box;
-    }
-
-    .sidebar-logo {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .sidebar-logo h2 {
-      color: var(--brand-gold);
-      margin: 0 0 5px 0;
-      font-weight: 800;
-      letter-spacing: 1px;
-    }
-
-    .sidebar-logo p {
-      margin: 0;
-      font-size: 0.75rem;
-      letter-spacing: 2px;
-      font-weight: bold;
-      color: #cbd5e1;
-    }
-
-    .sidebar-links {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .sidebar-links a {
-      text-decoration: none;
-      color: #cbd5e1;
-      padding: 12px 15px;
-      border-radius: 12px;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .sidebar-links a:hover,
-    .sidebar-links a.active {
-      background: var(--primary-blue);
-      color: white;
-    }
-
-    .admin-only-tab {
-      border-left: 4px solid var(--brand-gold);
-      background: rgba(245, 185, 66, 0.05);
-    }
-
-    .dashboard-main {
-      margin-left: 280px;
-      flex: 1;
-      padding: 40px;
-      box-sizing: border-box;
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 40px;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .topbar h1 {
-      color: #0f172a;
-      font-weight: 800;
-      margin: 0;
-    }
-
-    .profile-box {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      background: white;
-      padding: 10px 25px;
-      border-radius: 50px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-      border: 1px solid var(--soft-peach);
-    }
-
-    .profile-box img {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      border: 2px solid var(--brand-gold);
-      object-fit: cover;
-    }
-
-    .profile-box h4 {
-      margin: 0;
-      color: var(--deep-navy);
-    }
-
-    .app-view {
-      display: none;
-    }
-
-    .app-view.active-view {
-      display: block;
-    }
-
-    .module-card {
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-      margin-bottom: 30px;
-    }
-
-    .module-card h2 {
-      color: var(--deep-navy);
-      margin-top: 0;
-      margin-bottom: 20px;
-      font-weight: 800;
-      border-left: 5px solid var(--primary-blue);
-      padding-left: 15px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 25px;
-      margin-bottom: 40px;
-    }
-
-    .stat-card {
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    }
-
-    .stat-card i {
-      font-size: 2rem;
-      margin-bottom: 15px;
-      color: var(--primary-blue);
-    }
-
-    .stat-card h2 {
-      font-size: 2.2rem;
-      margin: 0 0 5px 0;
-      color: #0f172a;
-      font-weight: 800;
-    }
-
-    .stat-card p {
-      margin: 0;
-      color: #64748b;
-      font-weight: 600;
-    }
-
-    .wallet-card {
-      background: linear-gradient(135deg, var(--primary-blue), #1565c0);
-      color: white;
-      padding: 35px;
-      border-radius: 25px;
-      margin-bottom: 40px;
-      box-shadow: 0 15px 40px rgba(13, 71, 161, 0.25);
-      border-bottom: 4px solid var(--brand-gold);
-    }
-
-    .wallet-card h3 {
-      margin-top: 0;
-      font-weight: 600;
-    }
-
-    .wallet-balance {
-      font-size: 3rem;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-
-    .wallet-actions button {
-      padding: 14px 30px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      margin-right: 10px;
-      transition: background 0.2s ease;
-    }
-
-    .deposit-btn { 
-      background: var(--brand-gold); 
-      color: var(--deep-navy); 
-    }
-    
-    .deposit-btn:hover {
-      background: #e0aa34;
-    }
-
-    .funding-form-wrapper {
-      background: rgba(255, 255, 255, 0.08);
-      padding: 20px;
-      border-radius: 15px;
-      margin-top: 15px;
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .funding-form-wrapper input {
-      padding: 14px;
-      border: 2px solid transparent;
-      border-radius: 10px;
-      outline: none;
-      font-size: 1.1rem;
-      font-weight: bold;
-      flex: 1;
-      min-width: 200px;
-    }
-    
-    .funding-form-wrapper input:focus {
-      border-color: var(--brand-gold);
-    }
-
-    .order-form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .form-group label {
-      font-weight: 700;
-      color: #475569;
-    }
-
-    .form-group input, .form-group select, .form-group textarea {
-      padding: 14px;
-      border: 1px solid #cbd5e1;
-      border-radius: 10px;
-      outline: none;
-      font-size: 1rem;
-      font-family: inherit;
-    }
-
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-      border-color: var(--primary-blue);
-    }
-
-    .submit-action-btn {
-      background: var(--primary-blue);
-      color: white;
-      padding: 14px 28px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 700;
-      margin-top: 20px;
-      transition: background 0.2s ease;
-    }
-
-    .submit-action-btn:hover { background: #1565c0; }
-
-    .chart-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 30px;
-      margin-bottom: 40px;
-    }
-
-    .chart-card {
-      background: white;
-      padding: 25px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    }
-
-    .table-box {
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    }
-
-    .table-box h2 {
-      margin-top: 0;
-      margin-bottom: 20px;
-      color: var(--deep-navy);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
-
-    table th, table td {
-      padding: 16px;
-      text-align: left;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    table th {
-      background: var(--primary-blue);
-      color: white;
-      font-weight: 600;
-    }
-
-    .notice {
-      padding: 15px;
-      border-left: 5px solid var(--accent-pink);
-      background: #f8fafc;
-      margin-bottom: 15px;
-      border-radius: 10px;
-      font-weight: 500;
-      color: #334155;
-    }
-
-    .admin-block-section { display: none; }
-    
-    /* Utility class to display flex layout elements securely for admins */
-    .admin-block-section.show-admin-flex {
-      display: grid !important;
-    }
-    
-    .admin-only-tab { display: none; }
-    .admin-only-tab.show-admin-nav { display: flex !important; }
-
-    @media(max-width:900px) {
-      .dashboard { flex-direction: column; }
-      .sidebar { position: relative; width: 100%; height: auto; padding: 20px; }
-      .dashboard-main { margin-left: 0; padding: 20px; }
-    }
-  </style>
-</head>
-
-<body>
-
-  <div class="dashboard">
-
-    <div class="sidebar">
-      <div class="sidebar-logo">
-        <h2>HAMBAK</h2>
-        <p>TECH & SERVICES</p>
-      </div>
-
-      <div class="sidebar-links">
-        <a id="nav-home" class="active" onclick="showSection('home-view')"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
-        <a id="nav-wallet" onclick="showSection('wallet-view')"><i class="fa-solid fa-wallet"></i> Wallet Manager</a>
-        <a id="nav-ict" onclick="showSection('ict-view')"><i class="fa-solid fa-laptop-code"></i> ICT & Tech Core</a>
-        <a id="nav-business" onclick="showSection('business-view')"><i class="fa-solid fa-briefcase"></i> Business & Print</a>
-        <a id="nav-financial" onclick="showSection('financial-view')"><i class="fa-solid fa-scale-balanced"></i> Agency Banking</a>
-        <a id="nav-marketing" onclick="showSection('marketing-view')"><i class="fa-solid fa-bullhorn"></i> Marketing Node</a>
-        <a id="nav-game" onclick="showSection('game-view')"><i class="fa-solid fa-gamepad"></i> Game Terminal</a>
-        <a id="nav-orders" onclick="showSection('orders-view')"><i class="fa-solid fa-list-check"></i> System History</a>
-        
-        <a href="admin.html" class="admin-only-tab" id="adminUsersLink"><i class="fa-solid fa-users-gear"></i> Manage Users</a>
-        <a href="admin.html" class="admin-only-tab" id="adminServicesLink"><i class="fa-solid fa-gears"></i> Core Settings</a>
-        
-        <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-      </div>
-    </div>
-
-    <div class="dashboard-main">
-
-      <div class="topbar">
-        <h1 id="panelTitle">Ecosystem Operations Hub</h1>
-        <div class="profile-box">
-          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Hambak" alt="profile">
-          <div>
-            <h4 id="userName">Loading Name Parameters...</h4>
-            <small id="userRole" style="text-transform: uppercase; font-weight: bold; color: var(--primary-blue);">Customer</small>
-          </div>
-        </div>
-      </div>
-
-      <div id="home-view" class="app-view active-view">
-        <div class="wallet-card">
-          <h3>Available Wallet Balance</h3>
-          <div class="wallet-balance">₦0.00</div>
-          <div class="wallet-actions">
-            <button class="deposit-btn" onclick="showSection('wallet-view')">Deposit Cash</button>
-          </div>
-        </div>
-
-        <div id="adminAnalyticsSection" class="admin-block-section">
-          <div class="stats-grid">
-            <div class="stat-card"><i class="fa-solid fa-cart-shopping"></i><h2>150</h2><p>Total Server Orders</p></div>
-            <div class="stat-card"><i class="fa-solid fa-money-bill-wave"></i><h2>₦450K</h2><p>Ecosystem Revenue</p></div>
-            <div class="stat-card"><i class="fa-solid fa-users"></i><h2>85</h2><p>Active Clients</p></div>
-            <div class="stat-card"><i class="fa-solid fa-chart-column"></i><h2>92%</h2><p>Growth Scale</p></div>
-          </div>
-          <div class="chart-grid">
-            <div class="chart-card"><h3>Revenue Graph</h3><canvas id="revenueChart"></canvas></div>
-            <div class="chart-card"><h3>Deployment Metrics</h3><canvas id="serviceChart"></canvas></div>
-          </div>
-        </div>
-
-        <div class="table-box">
-          <h2>Recent Universal System Logs</h2>
-          <table>
-            <thead><tr><th>Service Category</th><th>Amount</th><th>Status</th><th>Date Logged</th></tr></thead>
-            <tbody id="universalLogsTableBody">
-              <tr><td colspan="4">Synchronizing system logs...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div id="wallet-view" class="app-view">
-        <div class="module-card">
-          <h2>My Hambak Wallet Balance Manager</h2>
-          <div class="wallet-balance" style="color: var(--deep-navy);">₦0.00</div>
-          <p style="color: #64748b; margin-bottom: 20px;">Add funds securely via automated payment processing channels to execute technical services instantly.</p>
-          
-          <div style="background: linear-gradient(135deg, var(--deep-navy), #112240); padding: 25px; border-radius: 15px; margin-bottom: 25px; border-left: 5px solid var(--brand-gold);">
-            <h3 style="color: white; margin-bottom: 10px;"><i class="fa-solid fa-credit-card" style="color: var(--brand-gold);"></i> Automated Online Funding</h3>
-            <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 15px;">Enter your target amount to initialize the secure Paystack checkout portal system.</p>
-            <div class="funding-form-wrapper">
-              <input type="number" id="funding-amount-input" min="100" placeholder="Enter Amount (e.g. 2500)" required>
-              <button class="deposit-btn" id="fund-wallet-btn" style="padding: 14px 28px; border-radius: 10px; font-weight: bold; cursor: pointer;">Initialize Checkout</button>
-            </div>
-          </div>
-
-          <div style="background: #f8fafc; padding: 20px; border-radius: 12px; color: var(--deep-navy); border: 1px solid #cbd5e1;">
-            <strong>Manual Bank Deposit Backup Node:</strong><br>
-            Wema Bank Account Number: <span style="font-weight: 800; color: var(--primary-blue);">9928174621</span><br>
-            Account Reference Name: <span style="font-weight: 800;">HAMBAK TECH - Payments Matrix</span>
-          </div>
-        </div>
-      </div>
-
-      <div id="ict-view" class="app-view">
-        <div class="module-card">
-          <h2>ICT & Technology Deployment Panel</h2>
-          <p>Request Web Development, Specialized App Systems, Graphic Design Arrays, or Professional Bootcamp training.</p>
-          <form class="order-form-grid order-placement-form" id="ictOrderForm" enctype="multipart/form-data">
-            <div class="form-group">
-              <label>Select Core Technology Service</label>
-              <select id="ict-service-select" class="service-select-node" required>
-                <option value="">-- Synchronizing Live Services... --</option>
-              </select>
-            </div>
-            <div class="form-group"><label>Target Run Quantities</label><input type="number" class="order-qty" value="1" min="1" required></div>
-            <div class="form-group"><label>Asset Blueprint / Reference Files</label><input type="file" class="order-file-upload"></div>
-            <div class="form-group"><label>Execution Specifications & Brief</label><textarea class="order-context" placeholder="Detail custom coding layers, branding preferences, or syllabus targets..." required></textarea></div>
-            <button type="submit" class="submit-action-btn">Submit Operational Request</button>
-          </form>
-        </div>
-      </div>
-
-      <div id="business-view" class="app-view">
-        <div class="module-card">
-          <h2>Business Support & Documentation Infrastructure</h2>
-          <p>Execute CAC Registrations, Document Formatting, CV Writing, or High-Volume Premium Print commands.</p>
-          <form class="order-form-grid order-placement-form" id="businessOrderForm" enctype="multipart/form-data">
-            <div class="form-group">
-              <label>Select Structural Business Service</label>
-              <select id="business-service-select" class="service-select-node" required>
-                <option value="">-- Synchronizing Live Services... --</option>
-              </select>
-            </div>
-            <div class="form-group"><label>Target Copy Counts</label><input type="number" class="order-qty" value="1" min="1" required></div>
-            <div class="form-group"><label>Document Upload Asset Node</label><input type="file" class="order-file-upload"></div>
-            <div class="form-group"><label>Modification Context Details</label><textarea class="order-context" placeholder="Enter clear alignment data, business options, or special styling notes..." required></textarea></div>
-            <button type="submit" class="submit-action-btn">Submit Operational Request</button>
-          </form>
-        </div>
-      </div>
-
-      <div id="financial-view" class="app-view">
-        <div class="module-card">
-          <h2>Financial & Agency Banking Portal</h2>
-          <p>Initialize VTU Subscriptions, Bulk Airtime Operations, Utility Settlements, or Ajo Cooperative Savings updates.</p>
-          <form class="order-form-grid order-placement-form" id="financialOrderForm">
-            <div class="form-group">
-              <label>Select Financial Channel Service</label>
-              <select id="financial-service-select" class="service-select-node" required>
-                <option value="">-- Synchronizing Live Services... --</option>
-              </select>
-            </div>
-            <div class="form-group"><label>Processing Multiplier / Quantity</label><input type="number" class="order-qty" value="1" min="1" required></div>
-            <div class="form-group"><label>Target Account / Meter / Phone Number Matrix</label><textarea class="order-context" placeholder="Supply critical recipient references carefully..." required></textarea></div>
-            <button type="submit" class="submit-action-btn">Submit Operational Request</button>
-          </form>
-        </div>
-      </div>
-
-      <div id="marketing-view" class="app-view">
-        <div class="module-card">
-          <h2>Marketing Execution & Consultancy Matrix</h2>
-          <p>Deploy social media management parameters, digital target advertisements, or request corporate consulting runs.</p>
-          <form class="order-form-grid order-placement-form" id="marketingOrderForm">
-            <div class="form-group">
-              <label>Select Campaigns / Advisory Sector</label>
-              <select id="marketing-service-select" class="service-select-node" required>
-                <option value="">-- Synchronizing Live Services... --</option>
-              </select>
-            </div>
-            <div class="form-group"><label>Duration (Weeks/Units)</label><input type="number" class="order-qty" value="1" min="1" required></div>
-            <div class="form-group"><label>Strategic Context Definitions</label><textarea class="order-context" placeholder="Outline specific growth business models, ad spend allocations, or operational problems..." required></textarea></div>
-            <button type="submit" class="submit-action-btn">Submit Operational Request</button>
-          </form>
-        </div>
-      </div>
-
-      <div id="game-view" class="app-view">
-        <div class="module-card">
-          <h2>PanCafe Automated Game Server Client Node</h2>
-          <p style="margin-bottom: 20px;">Track timing access credits across Hambak cyber workspace terminals directly.</p>
-          <div style="background: var(--deep-navy); color: white; padding: 25px; border-radius: 15px;">
-            <h4>Active Machine Terminal Token: <span style="color: var(--brand-gold);" id="machineTokenRef">HBK-GAME-ACTIVE</span></h4>
-            <p style="font-size: 0.9rem; color: #cbd5e1; margin-top: 10px;">Status: Operational handshake confirmation received from core server router console.</p>
-          </div>
-        </div>
-      </div>
-
-      <div id="orders-view" class="app-view">
-        <div class="module-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin: 0;">Ecosystem Services Order Logs</h2>
-            <button onclick="window.printHistoryLog()" class="submit-action-btn" style="margin-top:0; padding: 10px 20px;"><i class="fa-solid fa-print"></i> Print Log Audit</button>
-          </div>
-          <table>
-            <thead><tr><th>Order ID Reference</th><th>Item System Description</th><th>Price Metric</th><th>Status Grid</th></tr></thead>
-            <tbody id="ordersLogTable">
-              <tr><td colspan="4">Querying account order indexes...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="notifications" style="margin-top: 30px;">
-        <h2>Live System Notifications Area</h2>
-        <div class="notice">Welcome to your updated premium workspace dashboard panel safely.</div>
-        <div class="notice">VTU automated electronic service connections are live and active.</div>
-      </div>
-
-    </div>
-  </div>
-
-  <script>
-    /* ==========================================================================
-       HAMBAK TECH & SERVICES - PRODUCTION ENGINE WITH SERVICE CATALOG FALLBACK
-       ========================================================================== */
-
-    // Global navigation core utility - switches view blocks instantly
-    window.showSection = function(sectionId) {
-      console.log("Switching view module target to:", sectionId);
-      
-      // Hide all view panels
-      document.querySelectorAll('.app-view').forEach(view => {
-        view.classList.remove('active-view');
-        view.style.display = 'none';
-      });
-      
-      // Display target selected view panel
-      const targetView = document.getElementById(sectionId);
-      if (targetView) {
-        targetView.classList.add('active-view');
-        targetView.style.display = 'block';
+    if (!res.ok) throw new Error(`Server returned error code: ${res.status}`);
+
+    const data = await res.json();
+    userProfile = data.user || data; // Accounts for backend payload structure variations
+
+    if (userProfile) {
+      // Dynamic rendering of Profile Details
+      if (userNameEl) userNameEl.textContent = userProfile.name || "Hambak User";
+      if (userRoleEl) userRoleEl.textContent = userProfile.role || "Customer";
+
+      // Toggle Admin Visibility blocks based on security profile roles
+      if (userProfile.role && userProfile.role.toLowerCase() === 'admin') {
+        document.querySelectorAll(".admin-block-section").forEach(el => {
+          el.style.display = "block";
+        });
+        // Run analytical reporting calculations safely if Chart.js structure exists
+        if (typeof initializeCharts === "function") {
+          initializeCharts();
+        }
       }
 
-      // Handle active navigation tab highlights
-      document.querySelectorAll('.sidebar-links a').forEach(link => {
-        link.classList.remove('active');
+      // Sync and render Account Wallet Balance values across UI cards
+      const balance = userProfile.wallet !== undefined ? userProfile.wallet : 0;
+      walletBalanceElements.forEach(el => {
+        el.textContent = `₦${Number(balance).toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
       });
-      
-      // Normalize navigation matching
-      const tabName = sectionId.split('-')[0];
-      const activeLink = document.getElementById("nav-" + tabName);
-      if (activeLink) activeLink.classList.add('active');
-    };
 
-    // Global Printing Utility for History Log
-    window.printHistoryLog = function() {
-      const printContent = document.getElementById("orders-view").innerHTML;
-      const originalContent = document.body.innerHTML;
-      document.body.innerHTML = `
-        <div style="padding:40px; font-family:sans-serif;">
-          <h2 style="text-align:center; color:#0d47a1;">HAMBAK TECH & SERVICES</h2>
-          <p style="text-align:center;">Ecosystem Operational History Log Audit</p>
-          <hr/>
-          ${printContent}
-        </div>
-      `;
-      window.print();
-      document.body.innerHTML = originalContent;
-      window.location.reload(); // Re-bind lifecycle handlers cleanly
-    };
+      // Synchronize internal service transactions lists
+      renderSystemLogs(userProfile.logs || []);
+      renderOrderHistory(userProfile.orders || []);
+    }
+  } catch (err) {
+    console.error("Critical Profile Parsing Node Failure:", err);
+  }
+}
 
-    document.addEventListener("DOMContentLoaded", () => {
-      let userProfile = null;
-      let availableServices = [];
+// --- Fetch Active Business Services & Categories ---
+async function fetchSystemServices() {
+  try {
+    const res = await fetch("/api/services", {
+      method: "GET",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
 
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.warn("Unauthorized: No token found. Redirecting to login.");
-        window.location.href = window.location.pathname.includes("/pages/") ? "login.html" : "pages/login.html";
+    if (!res.ok) throw new Error("Could not pull live ecosystem service data nodes.");
+
+    allServicesArray = await res.json();
+    populateCategorySelectors();
+  } catch (err) {
+    console.error("Services Synchronization Error:", err);
+    serviceSelectElements.forEach(select => {
+      select.innerHTML = `<option value="">-- Failed to sync services. Refresh page --</option>`;
+    });
+  }
+}
+
+// --- Populate UI Dropdowns Depending on Section Types ---
+function populateCategorySelectors() {
+  const categoriesMap = {
+    "ict-service-select": "ict",
+    "business-service-select": "business",
+    "financial-service-select": "financial",
+    "marketing-service-select": "marketing"
+  };
+
+  Object.entries(categoriesMap).forEach(([elementId, categoryName]) => {
+    const selectEl = document.getElementById(elementId);
+    if (!selectEl) return;
+
+    // Filter relevant services matching category parameters
+    const componentServices = allServicesArray.filter(s => s.category?.toLowerCase() === categoryName);
+
+    if (componentServices.length === 0) {
+      selectEl.innerHTML = `<option value="">No Active Services Configured</option>`;
+      return;
+    }
+
+    selectEl.innerHTML = `<option value="">-- Select Valid Option --</option>`;
+    componentServices.forEach(service => {
+      const option = document.createElement("option");
+      option.value = service._id || service.id;
+      option.textContent = `${service.name} (₦${Number(service.price).toLocaleString()})`;
+      selectEl.appendChild(option);
+    });
+  });
+}
+
+// --- Setup Order Form Submission Event Listeners ---
+function setupOrderForms() {
+  document.querySelectorAll(".order-placement-form").forEach(form => {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const serviceSelect = form.querySelector(".service-select-node");
+      const qtyInput = form.querySelector(".order-qty");
+      const contextInput = form.querySelector(".order-context");
+      const fileInput = form.querySelector(".order-file-upload");
+
+      if (!serviceSelect || !serviceSelect.value) {
+        alert("Please map a valid operational target service before proceeding.");
         return;
       }
 
-      // DOM Selectors
-      const userNameEl = document.getElementById("userName");
-      const userRoleEl = document.getElementById("userRole");
-      const logoutBtn = document.getElementById("logoutBtn");
-      const walletBalanceElements = document.querySelectorAll(".wallet-balance");
-
-      const ictServiceSelect = document.getElementById("ict-service-select");
-      const businessServiceSelect = document.getElementById("business-service-select");
-      const financialServiceSelect = document.getElementById("financial-service-select");
-      const marketingServiceSelect = document.getElementById("marketing-service-select");
-
-      const universalLogsTableBody = document.getElementById("universalLogsTableBody");
-      const ordersLogTable = document.getElementById("ordersLogTable");
-      const fundWalletBtn = document.getElementById("fund-wallet-btn");
-      const fundingAmountInput = document.getElementById("funding-amount-input");
-
-      // Hardcoded Real Service Catalogue Fallback Array (Protects against database undefined/null payloads)
-      const fallbackCatalog = [
-        // ICT Core
-        { _id: "ict_1", name: "Basic/Advanced Computer Training", price: 15000, category: "ict" },
-        { _id: "ict_2", name: "Website Development (Business/E-comm)", price: 45000, category: "ict" },
-        { _id: "ict_3", name: "Graphic Branding (Logo/Flyer/Banner)", price: 5000, category: "ict" },
-        { _id: "ict_4", name: "Software Management Systems Setup", price: 60000, category: "ict" },
-        { _id: "ict_5", name: "Computer Repair & Maintenance", price: 3500, category: "ict" },
-        // Business Support
-        { _id: "bus_1", name: "CAC Business Name Registration", price: 10000, category: "print" },
-        { _id: "bus_2", name: "Premium Printing & Photocopying", price: 100, category: "print" },
-        { _id: "bus_3", name: "Document Typing & Layout Formatting", price: 500, category: "print" },
-        { _id: "bus_4", name: "Professional CV & Cover Letter Design", price: 2500, category: "print" },
-        // Agency Banking
-        { _id: "fin_1", name: "VTU Airtime & Data Subscription Bundle", price: 500, category: "vtu" },
-        { _id: "fin_2", name: "POS Cash Deposit/Withdrawal Run", price: 200, category: "pos" },
-        { _id: "fin_3", name: "Ajo Esusu Cooperative Contribution", price: 1000, category: "vtu" },
-        // Marketing
-        { _id: "mkt_1", name: "Social Media Campaign Ad Setup", price: 15000, category: "market" },
-        { _id: "mkt_2", name: "Corporate ICT Advisory Consultation", price: 20000, category: "market" }
-      ];
-
-      async function initializeDashboard() {
-        try {
-          await fetchUserProfile();
-          await fetchServices();
-          await fetchOrderHistory();
-          setupEventListeners();
-        } catch (error) {
-          console.error("Dashboard failed initialization lifecycle:", error);
-        }
-      }
-
-     async function fetchUserProfile() {
-  try {
-    // FIXED: Changed endpoint from "/api/auth/me" to "/api/users/profile" to match your server logs
-    const res = await fetch("/api/users/profile", { 
-      headers: { "Authorization": `Bearer ${token}` } 
-    });
-    
-    if (!res.ok) {
-      console.error("Profile fetch failed with status:", res.status);
-      return;
-    }
-    
-    const data = await res.json();
-    userProfile = data.user || data;
-    
-    if (userProfile) {
-      if (userNameEl) userNameEl.textContent = userProfile.name || "Hambak User";
-      if (userRoleEl) userRoleEl.textContent = userProfile.role || "Customer";
+      // Build Form Data Payload (to handle text data along with custom files/blueprints)
+      const formData = new FormData();
+      formData.append("serviceId", serviceSelect.value);
+      formData.append("quantity", qtyInput ? qtyInput.value : 1);
+      formData.append("context", contextInput ? contextInput.value : "");
       
-      // Dynamic Admin Section Toggle
-      if (userProfile.role && userProfile.role.toLowerCase() === 'admin') {
-        document.getElementById("adminAnalyticsSection")?.classList.add("show-admin-flex");
-        document.getElementById("adminUsersLink")?.classList.add("show-admin-nav");
-        document.getElementById("adminServicesLink")?.classList.add("show-admin-nav");
-        if (typeof initializeCharts === "function") initializeCharts(); 
+      if (fileInput && fileInput.files[0]) {
+        formData.append("blueprint", fileInput.files[0]);
       }
 
-      const rawWallet = userProfile.wallet !== undefined ? userProfile.wallet : 0;
-      walletBalanceElements.forEach(el => {
-        el.textContent = `₦${Number(rawWallet).toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
-      });
-    }
-  } catch (err) {
-    console.error("Profile parsing issue:", err);
-  }
-}
-      async function fetchServices() {
-        try {
-          const res = await fetch("/api/services", { headers: { "Authorization": `Bearer ${token}` } });
-          let dataItems = [];
-          if (res.ok) {
-            const data = await res.json();
-            dataItems = data.services || data || [];
-          }
-
-          if (!dataItems || dataItems.length === 0 || !dataItems[0].name) {
-            console.warn("Database records returned empty or corrupt. Injecting production catalog assets safely.");
-            availableServices = fallbackCatalog;
-          } else {
-            availableServices = dataItems;
-          }
-
-          // Clear Dropdowns cleanly
-          if (ictServiceSelect) ictServiceSelect.innerHTML = '<option value="" disabled selected>-- Select ICT or Tech Service --</option>';
-          if (businessServiceSelect) businessServiceSelect.innerHTML = '<option value="" disabled selected>-- Select Business Support or Print Service --</option>';
-          if (financialServiceSelect) financialServiceSelect.innerHTML = '<option value="" disabled selected>-- Select Financial or VTU Service --</option>';
-          if (marketingServiceSelect) marketingServiceSelect.innerHTML = '<option value="" disabled selected>-- Select Marketing or Consultation --</option>';
-
-          availableServices.forEach(service => {
-            const sId = service._id || service.id;
-            const sName = service.name || "Unnamed System Service";
-            const sPrice = service.price !== undefined ? Number(service.price) : 0;
-            const categoryKey = service.category ? service.category.toLowerCase() : "";
-
-            const optionHTML = `<option value="${sId}">${sName} — ₦${sPrice.toLocaleString()}</option>`;
-
-            if ((categoryKey.includes("ict") || categoryKey.includes("web") || categoryKey.includes("graph")) && ictServiceSelect) {
-              ictServiceSelect.insertAdjacentHTML("beforeend", optionHTML);
-            } else if ((categoryKey.includes("print") || categoryKey.includes("reg") || categoryKey.includes("doc") || categoryKey.includes("bus")) && businessServiceSelect) {
-              businessServiceSelect.insertAdjacentHTML("beforeend", optionHTML);
-            } else if ((categoryKey.includes("vtu") || categoryKey.includes("pos") || categoryKey.includes("pay") || categoryKey.includes("fin")) && financialServiceSelect) {
-              financialServiceSelect.insertAdjacentHTML("beforeend", optionHTML);
-            } else if ((categoryKey.includes("market") || categoryKey.includes("consult")) && marketingServiceSelect) {
-              marketingServiceSelect.insertAdjacentHTML("beforeend", optionHTML);
-            }
-          });
-        } catch (err) {
-          console.error("Fault parsing catalog streams. Deploying full catalog emergency redundancy:", err);
-        }
-      }
-
-      async function fetchOrderHistory() {
-        try {
-          const res = await fetch("/api/orders/my", { headers: { "Authorization": `Bearer ${token}` } });
-          let orders = [];
-          if (res.ok) {
-            const data = await res.json();
-            orders = data.orders || data || [];
-          }
-
-          if (ordersLogTable) {
-            if (!Array.isArray(orders) || orders.length === 0) {
-              ordersLogTable.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">No operational orders found in system registry.</td></tr>`;
-              if (universalLogsTableBody) {
-                universalLogsTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">No system parameters initialized yet.</td></tr>`;
-              }
-            } else {
-              ordersLogTable.innerHTML = "";
-              if (universalLogsTableBody) universalLogsTableBody.innerHTML = "";
-              
-              orders.forEach(order => {
-                const sName = order.service ? order.service.name : "Custom Operational Task";
-                const cat = order.service && order.service.category ? order.service.category.toUpperCase() : "CORE CORE";
-                const dateLogged = order.createdAt ? new Date(order.createdAt).toLocaleDateString() : new Date().toLocaleDateString();
-                
-                const row = `
-                  <tr>
-                    <td><strong>#${order._id ? order._id.substring(order._id.length - 8).toUpperCase() : 'RUN-TX'}</strong></td>
-                    <td>${sName}</td>
-                    <td>₦${Number(order.amount || 0).toLocaleString()}</td>
-                    <td><span style="background:#10b981; color:white; padding:4px 10px; border-radius:12px; font-size:0.8rem;">Processed</span></td>
-                  </tr>
-                `;
-                ordersLogTable.insertAdjacentHTML("beforeend", row);
-
-                // Populate Home dashboard universal logs array simultaneously
-                if (universalLogsTableBody) {
-                  const dashboardRow = `
-                    <tr>
-                      <td><strong>${cat}</strong></td>
-                      <td>₦${Number(order.amount || 0).toLocaleString()}</td>
-                      <td><span style="color:#10b981; font-weight:bold;"><i class="fa-solid fa-circle-check"></i> Success</span></td>
-                      <td>${dateLogged}</td>
-                    </tr>
-                  `;
-                  universalLogsTableBody.insertAdjacentHTML("beforeend", dashboardRow);
-                }
-              });
-            }
-          }
-        } catch (err) {
-          console.error("Order index compiler exception:", err);
-        }
-      }
-
-      function setupEventListeners() {
-        document.querySelectorAll(".order-placement-form").forEach(form => {
-          form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const selectNode = form.querySelector("select.service-select-node");
-            if (!selectNode || !selectNode.value) return alert("Validation Error: Please select an active operational catalog item.");
-            alert(`Success: Payload configured for dispatch ID: ${selectNode.value}`);
-            form.reset();
-          });
+      try {
+        const res = await fetch("/api/orders/create", {
+          method: "POST",
+          headers: { "Authorization": `Bearer ${token}` },
+          body: formData // Set body without manually tracking Content-Type boundaries
         });
 
-        if (fundWalletBtn) {
-          fundWalletBtn.addEventListener("click", () => {
-            const amt = fundingAmountInput?.value;
-            if (!amt || amt < 100) return alert("Validation entry rule: Minimum limit is ₦100.");
-            alert(`Initializing payment gateway sequence for ₦${amt}...`);
-          });
-        }
+        const outcome = await res.json();
+        if (!res.ok) throw new Error(outcome.message || "Request routing deployment failure.");
 
-        if (logoutBtn) {
-          logoutBtn.addEventListener("click", () => {
-            localStorage.clear();
-            window.location.reload();
-          });
-        }
+        alert("Operational Task Blueprint Dispatched Successfully!");
+        form.reset();
+        fetchUserProfile(); // Automatically reload profile metrics & updated balances
+        showSection("orders-view");
+      } catch (err) {
+        alert(`Order Routing Aborted: ${err.message}`);
       }
-
-      function initializeCharts() {
-        const ctxRev = document.getElementById('revenueChart');
-        const ctxServ = document.getElementById('serviceChart');
-        
-        if (ctxRev && ctxServ) {
-          new Chart(ctxRev, {
-            type: 'line',
-            data: {
-              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-              datasets: [{ label: 'Gross Yield', data: [120000, 190000, 300000, 250000, 400000, 450000], borderColor: '#0d47a1', tension: 0.3 }]
-            }
-          });
-
-          new Chart(ctxServ, {
-            type: 'doughnut',
-            data: {
-              labels: ['ICT Hub', 'Agency Banking', 'Print Business', 'Marketing Solutions'],
-              datasets: [{ data: [40, 30, 20, 10], backgroundColor: ['#0d47a1', '#f5b942', '#ff4081', '#081120'] }]
-            }
-          });
-        }
-      }
-
-      initializeDashboard();
     });
-  </script>
-</body>
-</html>
+  });
+}
+
+// --- Paystack Online Wallet Funding Handler ---
+function setupWalletFunding() {
+  const fundBtn = document.getElementById("fund-wallet-btn");
+  const amountInput = document.getElementById("funding-amount-input");
+
+  if (!fundBtn || !amountInput) return;
+
+  fundBtn.addEventListener("click", () => {
+    const fundingAmount = parseFloat(amountInput.value);
+
+    if (isNaN(fundingAmount) || fundingAmount < 100) {
+      alert("Please designate a minimum initialization entry value of ₦100.");
+      return;
+    }
+
+    if (!userProfile || !userProfile.email) {
+      alert("Critical security context missing. Re-authenticating network parameters...");
+      return;
+    }
+
+    // Call inline Paystack processing architecture 
+    const handler = PaystackPop.setup({
+      key: "pk_live_your_actual_public_key_string_here", // Swap to test/live Paystack keys safely
+      email: userProfile.email,
+      amount: Math.round(fundingAmount * 100), // Convert transaction values to Kobo parameters
+      currency: "NGN",
+      callback: async (response) => {
+        // Run payment reference verification checks with server nodes backend
+        try {
+          const verification = await fetch("/api/wallet/verify-funding", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ reference: response.reference, amount: fundingAmount })
+          });
+
+          const verifiedData = await verification.json();
+          if (verification.ok) {
+            alert(`Wallet safely loaded with ₦${fundingAmount.toLocaleString()}!`);
+            amountInput.value = "";
+            fetchUserProfile(); // Reload current view cards context balance nodes
+          } else {
+            alert(`Ledger Verification Error: ${verifiedData.message}`);
+          }
+        } catch (err) {
+          console.error("Verification processing matrix failure:", err);
+        }
+      },
+      onClose: () => {
+        alert("Ecosystem billing payment channel pipeline was closed down manually.");
+      }
+    });
+
+    handler.openIframe();
+  });
+}
+
+// --- Render Systems Activity Logs Tables ---
+function renderSystemLogs(logs) {
+  if (!universalLogsTableBody) return;
+
+  if (!logs || logs.length === 0) {
+    universalLogsTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No universal activity log records currently recorded.</td></tr>`;
+    return;
+  }
+
+  universalLogsTableBody.innerHTML = "";
+  logs.slice(0, 10).forEach(log => { // Bound display index range caps to 10 lines
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td><strong>${log.category || 'System Layer'}</strong></td>
+      <td>₦${Number(log.amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+      <td><span style="color: ${log.status === 'success' ? '#10b981' : '#f43f5e'}; font-weight: bold;">${log.status?.toUpperCase() || 'COMPLETED'}</span></td>
+      <td>${log.createdAt ? new Date(log.createdAt).toLocaleDateString() : 'Recent'}</td>
+    `;
+    universalLogsTableBody.appendChild(row);
+  });
+}
+
+// --- Render Manifest Services Orders Log Block ---
+function renderOrderHistory(orders) {
+  if (!ordersLogTable) return;
+
+  if (!orders || orders.length === 0) {
+    ordersLogTable.innerHTML = `<tr><td colspan="4" style="text-align:center;">No processing files or orders traced on account indices.</td></tr>`;
+    return;
+  }
+
+  ordersLogTable.innerHTML = "";
+  orders.forEach(order => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td><code>${order.orderRef || order._id || 'HBK-TRX'}</code></td>
+      <td>${order.serviceName || 'Custom Operational Resource'}</td>
+      <td>₦${Number(order.totalPrice || order.price || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+      <td><span style="padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; background: ${getStatusBg(order.status)}; color: white;">${order.status || 'Pending'}</span></td>
+    `;
+    ordersLogTable.appendChild(row);
+  });
+}
+
+// --- Helper Switch Component to style Status Grid Tags ---
+function getStatusBg(status) {
+  switch (status?.toLowerCase()) {
+    case 'completed': return '#10b981';
+    case 'processing': return '#3b82f6';
+    case 'failed': return '#ef4444';
+    default: return '#f5b942'; // Pending / Default
+  }
+}
+
+// --- Setup Browser Window Printing for System Records ---
+function printHistoryLog() {
+  window.print();
+}
+
+// --- Destroy Storage Token Arrays and Sign Out ---
+function setupLogout() {
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (!logoutBtn) return;
+
+  logoutBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (confirm("Confirm security closure. Do you want to sign out from operational hub?")) {
+      handleSessionTimeout();
+    }
+  });
+}
+
+function handleSessionTimeout() {
+  localStorage.removeItem("token");
+  sessionStorage.removeItem("token");
+  window.location.href = "login.html";
+}
+
+// --- Chart.js Graphical Analytics Dash Engine (Admin Dashboard Only) ---
+function initializeCharts() {
+  const revCtx = document.getElementById('revenueChart');
+  const servCtx = document.getElementById('serviceChart');
+
+  if (!revCtx || !servCtx) return;
+
+  // Initialize Revenue Trend Graph Mapping
+  new Chart(revCtx, {
+    type: 'line',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+      datasets: [{
+        label: 'Gross Volume Tracking',
+        data: [120000, 190000, 270000, 320000, 410000, 450000],
+        borderColor: '#0d47a1',
+        backgroundColor: 'rgba(13, 71, 161, 0.1)',
+        tension: 0.4,
+        fill: true
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+
+  // Initialize Core Categories Metrics Breakdown Mapping
+  new Chart(servCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['ICT Development', 'Business & Printing', 'Agency Banking', 'Marketing Run'],
+      datasets: [{
+        data: [40, 30, 20, 10],
+        backgroundColor: ['#0d47a1', '#f5b942', '#081120', '#ff4081']
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+}
