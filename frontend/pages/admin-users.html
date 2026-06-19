@@ -54,7 +54,7 @@
             transition: 0.3s;
         }
 
-        .menu a:hover {
+        .menu a:hover, .menu a.active {
             background: #0d47a1;
             color: white;
         }
@@ -153,7 +153,7 @@
         <div class="menu">
             <a href="admin.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
             <a href="admin-services.html"><i class="fa-solid fa-briefcase"></i> Services</a>
-            <a href="admin-users.html"><i class="fa-solid fa-users"></i> Users</a>
+            <a href="admin-users.html" class="active"><i class="fa-solid fa-users"></i> Users</a>
             <a href="admin-orders.html"><i class="fa-solid fa-cart-shopping"></i> Orders</a>
             <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
         </div>
@@ -186,15 +186,18 @@
     /* =========================
     AUTH & PRIVILEGE GUARD
     ========================= */
-    const user = JSON.parse(localStorage.getItem("hambak_user"));
-    const token = localStorage.getItem("hambak_token");
+    // Synchronized local token references to avoid authentication mismatches
+    const user = JSON.parse(localStorage.getItem("user")) || JSON.parse(localStorage.getItem("hambak_user"));
+    const token = localStorage.getItem("token") || localStorage.getItem("hambak_token");
 
-    if (!user || !token || user.role !== "admin") {
+    if (!user || !token || user.role.toLowerCase() !== "admin") {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
         localStorage.removeItem("hambak_user");
         localStorage.removeItem("hambak_token");
         window.location.href = "login.html";
     } else {
-        document.getElementById("adminName").innerHTML = user.name;
+        document.getElementById("adminName").innerHTML = user.name || "Administrator";
     }
 
     /* =========================
@@ -207,16 +210,19 @@
     ========================= */
     async function loadUsers() {
         try {
-            const response = await fetch(`${API_URL}/users`, {
+            // FIXED: Pointed to the validated administrative API endpoint path
+            const response = await fetch(`${API_URL}/admin/users`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
             });
+            
             const data = await response.json();
             const table = document.getElementById("usersTable");
             table.innerHTML = "";
 
-            const usersList = data.users || [];
+            // Accounts for both direct arrays or nested payload object schemas
+            const usersList = Array.isArray(data) ? data : (data.users || []);
 
             if (usersList.length === 0) {
                 table.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:#cbd5e1;">No accounts registered yet</td></tr>`;
@@ -224,26 +230,26 @@
             }
 
             usersList.forEach(u => {
-                // Determine layout badge by matching string structure to backend role value
-                const isAdminRole = u.role === "admin";
+                const isAdminRole = u.role && u.role.toLowerCase() === "admin";
                 
                 table.innerHTML += `
                 <tr>
-                    <td>${u.name}</td>
-                    <td>${u.email}</td>
+                    <td>${u.name || 'N/A'}</td>
+                    <td>${u.email || 'N/A'}</td>
                     <td>
                         <span class="role-badge ${isAdminRole ? 'admin-role' : 'user-role'}">
                             ${u.role || 'user'}
                         </span>
                     </td>
                     <td>
-                        <button class="delete-btn" onclick="deleteUser('${u._id}')">Delete</button>
+                        <button class="delete-btn" onclick="deleteUser('${u._id || u.id}')">Delete</button>
                     </td>
                 </tr>
                 `;
             });
         } catch (error) {
             console.error("Error streaming user matrix:", error);
+            document.getElementById("usersTable").innerHTML = `<tr><td colspan="4" style="text-align:center; color:#dc2626;">Failed to connect to administrative server layer.</td></tr>`;
         }
     }
 
@@ -255,7 +261,8 @@
         if (!confirmDelete) return;
 
         try {
-            const response = await fetch(`${API_URL}/users/${id}`, {
+            // FIXED: Pointed endpoint context explicitly to the admin data routing path
+            const response = await fetch(`${API_URL}/admin/users/${id}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -263,7 +270,7 @@
             });
             const data = await response.json();
             
-            if (data.success) {
+            if (response.ok || data.success) {
                 alert("User profile deleted successfully");
                 loadUsers();
             } else {
@@ -280,12 +287,14 @@
     ========================= */
     document.getElementById("logoutBtn").addEventListener("click", (e) => {
         e.preventDefault();
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
         localStorage.removeItem("hambak_user");
         localStorage.removeItem("hambak_token");
         window.location.href = "login.html";
     });
 
-    // Run layout pull
+    // Run layout pull on startup instance
     loadUsers();
 </script>
 
