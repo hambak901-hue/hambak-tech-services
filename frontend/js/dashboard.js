@@ -32,7 +32,18 @@ document.addEventListener("DOMContentLoaded", () => {
   setupOrderForms();
   setupWalletFunding();
   setupLogout();
+  setupAdminNavigationLinks();
 });
+
+// --- Dynamic Admin Navigation Bindings ---
+function setupAdminNavigationLinks() {
+  // Ensures admin sidebar click targets map seamlessly to their real layout paths
+  const adminUsersLink = document.getElementById("adminUsersLink");
+  const adminServicesLink = document.getElementById("adminServicesLink");
+
+  if (adminUsersLink) adminUsersLink.setAttribute("href", "admin-users.html");
+  if (adminServicesLink) adminServicesLink.setAttribute("href", "admin-services.html");
+}
 
 // --- View Switching Navigation Logic ---
 function showSection(viewId) {
@@ -75,7 +86,6 @@ function showSection(viewId) {
 // --- Fetch User Profile Data from Core API Endpoint ---
 async function fetchUserProfile() {
   try {
-    // FIXED: Points precisely to your real backend route endpoint verified in the logs
     const res = await fetch("/api/users/profile", {
       method: "GET",
       headers: {
@@ -99,16 +109,22 @@ async function fetchUserProfile() {
       if (userNameEl) userNameEl.textContent = userProfile.name || "Hambak User";
       if (userRoleEl) userRoleEl.textContent = userProfile.role || "Customer";
 
-      // Add inside your fetchUserProfile() function right where role validation succeeds:
+      // Role check validation handling
       if (userProfile.role && userProfile.role.toLowerCase() === 'admin') {
           document.querySelectorAll(".admin-block-section, .admin-only-tab").forEach(el => {
+              // Smoothly displays core administrative templates
+              el.style.setProperty('display', 'block', 'important');
+          });
+          
+          // Custom flex mapping fallback override for modern row item cards
+          document.querySelectorAll("div.admin-block-section").forEach(el => {
               el.style.setProperty('display', 'block', 'important');
           });
       }
-        // Run analytical reporting calculations safely if Chart.js structure exists
-        if (typeof initializeCharts === "function") {
-          initializeCharts();
-        }
+
+      // Run analytical reporting calculations safely if Chart.js structure exists
+      if (typeof initializeCharts === "function") {
+        initializeCharts();
       }
 
       // Sync and render Account Wallet Balance values across UI cards
@@ -171,7 +187,12 @@ function populateCategorySelectors() {
     componentServices.forEach(service => {
       const option = document.createElement("option");
       option.value = service._id || service.id;
-      option.textContent = `${service.name} (₦${Number(service.price).toLocaleString()})`;
+      
+      // FIXED: Fallbacks added here to ensure undefined/NaN variables never display again
+      const targetName = service.name || service.serviceName || "Unnamed Service Node";
+      const targetPrice = service.price !== undefined ? service.price : (service.servicePrice !== undefined ? service.servicePrice : 0);
+      
+      option.textContent = `${targetName} (₦${Number(targetPrice).toLocaleString()})`;
       selectEl.appendChild(option);
     });
   });
