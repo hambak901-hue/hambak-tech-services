@@ -8,6 +8,10 @@ let userProfile = null;
 let allServicesArray = [];
 const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
+// FIXED: Global references to keep track of active Chart instances across re-renders
+let revenueChartInstance = null;
+let serviceChartInstance = null;
+
 // --- DOM Selector Elements ---
 const userNameEl = document.getElementById("userName");
 const userRoleEl = document.getElementById("userRole");
@@ -383,31 +387,48 @@ function handleSessionTimeout() {
 }
 
 // --- Chart.js Graphical Analytics Dash Engine (Admin Dashboard Only) ---
-function initializeCharts() {
+// FIXED: This implementation safely destroys old chart matrices to prevent ongoing 304 re-render bounce bugs
+function initializeCharts(revenueData = [120000, 190000, 270000, 320000, 410000, 450000]) {
   const revCtx = document.getElementById('revenueChart');
   const servCtx = document.getElementById('serviceChart');
 
   if (!revCtx || !servCtx) return;
 
+  // Destroy previous line instance before rendering to block infinite visual loops
+  if (revenueChartInstance !== null) {
+    revenueChartInstance.destroy();
+  }
+
   // Initialize Revenue Trend Graph Mapping
-  new Chart(revCtx, {
+  revenueChartInstance = new Chart(revCtx, {
     type: 'line',
     data: {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
       datasets: [{
         label: 'Gross Volume Tracking',
-        data: [120000, 190000, 270000, 320000, 410000, 450000],
+        data: revenueData,
         borderColor: '#0d47a1',
         backgroundColor: 'rgba(13, 71, 161, 0.1)',
         tension: 0.4,
         fill: true
       }]
     },
-    options: { responsive: true, maintainAspectRatio: false }
+    options: { 
+      responsive: true, 
+      maintainAspectRatio: false,
+      animation: {
+        duration: 1000 // Runs animation exactly once per refresh instance
+      }
+    }
   });
 
+  // Destroy previous doughnut instance before drawing to prevent flickering artifacts
+  if (serviceChartInstance !== null) {
+    serviceChartInstance.destroy();
+  }
+
   // Initialize Core Categories Metrics Breakdown Mapping
-  new Chart(servCtx, {
+  serviceChartInstance = new Chart(servCtx, {
     type: 'doughnut',
     data: {
       labels: ['ICT Development', 'Business & Printing', 'Agency Banking', 'Marketing Run'],
