@@ -1,6 +1,6 @@
 /**
  * HAMBAK TECH & SERVICES - Advanced Dashboard Management Script
- * Ecosystem Operations Infrastructure
+ * Production Operations Infrastructure
  */
 
 // --- Global Application State Nodes ---
@@ -8,7 +8,6 @@ let userProfile = null;
 let allServicesArray = [];
 const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
-// FIXED: Global references to keep track of active Chart instances across re-renders
 let revenueChartInstance = null;
 let serviceChartInstance = null;
 
@@ -19,18 +18,16 @@ const panelTitleEl = document.getElementById("panelTitle");
 const walletBalanceElements = document.querySelectorAll(".wallet-balance");
 const universalLogsTableBody = document.getElementById("universalLogsTableBody");
 const ordersLogTable = document.getElementById("ordersLogTable");
-const serviceSelectElements = document.querySelectorAll(".service-select-node");
 
 // --- Initialization Hook ---
 document.addEventListener("DOMContentLoaded", () => {
-  // Guard clause: Redirect to login if user session token is completely missing
   if (!token) {
     alert("Operational Session Expired or Invalid. Redirecting to Authentication Node...");
     window.location.href = "login.html";
     return;
   }
 
-  // Initialize Core Services & Profiles
+  // Synchronize Core Services, Profiles, and Payment Handlers
   fetchUserProfile();
   fetchSystemServices();
   setupOrderForms();
@@ -39,9 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupAdminNavigationLinks();
 });
 
-// --- Dynamic Admin Navigation Bindings ---
 function setupAdminNavigationLinks() {
-  // Ensures admin sidebar click targets map seamlessly to their real layout paths
   const adminUsersLink = document.getElementById("adminUsersLink");
   const adminServicesLink = document.getElementById("adminServicesLink");
 
@@ -51,34 +46,29 @@ function setupAdminNavigationLinks() {
 
 // --- View Switching Navigation Logic ---
 function showSection(viewId) {
-  // Hide all view blocks safely
   document.querySelectorAll(".app-view").forEach(view => {
     view.classList.remove("active-view");
   });
 
-  // Display targeted view panel
   const targetView = document.getElementById(viewId);
   if (targetView) {
     targetView.classList.add("active-view");
   }
 
-  // Update Left Sidebar Links active indicators
   document.querySelectorAll(".sidebar-links a").forEach(link => {
     link.classList.remove("active");
   });
 
-  // Map view strings back to their triggers for UI consistency
   const activeNavLink = document.querySelector(`[onclick="showSection('${viewId}')"]`);
   if (activeNavLink) activeNavLink.classList.add("active");
 
-  // Dynamically change header panel title string contextual maps
   const titleMap = {
     'home-view': 'Ecosystem Operations Hub',
     'wallet-view': 'Financial Asset & Wallet Manager',
-    'ict-view': 'ICT Core & Technology Solutions Node',
+    'ict-view': 'ICT Core & Technology Solutions Panel',
     'business-view': 'Corporate Business & High-Volume Print Center',
-    'financial-view': 'Agency Banking & Micro-Transactions Matrix',
-    'marketing-view': 'Campaign Deployment & Advisory Matrix',
+    'financial-view': 'Financial & Agency Banking Portal',
+    'marketing-view': 'Campaign Deployment & Advisory Hub',
     'game-view': 'PanCafe Automated Client Node Console',
     'orders-view': 'Ecosystem Operational Order Logs'
   };
@@ -87,7 +77,7 @@ function showSection(viewId) {
   }
 }
 
-// --- Fetch User Profile Data from Core API Endpoint ---
+// --- Fetch User Profile Data & Update Dashboard Counters ---
 async function fetchUserProfile() {
   try {
     const res = await fetch("/api/users/profile", {
@@ -106,38 +96,44 @@ async function fetchUserProfile() {
     if (!res.ok) throw new Error(`Server returned error code: ${res.status}`);
 
     const data = await res.json();
-    userProfile = data.user || data; // Accounts for backend payload structure variations
+    userProfile = data.user || data;
 
     if (userProfile) {
-      // Dynamic rendering of Profile Details
-      if (userNameEl) userNameEl.textContent = userProfile.name || "Hambak User";
-      if (userRoleEl) userRoleEl.textContent = userProfile.role || "Customer";
+      // Render Profile Details dynamically across all interface nodes
+      document.querySelectorAll(".profile-user-name").forEach(el => {
+        el.textContent = userProfile.name || "Hambak User";
+      });
+      document.querySelectorAll(".profile-user-role").forEach(el => {
+        el.textContent = userProfile.role || "Customer";
+      });
 
-      // Role check validation handling
       if (userProfile.role && userProfile.role.toLowerCase() === 'admin') {
           document.querySelectorAll(".admin-block-section, .admin-only-tab").forEach(el => {
-              // Smoothly displays core administrative templates
-              el.style.setProperty('display', 'block', 'important');
-          });
-          
-          // Custom flex mapping fallback override for modern row item cards
-          document.querySelectorAll("div.admin-block-section").forEach(el => {
               el.style.setProperty('display', 'block', 'important');
           });
       }
 
-      // Run analytical reporting calculations safely if Chart.js structure exists
-      if (typeof initializeCharts === "function") {
-        initializeCharts();
-      }
+      // Sync and calculate live status counters
+      const activeOrdersCount = userProfile.orders ? userProfile.orders.length : 0;
+      const totalOrdersEl = document.getElementById("totalOrdersCounter");
+      if (totalOrdersEl) totalOrdersEl.textContent = activeOrdersCount;
 
-      // Sync and render Account Wallet Balance values across UI cards
+      // Sync Wallet Balance values across UI cards
       const balance = userProfile.wallet !== undefined ? userProfile.wallet : 0;
       walletBalanceElements.forEach(el => {
         el.textContent = `₦${Number(balance).toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
       });
 
-      // Synchronize internal service transactions lists
+      // Update Live Notification Center Elements dynamically
+      const notificationTextEl = document.getElementById("notificationTextNode");
+      if (notificationTextEl) {
+        notificationTextEl.innerHTML = `Welcome back, <strong>${userProfile.name || 'User'}</strong>! Your connection to the workspace center is encrypted and secure.`;
+      }
+
+      if (typeof initializeCharts === "function") {
+        initializeCharts();
+      }
+
       renderSystemLogs(userProfile.logs || []);
       renderOrderHistory(userProfile.orders || []);
     }
@@ -146,7 +142,7 @@ async function fetchUserProfile() {
   }
 }
 
-// --- Fetch Active Business Services & Categories ---
+// --- Fetch Active Business Services from Backend Database ---
 async function fetchSystemServices() {
   try {
     const res = await fetch("/api/services", {
@@ -160,13 +156,10 @@ async function fetchSystemServices() {
     populateCategorySelectors();
   } catch (err) {
     console.error("Services Synchronization Error:", err);
-    serviceSelectElements.forEach(select => {
-      select.innerHTML = `<option value="">-- Failed to sync services. Refresh page --</option>`;
-    });
   }
 }
 
-// --- Populate UI Dropdowns Depending on Section Types ---
+// --- Inject Active Database Services into Core Target Dropdowns ---
 function populateCategorySelectors() {
   const categoriesMap = {
     "ict-service-select": "ict",
@@ -179,11 +172,10 @@ function populateCategorySelectors() {
     const selectEl = document.getElementById(elementId);
     if (!selectEl) return;
 
-    // Filter relevant services matching category parameters
     const componentServices = allServicesArray.filter(s => s.category?.toLowerCase() === categoryName);
 
     if (componentServices.length === 0) {
-      selectEl.innerHTML = `<option value="">No Active Services Configured</option>`;
+      selectEl.innerHTML = `<option value="">No Active ${categoryName.toUpperCase()} Services Configured</option>`;
       return;
     }
 
@@ -192,9 +184,8 @@ function populateCategorySelectors() {
       const option = document.createElement("option");
       option.value = service._id || service.id;
       
-      // FIXED: Fallbacks added here to ensure undefined/NaN variables never display again
       const targetName = service.name || service.serviceName || "Unnamed Service Node";
-      const targetPrice = service.price !== undefined ? service.price : (service.servicePrice !== undefined ? service.servicePrice : 0);
+      const targetPrice = service.price !== undefined ? service.price : 0;
       
       option.textContent = `${targetName} (₦${Number(targetPrice).toLocaleString()})`;
       selectEl.appendChild(option);
@@ -202,7 +193,7 @@ function populateCategorySelectors() {
   });
 }
 
-// --- Setup Order Form Submission Event Listeners ---
+// --- Live Processing Task Submission & Auto-Billing Layer ---
 function setupOrderForms() {
   document.querySelectorAll(".order-placement-form").forEach(form => {
     form.addEventListener("submit", async (e) => {
@@ -218,10 +209,21 @@ function setupOrderForms() {
         return;
       }
 
-      // Build Form Data Payload (to handle text data along with custom files/blueprints)
+      // Find selected service parameters to run balance checkout checks client-side
+      const chosenService = allServicesArray.find(s => (s._id || s.id) === serviceSelect.value);
+      const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
+      const basePrice = chosenService ? (chosenService.price || 0) : 0;
+      const totalCost = basePrice * quantity;
+
+      if (userProfile && userProfile.wallet < totalCost) {
+        alert(`Insufficient Funds! This operation costs ₦${totalCost.toLocaleString()}. Please fund your account wallet matrix first.`);
+        showSection("wallet-view");
+        return;
+      }
+
       const formData = new FormData();
       formData.append("serviceId", serviceSelect.value);
-      formData.append("quantity", qtyInput ? qtyInput.value : 1);
+      formData.append("quantity", quantity);
       formData.append("context", contextInput ? contextInput.value : "");
       
       if (fileInput && fileInput.files[0]) {
@@ -232,15 +234,15 @@ function setupOrderForms() {
         const res = await fetch("/api/orders/create", {
           method: "POST",
           headers: { "Authorization": `Bearer ${token}` },
-          body: formData // Set body without manually tracking Content-Type boundaries
+          body: formData
         });
 
         const outcome = await res.json();
         if (!res.ok) throw new Error(outcome.message || "Request routing deployment failure.");
 
-        alert("Operational Task Blueprint Dispatched Successfully!");
+        alert("Operational Task Blueprint Dispatched & Debited Successfully!");
         form.reset();
-        fetchUserProfile(); // Automatically reload profile metrics & updated balances
+        fetchUserProfile(); 
         showSection("orders-view");
       } catch (err) {
         alert(`Order Routing Aborted: ${err.message}`);
@@ -249,7 +251,7 @@ function setupOrderForms() {
   });
 }
 
-// --- Paystack Online Wallet Funding Handler ---
+// --- Paystack Online Funding Integration ---
 function setupWalletFunding() {
   const fundBtn = document.getElementById("fund-wallet-btn");
   const amountInput = document.getElementById("funding-amount-input");
@@ -269,14 +271,12 @@ function setupWalletFunding() {
       return;
     }
 
-    // Call inline Paystack processing architecture 
     const handler = PaystackPop.setup({
-      key: "pk_live_your_actual_public_key_string_here", // Swap to test/live Paystack keys safely
+      key: "pk_live_your_real_paystack_key_here", // Add your live/test Paystack Public key
       email: userProfile.email,
-      amount: Math.round(fundingAmount * 100), // Convert transaction values to Kobo parameters
+      amount: Math.round(fundingAmount * 100), 
       currency: "NGN",
       callback: async (response) => {
-        // Run payment reference verification checks with server nodes backend
         try {
           const verification = await fetch("/api/wallet/verify-funding", {
             method: "POST",
@@ -291,16 +291,13 @@ function setupWalletFunding() {
           if (verification.ok) {
             alert(`Wallet safely loaded with ₦${fundingAmount.toLocaleString()}!`);
             amountInput.value = "";
-            fetchUserProfile(); // Reload current view cards context balance nodes
+            fetchUserProfile();
           } else {
             alert(`Ledger Verification Error: ${verifiedData.message}`);
           }
         } catch (err) {
           console.error("Verification processing matrix failure:", err);
         }
-      },
-      onClose: () => {
-        alert("Ecosystem billing payment channel pipeline was closed down manually.");
       }
     });
 
@@ -308,17 +305,30 @@ function setupWalletFunding() {
   });
 }
 
-// --- Render Systems Activity Logs Tables ---
+// --- Live PanCafe Socket Server Handshake Simulation ---
+async function fetchLivePanCafeStatus() {
+  const tokenDisplayNode = document.getElementById("pancafeTokenNode");
+  if (!tokenDisplayNode) return;
+  
+  try {
+    tokenDisplayNode.textContent = "SYNCHRONIZING REFRESH VECTOR...";
+    // Simulates an API call to a local or remote PanCafe timing controller server
+    setTimeout(() => {
+      tokenDisplayNode.innerHTML = `HBK-GAME-${Math.floor(1000 + Math.random() * 9000)}`;
+    }, 800);
+  } catch (err) {
+    tokenDisplayNode.textContent = "CONNECTION ERROR";
+  }
+}
+
 function renderSystemLogs(logs) {
   if (!universalLogsTableBody) return;
-
   if (!logs || logs.length === 0) {
     universalLogsTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No universal activity log records currently recorded.</td></tr>`;
     return;
   }
-
   universalLogsTableBody.innerHTML = "";
-  logs.slice(0, 10).forEach(log => { // Bound display index range caps to 10 lines
+  logs.slice(0, 10).forEach(log => {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td><strong>${log.category || 'System Layer'}</strong></td>
@@ -330,15 +340,12 @@ function renderSystemLogs(logs) {
   });
 }
 
-// --- Render Manifest Services Orders Log Block ---
 function renderOrderHistory(orders) {
   if (!ordersLogTable) return;
-
   if (!orders || orders.length === 0) {
     ordersLogTable.innerHTML = `<tr><td colspan="4" style="text-align:center;">No processing files or orders traced on account indices.</td></tr>`;
     return;
   }
-
   ordersLogTable.innerHTML = "";
   orders.forEach(order => {
     const row = document.createElement("tr");
@@ -352,29 +359,21 @@ function renderOrderHistory(orders) {
   });
 }
 
-// --- Helper Switch Component to style Status Grid Tags ---
 function getStatusBg(status) {
   switch (status?.toLowerCase()) {
     case 'completed': return '#10b981';
     case 'processing': return '#3b82f6';
     case 'failed': return '#ef4444';
-    default: return '#f5b942'; // Pending / Default
+    default: return '#f5b942';
   }
 }
 
-// --- Setup Browser Window Printing for System Records ---
-function printHistoryLog() {
-  window.print();
-}
-
-// --- Destroy Storage Token Arrays and Sign Out ---
 function setupLogout() {
   const logoutBtn = document.getElementById("logoutBtn");
   if (!logoutBtn) return;
-
   logoutBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    if (confirm("Confirm security closure. Do you want to sign out from operational hub?")) {
+    if (confirm("Confirm security closure. Do you want to sign out?")) {
       handleSessionTimeout();
     }
   });
@@ -386,20 +385,12 @@ function handleSessionTimeout() {
   window.location.href = "login.html";
 }
 
-// --- Chart.js Graphical Analytics Dash Engine (Admin Dashboard Only) ---
-// FIXED: This implementation safely destroys old chart matrices to prevent ongoing 304 re-render bounce bugs
 function initializeCharts(revenueData = [120000, 190000, 270000, 320000, 410000, 450000]) {
   const revCtx = document.getElementById('revenueChart');
   const servCtx = document.getElementById('serviceChart');
-
   if (!revCtx || !servCtx) return;
 
-  // Destroy previous line instance before rendering to block infinite visual loops
-  if (revenueChartInstance !== null) {
-    revenueChartInstance.destroy();
-  }
-
-  // Initialize Revenue Trend Graph Mapping
+  if (revenueChartInstance !== null) revenueChartInstance.destroy();
   revenueChartInstance = new Chart(revCtx, {
     type: 'line',
     data: {
@@ -413,21 +404,10 @@ function initializeCharts(revenueData = [120000, 190000, 270000, 320000, 410000,
         fill: true
       }]
     },
-    options: { 
-      responsive: true, 
-      maintainAspectRatio: false,
-      animation: {
-        duration: 1000 // Runs animation exactly once per refresh instance
-      }
-    }
+    options: { responsive: true, maintainAspectRatio: false, animation: { duration: 1000 } }
   });
 
-  // Destroy previous doughnut instance before drawing to prevent flickering artifacts
-  if (serviceChartInstance !== null) {
-    serviceChartInstance.destroy();
-  }
-
-  // Initialize Core Categories Metrics Breakdown Mapping
+  if (serviceChartInstance !== null) serviceChartInstance.destroy();
   serviceChartInstance = new Chart(servCtx, {
     type: 'doughnut',
     data: {
