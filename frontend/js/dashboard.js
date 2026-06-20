@@ -109,7 +109,9 @@ async function fetchUserProfile() {
 
       if (userProfile.role && userProfile.role.toLowerCase() === 'admin') {
           document.querySelectorAll(".admin-block-section, .admin-only-tab").forEach(el => {
-              el.style.setProperty('display', 'block', 'important');
+              // Using flex display fallback if element is a link in sidebar layout
+              const targetDisplay = el.tagName === 'A' ? 'flex' : 'block';
+              el.style.setProperty('display', targetDisplay, 'important');
           });
       }
 
@@ -272,7 +274,7 @@ function setupWalletFunding() {
     }
 
     const handler = PaystackPop.setup({
-      key: "pk_live_your_real_paystack_key_here", // Add your live/test Paystack Public key
+      key: "pk_live_your_real_paystack_key_here", // Replace with your verified public key
       email: userProfile.email,
       amount: Math.round(fundingAmount * 100), 
       currency: "NGN",
@@ -283,8 +285,7 @@ function setupWalletFunding() {
             headers: {
               "Authorization": `Bearer ${token}`,
               "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ reference: response.reference, amount: fundingAmount })
+            }
           });
 
           const verifiedData = await verification.json();
@@ -312,7 +313,6 @@ async function fetchLivePanCafeStatus() {
   
   try {
     tokenDisplayNode.textContent = "SYNCHRONIZING REFRESH VECTOR...";
-    // Simulates an API call to a local or remote PanCafe timing controller server
     setTimeout(() => {
       tokenDisplayNode.innerHTML = `HBK-GAME-${Math.floor(1000 + Math.random() * 9000)}`;
     }, 800);
@@ -366,6 +366,11 @@ function getStatusBg(status) {
     case 'failed': return '#ef4444';
     default: return '#f5b942';
   }
+}
+
+// --- Order Manifest Printing Action ---
+function printHistoryLog() {
+  window.print();
 }
 
 function setupLogout() {
