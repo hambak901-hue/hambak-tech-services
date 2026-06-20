@@ -111,12 +111,42 @@
             background: #2563eb;
         }
 
+        .action-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .balance-input {
+            width: 90px;
+            padding: 8px;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: #fff;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .fund-btn {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .fund-btn:hover {
+            background: #15803d;
+        }
+
         .delete-btn {
             background: #dc2626;
             color: white;
             border: none;
-            padding: 10px 14px;
-            border-radius: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
             cursor: pointer;
             transition: 0.3s;
         }
@@ -172,6 +202,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Role</th>
+                        <th>Wallet Balance</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -186,15 +217,11 @@
     /* =========================
     AUTH & PRIVILEGE GUARD
     ========================= */
-    // Synchronized local token references to avoid authentication mismatches
-    const user = JSON.parse(localStorage.getItem("user")) || JSON.parse(localStorage.getItem("hambak_user"));
-    const token = localStorage.getItem("token") || localStorage.getItem("hambak_token");
+    const user = JSON.parse(localStorage.getItem("hambak_user")) || JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("hambak_token") || localStorage.getItem("token");
 
     if (!user || !token || user.role.toLowerCase() !== "admin") {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        localStorage.removeItem("hambak_user");
-        localStorage.removeItem("hambak_token");
+        localStorage.clear();
         window.location.href = "login.html";
     } else {
         document.getElementById("adminName").innerHTML = user.name || "Administrator";
@@ -210,7 +237,6 @@
     ========================= */
     async function loadUsers() {
         try {
-            // FIXED: Pointed to the validated administrative API endpoint path
             const response = await fetch(`${API_URL}/admin/users`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -221,16 +247,17 @@
             const table = document.getElementById("usersTable");
             table.innerHTML = "";
 
-            // Accounts for both direct arrays or nested payload object schemas
             const usersList = Array.isArray(data) ? data : (data.users || []);
 
             if (usersList.length === 0) {
-                table.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:#cbd5e1;">No accounts registered yet</td></tr>`;
+                table.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:#cbd5e1;">No accounts registered yet</td></tr>`;
                 return;
             }
 
             usersList.forEach(u => {
                 const isAdminRole = u.role && u.role.toLowerCase() === "admin";
+                const userId = u._id || u.id;
+                const balance = u.walletBalance !== undefined ? u.walletBalance : 0;
                 
                 table.innerHTML += `
                 <tr>
@@ -241,15 +268,59 @@
                             ${u.role || 'user'}
                         </span>
                     </td>
+                    <td>₦${Number(balance).toLocaleString()}</td>
                     <td>
-                        <button class="delete-btn" onclick="deleteUser('${u._id || u.id}')">Delete</button>
+                        <div class="action-group">
+                            <input type="number" id="amt-${userId}" class="balance-input" placeholder="Amount">
+                            <button class="fund-btn" onclick="modifyBalance('${userId}', 'add')">Fund</button>
+                            <button class="fund-btn" style="background:#ea580c" onclick="modifyBalance('${userId}', 'deduct')">Deduct</button>
+                            <button class="delete-btn" onclick="deleteUser('${userId}')"><i class="fa-solid fa-trash"></i></button>
+                        </div>
                     </td>
                 </tr>
                 `;
             });
         } catch (error) {
             console.error("Error streaming user matrix:", error);
-            document.getElementById("usersTable").innerHTML = `<tr><td colspan="4" style="text-align:center; color:#dc2626;">Failed to connect to administrative server layer.</td></tr>`;
+            document.getElementById("usersTable").innerHTML = `<tr><td colspan="5" style="text-align:center; color:#dc2626;">Failed to connect to administrative server layer.</td></tr>`;
+        }
+    }
+
+    /* =========================
+    MANAGE WALLET BALANCE
+    ========================= */
+    async function modifyBalance(userId, action) {
+        const inputField = document.getElementById(`amt-${userId}`);
+        const amount = parseFloat(inputField.value);
+
+        if (!amount || amount <= 0) {
+            alert("Please enter a valid amount greater than zero.");
+            return;
+        }
+
+        const confirmAction = confirm(`Are you sure you want to ${action} ₦${amount} for this user?`);
+        if (!confirmAction) return;
+
+        try {
+            const response = await fetch(`${API_URL}/admin/users/${userId}/wallet`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ amount, action })
+            });
+
+            const data = await response.json();
+            if (response.ok || data.success) {
+                alert("Wallet modified successfully");
+                loadUsers();
+            } else {
+                alert(data.message || "Failed to update wallet balance.");
+            }
+        } catch (error) {
+            console.error("Wallet adjustment communication error:", error);
+            alert("Error trying to process wallet adjustment route.");
         }
     }
 
@@ -261,7 +332,6 @@
         if (!confirmDelete) return;
 
         try {
-            // FIXED: Pointed endpoint context explicitly to the admin data routing path
             const response = await fetch(`${API_URL}/admin/users/${id}`, {
                 method: "DELETE",
                 headers: {
@@ -287,14 +357,10 @@
     ========================= */
     document.getElementById("logoutBtn").addEventListener("click", (e) => {
         e.preventDefault();
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        localStorage.removeItem("hambak_user");
-        localStorage.removeItem("hambak_token");
+        localStorage.clear();
         window.location.href = "login.html";
     });
 
-    // Run layout pull on startup instance
     loadUsers();
 </script>
 
