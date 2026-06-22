@@ -1,3 +1,4 @@
+import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
@@ -7,6 +8,8 @@ dotenv.config();
 
 const servicesData = [
   {
+    _id: new mongoose.Types.ObjectId(), // Generates an internal valid ObjectId wrapper
+    id: "static-training", // Links perfectly with frontend static route handles
     title: "Computer Training & ICT Education",
     category: "ICT Training Services",
     status: "active",
@@ -22,6 +25,8 @@ const servicesData = [
     ]
   },
   {
+    _id: new mongoose.Types.ObjectId(),
+    id: "static-web",
     title: "Website Development",
     category: "Website Development",
     status: "active",
@@ -35,6 +40,8 @@ const servicesData = [
     ]
   },
   {
+    _id: new mongoose.Types.ObjectId(),
+    id: "static-graphics",
     title: "Graphic Design Services",
     category: "Graphic Design",
     status: "active",
@@ -49,6 +56,8 @@ const servicesData = [
     ]
   },
   {
+    _id: new mongoose.Types.ObjectId(),
+    id: "static-hardware",
     title: "Computer Services & Hardware Engineering",
     category: "Computer Services",
     status: "active",
@@ -62,6 +71,8 @@ const servicesData = [
     ]
   },
   {
+    _id: new mongoose.Types.ObjectId(),
+    id: "static-printing",
     title: "Printing & Documentation Services",
     category: "Printing & Documentation",
     status: "active",
@@ -76,6 +87,8 @@ const servicesData = [
     ]
   },
   {
+    _id: new mongoose.Types.ObjectId(),
+    id: "static-documentation",
     title: "Business Registration & Documentation",
     category: "Business Documentation",
     status: "active",
@@ -88,6 +101,8 @@ const servicesData = [
     ]
   },
   {
+    _id: new mongoose.Types.ObjectId(),
+    id: "static-marketing",
     title: "Online Marketing & Advertising Setup",
     category: "Digital Marketing",
     status: "active",
@@ -100,6 +115,8 @@ const servicesData = [
     ]
   },
   {
+    _id: new mongoose.Types.ObjectId(),
+    id: "static-consultancy",
     title: "ICT Consultancy Infrastructure",
     category: "ICT Consultancy",
     status: "active",
@@ -111,6 +128,8 @@ const servicesData = [
     ]
   },
   {
+    _id: new mongoose.Types.ObjectId(),
+    id: "static-vtu",
     title: "VTU Automated Operations",
     category: "VTU Services",
     status: "active",
@@ -123,7 +142,9 @@ const servicesData = [
     ]
   },
   {
-    title: "POS Agency Terminal Operations",
+    _id: new mongoose.Types.ObjectId(),
+    id: "static-nin",
+    title: "POS Agency Terminal Operations", // Serves as the matching link for NIN context lookups
     category: "POS Services",
     status: "active",
     pricing: [
@@ -135,6 +156,8 @@ const servicesData = [
     ]
   },
   {
+    _id: new mongoose.Types.ObjectId(),
+    id: "static-ajo",
     title: "Ajo & Cooperative Management Systems",
     category: "Ajo / Cooperative Management",
     status: "active",
@@ -145,6 +168,8 @@ const servicesData = [
     ]
   },
   {
+    _id: new mongoose.Types.ObjectId(),
+    id: "static-wallet",
     title: "Wallet & Fintech Platform",
     category: "Future Services",
     status: "coming-soon",
@@ -153,6 +178,8 @@ const servicesData = [
     ]
   },
   {
+    _id: new mongoose.Types.ObjectId(),
+    id: "static-elearning",
     title: "E-Learning Platform",
     category: "Future Services",
     status: "coming-soon",
@@ -161,6 +188,8 @@ const servicesData = [
     ]
   },
   {
+    _id: new mongoose.Types.ObjectId(),
+    id: "static-analytics",
     title: "Analytics & Reporting Engine",
     category: "Future Services",
     status: "coming-soon",
@@ -172,6 +201,7 @@ const servicesData = [
 
 const importData = async () => {
   try {
+    // FIXED: Wait until database pipeline verifies live connection state successfully
     await connectDB();
     
     // Wipe clean old mismatch schemas safely
@@ -181,11 +211,12 @@ const importData = async () => {
     await Service.insertMany(servicesData);
     
     console.log("🏆 HAMBAK DATA MATRIX SEEDED TO MONGO SUCCESSFULLY!");
-    process.exit();
+    process.exit(0);
   } catch (error) {
     console.error(`❌ Data ingestion stopped: ${error.message}`);
     process.exit(1);
   }
 };
 
+// Fire the data seeder chain safely
 importData();
