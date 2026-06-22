@@ -33,6 +33,9 @@ router.delete("/users", protect, adminOnly, unifyTargetId, deleteUser);
    ADDED MANAGEMENT SYNC CHANNELS (Fixes Admin Panel Route 404 Vectors)
    ========================================================================== */
 
+// FIXED: Handles dynamic wallet funding from UI table rows matching /users/:id/wallet
+router.post("/users/:id/wallet", protect, adminOnly, unifyTargetId, fundUserWallet);
+
 // @desc    Fetch administrative tracking entries
 // @route   GET /api/admin/orders
 router.get("/orders", protect, adminOnly, async (req, res) => {
