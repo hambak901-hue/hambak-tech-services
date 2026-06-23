@@ -1,7 +1,21 @@
 import ExcelJS from "exceljs";
 import path from "path";
+import mongoose from "mongoose";
+
+// Import your database models
+import Order from "./models/order.js";
+import Service from "./models/service.js";
+import Transaction from "./models/transaction.js";
 
 async function generateMasterTracker() {
+  // Ensure we are connected to MongoDB before running calculations
+  if (mongoose.connection.readyState !== 1) {
+    if (!process.env.MONGO_URI) {
+      throw new Error("MONGO_URI environment variable is missing from your .env configuration.");
+    }
+    await mongoose.connect(process.env.MONGO_URI);
+  }
+
   const workbook = new ExcelJS.Workbook();
   
   // Style Configuration Matrix
@@ -37,7 +51,7 @@ async function generateMasterTracker() {
   titleCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: colors.navy } };
   titleCell.alignment = { horizontal: "center", vertical: "middle" };
 
-  // KPI Summary Cards Configuration
+  // KPI Summary Cards Configuration (Linked dynamically to transaction sheets)
   const kpis = [
     { labelCell: "B4", numCell: "B5", label: "TOTAL REVENUE", formula: "='Sales Transactions'!G32", color: colors.profitGreen },
     { labelCell: "D4", numCell: "D5", label: "TOTAL EXPENSES", formula: "='Expense Transactions'!E32", color: colors.expenseRed },
@@ -61,7 +75,6 @@ async function generateMasterTracker() {
     nCell.numFmt = '"₦"#,##0.00';
   });
 
-  // Categories Setup
   wsDash.getCell("A8").value = "Revenue By Category";
   wsDash.getCell("A8").font = fontSection;
   wsDash.getCell("A9").value = "Category";
@@ -92,10 +105,10 @@ async function generateMasterTracker() {
   wsDash.getCell(`A${totalSalesRow}`).font = fontBold;
   wsDash.getCell(`B${totalSalesRow}`).value = { formula: `=SUM(B10:B${totalSalesRow - 1})` };
   wsDash.getCell(`B${totalSalesRow}`).font = fontBold;
-  wsDash.getCell(`B${totalSalesRow}`).border = doubleBottomBorder;
+  wsDash.getCell(`B${totalSalesRow}).border = doubleBottomBorder;
   wsDash.getCell(`B${totalSalesRow}`).numFmt = '"₦"#,##0.00';
 
-  // Online Gateway Matrix Section
+  // Online Gateway Revenue Performance Tracker
   const startGatewayRow = totalSalesRow + 3;
   wsDash.getCell(`A${startGatewayRow}`).value = "Online Gateway Channel Matrix";
   wsDash.getCell(`A${startGatewayRow}`).font = fontSection;
@@ -104,7 +117,7 @@ async function generateMasterTracker() {
   wsDash.getCell(`A${startGatewayRow+1}`).fill = wsDash.getCell(`B${startGatewayRow+1}`).fill = { type: "pattern", pattern: "solid", fgColor: { argb: colors.lightBlue } };
   wsDash.getCell(`A${startGatewayRow+1}`).font = wsDash.getCell(`B${startGatewayRow+1}`).font = fontHeader;
 
-  const gateways = ["Paystack", "Flutterwave", "Online Transfer", "Cash", "POS"];
+  const gateways = ["Paystack", "Flutterwave", "Online Transfer", "Wallet Balance", "Cash", "POS"];
   gateways.forEach((g, i) => {
     const rNum = startGatewayRow + 2 + i;
     wsDash.getCell(`A${rNum}`).value = g;
@@ -118,7 +131,7 @@ async function generateMasterTracker() {
   });
 
   // ==========================================================================
-  // TAB 2: SALES TRANSACTIONS
+  // TAB 2: LIVE SALES TRANSACTIONS INTAKE
   // ==========================================================================
   const wsSales = workbook.addWorksheet("Sales Transactions", { views: [{ showGridLines: true }] });
   wsSales.getCell("A1").value = "DAILY SALES RECORD BOOK & WEB INTAKE LEDGER";
@@ -127,22 +140,35 @@ async function generateMasterTracker() {
   const headersSales = ["Date", "Invoice ID", "Customer Name", "Category", "Service/Product Details", "Quantity", "Amount (₦)", "Payment Method", "Handled By"];
   headersSales.forEach((h, i) => {
     const cell = wsSales.getCell(4, i + 1);
-    cell.value = h
+    cell.value = h;
     cell.font = fontHeader;
     cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: colors.navy } };
     cell.alignment = { horizontal: "center" };
   });
 
-  const sampleSales = [
-    ["2026-06-20", "INV-001", "Alani Coker", "ICT Training Services", "Basic Computer Training (1 Month)", 1, 25000, "Cash", "Fatimoh"],
-    ["2026-06-21", "INV-002", "Golden Heritage School", "Website Development", "School Website (Deposit)", 1, 300000, "Paystack", "Web Intake"],
-    ["2026-06-21", "INV-003", "Chidi Business Hub", "Graphic Design", "Logo & Business Card Design", 1, 25000, "POS", "Aisha"],
-    ["2026-06-22", "INV-004", "Grace Amadi", "Printing & Documentation", "Colour Printing & Spiral Binding", 12, 4500, "Cash", "Fatimoh"],
-    ["2026-06-23", "INV-005", "Ibeju-Lekki Cooperative", "Ajo / Cooperative Management", "Monthly Setup Fee", 1, 50000, "Flutterwave", "Web Intake"]
-  ];
+  // FETCH ALL SUCCESSFUL ORDERS FROM DATABASE & POPULATE SPREADSHEET
+  const dbOrders = await Order.find({}).populate("service").sort({ createdAt: -1 }).limit(26).lean();
 
-  sampleSales.forEach((row, rIdx) => {
-    row.forEach((val, cIdx) => {
+  dbOrders.forEach((order, rIdx) => {
+    const dateStr = order.createdAt ? new Date(order.createdAt).toISOString().split('T')[0] : "";
+    const invoiceId = `HTS-${order._id.toString().slice(-5).toUpperCase()}`;
+    const category = order.service ? order.service.category : "Other";
+    const serviceName = order.service ? order.service.name : "Custom Operations Request";
+    const paymentChannel = order.amount > 0 ? "Wallet Balance" : "System Dynamic Sync";
+
+    const rowData = [
+      dateStr,
+      invoiceId,
+      order.customerName || "Anonymous Hub User",
+      category,
+      serviceName,
+      order.quantity || 1,
+      order.amount || 0,
+      paymentChannel,
+      "Web Intake"
+    ];
+
+    rowData.forEach((val, cIdx) => {
       const cell = wsSales.getCell(5 + rIdx, cIdx + 1);
       cell.value = val;
       cell.font = fontBody;
@@ -151,8 +177,8 @@ async function generateMasterTracker() {
     });
   });
 
-  // Setup blank data-entry framework grid cells
-  for (let r = 5 + sampleSales.length; r <= 31; r++) {
+  // PAD OUT UNUSED CELLS SO THE INPUT BOOK IS PRE-STYLED FOR MANUAL ENTRY TOO
+  for (let r = 5 + dbOrders.length; r <= 31; r++) {
     for (let c = 1; c <= headersSales.length; c++) {
       const cell = wsSales.getCell(r, c);
       cell.border = thinBorder;
@@ -168,7 +194,7 @@ async function generateMasterTracker() {
   wsSales.getCell("G32").border = doubleBottomBorder;
   wsSales.getCell("G32").numFmt = '"₦"#,##0.00';
 
-  // Data Validation Rules Injection
+  // Add Interactive Cell Validations for Dropdowns
   wsSales.dataValidations.add("D5:D31", {
     type: "list",
     allowBlank: true,
@@ -178,7 +204,7 @@ async function generateMasterTracker() {
   wsSales.dataValidations.add("H5:H31", {
     type: "list",
     allowBlank: true,
-    formulae: ['"Paystack,Flutterwave,Online Transfer,Cash,POS"']
+    formulae: ['"Paystack,Flutterwave,Online Transfer,Wallet Balance,Cash,POS"']
   });
 
   // ==========================================================================
@@ -197,15 +223,22 @@ async function generateMasterTracker() {
     cell.alignment = { horizontal: "center" };
   });
 
-  const sampleExpenses = [
-    ["2026-06-15", "EXP-001", "Power & Fuel", "Fuel for Generator (Business Center)", 12000, "Cash", "Paid"],
-    ["2026-06-18", "EXP-002", "Internet & Data", "Monthly Fiber Broadband Subscription", 25000, "Online Transfer", "Paid"],
-    ["2026-06-20", "EXP-003", "Office Supplies", "A4 Paper Cartons (3)", 18500, "POS", "Paid"],
-    ["2026-06-22", "EXP-004", "Repairs & Maintenance", "Printer Service & Toner Refill", 15000, "Cash", "Paid"]
-  ];
+  // Dynamically load any negative mutations or cash flow reversals logged
+  const dbRefunds = await Transaction.find({ type: "refund" }).sort({ createdAt: -1 }).limit(10).lean();
+  
+  dbRefunds.forEach((ref, rIdx) => {
+    const dateStr = ref.createdAt ? new Date(ref.createdAt).toISOString().split('T')[0] : "";
+    const rowData = [
+      dateStr,
+      ref.reference || "REFUND",
+      "Other",
+      ref.description || "Order Cancellation Refund Reversal",
+      ref.amount || 0,
+      ref.paymentMethod || "Wallet",
+      "Paid"
+    ];
 
-  sampleExpenses.forEach((row, rIdx) => {
-    row.forEach((val, cIdx) => {
+    rowData.forEach((val, cIdx) => {
       const cell = wsExp.getCell(5 + rIdx, cIdx + 1);
       cell.value = val;
       cell.font = fontBody;
@@ -214,7 +247,7 @@ async function generateMasterTracker() {
     });
   });
 
-  for (let r = 5 + sampleExpenses.length; r <= 31; r++) {
+  for (let r = 5 + dbRefunds.length; r <= 31; r++) {
     for (let c = 1; c <= headersExp.length; c++) {
       const cell = wsExp.getCell(r, c);
       cell.border = thinBorder;
@@ -236,13 +269,21 @@ async function generateMasterTracker() {
     formulae: ['"Rent & Utilities,Internet & Data,Power & Fuel,Office Supplies,Staff Salaries,Marketing,Repairs & Maintenance,Other"']
   });
 
-  // Set scannable widths
+  // Column width formatting adjustments
   wsDash.getColumn("A").width = 35; wsDash.getColumn("B").width = 22;
   wsSales.getColumn("D").width = 25; wsSales.getColumn("E").width = 35; wsSales.getColumn("H").width = 20;
 
   const destPath = path.resolve("./Hambak_Tech_Services_Master_Account_Book.xlsx");
   await workbook.xlsx.writeFile(destPath);
-  console.log(`🏆 EXCEL RUNTIME ENGINE GENERATED SPREADSHEET SUCCESSFULLY AT: ${destPath}`);
 }
 
-generateMasterTracker().catch(err => console.error("❌ Generation Stopped: ", err));
+// Ensure execution triggers correctly when called by child processes
+generateMasterTracker()
+  .then(() => {
+    console.log("SUCCESS");
+    process.exit(0);
+  })
+  .catch(err => {
+    console.error(err);
+    process.exit(1);
+  });
