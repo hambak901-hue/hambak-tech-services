@@ -532,18 +532,42 @@
     <i class="fa-brands fa-whatsapp"></i>
   </a>
 
+  <script src="../js/services.js"></script>
   <script>
-    // System Filter Funnel Logic (Secure Wallet Gateway vs Direct Reach Setup)
+    // Keep your navigation UI mechanics linked to the document safely here
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+    menuToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('show');
+    });
+
+    const themeToggle = document.getElementById('themeToggle');
+    const rootEl = document.documentElement;
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = rootEl.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      rootEl.setAttribute('data-theme', newTheme);
+      
+      const themeIcon = themeToggle.querySelector('i');
+      const themeText = themeToggle.querySelector('span');
+      if(newTheme === 'light') {
+        themeIcon.className = 'fa-solid fa-sun';
+        themeText.innerText = 'Light Mode';
+      } else {
+        themeIcon.className = 'fa-solid fa-moon';
+        themeText.innerText = 'Dark Mode';
+      }
+    });
+
+    // Funnel Router for client execution checkout
     function checkoutService(serviceId, serviceCategory) {
       const token = localStorage.getItem("token") || localStorage.getItem("hambak_token");
 
-      // Path A: Physical walk-in shop services do not require full client database accounts
       if (serviceCategory === "Document & Design" || serviceCategory === "Internet & Charging") {
         window.location.href = `https://wa.me/2349127469686?text=Hello+Hambak+Tech+and+Services,+I+want+to+order+the+${encodeURIComponent(serviceId)}+service.`;
         return;
       }
 
-      // Path B: Advanced automated items must route through validation dashboard
       if (!token) {
         alert("Please log in or register an account dashboard to fund your wallet and purchase this service track.");
         window.location.href = "login.html";
@@ -552,60 +576,6 @@
 
       window.location.href = `order-service.html?id=${serviceId}`;
     }
-
-    async function loadDynamicServices() {
-      const servicesContainer = document.getElementById("servicesGrid");
-      const BACKEND_SERVICE_API = "https://hambak-tech-services.onrender.com/api";
-
-      try {
-        const queryPipelineUrl = `${BACKEND_SERVICE_API}/services`;
-        
-        const fetchStreamResponse = await fetch(queryPipelineUrl, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json"
-          }
-        });
-
-        if (!fetchStreamResponse.ok) {
-          throw new Error(`Upstream Ingestion Failure: Target returned server code ${fetchStreamResponse.status}`);
-        }
-
-        const aggregatedResultData = await fetchStreamResponse.json();
-
-        if (aggregatedResultData && aggregatedResultData.services && aggregatedResultData.services.length > 0) {
-          // Clear static configurations safely since backend stream is running fine
-          servicesContainer.innerHTML = "";
-
-          aggregatedResultData.services.forEach(item => {
-            const parsedCardWrapper = document.createElement("div");
-            parsedCardWrapper.className = "service-card";
-
-            const graphicBannerAsset = item.image 
-              ? `<img src="${item.image.startsWith('http') ? '' : BACKEND_SERVICE_API + '/..'}${item.image}" style="width:100%; height:200px; object-fit:cover; border-radius:14px; margin-bottom:20px; border: 1px solid rgba(255,255,255,0.05);">` 
-              : "";
-
-            parsedCardWrapper.innerHTML = `
-              ${graphicBannerAsset}
-              <div class="service-icon">
-                <i class="fa-solid fa-briefcase"></i>
-              </div>
-              <h3>${item.name}</h3>
-              <p>${item.description || "Custom database configuration track deployed on live server cluster infrastructure."}</p>
-              <div class="price-tag">₦${Number(item.price).toLocaleString()}</div>
-              <div onclick="checkoutService('${item._id}', '${item.category}')" class="service-btn">Instantiate Order Node</div>
-            `;
-
-            servicesContainer.appendChild(parsedCardWrapper);
-          });
-        }
-      } catch (runtimeInfrastructuralFault) {
-        console.error("Critical Sync Failure Trace log inside loadDynamicServices:", runtimeInfrastructuralFault);
-        // Fallback Strategy: Static cards stay functional so the screen is never left empty!
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", loadDynamicServices);
   </script>
 </body>
 </html>
