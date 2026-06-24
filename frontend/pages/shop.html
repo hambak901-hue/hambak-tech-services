@@ -1,142 +1,261 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Digital Shop | HAMBAK TECH & SERVICES</title>
-  <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    :root {
+    /* ==========================================================================
+       HAMBAK BRAND DESIGN SYSTEM (Synced Across All Platform Sub-Modules)
+       ========================================================================== */
+    :root[data-theme="dark"] {
       --primary-blue: #0d47a1;
       --deep-navy: #081120;
       --brand-gold: #f5b942;
       --soft-peach: #ffdfd3;
       --accent-pink: #ff4081;
       --clean-white: #ffffff;
-      --dark-card: #0f172a;
-      --input-bg: #1e293b;
-      --border-glow: rgba(245, 185, 66, 0.2);
+      --slate-gray: #94a3b8;
+      --dark-card: rgba(15, 23, 42, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --body-bg: linear-gradient(135deg, var(--deep-navy), #040812);
+      --text-main: var(--clean-white);
+      --text-muted: #cbd5e1;
+      --header-bg: rgba(15, 23, 42, 0.9);
+    }
+
+    :root[data-theme="light"] {
+      --primary-blue: #0d47a1;
+      --deep-navy: #ffffff;
+      --brand-gold: #e0a534;
+      --soft-peach: #ffdfd3;
+      --accent-pink: #d81b60;
+      --clean-white: #0f172a;
+      --slate-gray: #475569;
+      --dark-card: rgba(241, 245, 249, 0.9);
+      --glass-border: rgba(15, 23, 42, 0.08);
+      --body-bg: linear-gradient(135deg, #f8fafc, #e2e8f0);
+      --text-main: #0f172a;
+      --text-muted: #334155;
+      --header-bg: rgba(255, 255, 255, 0.95);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: background 0.3s ease, color 0.3s ease;
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, var(--deep-navy), #040812);
-      color: var(--clean-white);
+      background: var(--body-bg);
+      color: var(--text-main);
       line-height: 1.6;
+      overflow-x: hidden;
     }
 
-    /* NAVBAR MODULE */
-    .navbar {
+    /* NAVIGATION BAR CONTAINER */
+    .header-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 8%;
-      background: rgba(15, 23, 42, 0.8);
+      padding: 15px 8%;
+      background: var(--header-bg);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid var(--glass-border);
       position: sticky;
       top: 0;
       z-index: 1000;
     }
 
-    .logo { display: flex; flex-direction: column; }
-    .logo span { font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; color: var(--clean-white); }
-    .logo small { font-size: 0.75rem; color: var(--brand-gold); font-weight: 600; letter-spacing: 2px; }
-
-    .nav-links a {
-      color: #cbd5e1;
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       text-decoration: none;
-      margin-left: 25px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: 0.3s;
     }
-    .nav-links a:hover, .nav-links a.active { color: var(--brand-gold); }
 
-    /* RETAIL HUB HEADER */
+    .logo-img-frame {
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+      border: 1.5px solid var(--brand-gold);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2px;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-text h1 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .logo-text span {
+      font-size: 0.7rem;
+      color: var(--brand-gold);
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .right-nav-container {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* BURGER MENU DROP SYSTEM */
+    .menu-toggle-btn {
+      background: none;
+      border: none;
+      color: var(--text-main);
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 5px;
+      z-index: 1001;
+    }
+
+    .nav-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 8%;
+      background: var(--header-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 20px;
+      width: 280px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      list-style: none;
+      flex-direction: column;
+      gap: 12px;
+      backdrop-filter: blur(20px);
+    }
+
+    .nav-menu.show { display: flex; }
+
+    .nav-menu a {
+      color: var(--text-main);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: 0.3s;
+      padding: 8px 12px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-menu a:hover, .nav-menu a.active {
+      color: #ffffff;
+      background: var(--primary-blue);
+    }
+
+    .theme-toggle-switch {
+      background: rgba(13, 71, 161, 0.15);
+      border: 1px solid var(--brand-gold);
+      color: var(--brand-gold);
+      padding: 8px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+    }
+
+    /* RETAIL HUB HEADER HERO */
     .shop-hero {
-      padding: 100px 8% 60px;
-      background: linear-gradient(135deg, rgba(8, 17, 32, 0.95), rgba(13, 71, 161, 0.2));
+      padding: 120px 8% 80px;
+      background: linear-gradient(135deg, var(--deep-navy), var(--primary-blue));
       text-align: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid var(--glass-border);
     }
 
     .shop-hero h1 {
       font-size: 3.5rem;
       font-weight: 800;
       margin-bottom: 15px;
-      background: linear-gradient(135deg, var(--clean-white), var(--brand-gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
 
-    /* INVENTORY FILTER BUTTON PANEL */
+    .shop-hero p {
+      max-width: 700px;
+      margin: 0 auto;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    /* FILTER BUTTON NAVIGATION STRUCTURE */
     .filter-container {
       display: flex;
       justify-content: center;
       gap: 15px;
-      padding: 30px 8%;
+      padding: 40px 8% 10px;
       flex-wrap: wrap;
     }
 
     .filter-btn {
       padding: 10px 24px;
-      background: rgba(30, 41, 59, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #cbd5e1;
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px solid var(--glass-border);
+      color: var(--text-muted);
       border-radius: 50px;
       cursor: pointer;
       font-weight: 600;
       font-size: 0.9rem;
-      transition: 0.3s;
     }
 
     .filter-btn:hover, .filter-btn.active {
       background: var(--brand-gold);
-      color: var(--dark-card);
+      color: #081120;
       border-color: var(--brand-gold);
-      box-shadow: 0 4px 15px rgba(245, 185, 66, 0.3);
+      box-shadow: 0 4px 15px rgba(245, 185, 66, 0.25);
     }
 
-    /* GRID STRUCTURE FOR PRODUCTS */
-    .shop-section { padding: 20px 8% 80px; }
+    /* PRODUCTS GRID AREA */
+    .shop-section { padding: 40px 8% 100px; }
     
     .products-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 30px;
     }
 
     .product-card {
-      background: rgba(15, 23, 42, 0.65);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 20px;
+      background: var(--dark-card);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      transition: 0.3s ease;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
     }
 
     .product-card:hover {
       transform: translateY(-5px);
-      border-color: rgba(245, 185, 66, 0.25);
+      border-color: var(--brand-gold);
     }
 
     .product-img {
       width: 100%;
-      height: 220px;
+      height: 230px;
       object-fit: cover;
-      background: #1e293b;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid var(--glass-border);
     }
 
     .product-info {
@@ -158,13 +277,12 @@
     .product-title {
       font-size: 1.3rem;
       font-weight: 700;
-      color: var(--clean-white);
       margin-bottom: 10px;
     }
 
     .product-desc {
       font-size: 0.9rem;
-      color: #94a3b8;
+      color: var(--slate-gray);
       margin-bottom: 20px;
       line-height: 1.6;
     }
@@ -183,25 +301,24 @@
     }
 
     .cart-btn {
-      padding: 10px 18px;
+      padding: 11px 20px;
       background: linear-gradient(135deg, var(--primary-blue), #1565c0);
-      color: var(--clean-white);
+      color: #ffffff;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       font-weight: 700;
       cursor: pointer;
       font-size: 0.85rem;
-      transition: 0.2s;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
     .cart-btn:hover {
-      box-shadow: 0 5px 15px rgba(13, 71, 161, 0.4);
+      background: linear-gradient(135deg, var(--accent-pink), #d81b60);
     }
 
-    /* FLOATING SHOPPING CART CONTROL NOTIFICATION BUTTON */
+    /* BADGE TELEMETRY NOTIFICATION COUNTER BUTTON */
     .cart-badge-float {
       position: fixed;
       bottom: 110px;
@@ -209,7 +326,7 @@
       width: 60px;
       height: 60px;
       background: var(--brand-gold);
-      color: var(--dark-card);
+      color: #081120;
       border-radius: 50%;
       display: flex;
       justify-content: center;
@@ -218,47 +335,112 @@
       text-decoration: none;
       z-index: 999;
       box-shadow: 0 10px 25px rgba(245, 185, 66, 0.3);
-      transition: 0.3s;
     }
 
     .cart-count {
       position: absolute;
-      top: -5px;
+      top: -4px;
       right: -2px;
       background: var(--accent-pink);
-      color: var(--clean-white);
+      color: #ffffff;
       font-size: 0.75rem;
       font-weight: 800;
       padding: 3px 8px;
       border-radius: 20px;
-      border: 2px solid var(--dark-card);
+      border: 2px solid var(--deep-navy);
     }
 
-    .whatsapp-float { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: #25d366; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.9rem; color: var(--clean-white); text-decoration: none; z-index: 999; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3); }
+    .whatsapp-float {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.9rem;
+      color: #ffffff;
+      text-decoration: none;
+      z-index: 999;
+      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+    }
 
-    @media(max-width: 768px) {
-      .navbar { flex-direction: column; gap: 15px; }
-      .nav-links a { margin: 0 10px; }
-      .shop-hero h1 { font-size: 2.3rem; }
+    /* FOOTER ENVIRONMENT */
+    .master-footer {
+      background: #020617;
+      padding: 80px 8% 30px;
+      border-top: 1px solid var(--glass-border);
+      color: #ffffff;
+    }
+
+    .footer-grid-layout {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 50px;
+    }
+
+    .footer-brand-wrapper h3, .footer-links h4, .footer-socials h4 {
+      color: var(--brand-gold);
+      margin-bottom: 15px;
+    }
+
+    .footer-brand-wrapper p { color: #cbd5e1; }
+    .footer-links a { display: block; color: #cbd5e1; text-decoration: none; margin-bottom: 12px; }
+    .footer-links a:hover { color: var(--accent-pink); }
+    .social-row-flex { display: flex; gap: 15px; }
+
+    .social-box-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    @media(max-width: 992px) {
+      .footer-grid-layout { grid-template-columns: 1fr; gap: 30px; }
+      .shop-hero h1 { font-size: 2.5rem; }
     }
   </style>
 </head>
 
 <body>
 
-  <header class="navbar">
-    <div class="logo">
-      <span>HAMBAK</span>
-      <small>TECH & SERVICES</small>
+  <header class="header-bar">
+    <a href="../index.html" class="brand-logo">
+      <img src="../logo.png" alt="Hambak Logo" class="logo-img-frame">
+      <div class="logo-text">
+        <h1>HAMBAK</h1>
+        <span>TECH & SERVICES</span>
+      </div>
+    </a>
+
+    <div class="right-nav-container">
+      <button class="theme-toggle-switch" id="themeToggle">
+        <i class="fa-solid fa-moon"></i> <span>Dark Mode</span>
+      </button>
+
+      <button class="menu-toggle-btn" id="menuToggle" aria-label="Toggle Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="services.html"><i class="fa-solid fa-briefcase"></i> Services</a></li>
+        <li><a href="registration.html"><i class="fa-solid fa-file-signature"></i> Registration</a></li>
+        <li><a href="shop.html" class="active"><i class="fa-solid fa-cart-shopping"></i> Shop</a></li>
+        <li><a href="../index.html#contact-nexus"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+        <li><a href="login.html"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+        <li><a href="ajo.html"><i class="fa-solid fa-piggy-bank"></i> Ajo</a></li>
+      </ul>
     </div>
-    <nav class="nav-links">
-      <a href="../index.html">Home</a>
-      <a href="services.html">Services</a>
-      <a href="registration.html">Registration</a>
-      <a href="shop.html" class="active">Shop</a>
-      <a href="contact.html">Contact</a>
-      <a href="login.html">Login</a>
-    </nav>
   </header>
 
   <section class="shop-hero">
@@ -267,10 +449,10 @@
   </section>
 
   <div class="filter-container">
-    <button class="filter-btn active" onclick="filterItems('all')">All Hardware</button>
-    <button class="filter-btn" onclick="filterItems('accessories')">Accessories</button>
-    <button class="filter-btn" onclick="filterItems('components')">Components</button>
-    <button class="filter-btn" onclick="filterItems('stationery')">Stationery & Prints</button>
+    <button class="filter-btn active" onclick="filterItems('all', event)">All Hardware</button>
+    <button class="filter-btn" onclick="filterItems('accessories', event)">Accessories</button>
+    <button class="filter-btn" onclick="filterItems('components', event)">Components</button>
+    <button class="filter-btn" onclick="filterItems('stationery', event)">Stationery & Prints</button>
   </div>
 
   <section class="shop-section">
@@ -309,103 +491,67 @@
     </div>
   </section>
 
-  <a href="cart.html" class="cart-badge-float">
+  <a href="cart.html" class="cart-badge-float" aria-label="View Shopping Cart">
     <i class="fa-solid fa-shopping-cart"></i>
     <span class="cart-count" id="globalCartCount">0</span>
   </a>
 
-  <a href="https://wa.me/2349127469686" class="whatsapp-float">
-    <i class="fa-brands fa-whatsapp"></i>
-  </a>
+  <a href="https://wa.me/2349127469686" class="whatsapp-float" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
 
+  <footer class="master-footer">
+    <div class="footer-grid-layout">
+      <div class="footer-brand-wrapper">
+        <h3>HAMBAK TECH & SERVICES</h3>
+        <p>A premier global service provider deploying fully optimized digital automation channels, reliable regional network connections, and elite ICT educational infrastructures.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <a href="../index.html">Home Ecosystem</a>
+        <a href="services.html">Services Catalog</a>
+        <a href="../index.html#contact-nexus">Contact Portal</a>
+      </div>
+      <div class="footer-socials">
+        <h4>Social Media Channels</h4>
+        <div class="social-row-flex">
+          <a href="#" class="social-box-icon"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="social-box-icon"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://wa.me/2349127469686" class="social-box-icon"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); color: #cbd5e1;">
+      &copy; 2026 HAMBAK TECH & SERVICES — All Operational Rights Confirmed.
+    </div>
+  </footer>
+
+  <script src="../js/shop.js"></script>
   <script>
-    let internalCartItems = JSON.parse(localStorage.getItem("hambak_cart")) || [];
+    // Navigation Dropdown mechanics Toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+    menuToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('show');
+    });
 
-    function updateCartCounterUI() {
-      const countLabel = document.getElementById("globalCartCount");
-      if(countLabel) {
-        const aggregatedSum = internalCartItems.reduce((acc, curr) => acc + (curr.quantity || 1), 0);
-        countLabel.innerText = aggregatedSum;
-      }
-    }
-
-    function addToCart(productId, name, price) {
-      const distinctCheck = internalCartItems.find(item => item.id === productId);
-      if(distinctCheck) {
-        distinctCheck.quantity += 1;
+    // Theme Switch Light vs Dark System
+    const themeToggle = document.getElementById('themeToggle');
+    const rootEl = document.documentElement;
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = rootEl.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      rootEl.setAttribute('data-theme', newTheme);
+      
+      const themeIcon = themeToggle.querySelector('i');
+      const themeText = themeToggle.querySelector('span');
+      if(newTheme === 'light') {
+        themeIcon.className = 'fa-solid fa-sun';
+        themeText.innerText = 'Light Mode';
       } else {
-        internalCartItems.push({ id: productId, name: name, price: Number(price), quantity: 1 });
+        themeIcon.className = 'fa-solid fa-moon';
+        themeText.innerText = 'Dark Mode';
       }
-      localStorage.setItem("hambak_cart", JSON.stringify(internalCartItems));
-      updateCartCounterUI();
-      alert(`${name} added to cart!`);
-    }
-
-    function filterItems(targetCategory) {
-      // Manage filter buttons appearance states
-      const buttons = document.querySelectorAll('.filter-btn');
-      buttons.forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-
-      const itemCards = document.querySelectorAll('.product-card');
-      itemCards.forEach(card => {
-        if(targetCategory === 'all') {
-          card.style.display = 'flex';
-        } else {
-          card.getAttribute('data-category') === targetCategory ? card.style.display = 'flex' : card.style.display = 'none';
-        }
-      });
-    }
-
-    async function ingestDatabaseProducts() {
-      const catalogContainer = document.getElementById("productsGrid");
-      const BACKEND_API = "https://hambak-tech-services.onrender.com/api";
-
-      try {
-        const networkResponse = await fetch(`${BACKEND_API}/products`);
-        if(!networkResponse.ok) return; // Keep static inventory cards as structural safeties if route is unpopulated
-
-        const collectionData = await networkResponse.json();
-        if(collectionData && collectionData.products && collectionData.products.length > 0) {
-          
-          // Clear static catalog instances once verified db arrays populate
-          catalogContainer.innerHTML = "";
-
-          collectionData.products.forEach(prod => {
-            const layoutCard = document.createElement("div");
-            layoutCard.className = "product-card";
-            layoutCard.setAttribute("data-category", prod.category || "accessories");
-
-            const assetImage = prod.image 
-              ? (prod.image.startsWith('http') ? prod.image : `${BACKEND_API}/..${prod.image}`)
-              : "https://images.unsplash.com/photo-1588702547919-26089e690ecc?w=500";
-
-            layoutCard.innerHTML = `
-              <div class="product-img" style="background: url('${assetImage}') center/cover;"></div>
-              <div class="product-info">
-                <div class="product-tag">${prod.category || "Accessories"}</div>
-                <h3 class="product-title">${prod.name}</h3>
-                <p class="product-desc">${prod.description || "Hambak certified technical retail item configuration product asset resource."}</p>
-                <div class="product-meta">
-                  <div class="product-price">₦${Number(prod.price).toLocaleString()}</div>
-                  <button class="cart-btn" onclick="addToCart('${prod._id}', '${prod.name}', ${prod.price})">
-                    <i class="fa-solid fa-cart-plus"></i> Add to Cart
-                  </button>
-                </div>
-              </div>
-            `;
-            catalogContainer.appendChild(layoutCard);
-          });
-        }
-      } catch (fault) {
-        console.error("Retail product synchronization log trace fault context:", fault);
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      updateCartCounterUI();
-      ingestDatabaseProducts();
     });
   </script>
 </body>
+
 </html>
