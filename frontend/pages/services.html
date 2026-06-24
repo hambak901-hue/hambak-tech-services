@@ -238,6 +238,7 @@
       font-size: 0.95rem;
       box-shadow: 0 5px 15px rgba(13, 71, 161, 0.3);
       transition: 0.3s ease;
+      cursor: pointer;
     }
 
     .service-btn:hover {
@@ -400,6 +401,7 @@
 
     <div class="services-grid" id="servicesGrid">
 
+      <!-- SERVICE CARD 1 -->
       <div class="service-card">
         <div class="service-icon"><i class="fa-solid fa-id-card"></i></div>
         <h3>NIN Services</h3>
@@ -411,9 +413,10 @@
           <li>Ecosystem Integration & Validation</li>
         </ul>
         <div class="price-tag">Starting ₦1,000</div>
-        <a href="order-service.html?id=static-nin" class="service-btn">Book Verification Service</a>
+        <div onclick="checkoutService('NIN-Services', 'Specialized Services')" class="service-btn">Book Verification Service</div>
       </div>
 
+      <!-- SERVICE CARD 2 -->
       <div class="service-card">
         <div class="service-icon"><i class="fa-solid fa-print"></i></div>
         <h3>Printing & Photocopy</h3>
@@ -425,9 +428,10 @@
           <li>Thermal Asset Lamination</li>
         </ul>
         <div class="price-tag">Starting ₦100</div>
-        <a href="order-service.html?id=static-printing" class="service-btn">Place Copy Order</a>
+        <div onclick="checkoutService('Printing-Photocopy', 'Document & Design')" class="service-btn">Place Copy Order</div>
       </div>
 
+      <!-- SERVICE CARD 3 -->
       <div class="service-card">
         <div class="service-icon"><i class="fa-solid fa-file-pen"></i></div>
         <h3>Online Registration</h3>
@@ -439,9 +443,10 @@
           <li>NYSC Mobilization Unit</li>
         </ul>
         <div class="price-tag">Starting ₦3,000</div>
-        <a href="registration.html" class="service-btn">Launch Portal Terminal</a>
+        <div onclick="checkoutService('Online-Registration', 'Online & Educational')" class="service-btn">Launch Portal Terminal</div>
       </div>
 
+      <!-- SERVICE CARD 4 -->
       <div class="service-card">
         <div class="service-icon"><i class="fa-solid fa-sim-card"></i></div>
         <h3>VTU Airtime & Data</h3>
@@ -453,9 +458,10 @@
           <li>Automated Utility Transactions</li>
         </ul>
         <div class="price-tag">Starting ₦100</div>
-        <a href="order-service.html?id=static-vtu" class="service-btn">Recharge Terminal</a>
+        <div onclick="checkoutService('VTU-Airtime', 'Recharge & VTU')" class="service-btn">Recharge Terminal</div>
       </div>
 
+      <!-- SERVICE CARD 5 -->
       <div class="service-card">
         <div class="service-icon"><i class="fa-solid fa-palette"></i></div>
         <h3>Graphics & Brand Design</h3>
@@ -467,9 +473,10 @@
           <li>Plastic ID Badge Compositing</li>
         </ul>
         <div class="price-tag">Starting ₦3,000</div>
-        <a href="order-service.html?id=static-graphics" class="service-btn">Order Visual Assets</a>
+        <div onclick="checkoutService('Graphics-Design', 'Document & Design')" class="service-btn">Order Visual Assets</div>
       </div>
 
+      <!-- SERVICE CARD 6 -->
       <div class="service-card">
         <div class="service-icon"><i class="fa-solid fa-graduation-cap"></i></div>
         <h3>ICT Training Tracks</h3>
@@ -481,7 +488,7 @@
           <li>Comprehensive Monthly Bootcamps</li>
         </ul>
         <div class="price-tag">Starting ₦5,000</div>
-        <a href="order-service.html?id=static-training" class="service-btn">Enroll In Track</a>
+        <div onclick="checkoutService('ICT-Training', 'Computer Training')" class="service-btn">Enroll In Track</div>
       </div>
 
     </div>
@@ -526,15 +533,31 @@
   </a>
 
   <script>
+    // System Filter Funnel Logic (Secure Wallet Gateway vs Direct Reach Setup)
+    function checkoutService(serviceId, serviceCategory) {
+      const token = localStorage.getItem("token") || localStorage.getItem("hambak_token");
+
+      // Path A: Physical walk-in shop services do not require full client database accounts
+      if (serviceCategory === "Document & Design" || serviceCategory === "Internet & Charging") {
+        window.location.href = `https://wa.me/2349127469686?text=Hello+Hambak+Tech+and+Services,+I+want+to+order+the+${encodeURIComponent(serviceId)}+service.`;
+        return;
+      }
+
+      // Path B: Advanced automated items must route through validation dashboard
+      if (!token) {
+        alert("Please log in or register an account dashboard to fund your wallet and purchase this service track.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      window.location.href = `order-service.html?id=${serviceId}`;
+    }
+
     async function loadDynamicServices() {
       const servicesContainer = document.getElementById("servicesGrid");
-      const identityToken = localStorage.getItem("token") || localStorage.getItem("hambak_token");
-
-      // Set up the system api path root address accurately
       const BACKEND_SERVICE_API = "https://hambak-tech-services.onrender.com/api";
 
       try {
-        // FIXED route destination target pointing directly to services endpoint collection
         const queryPipelineUrl = `${BACKEND_SERVICE_API}/services`;
         
         const fetchStreamResponse = await fetch(queryPipelineUrl, {
@@ -550,10 +573,8 @@
 
         const aggregatedResultData = await fetchStreamResponse.json();
 
-        // Check if data returned has matching items configuration arrays
         if (aggregatedResultData && aggregatedResultData.services && aggregatedResultData.services.length > 0) {
-          
-          // Clear static options only when live connection successfully delivers database items
+          // Clear static configurations safely since backend stream is running fine
           servicesContainer.innerHTML = "";
 
           aggregatedResultData.services.forEach(item => {
@@ -570,9 +591,9 @@
                 <i class="fa-solid fa-briefcase"></i>
               </div>
               <h3>${item.name}</h3>
-              <p>${item.description || "Custom server catalog asset resource item deployed into network infrastructure parameters."}</p>
+              <p>${item.description || "Custom database configuration track deployed on live server cluster infrastructure."}</p>
               <div class="price-tag">₦${Number(item.price).toLocaleString()}</div>
-              <a href="order-service.html?id=${item._id}" class="service-btn">Instantiate Order Node</a>
+              <div onclick="checkoutService('${item._id}', '${item.category}')" class="service-btn">Instantiate Order Node</div>
             `;
 
             servicesContainer.appendChild(parsedCardWrapper);
@@ -580,11 +601,10 @@
         }
       } catch (runtimeInfrastructuralFault) {
         console.error("Critical Sync Failure Trace log inside loadDynamicServices:", runtimeInfrastructuralFault);
-        // Fallback strategy remains working: hardcoded static placeholder configurations stay alive on layout screen view!
+        // Fallback Strategy: Static cards stay functional so the screen is never left empty!
       }
     }
 
-    // Initialize application catalog evaluation loop on window construction
     document.addEventListener("DOMContentLoaded", loadDynamicServices);
   </script>
 </body>
