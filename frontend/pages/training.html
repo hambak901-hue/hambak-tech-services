@@ -1,85 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Training Portal | HAMBAK TECH & SERVICES</title>
-  <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     /* ==========================================================================
-       PREMIUM BRAND COLOR PALETTE & GLASSMORPHIC DESIGN SYSTEM
+       HAMBAK BRAND DESIGN SYSTEM (Synced Across All Platform Sub-Modules)
        ========================================================================== */
-    :root {
+    :root[data-theme="dark"] {
       --primary-blue: #0d47a1;
       --deep-navy: #081120;
       --brand-gold: #f5b942;
       --soft-peach: #ffdfd3;
       --accent-pink: #ff4081;
       --clean-white: #ffffff;
-      --dark-card: rgba(15, 23, 42, 0.65);
-      --input-bg: #1e293b;
+      --slate-gray: #94a3b8;
+      --dark-card: rgba(15, 23, 42, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --body-bg: linear-gradient(135deg, var(--deep-navy), #040812);
+      --text-main: var(--clean-white);
+      --text-muted: #cbd5e1;
+      --header-bg: rgba(15, 23, 42, 0.9);
+    }
+
+    :root[data-theme="light"] {
+      --primary-blue: #0d47a1;
+      --deep-navy: #ffffff;
+      --brand-gold: #e0a534;
+      --soft-peach: #ffdfd3;
+      --accent-pink: #d81b60;
+      --clean-white: #0f172a;
+      --slate-gray: #475569;
+      --dark-card: rgba(241, 245, 249, 0.9);
+      --glass-border: rgba(15, 23, 42, 0.08);
+      --body-bg: linear-gradient(135deg, #f8fafc, #e2e8f0);
+      --text-main: #0f172a;
+      --text-muted: #334155;
+      --header-bg: rgba(255, 255, 255, 0.95);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: background 0.3s ease, color 0.3s ease;
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, var(--deep-navy), #040812);
-      color: var(--clean-white);
+      background: var(--body-bg);
+      color: var(--text-main);
       line-height: 1.6;
+      overflow-x: hidden;
     }
 
-    /* GLOBAL SYSTEM NAVBAR */
-    .navbar {
+    /* NAVIGATION BAR CONTAINER */
+    .header-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 8%;
-      background: rgba(15, 23, 42, 0.8);
+      padding: 15px 8%;
+      background: var(--header-bg);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid var(--glass-border);
       position: sticky;
       top: 0;
       z-index: 1000;
     }
 
-    .logo {
+    .brand-logo {
       display: flex;
-      flex-direction: column;
-    }
-
-    .logo span {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: var(--clean-white);
-    }
-
-    .logo small {
-      font-size: 0.75rem;
-      color: var(--brand-gold);
-      font-weight: 600;
-      letter-spacing: 2px;
-    }
-
-    .nav-links a {
-      color: #cbd5e1;
+      align-items: center;
+      gap: 12px;
       text-decoration: none;
-      margin-left: 25px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: 0.3s;
     }
 
-    .nav-links a:hover, .nav-links a.active {
-      color: var(--brand-gold);
+    .logo-img-frame {
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+      border: 1.5px solid var(--brand-gold);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2px;
     }
+
+    .logo-text { display: flex; flex-direction: column; }
+    .logo-text h1 { font-size: 1.3rem; font-weight: 800; color: var(--text-main); line-height: 1.2; }
+    .logo-text span { font-size: 0.7rem; color: var(--brand-gold); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
+
+    .right-nav-container { display: flex; align-items: center; gap: 20px; }
+
+    .menu-toggle-btn {
+      background: none; border: none; color: var(--text-main); font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; padding: 5px; z-index: 1001;
+    }
+
+    .nav-menu {
+      display: none; position: absolute; top: 100%; right: 8%; background: var(--header-bg); border: 1px solid var(--glass-border); border-radius: 12px; padding: 20px; width: 280px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); list-style: none; flex-direction: column; gap: 12px; backdrop-filter: blur(20px);
+    }
+    .nav-menu.show { display: flex; }
+    .nav-menu a { color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 1rem; padding: 8px 12px; border-radius: 6px; display: flex; align-items: center; gap: 10px; }
+    .nav-menu a:hover, .nav-menu a.active { color: #ffffff; background: var(--primary-blue); }
+
+    .theme-toggle-switch { background: rgba(13, 71, 161, 0.15); border: 1px solid var(--brand-gold); color: var(--brand-gold); padding: 8px 12px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; font-weight: 700; }
 
     /* HERO ARCHITECTURE */
     .training-hero {
@@ -92,9 +118,6 @@
       font-size: 3.8rem;
       font-weight: 800;
       margin-bottom: 20px;
-      background: linear-gradient(135deg, var(--clean-white), var(--brand-gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
 
     .training-hero p {
@@ -102,334 +125,81 @@
       margin: auto;
       line-height: 1.9;
       font-size: 1.15rem;
-      color: #cbd5e1;
+      color: var(--text-muted);
     }
 
-    /* SECTIONS COMMON BASE */
-    .course-section, .feature-section, .trainer-section {
-      padding: 90px 8%;
-    }
+    /* SECTIONS BASE GRID FORMATTING */
+    .course-section, .feature-section, .trainer-section { padding: 90px 8%; }
+    .section-title { text-align: center; margin-bottom: 60px; }
+    .section-title h2 { font-size: 2.8rem; font-weight: 800; margin-bottom: 15px; }
+    .section-title p { color: var(--slate-gray); line-height: 1.8; max-width: 700px; margin: auto; font-size: 1.05rem; }
 
-    .section-title {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-
-    .section-title h2 {
-      font-size: 2.8rem;
-      font-weight: 800;
-      margin-bottom: 15px;
-      color: var(--clean-white);
-    }
-
-    .section-title p {
-      color: #94a3b8;
-      line-height: 1.8;
-      max-width: 700px;
-      margin: auto;
-      font-size: 1.05rem;
-    }
-
-    /* GRID GRAPHS */
     .course-grid, .feature-grid, .trainer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 35px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px;
     }
 
     /* PREMIUM CARD DESIGN */
     .course-card {
-      background: var(--dark-card);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
-      transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      flex-direction: column;
+      background: var(--dark-card); border: 1px solid var(--glass-border); border-radius: 24px; overflow: hidden; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25); display: flex; flex-direction: column;
     }
 
-    .course-card:hover {
-      transform: translateY(-10px);
-      border-color: rgba(245, 185, 66, 0.25);
-    }
-
-    .course-image img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .course-content {
-      padding: 30px;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-    }
+    .course-card:hover { transform: translateY(-5px); border-color: var(--brand-gold); }
+    .course-image img { width: 100%; height: 220px; object-fit: cover; border-bottom: 1px solid var(--glass-border); }
+    .course-content { padding: 30px; flex-grow: 1; display: flex; flex-direction: column; }
 
     .course-level {
-      align-self: flex-start;
-      padding: 6px 16px;
-      background: rgba(245, 185, 66, 0.15);
-      border: 1px solid rgba(245, 185, 66, 0.3);
-      color: var(--brand-gold);
-      border-radius: 50px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      align-self: flex-start; padding: 6px 16px; background: rgba(245, 185, 66, 0.15); border: 1px solid var(--brand-gold); color: var(--brand-gold); border-radius: 50px; font-size: 0.85rem; font-weight: 700; margin-bottom: 20px; text-transform: uppercase;
     }
 
-    .course-content h3 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: var(--clean-white);
-    }
-
-    .course-content p {
-      line-height: 1.8;
-      color: #94a3b8;
-      margin-bottom: 25px;
-      font-size: 0.95rem;
-    }
-
-    .course-meta {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 25px;
-      color: #cbd5e1;
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-
-    .course-meta i {
-      color: var(--brand-gold);
-      margin-right: 6px;
-    }
-
-    .course-price {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--brand-gold);
-      margin-bottom: 25px;
-      margin-top: auto;
-    }
+    .course-content h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 12px; }
+    .course-content p { line-height: 1.8; color: var(--slate-gray); margin-bottom: 25px; font-size: 0.95rem; }
+    .course-meta { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 25px; color: var(--text-muted); font-size: 0.9rem; }
+    .course-meta i { color: var(--brand-gold); margin-right: 6px; }
+    .course-price { font-size: 1.8rem; font-weight: 800; color: var(--brand-gold); margin-bottom: 25px; margin-top: auto; }
 
     .course-btn {
-      display: block;
-      text-align: center;
-      padding: 15px;
-      background: linear-gradient(135deg, var(--primary-blue), #1565c0);
-      color: var(--clean-white);
-      text-decoration: none;
-      border-radius: 12px;
-      font-weight: 700;
-      transition: 0.3s ease;
-      box-shadow: 0 4px 12px rgba(13, 71, 161, 0.3);
+      display: block; text-align: center; padding: 15px; background: linear-gradient(135deg, var(--primary-blue), #1565c0); color: #ffffff; text-decoration: none; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 1rem; width: 100%;
     }
+    .course-btn:hover { background: linear-gradient(135deg, var(--accent-pink), #d81b60); }
 
-    .course-btn:hover {
-      box-shadow: 0 6px 18px rgba(13, 71, 161, 0.5);
-      transform: translateY(-1px);
-    }
+    /* ADVANTAGES FEATURES */
+    .feature-card { padding: 45px 35px; background: var(--dark-card); border: 1px solid var(--glass-border); border-radius: 24px; text-align: center; }
+    .feature-card i { font-size: 2.8rem; margin-bottom: 25px; color: var(--brand-gold); }
+    .feature-card h3 { font-size: 1.35rem; margin-bottom: 15px; }
+    .feature-card p { line-height: 1.8; color: var(--slate-gray); font-size: 0.95rem; }
 
-    /* FEATURES GRID LAYOUT */
-    .feature-card {
-      padding: 45px 35px;
-      background: var(--dark-card);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 24px;
-      text-align: center;
-      transition: 0.3s;
-    }
+    /* TRAINERS MODULE */
+    .trainer-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .trainer-card { background: var(--dark-card); border: 1px solid var(--glass-border); padding: 40px 30px; border-radius: 24px; text-align: center; }
+    .trainer-card img { width: 125px; height: 125px; border-radius: 50%; margin-bottom: 22px; object-fit: cover; border: 3px solid var(--glass-border); }
+    .trainer-card h3 { font-size: 1.3rem; margin-bottom: 8px; }
+    .trainer-card p { color: var(--slate-gray); font-size: 0.95rem; }
 
-    .feature-card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(255, 64, 129, 0.2);
-    }
-
-    .feature-card i {
-      font-size: 2.8rem;
-      margin-bottom: 25px;
-      color: var(--brand-gold);
-    }
-
-    .feature-card h3 {
-      font-size: 1.35rem;
-      margin-bottom: 15px;
-      color: var(--clean-white);
-    }
-
-    .feature-card p {
-      line-height: 1.8;
-      color: #94a3b8;
-      font-size: 0.95rem;
-    }
-
-    /* INSTRUCTORS PANEL */
-    .trainer-grid {
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    }
-
-    .trainer-card {
-      background: var(--dark-card);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 40px 30px;
-      border-radius: 24px;
-      text-align: center;
-      transition: 0.3s;
-    }
-
-    .trainer-card:hover {
-      border-color: rgba(13, 71, 161, 0.3);
-    }
-
-    .trainer-card img {
-      width: 125px;
-      height: 125px;
-      border-radius: 50%;
-      margin-bottom: 22px;
-      object-fit: cover;
-      border: 3px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .trainer-card h3 {
-      font-size: 1.3rem;
-      margin-bottom: 8px;
-      color: var(--clean-white);
-    }
-
-    .trainer-card p {
-      color: #94a3b8;
-      line-height: 1.7;
-      font-size: 0.95rem;
-    }
-
-    /* CTA MATRIX OVERLAY */
+    /* CTA PANEL */
     .register-section {
-      padding: 100px 8%;
-      background: linear-gradient(rgba(8, 17, 32, 0.9), rgba(8, 17, 32, 0.9)), 
-                  url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1200&auto=format&fit=crop');
-      background-size: cover;
-      background-position: center;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      text-align: center;
+      padding: 100px 8%; background: linear-gradient(rgba(8, 17, 32, 0.95), rgba(4, 8, 18, 0.95)), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1200'); background-size: cover; background-position: center; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); text-align: center;
     }
-
-    .register-section h2 {
-      font-size: 2.8rem;
-      font-weight: 800;
-      margin-bottom: 20px;
-    }
-
-    .register-section p {
-      max-width: 700px;
-      margin: auto;
-      line-height: 1.8;
-      color: #cbd5e1;
-      margin-bottom: 40px;
-      font-size: 1.1rem;
-    }
-
+    .register-section h2 { font-size: 2.8rem; font-weight: 800; margin-bottom: 20px; }
+    .register-section p { max-width: 700px; margin: auto; color: var(--text-muted); margin-bottom: 40px; font-size: 1.1rem; }
+    
     .register-btn {
-      display: inline-block;
-      padding: 16px 38px;
-      background: linear-gradient(135deg, var(--brand-gold), #e0a534);
-      color: var(--deep-navy);
-      text-decoration: none;
-      border-radius: 12px;
-      font-weight: 700;
-      transition: 0.3s ease;
-      box-shadow: 0 4px 15px rgba(245, 185, 66, 0.3);
+      display: inline-block; padding: 16px 38px; background: linear-gradient(135deg, var(--brand-gold), #e0a534); color: #081120; text-decoration: none; border-radius: 12px; font-weight: 700; box-shadow: 0 4px 15px rgba(245, 185, 66, 0.3);
     }
 
-    .register-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(245, 185, 66, 0.4);
-    }
+    /* FOOTER MODULE */
+    .master-footer { background: #020617; padding: 80px 8% 30px; border-top: 1px solid var(--glass-border); color: #ffffff; }
+    .footer-grid-layout { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 50px; }
+    .footer-brand-wrapper h3, .footer-links h4, .footer-socials h4 { color: var(--brand-gold); margin-bottom: 15px; }
+    .footer-brand-wrapper p, .footer-links p { color: #cbd5e1; font-size: 0.95rem; line-height: 1.8; }
+    .footer-links a { display: block; color: #cbd5e1; text-decoration: none; margin-bottom: 12px; }
+    .footer-links a:hover { color: var(--accent-pink); }
 
-    /* ECOSYSTEM FOOTER MODULE */
-    .footer {
-      background: #020617;
-      color: #94a3b8;
-      padding: 70px 8% 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .footer-content {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 40px;
-      margin-bottom: 40px;
-    }
-
-    .footer h3 {
-      margin-bottom: 20px;
-      color: var(--brand-gold);
-      font-size: 1.15rem;
-    }
-
-    .footer p {
-      line-height: 1.8;
-      font-size: 0.95rem;
-    }
-
-    .footer-links a {
-      display: block;
-      margin-bottom: 12px;
-      color: #cbd5e1;
-      text-decoration: none;
-      transition: 0.2s;
-    }
-
-    .footer-links a:hover {
-      color: var(--accent-pink);
-      padding-left: 5px;
-    }
-
-    .footer-bottom {
-      text-align: center;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      color: #64748b;
-      font-size: 0.85rem;
-    }
-
-    /* FLOATING CONNECTIVITY WIDGET */
     .whatsapp-float {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 60px;
-      height: 60px;
-      background: #25d366;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.9rem;
-      color: var(--clean-white);
-      text-decoration: none;
-      z-index: 999;
-      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
-      transition: 0.3s ease;
+      position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: #25d366; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.9rem; color: #ffffff; text-decoration: none; z-index: 999; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
     }
 
-    .whatsapp-float:hover {
-      transform: scale(1.1);
-    }
-
-    @media(max-width: 768px) {
-      .navbar { flex-direction: column; gap: 15px; }
-      .training-hero { padding: 120px 5% 70px; }
+    @media(max-width: 992px) {
+      .footer-grid-layout { grid-template-columns: 1fr; gap: 30px; }
       .training-hero h1 { font-size: 2.5rem; }
       .section-title h2, .register-section h2 { font-size: 2rem; }
     }
@@ -438,42 +208,51 @@
 
 <body>
 
-  <!-- GLOBAL SYSTEM NAVBAR -->
-  <header class="navbar">
-    <div class="logo">
-      <span>HAMBAK</span>
-      <small>TECH & SERVICES</small>
+  <header class="header-bar">
+    <a href="../index.html" class="brand-logo">
+      <img src="../logo.png" alt="Hambak Logo" class="logo-img-frame">
+      <div class="logo-text">
+        <h1>HAMBAK</h1>
+        <span>TECH & SERVICES</span>
+      </div>
+    </a>
+
+    <div class="right-nav-container">
+      <button class="theme-toggle-switch" id="themeToggle">
+        <i class="fa-solid fa-moon"></i> <span>Dark Mode</span>
+      </button>
+
+      <button class="menu-toggle-btn" id="menuToggle" aria-label="Toggle Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="services.html"><i class="fa-solid fa-briefcase"></i> Services</a></li>
+        <li><a href="registration.html"><i class="fa-solid fa-file-signature"></i> Registration</a></li>
+        <li><a href="shop.html"><i class="fa-solid fa-cart-shopping"></i> Shop</a></li>
+        <li><a href="training.html" class="active"><i class="fa-solid fa-graduation-cap"></i> Training</a></li>
+        <li><a href="../index.html#contact-nexus"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+        <li><a href="login.html"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+      </ul>
     </div>
-    <nav class="nav-links">
-      <a href="../index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="services.html">Services</a>
-      <a href="training.html" class="active">Training</a>
-      <a href="contact.html">Contact</a>
-    </nav>
   </header>
 
-  <!-- HERO SECTION -->
   <section class="training-hero">
     <h1>Training & Courses Portal</h1>
-    <p>
-      Learn modern ICT skills, digital business platforms, creative design, and structural system configurations professionally engineered under HAMBAK TECH & SERVICES execution rules.
-    </p>
+    <p>Learn modern ICT skills, digital business platforms, creative design, and structural system configurations professionally engineered under HAMBAK TECH & SERVICES execution rules.</p>
   </section>
 
-  <!-- COURSES DISPLAY SYSTEM -->
   <section class="course-section">
     <div class="section-title">
       <h2>Popular Courses</h2>
       <p>Professional technical syllabuses customized for corporate students, business operators, and engineering candidates.</p>
     </div>
 
-    <div class="course-grid">
-
-      <!-- SKILL TRACK 1 -->
+    <div class="course-grid" id="coursesGrid">
       <div class="course-card">
         <div class="course-image">
-          <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop" alt="Basic ICT Infrastructure Operations Grid">
+          <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200" alt="Basic ICT Infrastructure">
         </div>
         <div class="course-content">
           <div class="course-level">Beginner</div>
@@ -484,14 +263,13 @@
             <span><i class="fa-solid fa-user-group"></i> Active Enrollment</span>
           </div>
           <div class="course-price">₦15,000</div>
-          <a href="shop.html?category=training" class="course-btn">Enroll Now</a>
+          <button onclick="handleCourseEnrollment('ict-basic', 'Basic ICT Training')" class="course-btn">Enroll Now</button>
         </div>
       </div>
 
-      <!-- SKILL TRACK 2 -->
       <div class="course-card">
         <div class="course-image">
-          <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop" alt="Website Architecture Logic Matrix">
+          <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200" alt="Website Architecture">
         </div>
         <div class="course-content">
           <div class="course-level">Advanced</div>
@@ -502,122 +280,79 @@
             <span><i class="fa-solid fa-user-group"></i> Active Enrollment</span>
           </div>
           <div class="course-price">₦35,000</div>
-          <a href="shop.html?category=training" class="course-btn">Enroll Now</a>
+          <button onclick="handleCourseEnrollment('web-dev', 'Web Development')" class="course-btn">Enroll Now</button>
         </div>
       </div>
-
-      <!-- SKILL TRACK 3 -->
-      <div class="course-card">
-        <div class="course-image">
-          <img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1200&auto=format&fit=crop" alt="Creative Vector Graphics Core Module">
-        </div>
-        <div class="course-content">
-          <div class="course-level">Intermediate</div>
-          <h3>Graphics Design</h3>
-          <p>High-fidelity vector engineering, corporate visual systems layout, layout design compositions, and digital asset branding pipelines.</p>
-          <div class="course-meta">
-            <span><i class="fa-solid fa-clock"></i> 6 Weeks</span>
-            <span><i class="fa-solid fa-user-group"></i> Active Enrollment</span>
-          </div>
-          <div class="course-price">₦25,000</div>
-          <a href="shop.html?category=training" class="course-btn">Enroll Now</a>
-        </div>
-      </div>
-
     </div>
   </section>
 
-  <!-- BENCHMARK CORE ADVANTAGES -->
   <section class="feature-section">
     <div class="section-title">
       <h2>Why Learn With Us</h2>
       <p>A rigorous training process with end-to-end continuous support layers.</p>
     </div>
-
     <div class="feature-grid">
-      <div class="feature-card">
-        <i class="fa-solid fa-certificate"></i>
-        <h3>Validated Certifications</h3>
-        <p>Issued authorized corporate fulfillment validation assets upon complete module execution.</p>
-      </div>
-      <div class="feature-card">
-        <i class="fa-solid fa-laptop-code"></i>
-        <h3>Project-Driven Classes</h3>
-        <p>100% execution-focused environments centered on practical structural systems deployment.</p>
-      </div>
-      <div class="feature-card">
-        <i class="fa-solid fa-headset"></i>
-        <h3>Continuous Mentorship</h3>
-        <p>Ongoing support pathways and open system assistance modules during all learning cycles.</p>
-      </div>
+      <div class="feature-card"><i class="fa-solid fa-certificate"></i><h3>Validated Certifications</h3><p>Issued authorized corporate fulfillment validation assets upon complete module execution.</p></div>
+      <div class="feature-card"><i class="fa-solid fa-laptop-code"></i><h3>Project-Driven Classes</h3><p>100% execution-focused environments centered on practical structural systems deployment.</p></div>
+      <div class="feature-card"><i class="fa-solid fa-headset"></i><h3>Continuous Mentorship</h3><p>Ongoing support pathways and open system assistance modules during all learning cycles.</p></div>
     </div>
   </section>
 
-  <!-- INSTRUCTOR ROSTER HUB -->
-  <section class="trainer-section">
-    <div class="section-title">
-      <h2>Our Trainers</h2>
-      <p>Experienced industry specialists managing your learning tracks.</p>
-    </div>
-
-    <div class="trainer-grid">
-      <div class="trainer-card">
-        <img src="https://i.pravatar.cc/200?img=12" alt="Lead ICT Systems Specialist">
-        <h3>ICT Systems Trainer</h3>
-        <p>Enterprise desktop operations mentor and business workflow layout coach.</p>
-      </div>
-      <div class="trainer-card">
-        <img src="https://i.pravatar.cc/200?img=32" alt="Web Systems Application Engineer">
-        <h3>Web Infrastructure Engineer</h3>
-        <p>Full-stack web logic engineer and custom application specialist.</p>
-      </div>
-      <div class="trainer-card">
-        <img src="https://i.pravatar.cc/200?img=15" alt="Creative Director and Brand Designer">
-        <h3>Creative Identity Architect</h3>
-        <p>Bespoke vector design instructor and marketing communications supervisor.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- CALL TO REGISTRATION PIPELINE -->
   <section class="register-section">
     <h2>Launch Your Technical Roadmap</h2>
     <p>Configure your foundational competence matrix today. Sync directly with our processing nodes to lock down your learning space.</p>
-    <a href="contact.html" class="register-btn">Register Now</a>
+    <a href="https://wa.me/2349127469686?text=Hello+Hambak+Tech+and+Services,+I+want+to+inquire+about+available+training+programs." class="register-btn" target="_blank">Register Via WhatsApp</a>
   </section>
 
-  <!-- SYSTEMS FOOTER CONTAINER -->
-  <footer class="footer">
-    <div class="footer-content">
-      <div>
+  <footer class="master-footer">
+    <div class="footer-grid-layout">
+      <div class="footer-brand-wrapper">
         <h3>HAMBAK TECH & SERVICES</h3>
         <p>Where corporate technical systems balance perfectly with agile service deployment pipelines.</p>
       </div>
-      <div>
-        <h3>Quick Navigation</h3>
-        <div class="footer-links">
-          <a href="../index.html">Home Ecosystem</a>
-          <a href="services.html">Services Catalog</a>
-          <a href="training.html">Training Portal</a>
-          <a href="contact.html">Support Desk</a>
-        </div>
+      <div class="footer-links">
+        <h4>Quick Navigation</h4>
+        <a href="../index.html">Home Ecosystem</a>
+        <a href="services.html">Services Catalog</a>
+        <a href="training.html">Training Portal</a>
       </div>
-      <div>
-        <h3>Contact Coordinates</h3>
-        <p style="margin-bottom: 8px;"><i class="fa-solid fa-phone" style="color: var(--brand-gold); margin-right: 8px;"></i> 09127469686</p>
-        <p style="margin-bottom: 8px;"><i class="fa-solid fa-envelope" style="color: var(--brand-gold); margin-right: 8px;"></i> hambak901@gmail.com</p>
+      <div class="footer-links">
+        <h4>Contact Coordinates</h4>
+        <p><i class="fa-solid fa-phone" style="color: var(--brand-gold); margin-right: 8px;"></i> 09127469686</p>
+        <p><i class="fa-solid fa-envelope" style="color: var(--brand-gold); margin-right: 8px;"></i> hambak901@gmail.com</p>
         <p><i class="fa-solid fa-location-dot" style="color: var(--brand-gold); margin-right: 8px;"></i> Ibeju-Lekki, Lagos Nigeria</p>
       </div>
     </div>
-    <div class="footer-bottom">
-      &copy; 2026 HAMBAK TECH & SERVICES. All System Records Preserved.
+    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); color: #cbd5e1;">
+      &copy; 2026 HAMBAK TECH & SERVICES — All Operational Rights Confirmed.
     </div>
   </footer>
 
-  <!-- FLOATING COMMUNICATION LINK -->
-  <a href="https://wa.me/2349127469686" class="whatsapp-float" aria-label="Direct Link to WhatsApp Support Matrix">
-    <i class="fa-brands fa-whatsapp"></i>
-  </a>
+  <a href="https://wa.me/2349127469686" class="whatsapp-float" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
 
+  <script src="../js/training.js"></script>
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+    menuToggle.addEventListener('click', () => { navMenu.classList.toggle('show'); });
+
+    const themeToggle = document.getElementById('themeToggle');
+    const rootEl = document.documentElement;
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = rootEl.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      rootEl.setAttribute('data-theme', newTheme);
+      
+      const themeIcon = themeToggle.querySelector('i');
+      const themeText = themeToggle.querySelector('span');
+      if(newTheme === 'light') {
+        themeIcon.className = 'fa-solid fa-sun';
+        themeText.innerText = 'Light Mode';
+      } else {
+        themeIcon.className = 'fa-solid fa-moon';
+        themeText.innerText = 'Dark Mode';
+      }
+    });
+  </script>
 </body>
 </html>
