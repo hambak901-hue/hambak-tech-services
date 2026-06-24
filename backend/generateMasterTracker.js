@@ -2,27 +2,23 @@ import ExcelJS from "exceljs";
 import path from "path";
 import mongoose from "mongoose";
 
-// Import your database models
+// Import core collection schemas
 import Order from "./models/order.js";
-import Service from "./models/service.js";
 import Transaction from "./models/transaction.js";
 
 async function generateMasterTracker() {
-  // Ensure we are connected to MongoDB before running calculations
   if (mongoose.connection.readyState !== 1) {
-    if (!process.env.MONGO_URI) {
-      throw new Error("MONGO_URI environment variable is missing from your .env configuration.");
-    }
+    if (!process.env.MONGO_URI) throw new Error("MONGO_URI variable is missing.");
     await mongoose.connect(process.env.MONGO_URI);
   }
 
   const workbook = new ExcelJS.Workbook();
-  
-  // Style Configuration Matrix
   const FONT_NAME = "Segoe UI";
+  
   const colors = {
     navy: "1B365D",
     lightBlue: "2B6CB0",
+    darkTeal: "0D9488",
     zebra: "F7FAFC",
     summary: "EDF2F7",
     profitGreen: "E6FFFA",
@@ -32,7 +28,7 @@ async function generateMasterTracker() {
   const fontTitle = { name: FONT_NAME, size: 16, bold: true, color: { argb: "FFFFFF" } };
   const fontSection = { name: FONT_NAME, size: 12, bold: true, color: { argb: "1B365D" } };
   const fontHeader = { name: FONT_NAME, size: 11, bold: true, color: { argb: "FFFFFF" } };
-  const fontBody = { name: FONT_NAME, size: 11, bold: false, color: { argb: "000000" } };
+  const fontBody = { name: FONT_NAME, size: 11, color: { argb: "000000" } };
   const fontBold = { name: FONT_NAME, size: 11, bold: true, color: { argb: "000000" } };
 
   const thinBorderSide = { style: "thin", color: { argb: "CBD5E0" } };
@@ -40,250 +36,147 @@ async function generateMasterTracker() {
   const doubleBottomBorder = { top: thinBorderSide, bottom: { style: "double", color: { argb: "1B365D" } } };
 
   // ==========================================================================
-  // TAB 1: DASHBOARD
+  // TAB 1: BUSINESS DASHBOARD
   // ==========================================================================
   const wsDash = workbook.addWorksheet("Dashboard", { views: [{ showGridLines: true }] });
   
-  wsDash.mergeCells("A1:G2");
-  const titleCell = wsDash.getCell("A1");
-  titleCell.value = "HAMBAK TECH & SERVICES - MASTER MANAGEMENT DASHBOARD";
-  titleCell.font = fontTitle;
-  titleCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: colors.navy } };
-  titleCell.alignment = { horizontal: "center", vertical: "middle" };
+  wsDash.mergeCells("A1:M2");
+  const tCell = wsDash.getCell("A1");
+  tCell.value = "HAMBAK TECH & SERVICES – MAIN OPERATIONS REAL-TIME DASHBOARD";
+  tCell.font = fontTitle;
+  tCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: colors.navy } };
+  tCell.alignment = { horizontal: "center", vertical: "middle" };
 
-  // KPI Summary Cards Configuration (Linked dynamically to transaction sheets)
-  const kpis = [
-    { labelCell: "B4", numCell: "B5", label: "TOTAL REVENUE", formula: "='Sales Transactions'!G32", color: colors.profitGreen },
-    { labelCell: "D4", numCell: "D5", label: "TOTAL EXPENSES", formula: "='Expense Transactions'!E32", color: colors.expenseRed },
-    { labelCell: "F4", numCell: "F5", label: "NET PROFIT", formula: "=B5-D5", color: colors.summary }
+  // Core Corporate Financial Metrics Grid Setup
+  const dashboardKpis = [
+    { label: "🧮 Total Transactions", cell: "A4", valCell: "A5", formula: "=COUNTA('Transactions Log'!A5:A1000)" },
+    { label: "💰 Total Amount", cell: "D4", valCell: "D5", formula: "=SUM('Transactions Log'!M5:M1000)", fmt: '"₦"#,##0.00' },
+    { label: "💼 Total Commission", cell: "G4", valCell: "G5", formula: "=SUM('Transactions Log'!N5:N1000)", fmt: '"₦"#,##0.00' },
+    { label: "Total Profit", cell: "J4", valCell: "J5", formula: "=SUM('Transactions Log'!V5:V1000)", fmt: '"₦"#,##0.00' }
   ];
 
-  kpis.forEach(kpi => {
-    const lCell = wsDash.getCell(kpi.labelCell);
-    lCell.value = kpi.label;
-    lCell.font = { name: FONT_NAME, size: 9, bold: true, color: { argb: "4A5568" } };
-    lCell.alignment = { horizontal: "center", vertical: "middle" };
-    lCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: kpi.color } };
-    lCell.border = thinBorder;
+  dashboardKpis.forEach(kpi => {
+    wsDash.getCell(kpi.cell).value = kpi.label;
+    wsDash.getCell(kpi.cell).font = fontBold;
+    wsDash.getCell(kpi.cell).fill = { type: "pattern", pattern: "solid", fgColor: { argb: colors.summary } };
+    wsDash.getCell(kpi.cell).border = thinBorder;
 
-    const nCell = wsDash.getCell(kpi.numCell);
-    nCell.value = { formula: kpi.formula };
-    nCell.font = { name: FONT_NAME, size: 20, bold: true, color: { argb: "1B365D" } };
-    nCell.alignment = { horizontal: "center", vertical: "middle" };
-    nCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: kpi.color } };
-    nCell.border = thinBorder;
-    nCell.numFmt = '"₦"#,##0.00';
+    const vCell = wsDash.getCell(kpi.valCell);
+    vCell.value = { formula: kpi.formula };
+    vCell.font = { name: FONT_NAME, size: 14, bold: true, color: { argb: colors.navy } };
+    vCell.border = thinBorder;
+    if (kpi.fmt) vCell.numFmt = kpi.fmt;
   });
 
-  wsDash.getCell("A8").value = "Revenue By Category";
+  // Top Category Dynamic Yield Block
+  wsDash.getCell("A8").value = "📊 TOP CATEGORIES SUMMARY";
   wsDash.getCell("A8").font = fontSection;
   wsDash.getCell("A9").value = "Category";
-  wsDash.getCell("B9").value = "Total Sales (₦)";
+  wsDash.getCell("B9").value = "Total Volume Sales (₦)";
   wsDash.getCell("A9").fill = wsDash.getCell("B9").fill = { type: "pattern", pattern: "solid", fgColor: { argb: colors.lightBlue } };
   wsDash.getCell("A9").font = wsDash.getCell("B9").font = fontHeader;
 
-  const categories = [
-    "ICT Training Services", "Website Development", "Graphic Design", 
-    "Computer Services", "Printing & Documentation", "Business Documentation",
-    "Digital Marketing", "ICT Consultancy", "VTU Services", "POS Services", "Other"
+  const categories = ["POS & Agency Banking", "Document & Design", "Specialized Services", "Computer Training", "Online & Educational", "Recharge & VTU"];
+  categories.forEach((cat, idx) => {
+    const row = 10 + idx;
+    wsDash.getCell(`A${row}`).value = cat;
+    wsDash.getCell(`A${row}`).border = thinBorder;
+    wsDash.getCell(`B${row}`).value = { formula: `=SUMIF('Transactions Log'!E5:E1000, A${row}, 'Transactions Log'!M5:M1000)` };
+    wsDash.getCell(`B${row}`).border = thinBorder;
+    wsDash.getCell(`B${row}`).numFmt = '"₦"#,##0.00';
+  });
+
+  // ==========================================================================
+  // TAB 2: TRANSACTIONS LOG (YOUR CORE FORMAT)
+  // ==========================================================================
+  const wsTx = workbook.addWorksheet("Transactions Log", { views: [{ showGridLines: true }] });
+  
+  const headersTx = [
+    "Date", "Time", "Receipt_No", "Staff_Name", "Category", "Service_Name", "Type", "Unit", 
+    "Quantity", "Entered_Amount", "Unit_Price", "POS_Charge", "Total_Amount", "Staff_Commission", 
+    "Payment_Method", "Receipt_Delivery", "Customer_Phone", "Notes", "Real_Date", "Service_Group", 
+    "Buying_Price (auto)", "Profit (auto)"
   ];
 
-  categories.forEach((cat, i) => {
-    const rowNum = 10 + i;
-    wsDash.getCell(`A${rowNum}`).value = cat;
-    wsDash.getCell(`A${rowNum}`).font = fontBody;
-    wsDash.getCell(`A${rowNum}`).border = thinBorder;
-
-    wsDash.getCell(`B${rowNum}`).value = { formula: `=SUMIF('Sales Transactions'!D$5:D$30, A${rowNum}, 'Sales Transactions'!G$5:G$30)` };
-    wsDash.getCell(`B${rowNum}`).font = fontBody;
-    wsDash.getCell(`B${rowNum}`).border = thinBorder;
-    wsDash.getCell(`B${rowNum}`).numFmt = '"₦"#,##0.00';
-  });
-
-  const totalSalesRow = 10 + categories.length;
-  wsDash.getCell(`A${totalSalesRow}`).value = "Total Calculated";
-  wsDash.getCell(`A${totalSalesRow}`).font = fontBold;
-  wsDash.getCell(`B${totalSalesRow}`).value = { formula: `=SUM(B10:B${totalSalesRow - 1})` };
-  wsDash.getCell(`B${totalSalesRow}`).font = fontBold;
-  wsDash.getCell(`B${totalSalesRow}).border = doubleBottomBorder;
-  wsDash.getCell(`B${totalSalesRow}`).numFmt = '"₦"#,##0.00';
-
-  // Online Gateway Revenue Performance Tracker
-  const startGatewayRow = totalSalesRow + 3;
-  wsDash.getCell(`A${startGatewayRow}`).value = "Online Gateway Channel Matrix";
-  wsDash.getCell(`A${startGatewayRow}`).font = fontSection;
-  wsDash.getCell(`A${startGatewayRow+1}`).value = "Gateway";
-  wsDash.getCell(`B${startGatewayRow+1}`).value = "Volume Processed";
-  wsDash.getCell(`A${startGatewayRow+1}`).fill = wsDash.getCell(`B${startGatewayRow+1}`).fill = { type: "pattern", pattern: "solid", fgColor: { argb: colors.lightBlue } };
-  wsDash.getCell(`A${startGatewayRow+1}`).font = wsDash.getCell(`B${startGatewayRow+1}`).font = fontHeader;
-
-  const gateways = ["Paystack", "Flutterwave", "Online Transfer", "Wallet Balance", "Cash", "POS"];
-  gateways.forEach((g, i) => {
-    const rNum = startGatewayRow + 2 + i;
-    wsDash.getCell(`A${rNum}`).value = g;
-    wsDash.getCell(`A${rNum}`).font = fontBody;
-    wsDash.getCell(`A${rNum}`).border = thinBorder;
-
-    wsDash.getCell(`B${rNum}`).value = { formula: `=SUMIF('Sales Transactions'!H$5:H$30, A${rNum}, 'Sales Transactions'!G$5:G$30)` };
-    wsDash.getCell(`B${rNum}`).font = fontBody;
-    wsDash.getCell(`B${rNum}`).border = thinBorder;
-    wsDash.getCell(`B${rNum}`).numFmt = '"₦"#,##0.00';
-  });
-
-  // ==========================================================================
-  // TAB 2: LIVE SALES TRANSACTIONS INTAKE
-  // ==========================================================================
-  const wsSales = workbook.addWorksheet("Sales Transactions", { views: [{ showGridLines: true }] });
-  wsSales.getCell("A1").value = "DAILY SALES RECORD BOOK & WEB INTAKE LEDGER";
-  wsSales.getCell("A1").font = fontSection;
-
-  const headersSales = ["Date", "Invoice ID", "Customer Name", "Category", "Service/Product Details", "Quantity", "Amount (₦)", "Payment Method", "Handled By"];
-  headersSales.forEach((h, i) => {
-    const cell = wsSales.getCell(4, i + 1);
+  headersTx.forEach((h, i) => {
+    const cell = wsTx.getCell(4, i + 1);
     cell.value = h;
     cell.font = fontHeader;
     cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: colors.navy } };
     cell.alignment = { horizontal: "center" };
   });
 
-  // FETCH ALL SUCCESSFUL ORDERS FROM DATABASE & POPULATE SPREADSHEET
-  const dbOrders = await Order.find({}).populate("service").sort({ createdAt: -1 }).limit(26).lean();
+  // Fetch orders logged via web portal checkouts or staff form endpoints
+  const dbOrders = await Order.find({}).populate("service").sort({ createdAt: -1 }).lean();
 
-  dbOrders.forEach((order, rIdx) => {
-    const dateStr = order.createdAt ? new Date(order.createdAt).toISOString().split('T')[0] : "";
-    const invoiceId = `HTS-${order._id.toString().slice(-5).toUpperCase()}`;
-    const category = order.service ? order.service.category : "Other";
-    const serviceName = order.service ? order.service.name : "Custom Operations Request";
-    const paymentChannel = order.amount > 0 ? "Wallet Balance" : "System Dynamic Sync";
+  dbOrders.forEach((order, idx) => {
+    const r = 5 + idx;
+    const dateObj = order.createdAt ? new Date(order.createdAt) : new Date();
+    
+    wsTx.getCell(`A${r}`).value = dateObj.toLocaleDateString("en-GB");
+    wsTx.getCell(`B${r}`).value = dateObj.toLocaleTimeString("en-GB");
+    wsTx.getCell(`C${r}`).value = `HMB-${dateObj.getFullYear()}${(dateObj.getMonth()+1).toString().padStart(2,'0')}-${100 + idx}`;
+    wsTx.getCell(`D${r}`).value = order.handledBy || "Web Intake";
+    wsTx.getCell(`E${r}`).value = order.service?.category || "Document & Design";
+    wsTx.getCell(`F${r}`).value = order.service?.name || "Photocopy";
+    wsTx.getCell(`G${r}`).value = "Fixed";
+    wsTx.getCell(`H${r}`).value = "Job";
+    wsTx.getCell(`I${r}`).value = order.quantity || 1;
+    wsTx.getCell(`J${r}`).value = order.amount || 0;
+    wsTx.getCell(`K${r}`).value = order.service?.price || 0;
+    wsTx.getCell(`L${r}`).value = { formula: `=IF(E${r}="POS & Agency Banking", 100, 0)` }; // Automated tier tracking logic rules
+    wsTx.getCell(`M${r}`).value = { formula: `=IF(L${r}>0, J${r}+L${r}, J${r})` };
+    wsTx.getCell(`N${r}`).value = { formula: `=M${r}*0.02` }; // 2% Standardized System Commission Evaluation
+    wsTx.getCell(`O${r}`).value = order.paymentMethod || "Wallet Balance";
+    wsTx.getCell(`P${r}`).value = "WhatsApp";
+    wsTx.getCell(`Q${r}`).value = order.customerPhone || "N/A";
+    wsTx.getCell(`R${r}`).value = order.message || "Processed successfully.";
+    wsTx.getCell(`S${r}`).value = dateObj.toLocaleDateString("en-US");
+    wsTx.getCell(`T${r}`).value = "SERVICE";
+    wsTx.getCell(`U${r}`).value = order.service?.buyingPrice || 0;
+    wsTx.getCell(`V${r}`).value = { formula: `=M${r}-U${r}` };
 
-    const rowData = [
-      dateStr,
-      invoiceId,
-      order.customerName || "Anonymous Hub User",
-      category,
-      serviceName,
-      order.quantity || 1,
-      order.amount || 0,
-      paymentChannel,
-      "Web Intake"
-    ];
-
-    rowData.forEach((val, cIdx) => {
-      const cell = wsSales.getCell(5 + rIdx, cIdx + 1);
-      cell.value = val;
-      cell.font = fontBody;
-      cell.border = thinBorder;
-      if (cIdx + 1 === 7) cell.numFmt = '"₦"#,##0.00';
+    // Format Number Configurations
+    ["J", "K", "L", "M", "N", "U", "V"].forEach(col => {
+      wsTx.getCell(`${col}${r}`).numFmt = '"₦"#,##0.00';
+      wsTx.getCell(`${col}${r}`).font = fontBody;
+      wsTx.getCell(`${col}${r}`).border = thinBorder;
     });
   });
 
-  // PAD OUT UNUSED CELLS SO THE INPUT BOOK IS PRE-STYLED FOR MANUAL ENTRY TOO
-  for (let r = 5 + dbOrders.length; r <= 31; r++) {
-    for (let c = 1; c <= headersSales.length; c++) {
-      const cell = wsSales.getCell(r, c);
+  // ==========================================================================
+  // TAB 3: AJO / COOPERATIVE SECTION
+  // ==========================================================================
+  const wsAjo = workbook.addWorksheet("Ajo Section", { views: [{ showGridLines: true }] });
+  wsAjo.getCell("A1").value = "COOPERATIVE DAILY CONTRIBUTION MANAGEMENT SYSTEM";
+  wsAjo.getCell("A1").font = fontSection;
+
+  const headersAjo = ["Collection Date", "Account ID", "Customer Name", "Phone Number", "Target Scheme Group", "Cycle Period", "Amount Deposited (₦)", "Staff Collector", "Balance Status"];
+  headersAjo.forEach((h, i) => {
+    const cell = wsAjo.getCell(4, i + 1);
+    cell.value = h;
+    cell.font = fontHeader;
+    cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: colors.darkTeal } };
+  });
+
+  // Generate blank template space rows to allow managers to run offline sync checks easily
+  for (let r = 5; r <= 20; r++) {
+    for (let c = 1; c <= headersAjo.length; c++) {
+      const cell = wsAjo.getCell(r, c);
       cell.border = thinBorder;
-      cell.font = fontBody;
       if (c === 7) cell.numFmt = '"₦"#,##0.00';
     }
   }
 
-  wsSales.getCell("F32").value = "TOTAL REVENUE";
-  wsSales.getCell("F32").font = fontBold;
-  wsSales.getCell("G32").value = { formula: "=SUM(G5:G31)" };
-  wsSales.getCell("G32").font = fontBold;
-  wsSales.getCell("G32").border = doubleBottomBorder;
-  wsSales.getCell("G32").numFmt = '"₦"#,##0.00';
-
-  // Add Interactive Cell Validations for Dropdowns
-  wsSales.dataValidations.add("D5:D31", {
-    type: "list",
-    allowBlank: true,
-    formulae: ['"ICT Training Services,Website Development,Graphic Design,Computer Services,Printing & Documentation,Business Documentation,Digital Marketing,ICT Consultancy,VTU Services,POS Services,Other"']
-  });
-
-  wsSales.dataValidations.add("H5:H31", {
-    type: "list",
-    allowBlank: true,
-    formulae: ['"Paystack,Flutterwave,Online Transfer,Wallet Balance,Cash,POS"']
-  });
-
-  // ==========================================================================
-  // TAB 3: EXPENSE TRANSACTIONS
-  // ==========================================================================
-  const wsExp = workbook.addWorksheet("Expense Transactions", { views: [{ showGridLines: true }] });
-  wsExp.getCell("A1").value = "COMPANY EXPENSES RECORD BOOK";
-  wsExp.getCell("A1").font = fontSection;
-
-  const headersExp = ["Date", "Expense ID", "Category", "Description / Purpose", "Amount (₦)", "Payment Method", "Status"];
-  headersExp.forEach((h, i) => {
-    const cell = wsExp.getCell(4, i + 1);
-    cell.value = h;
-    cell.font = fontHeader;
-    cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: colors.navy } };
-    cell.alignment = { horizontal: "center" };
-  });
-
-  // Dynamically load any negative mutations or cash flow reversals logged
-  const dbRefunds = await Transaction.find({ type: "refund" }).sort({ createdAt: -1 }).limit(10).lean();
-  
-  dbRefunds.forEach((ref, rIdx) => {
-    const dateStr = ref.createdAt ? new Date(ref.createdAt).toISOString().split('T')[0] : "";
-    const rowData = [
-      dateStr,
-      ref.reference || "REFUND",
-      "Other",
-      ref.description || "Order Cancellation Refund Reversal",
-      ref.amount || 0,
-      ref.paymentMethod || "Wallet",
-      "Paid"
-    ];
-
-    rowData.forEach((val, cIdx) => {
-      const cell = wsExp.getCell(5 + rIdx, cIdx + 1);
-      cell.value = val;
-      cell.font = fontBody;
-      cell.border = thinBorder;
-      if (cIdx + 1 === 5) cell.numFmt = '"₦"#,##0.00';
-    });
-  });
-
-  for (let r = 5 + dbRefunds.length; r <= 31; r++) {
-    for (let c = 1; c <= headersExp.length; c++) {
-      const cell = wsExp.getCell(r, c);
-      cell.border = thinBorder;
-      cell.font = fontBody;
-      if (c === 5) cell.numFmt = '"₦"#,##0.00';
-    }
-  }
-
-  wsExp.getCell("D32").value = "TOTAL EXPENSES";
-  wsExp.getCell("D32").font = fontBold;
-  wsExp.getCell("E32").value = { formula: "=SUM(E5:E31)" };
-  wsExp.getCell("E32").font = fontBold;
-  wsExp.getCell("E32").border = doubleBottomBorder;
-  wsExp.getCell("E32").numFmt = '"₦"#,##0.00';
-
-  wsExp.dataValidations.add("C5:C31", {
-    type: "list",
-    allowBlank: true,
-    formulae: ['"Rent & Utilities,Internet & Data,Power & Fuel,Office Supplies,Staff Salaries,Marketing,Repairs & Maintenance,Other"']
-  });
-
-  // Column width formatting adjustments
-  wsDash.getColumn("A").width = 35; wsDash.getColumn("B").width = 22;
-  wsSales.getColumn("D").width = 25; wsSales.getColumn("E").width = 35; wsSales.getColumn("H").width = 20;
+  // Set scannable operational layout sizes
+  wsDash.getColumn("A").width = 30; wsDash.getColumn("B").width = 25;
+  wsTx.getColumn("E").width = 25; wsTx.getColumn("F").width = 35; wsTx.getColumn("M").width = 18;
+  wsAjo.getColumn("C").width = 25; wsAjo.getColumn("E").width = 25;
 
   const destPath = path.resolve("./Hambak_Tech_Services_Master_Account_Book.xlsx");
   await workbook.xlsx.writeFile(destPath);
 }
 
-// Ensure execution triggers correctly when called by child processes
 generateMasterTracker()
-  .then(() => {
-    console.log("SUCCESS");
-    process.exit(0);
-  })
-  .catch(err => {
-    console.error(err);
-    process.exit(1);
-  });
+  .then(() => { process.exit(0); })
+  .catch(err => { console.error(err); process.exit(1); });
