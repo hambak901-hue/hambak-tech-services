@@ -1,62 +1,63 @@
-/* ==========================================================
-   HAMBAK TECH SERVICES: SERVICES RENDER ENGINE (FIXED ARRAY SYNC)
-   ========================================================== */
-async function loadServices() {
+/* ==========================================================================
+   HAMBAK TECH SERVICES: UNIFIED CATALOG MATRIX & RENDER ENGINE
+   ========================================================================== */
+
+async function loadDynamicServices() {
+  // Target your grid layout using the correct ID from your HTML
+  const servicesContainer = document.getElementById("servicesGrid");
+  if (!servicesContainer) return;
+
+  const BACKEND_SERVICE_API = "https://hambak-tech-services.onrender.com/api";
+
   try {
-    const servicesContainer = document.getElementById("servicesContainer");
-    if (!servicesContainer) return; 
+    const queryPipelineUrl = `${BACKEND_SERVICE_API}/services`;
+    const fetchStreamResponse = await fetch(queryPipelineUrl, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
+    });
 
-    servicesContainer.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px;"><p>Syncing catalog matrix...</p></div>`;
+    if (!fetchStreamResponse.ok) return; // Silent bounce to preserve pristine HTML fallback static cards
 
-    // Fetch directly from your backend route natively to handle the raw array
-    const response = await fetch("https://hambak-tech-services.onrender.com/api/services");
-    if (!response.ok) throw new Error("Network response was not ok");
-    
-    const servicesArray = await response.json();
-    servicesContainer.innerHTML = "";
+    const servicesArray = await fetchStreamResponse.json();
 
-    // FIXED: Directly check if response is a valid array
+    // Check if the response is a valid raw array from the backend pipeline
     if (Array.isArray(servicesArray) && servicesArray.length > 0) {
-      servicesArray.forEach(service => {
-        let iconClass = "fas fa-laptop-code";
-        const category = service.category ? service.category.toLowerCase() : "";
-        
-        if (category.includes("nin")) iconClass = "fas fa-id-card";
-        if (category.includes("print") || category.includes("photocopy")) iconClass = "fas fa-print";
-        if (category.includes("vtu") || category.includes("data") || category.includes("airtime")) iconClass = "fas fa-mobile-alt";
-        if (category.includes("exam") || category.includes("jamb") || category.includes("waec")) iconClass = "fas fa-user-graduate";
-        if (category.includes("design") || category.includes("graphics")) iconClass = "fas fa-paint-brush";
+      servicesContainer.innerHTML = ""; // Clear fallback block safely now that dynamic data is confirmed
 
-        servicesContainer.innerHTML += `
-          <div class="service-card glass">
-            <div class="service-icon-wrapper"><i class="${iconClass}"></i></div>
-            <h3>${service.name}</h3>
-            <p>${service.description || 'Premium digital utility processing service.'}</p>
-            <span class="price-tag">₦${Number(service.price).toLocaleString()}</span>
-            <button class="service-btn" onclick="initiateOrderPlacement('${service._id}', ${service.price})">
-              Order Service
-            </button>
+      servicesArray.forEach(item => {
+        const parsedCardWrapper = document.createElement("div");
+        parsedCardWrapper.className = "service-card";
+
+        // Category-driven icon selection engine
+        let iconClass = "fa-solid fa-briefcase";
+        const category = item.category ? item.category.toLowerCase() : "";
+        
+        if (category.includes("nin")) iconClass = "fa-solid fa-id-card";
+        if (category.includes("print") || category.includes("photocopy")) iconClass = "fa-solid fa-print";
+        if (category.includes("vtu") || category.includes("data") || category.includes("airtime")) iconClass = "fa-solid fa-sim-card";
+        if (category.includes("exam") || category.includes("jamb") || category.includes("waec") || category.includes("training") || category.includes("computer")) iconClass = "fa-solid fa-graduation-cap";
+        if (category.includes("design") || category.includes("graphics")) iconClass = "fa-solid fa-palette";
+
+        const graphicBannerAsset = item.image 
+          ? `<img src="${item.image.startsWith('http') ? '' : BACKEND_SERVICE_API + '/..'}${item.image}" style="width:100%; height:200px; object-fit:cover; border-radius:14px; margin-bottom:20px; border: 1px solid var(--glass-border);">` 
+          : "";
+
+        parsedCardWrapper.innerHTML = `
+          ${graphicBannerAsset}
+          <div class="service-icon">
+            <i class="${iconClass}"></i>
           </div>
+          <h3>${item.name}</h3>
+          <p>${item.description || "Custom digital workspace utility configuration deployed on live server cluster infrastructure."}</p>
+          <div class="price-tag">₦${Number(item.price).toLocaleString()}</div>
+          <button onclick="checkoutService('${item._id}', '${item.category}')" class="service-btn">Instantiate Order Node</button>
         `;
+        servicesContainer.appendChild(parsedCardWrapper);
       });
-    } else {
-      servicesContainer.innerHTML = `
-        <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
-          <p>No active workspace digital utilities available at this time.</p>
-        </div>
-      `;
     }
-  } catch (error) {
-    console.error("Services Load Matrix Exception:", error);
-    const servicesContainer = document.getElementById("servicesContainer");
-    if (servicesContainer) {
-      servicesContainer.innerHTML = `<p style="text-align:center; color:red; padding: 20px;">Failed to resolve catalog services architecture.</p>`;
-    }
+  } catch (err) {
+    console.error("Upstream ingestion bypassed; keeping static fallback structural cards functional:", err);
   }
 }
 
-window.initiateOrderPlacement = (serviceId, price) => {
-  console.log(`Routing interaction flow to service ID: ${serviceId} with price ₦${price}`);
-};
-
-document.addEventListener("DOMContentLoaded", loadServices);
+document.addEventListener("DOMContentLoaded", loadDynamicServices);
