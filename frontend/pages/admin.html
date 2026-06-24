@@ -314,12 +314,14 @@
         <a id="nav-nin" class="admin-only-tab" onclick="showSection('nin-view')"><i class="fa-solid fa-id-card"></i> NIN Allocations</a>
         <a id="nav-print" class="admin-only-tab" onclick="showSection('print-view')"><i class="fa-solid fa-print"></i> Graphic Print Nodes</a>
         <a id="nav-settings" class="admin-only-tab" onclick="showSection('settings-view')"><i class="fa-solid fa-gears"></i> Core Settings</a>
+
+        <button onclick="downloadMasterTracker()" class="btn btn-primary">
+          📊 Download Master Business Tracker (.xlsx)
+        </button>
         
         <a href="dashboard.html"><i class="fa-solid fa-right-to-bracket"></i> Return to Client View</a>
         <a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Clear Session</a>
-        <a href="/api/admin/download-tracker" class="btn btn-primary">
-          📊 Download Master Business Tracker (.xlsx)
-        </a>
+        
       </div>
     </div>
 
@@ -686,6 +688,38 @@
         console.error("Failed to commit user block toggle operations.");
       }
     }
+
+    async function downloadMasterTracker() {
+  try {
+    // Retreive the active admin token saved during your secure login sequence
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+
+    const response = await fetch("/api/admin/download-tracker", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server returned authorization status code: ${response.status}`);
+    }
+
+    // Convert the incoming binary data stream into a real downloadable desktop file
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "Hambak_Tech_Services_Master_Account_Book.xlsx");
+    
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode.removeChild(link);
+  } catch (error) {
+    alert("Authorization Error: Please ensure you are logged in as an authorized administrator.");
+    console.error("Download pipeline execution failure:", error);
+  }
+}
 
     // Environmental variables submission routing logic
     document.getElementById("globalSettingsForm").addEventListener("submit", async (e) => {
