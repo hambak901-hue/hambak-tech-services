@@ -1,646 +1,272 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VTU Center | HAMBAK TECH & SERVICES</title>
-  <link rel="stylesheet" href="../css/style.css">
+  <title>VTU Wholesaler Matrix | HAMBAK TECH & SERVICES</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* ==========================================================================
-       PREMIUM BRAND COLOR PALETTE & GLASSMORPHIC DESIGN SYSTEM
+       HAMBAK STANDARD LIGHT/DARK DESIGN GRID LAYOUT
        ========================================================================== */
-    :root {
+    :root[data-theme="dark"] {
       --primary-blue: #0d47a1;
       --deep-navy: #081120;
       --brand-gold: #f5b942;
-      --soft-peach: #ffdfd3;
       --accent-pink: #ff4081;
       --clean-white: #ffffff;
-      --dark-card: rgba(15, 23, 42, 0.65);
+      --slate-gray: #94a3b8;
+      --dark-card: rgba(15, 23, 42, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --body-bg: linear-gradient(135deg, var(--deep-navy), #040812);
+      --text-main: var(--clean-white);
+      --text-muted: #cbd5e1;
+      --header-bg: rgba(15, 23, 42, 0.9);
       --input-bg: #1e293b;
-      --status-success: #10b981;
-      --status-pending: #f5b942;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    :root[data-theme="light"] {
+      --primary-blue: #0d47a1;
+      --deep-navy: #ffffff;
+      --brand-gold: #e0a534;
+      --accent-pink: #d81b60;
+      --clean-white: #0f172a;
+      --slate-gray: #475569;
+      --dark-card: rgba(241, 245, 249, 0.9);
+      --glass-border: rgba(15, 23, 42, 0.08);
+      --body-bg: linear-gradient(135deg, #f8fafc, #e2e8f0);
+      --text-main: #0f172a;
+      --text-muted: #334155;
+      --header-bg: rgba(255, 255, 255, 0.95);
+      --input-bg: #e2e8f0;
     }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, var(--deep-navy), #040812);
-      color: var(--clean-white);
-      line-height: 1.6;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: var(--body-bg); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
 
-    /* GLOBAL SYSTEM NAVBAR */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 8%;
-      background: rgba(15, 23, 42, 0.8);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+    /* UNIFIED SYSTEM HEADER */
+    .header-bar {
+      display: flex; justify-content: space-between; align-items: center; padding: 15px 8%; background: var(--header-bg); backdrop-filter: blur(12px); border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 1000;
     }
+    .brand-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo-img-frame { width: 45px; height: 45px; object-fit: contain; border: 1.5px solid var(--brand-gold); border-radius: 8px; }
+    .logo-text h1 { font-size: 1.3rem; font-weight: 800; color: var(--text-main); line-height: 1.2; }
+    .logo-text span { font-size: 0.7rem; color: var(--brand-gold); font-weight: 700; text-transform: uppercase; }
 
-    .logo {
-      display: flex;
-      flex-direction: column;
+    .right-nav-container { display: flex; align-items: center; gap: 20px; }
+    .menu-toggle-btn { background: none; border: none; color: var(--text-main); font-size: 1.5rem; cursor: pointer; }
+    
+    .nav-menu {
+      display: none; position: absolute; top: 100%; right: 8%; background: var(--header-bg); border: 1px solid var(--glass-border); border-radius: 12px; padding: 20px; width: 280px; list-style: none; flex-direction: column; gap: 12px; backdrop-filter: blur(20px); box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
+    .nav-menu.show { display: flex; }
+    .nav-menu a { color: var(--text-main); text-decoration: none; font-weight: 600; padding: 8px 12px; display: flex; align-items: center; gap: 10px; }
+    .nav-menu a:hover, .nav-menu a.active { color: #ffffff; background: var(--primary-blue); border-radius: 6px; }
 
-    .logo span {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: var(--clean-white);
-    }
+    .theme-toggle-switch { background: rgba(13, 71, 161, 0.15); border: 1px solid var(--brand-gold); color: var(--brand-gold); padding: 8px 12px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; font-weight: 700; }
 
-    .logo small {
-      font-size: 0.75rem;
-      color: var(--brand-gold);
-      font-weight: 600;
-      letter-spacing: 2px;
-    }
+    /* VTU CORE HERO SECTION */
+    .vtu-hero { padding: 120px 8% 50px; text-align: center; }
+    .vtu-hero h1 { font-size: 3.5rem; font-weight: 800; margin-bottom: 20px; }
+    .vtu-hero p { max-width: 750px; margin: auto; color: var(--text-muted); font-size: 1.15rem; }
 
-    .nav-links a {
-      color: #cbd5e1;
-      text-decoration: none;
-      margin-left: 25px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: 0.3s;
-    }
+    .tiers-badge-container { display: flex; justify-content: center; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
+    .tier-badge { padding: 8px 20px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--glass-border); border-radius: 50px; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); }
+    .tier-badge.active-tier { border-color: var(--brand-gold); color: var(--brand-gold); background: rgba(245, 185, 66, 0.12); box-shadow: 0 0 15px rgba(245, 185, 66, 0.2); }
 
-    .nav-links a:hover, .nav-links a.active {
-      color: var(--brand-gold);
-    }
+    /* BALANCE SHEET CARD */
+    .wallet-section { padding: 20px 8%; }
+    .wallet-card { background: linear-gradient(135deg, rgba(13, 71, 161, 0.3), rgba(21, 101, 192, 0.1)); border: 1px solid var(--glass-border); padding: 40px; border-radius: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 30px; }
+    .wallet-balance p { font-size: 0.85rem; text-transform: uppercase; color: var(--slate-gray); font-weight: 700; letter-spacing: 1px; }
+    .wallet-balance h2 { font-size: 3rem; font-weight: 800; color: var(--brand-gold); margin: 5px 0; }
+    .wallet-balance small { color: var(--slate-gray); }
 
-    /* VTU HERO COMPONENT */
-    .vtu-hero {
-      padding: 140px 8% 60px;
-      text-align: center;
-    }
+    .wallet-actions { display: flex; gap: 15px; }
+    .deposit-btn { padding: 14px 28px; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; background: linear-gradient(135deg, var(--brand-gold), #e0a534); color: #081120; }
+    .transfer-btn { padding: 14px 28px; border: 1px solid var(--glass-border); border-radius: 12px; cursor: pointer; font-weight: 700; background: transparent; color: var(--text-main); }
 
-    .vtu-hero h1 {
-      font-size: 3.8rem;
-      font-weight: 800;
-      margin-bottom: 20px;
-      background: linear-gradient(135deg, var(--clean-white), var(--brand-gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+    /* CORE SERVICE FORM WRAPPERS */
+    .service-section { padding: 60px 8%; }
+    .section-title { text-align: center; margin-bottom: 50px; }
+    .section-title h2 { font-size: 2.6rem; font-weight: 800; }
+    .section-title p { color: var(--slate-gray); }
 
-    .vtu-hero p {
-      max-width: 750px;
-      margin: auto;
-      line-height: 1.9;
-      font-size: 1.15rem;
-      color: #cbd5e1;
-    }
+    .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 30px; }
+    .service-card { background: var(--dark-card); border: 1px solid var(--glass-border); padding: 35px; border-radius: 24px; display: flex; flex-direction: column; }
+    .service-icon { width: 65px; height: 65px; background: rgba(13, 71, 161, 0.15); border: 1px solid rgba(13, 71, 161, 0.3); border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 1.6rem; color: var(--brand-gold); margin-bottom: 20px; }
+    
+    .vtu-form { display: flex; flex-direction: column; gap: 15px; margin-top: 15px; }
+    .vtu-form select, .vtu-form input, .vtu-form textarea { padding: 14px; border: 1px solid var(--glass-border); border-radius: 10px; background: var(--input-bg); color: var(--text-main); font-size: 0.95rem; outline: none; }
+    .vtu-form select:focus, .vtu-form input:focus { border-color: var(--brand-gold); }
 
-    /* TIERS PREVIEW DISPLAY DECK */
-    .tiers-badge-container {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 25px;
-      flex-wrap: wrap;
-    }
+    .vtu-btn { padding: 15px; background: linear-gradient(135deg, var(--primary-blue), #1565c0); color: #ffffff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+    .vtu-btn:hover { background: var(--primary-blue); opacity: 0.9; }
 
-    .tier-badge {
-      padding: 6px 16px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 50px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #cbd5e1;
-    }
+    .live-pricing-hint { font-size: 0.85rem; color: var(--brand-gold); min-height: 20px; font-weight: 600; padding: 2px 5px; }
 
-    .tier-badge.active-tier {
-      border-color: var(--brand-gold);
-      color: var(--brand-gold);
-      background: rgba(245, 185, 66, 0.05);
-    }
+    /* CHARTS AND LEDGERS */
+    .chart-section { padding: 30px 8%; }
+    .chart-card { background: var(--dark-card); border: 1px solid var(--glass-border); padding: 30px; border-radius: 24px; }
+    
+    .transaction-section { padding: 30px 8% 100px; }
+    .transaction-box { background: var(--dark-card); border: 1px solid var(--glass-border); padding: 35px; border-radius: 24px; overflow-x: auto; }
+    
+    table { width: 100%; border-collapse: collapse; min-width: 600px; text-align: left; }
+    table th, table td { padding: 15px; border-bottom: 1px solid var(--glass-border); }
+    table th { color: var(--brand-gold); background: rgba(13, 71, 161, 0.15); font-weight: 700; }
 
-    /* PREMIUM LEDGER WALLET HOVER DECK */
-    .wallet-section {
-      padding: 40px 8% 20px;
-    }
+    .status-text { font-weight: 700; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; text-transform: uppercase; }
+    .status-text.success { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+    .status-text.pending { background: rgba(245, 185, 66, 0.15); color: #f5b942; }
 
-    .wallet-card {
-      background: linear-gradient(135deg, rgba(13, 71, 161, 0.4), rgba(21, 101, 192, 0.15));
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 40px;
-      border-radius: 24px;
-      color: var(--clean-white);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 30px;
-    }
+    /* MASTER PLATFORM FOOTER */
+    .master-footer { background: #020617; padding: 70px 8% 30px; border-top: 1px solid var(--glass-border); }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; color: #94a3b8; }
+    .footer-grid h3 { color: var(--brand-gold); margin-bottom: 15px; }
+    .footer-grid a { display: block; color: #cbd5e1; text-decoration: none; margin-bottom: 10px; }
 
-    .wallet-balance p {
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: #94a3b8;
-    }
-
-    .wallet-balance h2 {
-      font-size: 3.2rem;
-      font-weight: 800;
-      margin: 10px 0;
-      color: var(--brand-gold);
-    }
-
-    .wallet-balance small {
-      font-size: 0.8rem;
-      color: #64748b;
-    }
-
-    .wallet-actions {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .wallet-actions button {
-      padding: 14px 32px;
-      border: none;
-      border-radius: 12px;
-      cursor:pointer;
-      font-weight: 700;
-      font-size: 0.95rem;
-      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .deposit-btn {
-      background: linear-gradient(135deg, var(--brand-gold), #e0a534);
-      color: var(--deep-navy);
-      box-shadow: 0 4px 15px rgba(245, 185, 66, 0.2);
-    }
-
-    .deposit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(245, 185, 66, 0.35);
-    }
-
-    .transfer-btn {
-      background: var(--input-bg);
-      color: var(--clean-white);
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    }
-
-    .transfer-btn:hover {
-      background: rgba(255, 255, 255, 0.05);
-      transform: translateY(-2px);
-    }
-
-    /* GATEWAY MANAGEMENT GRID */
-    .service-section {
-      padding: 70px 8%;
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-
-    .section-title h2 {
-      font-size: 2.8rem;
-      font-weight: 800;
-      margin-bottom: 15px;
-      color: var(--clean-white);
-    }
-
-    .section-title p {
-      max-width: 700px;
-      margin: auto;
-      line-height: 1.8;
-      color: #94a3b8;
-      font-size: 1.05rem;
-    }
-
-    .service-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 35px;
-    }
-
-    /* PROCESSING ENGINE CARDS */
-    .service-card {
-      background: var(--dark-card);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 40px 35px;
-      border-radius: 24px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
-      transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .service-card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(245, 185, 66, 0.25);
-    }
-
-    .service-icon {
-      width: 76px;
-      height: 76px;
-      background: rgba(13, 71, 161, 0.2);
-      border: 1px solid rgba(13, 71, 161, 0.4);
-      border-radius: 18px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.8rem;
-      color: var(--brand-gold);
-      margin-bottom: 25px;
-    }
-
-    .service-card h3 {
-      margin-bottom: 12px;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--clean-white);
-    }
-
-    .service-card p {
-      line-height: 1.7;
-      color: #94a3b8;
-      margin-bottom: 25px;
-      font-size: 0.95rem;
-    }
-
-    /* INTEGRATED FORM MATRIX */
-    .vtu-form {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .vtu-form select,
-    .vtu-form input,
-    .vtu-form textarea {
-      padding: 15px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      background: var(--input-bg);
-      color: var(--clean-white);
-      outline: none;
-      font-size: 0.95rem;
-      transition: 0.3s;
-      font-family: inherit;
-    }
-
-    .vtu-form select:focus,
-    .vtu-form input:focus,
-    .vtu-form textarea:focus {
-      border-color: var(--brand-gold);
-    }
-
-    .vtu-form option {
-      background: #1e293b;
-      color: var(--clean-white);
-    }
-
-    .vtu-btn {
-      padding: 15px;
-      background: linear-gradient(135deg, var(--primary-blue), #1565c0);
-      color: var(--clean-white);
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 1rem;
-      font-weight: 700;
-      transition: 0.3s ease;
-      box-shadow: 0 4px 12px rgba(13, 71, 161, 0.3);
-    }
-
-    .vtu-btn:hover {
-      box-shadow: 0 6px 18px rgba(13, 71, 161, 0.5);
-    }
-
-    /* METRIC ANALYTICS MODULE */
-    .chart-section {
-      padding: 30px 8% 60px;
-    }
-
-    .chart-card {
-      background: var(--dark-card);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 35px;
-      border-radius: 24px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    }
-
-    .chart-card h2 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      margin-bottom: 25px;
-      color: var(--clean-white);
-    }
-
-    /* REAL-TIME AUDIT LOGS DISPLAY */
-    .transaction-section {
-      padding: 0 8% 90px;
-    }
-
-    .transaction-box {
-      background: var(--dark-card);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 35px;
-      border-radius: 24px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-      overflow-x: auto;
-    }
-
-    .transaction-box h2 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      margin-bottom: 25px;
-      color: var(--clean-white);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 600px;
-    }
-
-    table th,
-    table td {
-      padding: 16px;
-      text-align: left;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 0.95rem;
-    }
-
-    table th {
-      background: rgba(13, 71, 161, 0.3);
-      color: var(--brand-gold);
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-
-    table td {
-      color: #cbd5e1;
-    }
-
-    /* STATUS BADGE CORES */
-    .status-text {
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-    }
-
-    .status-text.success {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--status-success);
-    }
-
-    .status-text.pending {
-      background: rgba(245, 185, 66, 0.15);
-      color: var(--status-pending);
-    }
-
-    /* ECOSYSTEM FOOTER MODULE */
-    .footer {
-      background: #020617;
-      color: #94a3b8;
-      padding: 70px 8% 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .footer-content {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 40px;
-      margin-bottom: 40px;
-    }
-
-    .footer h3 {
-      margin-bottom: 20px;
-      color: var(--brand-gold);
-      font-size: 1.15rem;
-    }
-
-    .footer p {
-      line-height: 1.8;
-      font-size: 0.95rem;
-    }
-
-    .footer-links a {
-      display: block;
-      margin-bottom: 12px;
-      color: #cbd5e1;
-      text-decoration: none;
-      transition: 0.2s;
-    }
-
-    .footer-links a:hover {
-      color: var(--accent-pink);
-      padding-left: 5px;
-    }
-
-    .footer-bottom {
-      text-align: center;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      color: #64748b;
-      font-size: 0.85rem;
-    }
-
-    /* FLOATING CONNECTIVITY WIDGET */
-    .whatsapp-float {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 60px;
-      height: 60px;
-      background: #25d366;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.9rem;
-      color: var(--clean-white);
-      text-decoration: none;
-      z-index: 999;
-      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
-      transition: 0.3s ease;
-    }
-
-    .whatsapp-float:hover {
-      transform: scale(1.1);
-    }
+    .whatsapp-float { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: #25d366; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.9rem; color: #fff; text-decoration: none; z-index: 999; }
 
     @media(max-width: 768px) {
-      .navbar { flex-direction: column; gap: 15px; }
-      .vtu-hero { padding: 120px 5% 40px; }
-      .vtu-hero h1 { font-size: 2.5rem; }
-      .section-title h2, .wallet-balance h2 { font-size: 2rem; }
-      .wallet-card { padding: 30px; text-align: center; justify-content: center; }
+      .header-bar { flex-direction: column; gap: 12px; }
+      .vtu-hero h1 { font-size: 2.3rem; }
+      .wallet-card { padding: 25px; text-align: center; justify-content: center; }
     }
   </style>
 </head>
 
 <body>
 
-  <header class="navbar">
-    <div class="logo">
-      <span>HAMBAK</span>
-      <small>TECH & SERVICES</small>
+  <header class="header-bar">
+    <a href="../index.html" class="brand-logo">
+      <img src="../logo.png" alt="Hambak Logo" class="logo-img-frame">
+      <div class="logo-text">
+        <h1>HAMBAK</h1>
+        <span>TECH & SERVICES</span>
+      </div>
+    </a>
+
+    <div class="right-nav-container">
+      <button class="theme-toggle-switch" id="themeToggle">
+        <i class="fa-solid fa-moon"></i> <span>Dark Mode</span>
+      </button>
+      <button class="menu-toggle-btn" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="services.html"><i class="fa-solid fa-briefcase"></i> Services</a></li>
+        <li><a href="shop.html"><i class="fa-solid fa-basket-shopping"></i> Shop</a></li>
+        <li><a href="training.html"><i class="fa-solid fa-graduation-cap"></i> Training</a></li>
+        <li><a href="vtu.html" class="active"><i class="fa-solid fa-mobile-screen"></i> VTU Portal</a></li>
+        <li><a href="login.html"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+      </ul>
     </div>
-    <nav class="nav-links">
-      <a href="../index.html">Home</a>
-      <a href="services.html">Services</a>
-      <a href="shop.html">Shop</a>
-      <a href="vtu.html" class="active">VTU</a>
-      <a href="contact.html">Contact</a>
-    </nav>
   </header>
 
   <section class="vtu-hero">
-    <h1>VTU & Recharge Center</h1>
-    <p>Fast and secure airtime distribution, multi-band data subscriptions, utility bills, and instant smart-card activations.</p>
+    <h1>VTU Wholesale Distribution Engine</h1>
+    <p>Automated high-speed airtime dispatching, multi-tier database configurations, utility token billing, and high-volume e-pin script generation models.</p>
     
     <div class="tiers-badge-container">
-      <span class="tier-badge" id="tier-retailer">Retailer Mode</span>
-      <span class="tier-badge" id="tier-wholesaler">Wholesaler Tier</span>
-      <span class="tier-badge" id="tier-subdealer">Sub-Dealer Rate</span>
-      <span class="tier-badge active-tier" id="tier-dealer">Dealer Active Layer</span>
+      <span class="tier-badge" id="tier-retailer">Retailer Rate</span>
+      <span class="tier-badge" id="tier-wholesaler">Wholesaler Price</span>
+      <span class="tier-badge" id="tier-subdealer">Sub-Dealer Level</span>
+      <span class="tier-badge" id="tier-dealer">Dealer Root Access</span>
     </div>
   </section>
 
   <section class="wallet-section">
     <div class="wallet-card">
       <div class="wallet-balance">
-        <p>Wallet Balance</p>
-        <h2>₦85,000</h2>
-        <small>System sync trace active • updated just now</small>
+        <p>Unified Operational Balance</p>
+        <h2>₦0.00</h2>
+        <small><i class="fa-solid fa-arrows-rotate"></i> Infrastructure synchronization active</small>
       </div>
       <div class="wallet-actions">
-        <button class="deposit-btn" onclick="alert('Redirecting to secure gateway routing node...')">Deposit Funds</button>
-        <button class="transfer-btn" onclick="alert('Initializing secure peer-to-peer balance transfer staging...')">Transfer</button>
+        <button class="deposit-btn" onclick="alert('Routing execution to corporate bank assignment channel nodes...')">Fund Wallet</button>
+        <button class="transfer-btn" onclick="alert('Staging multi-user balance allocation handshake...')">P2P Transfer</button>
       </div>
     </div>
   </section>
 
   <section class="service-section">
-    <div class="section-title">
-      <h2>Recharge Services</h2>
-      <p>Automated real-time distribution engine across national infrastructure systems.</p>
-    </div>
-
     <div class="service-grid">
 
       <div class="service-card">
         <div class="service-icon"><i class="fa-solid fa-phone"></i></div>
-        <h3>Airtime Recharge</h3>
-        <p>Buy airtime instantly for all networks.</p>
-        <form class="vtu-form" onsubmit="event.preventDefault(); alert('Airtime processing pipeline initialized.');">
-          <select required>
-            <option value="">Select Network Matrix...</option>
-            <option>MTN</option>
-            <option>Airtel</option>
-            <option>GLO</option>
-            <option>9mobile</option>
+        <h3>Instant Airtime Dispense</h3>
+        <p>Automated network loading with real-time commissions calculated based on account level.</p>
+        <form class="vtu-form" id="airtimeForm">
+          <select id="airtimeNetwork" required>
+            <option value="">Select Carrier Node...</option>
+            <option value="MTN">MTN (SME / Corporate)</option>
+            <option value="Airtel">Airtel Direct</option>
+            <option value="GLO">GLO Wholesale</option>
+            <option value="9mobile">9mobile Commercial</option>
           </select>
-          <input type="tel" placeholder="Target Phone Number" required>
-          <input type="number" placeholder="Amount (₦)" min="50" required>
-          <button type="submit" class="vtu-btn">Execute Airtime Dispense</button>
+          <input type="tel" id="airtimePhone" placeholder="Destination Line (e.g. 0803...)" required>
+          <input type="number" id="airtimeAmount" placeholder="Amount (₦)" min="50" required>
+          <button type="submit" class="vtu-btn">Dispense Airtime</button>
         </form>
       </div>
 
       <div class="service-card">
         <div class="service-icon"><i class="fa-solid fa-wifi"></i></div>
-        <h3>Data Subscription</h3>
-        <p>Affordable internet data subscription plans.</p>
-        <form class="vtu-form" onsubmit="event.preventDefault(); alert('Data pipeline allocation active.');">
-          <select required>
-            <option value="">Select Carrier...</option>
-            <option>MTN</option>
-            <option>Airtel</option>
-            <option>GLO</option>
-            <option>9mobile</option>
+        <h3>Data Bundle Provisioning</h3>
+        <p>Low-cost high-capacity SME and corporate data shares routed directly to recipient devices.</p>
+        <form class="vtu-form" id="dataForm">
+          <select id="dataNetwork" required>
+            <option value="">Select Carrier Network...</option>
+            <option value="MTN">MTN Data Share</option>
+            <option value="Airtel">Airtel Corporate</option>
+            <option value="GLO">GLO Gifted</option>
+            <option value="9mobile">9mobile SME</option>
           </select>
-          <select required>
-            <option value="">Select Plan Allocation...</option>
-            <option>500MB (SME Data)</option>
-            <option>1GB (Giga-Share Bundle)</option>
-            <option>2GB (Corporate Data Tier)</option>
-            <option>5GB (Heavy Operational Bundle)</option>
+          <select id="dataPlan" required>
+            <option value="">Select Target Bundle Size...</option>
+            <option value="SME_1GB">1.0 GB SME (30 Days)</option>
+            <option value="SME_2GB">2.0 GB Wholesale (30 Days)</option>
+            <option value="SME_5GB">5.0 GB Sub-Dealer Special</option>
+            <option value="SME_10GB">10 GB Enterprise Matrix</option>
           </select>
-          <input type="tel" placeholder="Target Phone Number" required>
+          <input type="tel" id="dataPhone" placeholder="Destination Line" required>
           <button type="submit" class="vtu-btn">Provision Data Plan</button>
         </form>
       </div>
 
       <div class="service-card">
         <div class="service-icon"><i class="fa-solid fa-print"></i></div>
-        <h3>Bulk Printing & Dealer Pins</h3>
-        <p>Generate, download e-pins or request physical delivery for high-volume transactions.</p>
-        <form class="vtu-form" id="bulkForm" onsubmit="handleBulkSubmission(event)">
+        <h3>Bulk Printing & Recharge Cards</h3>
+        <p>Compile and download encrypted telecom e-pin rosters or stage physical logistical delivery.</p>
+        <div class="live-pricing-hint" id="pricingTierHint"></div>
+        <form class="vtu-form" id="bulkForm">
           <select id="bulkNetwork" required>
-            <option value="">Select Target Network...</option>
+            <option value="">Select Target Card Network...</option>
             <option value="MTN">MTN Pins</option>
             <option value="Airtel">Airtel Pins</option>
             <option value="GLO">GLO Pins</option>
             <option value="9mobile">9mobile Pins</option>
           </select>
           <select id="bulkDenomination" required>
-            <option value="">Select Denomination Tier...</option>
-            <option value="100">₦100 Face Value</option>
-            <option value="200">₦200 Face Value</option>
-            <option value="500">₦500 Face Value</option>
-            <option value="1000">₦1000 Face Value</option>
+            <option value="">Select Face Value Tier...</option>
+            <option value="100">₦100 Denomination</option>
+            <option value="200">₦200 Denomination</option>
+            <option value="500">₦500 Denomination</option>
+            <option value="1000">₦1,000 Denomination</option>
           </select>
-          <input type="number" id="bulkQuantity" placeholder="Quantity (e.g. 100, 500, 1000)" min="10" required>
+          <input type="number" id="bulkQuantity" placeholder="Quantity Selection (Minimum 10 Pcs)" min="10" required>
           <select id="deliveryMode" onchange="toggleDeliveryFields(this.value)" required>
-            <option value="digital">Instant Digital Token (Download PDF / E-Pin)</option>
-            <option value="physical">Physical Delivery Order (Scratch Cards Delivery)</option>
+            <option value="digital">Instant Digital Token (.TXT Sheet Compilation)</option>
+            <option value="physical">Physical Freight Delivery (Printed Scratch Layouts)</option>
           </select>
           
-          <div id="logisticsContainer" style="display: none; flex-direction: column; gap: 14px;">
-            <textarea id="deliveryAddress" placeholder="Enter full logistical delivery destination address..." rows="2"></textarea>
-            <input type="text" id="contactReceiver" placeholder="Receiver's Contact Name">
+          <div id="logisticsContainer" style="display: none; flex-direction: column; gap: 12px;">
+            <textarea id="deliveryAddress" placeholder="Enter physical home/office dispatch destination address..."></textarea>
+            <input type="text" id="contactReceiver" placeholder="Consignee Receiver Name">
           </div>
-
           <button type="submit" class="vtu-btn">Initialize Wholesale Request</button>
-        </form>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon"><i class="fa-solid fa-bolt"></i></div>
-        <h3>Electricity Payment</h3>
-        <p>Pay electricity bills securely online.</p>
-        <form class="vtu-form" onsubmit="event.preventDefault(); alert('Token generator staging initiated.');">
-          <select required>
-            <option value="">Select Utility Disco...</option>
-            <option>IKEDC (Ikeja Electric)</option>
-            <option>EKEDC (Eko Electric)</option>
-            <option>AEDC (Abuja Electric)</option>
-          </select>
-          <input type="text" placeholder="Meter Account Number" required>
-          <input type="number" placeholder="Amount (₦)" min="1000" required>
-          <button type="submit" class="vtu-btn">Recharge Power Token</button>
         </form>
       </div>
 
@@ -649,163 +275,63 @@
 
   <section class="chart-section">
     <div class="chart-card">
-      <h2>Transaction Flow Analytics</h2>
       <canvas id="transactionChart"></canvas>
     </div>
   </section>
 
-  <section class="transaction-section">
-    <div class="transaction-box">
-      <h2>Recent System Event Logs</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Service Type</th>
-            <th>Network Node</th>
-            <th>Value Metric</th>
-            <th>Gateway Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Airtime Dispatch</td>
-            <td>MTN</td>
-            <td>₦1,000</td>
-            <td><span class="status-text success">Successful</span></td>
-          </tr>
-          <tr>
-            <td>Data Allocation</td>
-            <td>Airtel</td>
-            <td>₦2,500</td>
-            <td><span class="status-text success">Successful</span></td>
-          </tr>
-          <tr>
-            <td>Bulk Cargo Order</td>
-            <td>MTN (500 Pcs)</td>
-            <td>₦50,000</td>
-            <td><span class="status-text pending">In Transit</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <footer class="footer">
-    <div class="footer-content">
+  <footer class="master-footer">
+    <div class="footer-grid">
       <div>
         <h3>HAMBAK TECH & SERVICES</h3>
-        <p>Where corporate technical systems balance perfectly with agile service deployment pipelines.</p>
+        <p>Industrial systems design, multi-brand digital solutions, and high-frequency technical services.</p>
       </div>
       <div>
-        <h3>Quick Navigation</h3>
-        <div class="footer-links">
-          <a href="../index.html">Home Ecosystem</a>
-          <a href="services.html">Services Catalog</a>
-          <a href="shop.html">Digital Shop</a>
-          <a href="vtu.html">VTU Portal</a>
-          <a href="contact.html">Support Desk</a>
-        </div>
+        <h3>Ecosystem Mapping</h3>
+        <a href="../index.html">Home Index</a>
+        <a href="services.html">Services Hub</a>
+        <a href="shop.html">Hardware Shop</a>
       </div>
       <div>
-        <h3>Contact Coordinates</h3>
-        <p style="margin-bottom: 8px;"><i class="fa-solid fa-phone" style="color: var(--brand-gold); margin-right: 8px;"></i> 09127469686</p>
-        <p style="margin-bottom: 8px;"><i class="fa-solid fa-envelope" style="color: var(--brand-gold); margin-right: 8px;"></i> hambak901@gmail.com</p>
-        <p><i class="fa-solid fa-location-dot" style="color: var(--brand-gold); margin-right: 8px;"></i> Ibeju-Lekki, Lagos Nigeria</p>
+        <h3>Terminal Coordinates</h3>
+        <p><i class="fa-solid fa-phone"></i> 09127469686</p>
+        <p><i class="fa-solid fa-envelope"></i> hambak901@gmail.com</p>
+        <p><i class="fa-solid fa-location-dot"></i> Ibeju-Lekki, Lagos, Nigeria</p>
       </div>
-    </div>
-    <div class="footer-bottom">
-      &copy; 2026 HAMBAK TECH & SERVICES. All Cryptographic Transaction Pipelines Live.
     </div>
   </footer>
 
-  <a href="https://wa.me/2349127469686" class="whatsapp-float" aria-label="Direct Link to WhatsApp Support Matrix">
-    <i class="fa-brands fa-whatsapp"></i>
-  </a>
+  <a href="https://wa.me/2349127469686" class="whatsapp-float" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
 
+  <script src="../js/vtu.js"></script>
   <script>
-    /**
-     * Intercepts delivery mode updates to mount physical shipping fields dynamically
-     */
-    function toggleDeliveryFields(modeValue) {
-      const logisticsBox = document.getElementById("logisticsContainer");
-      const addressInput = document.getElementById("deliveryAddress");
-      
-      if (modeValue === "physical") {
-        logisticsBox.style.display = "flex";
-        addressInput.required = true;
-      } else {
-        logisticsBox.style.display = "none";
-        addressInput.required = false;
-      }
-    }
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+    menuToggle.addEventListener('click', () => { navMenu.classList.toggle('show'); });
 
-    /**
-     * Dispatches bulk staging variables safely based on delivery configuration modes
-     */
-    function handleBulkSubmission(event) {
-      event.preventDefault();
-      const mode = document.getElementById("deliveryMode").value;
-      const network = document.getElementById("bulkNetwork").value;
-      const qty = document.getElementById("bulkQuantity").value;
-      const val = document.getElementById("bulkDenomination").value;
+    const themeToggle = document.getElementById('themeToggle');
+    const rootEl = document.documentElement;
+    themeToggle.addEventListener('click', () => {
+      const cur = rootEl.getAttribute('data-theme');
+      const next = cur === 'dark' ? 'light' : 'dark';
+      rootEl.setAttribute('data-theme', next);
+    });
 
-      if (mode === "digital") {
-        alert(`Generating structural token block for ${qty} pieces of ₦${val} ${network} E-pins. Document preparation initializing...`);
-      } else {
-        const destination = document.getElementById("deliveryAddress").value;
-        alert(`Logistics Order Staged! ${qty} units of physical ₦${val} cards queued for dispatch to delivery node:\n${destination}`);
-      }
-    }
-
-    // Chart.js Graph Rendering Logic 
-    const executionContext = document.getElementById("transactionChart").getContext("2d");
-    const blueGradientNode = executionContext.createLinearGradient(0, 0, 0, 400);
-    blueGradientNode.addColorStop(0, 'rgba(245, 185, 66, 0.4)');
-    blueGradientNode.addColorStop(1, 'rgba(13, 71, 161, 0.0)');
-
-    new Chart(executionContext, {
+    // Clean Line Node Initialization
+    const ctx = document.getElementById("transactionChart").getContext("2d");
+    new Chart(ctx, {
       type: "line",
       data: {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        labels: ["Wk 1", "Wk 2", "Wk 3", "Wk 4"],
         datasets: [{
-          label: "Dispensed Actions (Volume Node)",
-          data: [120, 190, 300, 250, 420, 500],
+          label: "Weekly Volume (Units Processed)",
+          data: [420, 680, 910, 1250],
           borderColor: "#f5b942",
-          borderWidth: 3,
-          backgroundColor: blueGradientNode,
-          fill: true,
-          tension: 0.4,
-          pointBackgroundColor: "#0d47a1",
-          pointBorderColor: "#f5b942",
-          pointHoverRadius: 7
+          tension: 0.3,
+          fill: false
         }]
       },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            labels: {
-              color: '#cbd5e1',
-              font: { family: 'Segoe UI', size: 12 }
-            }
-          }
-        },
-        scales: {
-          x: {
-            grid: { color: 'rgba(255, 255, 255, 0.05)' },
-            ticks: { color: '#94a3b8' }
-          },
-          y: {
-            grid: { color: 'rgba(255, 255, 255, 0.05)' },
-            ticks: { color: '#94a3b8' }
-          }
-        }
-      }
+      options: { responsive: true }
     });
   </script>
-  
-  <script src="../js/vtu.js"></script>
-  
 </body>
-
 </html>
