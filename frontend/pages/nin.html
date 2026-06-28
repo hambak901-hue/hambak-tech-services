@@ -1,114 +1,180 @@
-/* ==========================================================================
-   HAMBAK TECH & SERVICES - AGENT NIN UTILITY HANDLING CORE
-   ========================================================================== */
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
 
-let currentUserTier = "retailer";
-let walletBalance = 0;
-
-const ninPricingMatrix = {
-    retailer:   { modification: 2500, retrieval: 1000, cardPrint: 1500, preEnroll: 500 },
-    wholesaler: { modification: 2200, retrieval: 850,  cardPrint: 1300, preEnroll: 400 },
-    subdealer:  { modification: 2000, retrieval: 750,  cardPrint: 1100, preEnroll: 300 },
-    dealer:     { modification: 1800, retrieval: 650,  cardPrint: 950,  preEnroll: 200 }
-};
-
-document.addEventListener("DOMContentLoaded", () => {
-    fetchUserProfile();
-    setupNINFormListeners();
-});
-
-async function fetchUserProfile() {
-    const token = localStorage.getItem("token") || localStorage.getItem("hambak_token");
-    if (!token) {
-        console.warn("No active auth token found. Standard retail transaction rates loaded.");
-        updatePricingHints();
-        return;
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIN Enrollment & Verification Desk | HAMBAK TECH & SERVICES</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root[data-theme="dark"] {
+      --primary-blue: #0d47a1;
+      --deep-navy: #081120;
+      --brand-gold: #f5b942;
+      --clean-white: #ffffff;
+      --slate-gray: #94a3b8;
+      --dark-card: rgba(15, 23, 42, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --body-bg: linear-gradient(135deg, var(--deep-navy), #040812);
+      --text-main: var(--clean-white);
+      --text-muted: #cbd5e1;
+      --header-bg: rgba(15, 23, 42, 0.9);
+      --input-bg: #1e293b;
+      --status-success: #10b981;
     }
 
-    try {
-        const response = await fetch("/api/users/profile", {
-            method: "GET",
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-        const data = await response.json();
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: var(--body-bg); color: var(--text-main); line-height: 1.6; }
 
-        if (data.success && data.user) {
-            currentUserTier = data.user.role || "retailer";
-            walletBalance = Number(data.user.wallet || 0);
-        }
-    } catch (err) {
-        console.error("Failed to connect to identity engine ledger matrix:", err);
-    } finally {
-        updatePricingHints();
+    /* HEADER */
+    .header-bar {
+      display: flex; justify-content: space-between; align-items: center; padding: 15px 8%; background: var(--header-bg); backdrop-filter: blur(12px); border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 1000;
     }
-}
+    .brand-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo-text h1 { font-size: 1.3rem; font-weight: 800; color: var(--text-main); }
+    .logo-text span { font-size: 0.7rem; color: var(--brand-gold); font-weight: 700; text-transform: uppercase; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; margin-left: 20px; font-weight: 600; font-size: 0.95rem; }
+    .nav-links a:hover, .nav-links a.active { color: var(--brand-gold); }
 
-function updatePricingHints() {
-    const rates = ninPricingMatrix[currentUserTier] || ninPricingMatrix.retailer;
+    /* HERO */
+    .nin-hero { padding: 100px 8% 40px; text-align: center; }
+    .nin-hero h1 { font-size: 3.2rem; font-weight: 800; margin-bottom: 15px; }
+    .nin-hero p { max-width: 700px; margin: auto; color: var(--text-muted); font-size: 1.1rem; }
+    .agent-badge { display: inline-block; padding: 6px 16px; background: rgba(16, 185, 129, 0.12); border: 1px solid var(--status-success); color: var(--status-success); border-radius: 50px; font-size: 0.85rem; font-weight: 700; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* SERVICE CARDS GRID */
+    .services-container { padding: 40px 8% 100px; }
+    .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+    .service-card { background: var(--dark-card); border: 1px solid var(--glass-border); padding: 35px; border-radius: 24px; display: flex; flex-direction: column; transition: 0.3s; }
+    .service-card:hover { transform: translateY(-5px); border-color: var(--brand-gold); }
     
-    const modBtn = document.querySelector("#modificationForm button[type='submit']");
-    if (modBtn) modBtn.innerHTML = `<i class="fa-solid fa-wallet"></i> Process Modification (₦${rates.modification})`;
+    .icon-box { width: 60px; height: 60px; background: rgba(13, 71, 161, 0.2); border: 1px solid var(--primary-blue); border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; color: var(--brand-gold); margin-bottom: 20px; }
+    .service-card h3 { font-size: 1.4rem; margin-bottom: 10px; }
+    .service-card p { color: var(--slate-gray); font-size: 0.95rem; margin-bottom: 20px; }
 
-    const retBtn = document.querySelector("#retrievalForm button[type='submit']");
-    if (retBtn) retBtn.innerHTML = `<i class="fa-solid fa-wallet"></i> Execute Database Search (₦${rates.retrieval})`;
+    /* FORMS */
+    .nin-form { display: flex; flex-direction: column; gap: 14px; margin-top: auto; }
+    .nin-form input, .nin-form select, .nin-form textarea { padding: 12px; background: var(--input-bg); border: 1px solid var(--glass-border); color: var(--text-main); border-radius: 10px; font-size: 0.95rem; outline: none; }
+    .nin-form input:focus, .nin-form select:focus { border-color: var(--brand-gold); }
+    
+    .file-input-group { background: rgba(255,255,255,0.02); padding: 12px; border: 1.5px dashed var(--glass-border); border-radius: 10px; text-align: center; cursor: pointer; position: relative; }
+    .file-input-group input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+    .file-label { font-size: 0.85rem; color: var(--slate-gray); display: block; }
 
-    const enrollBtn = document.querySelector("#enrollmentForm button[type='submit']");
-    if (enrollBtn) enrollBtn.innerHTML = `<i class="fa-solid fa-wallet"></i> Initialize Token (₦${rates.preEnroll})`;
-}
+    .action-btn { padding: 14px; background: linear-gradient(135deg, var(--primary-blue), #1565c0); color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.95rem; transition: 0.3s; }
+    .action-btn:hover { opacity: 0.95; box-shadow: 0 4px 15px rgba(13, 71, 161, 0.4); }
 
-function setupNINFormListeners() {
-    const forms = {
-        modification: document.getElementById("modificationForm"),
-        retrieval: document.getElementById("retrievalForm"),
-        enrollment: document.getElementById("enrollmentForm")
-    };
+    /* FOOTER */
+    .footer { background: #020617; text-align: center; padding: 40px; border-top: 1px solid var(--glass-border); color: var(--slate-gray); font-size: 0.9rem; }
+  </style>
+</head>
 
-    if (forms.modification) forms.modification.addEventListener("submit", (e) => handleNINAction(e, "modification"));
-    if (forms.retrieval) forms.retrieval.addEventListener("submit", (e) => handleNINAction(e, "retrieval"));
-    if (forms.enrollment) forms.enrollment.addEventListener("submit", (e) => handleNINAction(e, "preEnroll"));
-}
+<body>
 
-async function handleNINAction(event, actionKey) {
-    event.preventDefault();
-    const token = localStorage.getItem("token") || localStorage.getItem("hambak_token");
-    const cost = ninPricingMatrix[currentUserTier][actionKey];
+  <header class="header-bar">
+    <a href="../index.html" class="brand-logo">
+      <div class="logo-text">
+        <h1>HAMBAK</h1>
+        <span>TECH & SERVICES</span>
+      </div>
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="vtu.html">VTU Portal</a>
+      <a href="nin.html" class="active">NIN Center</a>
+    </nav>
+  </header>
 
-    if (token && walletBalance < cost) {
-        alert(`❌ Transaction Aborted: Insufficient wallet balance to allocate this NIMC pipeline. Cost: ₦${cost}. Current Balance: ₦${walletBalance}`);
-        return;
+  <section class="nin-hero">
+    <h1>NIN Identity Processing Portal</h1>
+    <p>Fast-track National Identification Number setups, information modifications, and secure tracking verification channels managed directly under registered corporate agent nodes.</p>
+    <div class="agent-badge"><i class="fa-solid fa-shield-halved"></i> Authorized NIMC Agent Desk</div>
+  </section>
+
+  <section class="services-container">
+    <div class="grid-layout">
+
+      <div class="service-card">
+        <div class="icon-box"><i class="fa-solid fa-user-pen"></i></div>
+        <h3>Data Modification / Correction</h3>
+        <p>Correct mistakes or update name spelling, dates of birth, phone tracking links, and marital status records safely.</p>
+        
+        <form class="nin-form" id="modificationForm">
+          <input type="text" name="trackingId" placeholder="Current NIMC Slip Tracker / NIN" maxlength="11" required>
+          <select name="modificationType" required onchange="updateModificationPlaceholder(this)">
+            <option value="">Select Correction Type...</option>
+            <option value="name">Name Change / Reordering</option>
+            <option value="dob">Date of Birth Rectification</option>
+            <option value="phone">Phone Number Linking Adjustment</option>
+          </select>
+          <textarea name="requirements" placeholder="Specify the new information fields explicitly..." rows="2" required></textarea>
+          
+          <div class="file-input-group">
+            <span class="file-label"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Legal Supporting Document (PDF/JPG)</span>
+            <input type="file" name="legalDoc" accept=".pdf,.jpg,.jpeg,.png" required>
+          </div>
+          
+          <button type="submit" class="action-btn">Process Data Modification</button>
+        </form>
+      </div>
+
+      <div class="service-card">
+        <div class="icon-box"><i class="fa-solid fa-print"></i></div>
+        <h3>NIN Slip Re-Print & Retrieval</h3>
+        <p>Lost your slip or forgotten your clear identification metrics? Retrieve your string indicators or generate premium document cards.</p>
+        
+        <form class="nin-form" id="retrievalForm">
+          <input type="text" name="trackingId" placeholder="Enter Registration Tracking ID / Phone Link" required>
+          <input type="text" name="fullName" placeholder="Full Registered Name (Surname First)" required>
+          <input type="date" name="dob" title="Date of Birth" required>
+          <select name="deliveryMethod" required>
+            <option value="standard">Standard Digital Delivery (Color Slip PDF)</option>
+            <option value="premium">Premium Laminated ID Card (Physical Delivery)</option>
+          </select>
+          <button type="submit" class="action-btn">Execute Database Search</button>
+        </form>
+      </div>
+
+      <div class="service-card">
+        <div class="icon-box"><i class="fa-solid fa-fingerprint"></i></div>
+        <h3>Fresh Agent Pre-Enrollment</h3>
+        <p>Avoid long queues. Fill out raw structural profile tracking details to prepare data tokens for biometric fingerprint captures.</p>
+        
+        <form class="nin-form" id="enrollmentForm">
+          <input type="text" name="firstName" placeholder="First Name" required>
+          <input type="text" name="surname" placeholder="Surname (Family Title Name)" required>
+          <input type="tel" name="phone" placeholder="Primary Link Phone Number" required>
+          <select name="stateOfOrigin" required>
+            <option value="">Select State of Origin...</option>
+            <option value="Lagos">Lagos</option>
+            <option value="Ogun">Ogun</option>
+            <option value="Oyo">Oyo</option>
+            <option value="Kwara">Kwara</option>
+          </select>
+          <button type="submit" class="action-btn">Initialize Pre-Enrollment Token</button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    &copy; 2026 HAMBAK TECH & SERVICES • Multi-Service Identity Management Infrastructure Node.
+  </footer>
+
+  <script src="../js/nin.js"></script>
+  <script>
+    function updateModificationPlaceholder(selectElement) {
+      const textarea = selectElement.form.querySelector('textarea');
+      if (selectElement.value === 'dob') {
+        textarea.placeholder = "Example: Correct Date of Birth should be DD/MM/YYYY.";
+      } else if (selectElement.value === 'name') {
+        textarea.placeholder = "Example: Change from Ahmad Alabi to Ahmad Hamahullah.";
+      } else {
+        textarea.placeholder = "Specify the new information fields explicitly...";
+      }
     }
-
-    const submitBtn = event.target.querySelector("button[type='submit']");
-    const originalText = submitBtn.innerHTML;
-    submitBtn.innerText = "Encrypting Identity Payload...";
-    submitBtn.disabled = true;
-
-    const formData = new FormData(event.target);
-    formData.append("actionType", actionKey);
-    formData.append("computedCost", cost);
-    formData.append("tierLevel", currentUserTier);
-
-    try {
-        const response = await fetch("/api/nin/process-record", {
-            method: "POST",
-            headers: { "Authorization": `Bearer ${token}` },
-            body: formData
-        });
-        const data = await response.json();
-
-        if (data.success) {
-            alert(`🎉 Identity Record Successfully Processed! Trace Code: ${data.reference}`);
-            event.target.reset();
-            fetchUserProfile();
-        } else {
-            alert(`⚠️ NIMC Gateway Notice: ${data.message}`);
-        }
-    } catch (error) {
-        const referenceCode = `HM-NIMC-${Math.floor(100000 + Math.random() * 900000)}`;
-        alert(`🔒 Record Staged Offline!\n\nYour transaction has been written to the client data queue.\nReference ID: ${referenceCode}\nCost to Debit: ₦${cost}\n\nPlease forward physical details to Hambak Admin Desk for biometrics.`);
-        event.target.reset();
-    } finally {
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
-    }
-}
+  </script>
+</body>
+</html>
