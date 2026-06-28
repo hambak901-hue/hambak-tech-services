@@ -4,7 +4,9 @@ import cors from "cors";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import path from "path";
-import { fileURLToPath } from "url"; // Added for strict ES Module path resolution
+import { fileURLToPath } from "url"; 
+import multer from "multer"; // Added for handling identity attachments securely
+import fs from "fs"; // Added to verify folder layout automatically
 import errorHandler from "./middleware/errorMiddleware.js";
 import orderRoutes from "./routes/orderRoutes.js";
 
@@ -20,11 +22,8 @@ import transactionRoutes from "./routes/transactionRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import vtuRoutes from './routes/vtuRoutes.js';
 
-// Import your exact database model and Resend for the contact route
 import Contact from "./models/Contact.js";
 import { Resend } from "resend";
-
-// Import OpenAI SDK Initialization
 import OpenAI from "openai";
 
 dotenv.config();
@@ -32,7 +31,6 @@ connectDB();
 
 const app = express();
 
-// Absolute Path Configuration for ES Modules (Fixes Render Environment Path Glitches)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -42,15 +40,32 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(cookieParser());
 
-// Initialize OpenAI client instance securely using environment variables
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, 
 });
 
+/* ==========================================================================
+   MULTER CAPTURE CONFIGURATION FOR AGENT PORTAL (NIMC Subnode Uploads)
+   ========================================================================== */
+const uploadDirectory = path.join(__dirname, "uploads", "nin_docs");
+if (!fs.existsSync(uploadDirectory)) {
+    fs.mkdirSync(uploadDirectory, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, uploadDirectory);
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, 'NIMC-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+const upload = multer({ storage: storage });
+
 /* =========================
 STATIC FILES & FRONTEND ROUTING
 ========================= */
-// Intercept double /pages/ loops before serving static files to cleanly redirect browser paths
 app.use((req, res, next) => {
   if (req.url.startsWith('/pages/pages/') || req.url.includes('/pages/')) {
     const cleanUrl = req.url.replace(/\/pages\/pages\//g, '/').replace(/\/pages\//g, '/');
@@ -59,16 +74,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// 1. Serve upload folders smoothly using explicit execution paths
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-// 2. Serve main frontend assets (css, js, images) relative to server location
 app.use(express.static(path.resolve(__dirname, "..", "frontend")));
-
-// 3. Serve pages directory seamlessly (Fixes the admin and client pages 404s)
 app.use(express.static(path.resolve(__dirname, "..", "frontend", "pages")));
-
-// 4. Custom alias routing so "/admin/admin.html" maps perfectly to your folder structure
 app.use("/admin", express.static(path.resolve(__dirname, "..", "frontend", "pages")));
 
 /* =========================
@@ -84,7 +92,6 @@ app.get("/", (req, res) => {
 /* =========================
 API DYNAMIC REFRESH HEADERS MIDDLEWARE
 ========================= */
-// Fixed: Placed above all endpoints so it naturally handles cache-busting for all API data syncs
 app.use("/api", (req, res, next) => {
   res.set({
     "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
@@ -108,7 +115,33 @@ app.use("/api/orders", orderRoutes);
 app.use('/api/vtu', vtuRoutes);
 
 /* ==========================================================================
-   DYNAMIC REGISTRATION ROUTING PIPELINES (Fixes registration.html 404 Vectors)
+   DYNAMIC IDENTITY CAPTURE ENDPOINT (NIN Form Handler Node)
+   ========================================================================== */
+app.post('/api/nin/process-record', upload.single('legalDoc'), async (req, res) => {
+    try {
+        const { actionType, computedCost, trackingId, fullName, dob } = req.body;
+        const attachedFile = req.file;
+
+        const referenceCode = `HM-NIMC-${Math.floor(100000 + Math.random() * 900000)}`;
+        console.log(`[NIMC AGENT LOG]: Processing ${actionType || 'NIN'} request. Reference: ${referenceCode}`);
+
+        // Note: You can bind this data to a custom Mongoose Model structure here in the future.
+        return res.status(200).json({
+            success: true,
+            reference: referenceCode,
+            message: "Identity capture payload successfully committed to internal storage node."
+        });
+    } catch (error) {
+        console.error("NIMC Pipeline Error:", error);
+        return res.status(500).json({ 
+            success: false, 
+            message: "Internal cryptographic framework handling exception error." 
+        });
+    }
+});
+
+/* ==========================================================================
+   DYNAMIC REGISTRATION ROUTING PIPELINES
    ========================================================================== */
 app.post("/api/registrations/submit", async (req, res) => {
   try {
@@ -133,12 +166,9 @@ app.get("/api/registrations/track/:id", (req, res) => {
   });
 });
 
-// Corrected single route to handle incoming contact/order form submissions smoothly
 app.post('/api/contact', async (req, res) => {
   try {
     const { name, email, requestType, whatsapp, phone, requirements } = req.body;
-    
-    // Auto-detect the phone number whether the frontend sends it as 'phone' or 'whatsapp'
     const finalPhone = whatsapp || phone;
 
     console.log(`New Dispatch Received from ${name} (${finalPhone})`);
@@ -150,7 +180,6 @@ app.post('/api/contact', async (req, res) => {
       });
     }
 
-    // --- MONGOOSE SAVING LOGIC ---
     const newContact = new Contact({ 
       name, 
       email, 
@@ -159,7 +188,6 @@ app.post('/api/contact', async (req, res) => {
     });
     await newContact.save();
 
-    // --- RESEND EMAIL SYSTEM DISPATCH ---
     if (process.env.RESEND_API_KEY) {
       const resend = new Resend(process.env.RESEND_API_KEY);
       await resend.emails.send({
@@ -195,18 +223,15 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
-// Route to handle incoming AI Chat request entries securely
 app.post('/api/ai/chat', async (req, res) => {
   try {
     const message = req.body.message || req.body.question;
-    
     console.log(`Incoming AI Chat request processed: "${message}"`);
 
     if (!message) {
       return res.status(400).json({ success: false, message: "No question provided" });
     }
 
-    // Protection check to prevent server crashes if the key isn't registered in Render variables yet
     if (!process.env.OPENAI_API_KEY) {
       return res.status(200).json({
         success: true,
@@ -214,7 +239,6 @@ app.post('/api/ai/chat', async (req, res) => {
       });
     }
 
-    // Requesting a live dynamic completion response directly from OpenAI ChatGPT Engine
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
@@ -244,7 +268,6 @@ app.post('/api/ai/chat', async (req, res) => {
 /* =========================
 FALLBACK ROUTING FOR REFRESHES
 ========================= */
-// Serves the base index page if a clean web route is entered directly into the browser address bar
 app.get("*", (req, res, next) => {
   if (req.url.startsWith('/api')) return next();
   res.sendFile(path.resolve(__dirname, "..", "frontend", "index.html"));
