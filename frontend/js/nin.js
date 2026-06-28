@@ -5,7 +5,6 @@
 let currentUserTier = "retailer";
 let walletBalance = 0;
 
-// Centralized premium agency cost model (simulating dgstech ecosystem rules)
 const ninPricingMatrix = {
     retailer:   { modification: 2500, retrieval: 1000, cardPrint: 1500, preEnroll: 500 },
     wholesaler: { modification: 2200, retrieval: 850,  cardPrint: 1300, preEnroll: 400 },
@@ -18,9 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setupNINFormListeners();
 });
 
-/**
- * Validates agent session authorization to load specific localized service pricing sheets
- */
 async function fetchUserProfile() {
     const token = localStorage.getItem("token") || localStorage.getItem("hambak_token");
     if (!token) {
@@ -39,11 +35,6 @@ async function fetchUserProfile() {
         if (data.success && data.user) {
             currentUserTier = data.user.role || "retailer";
             walletBalance = Number(data.user.wallet || 0);
-            
-            // Sync visible tier badge in nin.html
-            document.querySelectorAll(".tier-badge").forEach(b => b.classList.remove("active-tier"));
-            const currentBadge = document.getElementById(`tier-${currentUserTier}`);
-            if (currentBadge) currentBadge.classList.add("active-tier");
         }
     } catch (err) {
         console.error("Failed to connect to identity engine ledger matrix:", err);
@@ -52,9 +43,6 @@ async function fetchUserProfile() {
     }
 }
 
-/**
- * Injects pricing notifications directly above action dispatch buttons
- */
 function updatePricingHints() {
     const rates = ninPricingMatrix[currentUserTier] || ninPricingMatrix.retailer;
     
@@ -80,9 +68,6 @@ function setupNINFormListeners() {
     if (forms.enrollment) forms.enrollment.addEventListener("submit", (e) => handleNINAction(e, "preEnroll"));
 }
 
-/**
- * Manages calculations, ledger balance drops, and forms upload pipelines
- */
 async function handleNINAction(event, actionKey) {
     event.preventDefault();
     const token = localStorage.getItem("token") || localStorage.getItem("hambak_token");
@@ -98,7 +83,6 @@ async function handleNINAction(event, actionKey) {
     submitBtn.innerText = "Encrypting Identity Payload...";
     submitBtn.disabled = true;
 
-    // Convert raw structural form records into transactional files
     const formData = new FormData(event.target);
     formData.append("actionType", actionKey);
     formData.append("computedCost", cost);
@@ -107,7 +91,7 @@ async function handleNINAction(event, actionKey) {
     try {
         const response = await fetch("/api/nin/process-record", {
             method: "POST",
-            headers: { "Authorization": `Bearer ${token}` }, // Leave Content-Type empty for multi-part file uploads
+            headers: { "Authorization": `Bearer ${token}` },
             body: formData
         });
         const data = await response.json();
@@ -120,7 +104,6 @@ async function handleNINAction(event, actionKey) {
             alert(`⚠️ NIMC Gateway Notice: ${data.message}`);
         }
     } catch (error) {
-        // Local programmatic fallback mode if server link is offline
         const referenceCode = `HM-NIMC-${Math.floor(100000 + Math.random() * 900000)}`;
         alert(`🔒 Record Staged Offline!\n\nYour transaction has been written to the client data queue.\nReference ID: ${referenceCode}\nCost to Debit: ₦${cost}\n\nPlease forward physical details to Hambak Admin Desk for biometrics.`);
         event.target.reset();
