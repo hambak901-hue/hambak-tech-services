@@ -101,18 +101,18 @@
         <p>Correct mistakes or update name spelling, dates of birth, phone tracking links, and marital status records safely.</p>
         
         <form class="nin-form" id="modificationForm">
-          <input type="text" placeholder="Current NIMC Slip Tracker / NIN" maxlength="11" required>
-          <select required onchange="updateModificationPlaceholder(this)">
+          <input type="text" name="trackingId" placeholder="Current NIMC Slip Tracker / NIN" maxlength="11" required>
+          <select name="modificationType" required onchange="updateModificationPlaceholder(this)">
             <option value="">Select Correction Type...</option>
             <option value="name">Name Change / Reordering</option>
             <option value="dob">Date of Birth Rectification</option>
             <option value="phone">Phone Number Linking Adjustment</option>
           </select>
-          <textarea placeholder="Specify the new information fields explicitly..." rows="2" required></textarea>
+          <textarea name="requirements" placeholder="Specify the new information fields explicitly..." rows="2" required></textarea>
           
           <div class="file-input-group">
             <span class="file-label"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Legal Supporting Document (PDF/JPG)</span>
-            <input type="file" accept=".pdf,.jpg,.jpeg,.png" required>
+            <input type="file" name="legalDoc" accept=".pdf,.jpg,.jpeg,.png" required>
           </div>
           
           <button type="submit" class="action-btn">Process Data Modification</button>
@@ -125,10 +125,10 @@
         <p>Lost your slip or forgotten your clear identification metrics? Retrieve your string indicators or generate premium document cards.</p>
         
         <form class="nin-form" id="retrievalForm">
-          <input type="text" placeholder="Enter Registration Tracking ID / Phone Link" required>
-          <input type="text" placeholder="Full Registered Name (Surname First)" required>
-          <input type="date" title="Date of Birth" required>
-          <select required>
+          <input type="text" name="trackingId" placeholder="Enter Registration Tracking ID / Phone Link" required>
+          <input type="text" name="fullName" placeholder="Full Registered Name (Surname First)" required>
+          <input type="date" name="dob" title="Date of Birth" required>
+          <select name="deliveryMethod" required>
             <option value="standard">Standard Digital Delivery (Color Slip PDF)</option>
             <option value="premium">Premium Laminated ID Card (Physical Delivery)</option>
           </select>
@@ -142,15 +142,15 @@
         <p>Avoid long queues. Fill out raw structural profile tracking details to prepare data tokens for biometric fingerprint captures.</p>
         
         <form class="nin-form" id="enrollmentForm">
-          <input type="text" placeholder="First Name" required>
-          <input type="text" placeholder="Surname (Family Title Name)" required>
-          <input type="tel" placeholder="Primary Link Phone Number" required>
-          <select required>
+          <input type="text" name="firstName" placeholder="First Name" required>
+          <input type="text" name="surname" placeholder="Surname (Family Title Name)" required>
+          <input type="tel" name="phone" placeholder="Primary Link Phone Number" required>
+          <select name="stateOfOrigin" required>
             <option value="">Select State of Origin...</option>
-            <option>Lagos</option>
-            <option>Ogun</option>
-            <option>Oyo</option>
-            <option>Kwara</option>
+            <option value="Lagos">Lagos</option>
+            <option value="Ogun">Ogun</option>
+            <option value="Oyo">Oyo</option>
+            <option value="Kwara">Kwara</option>
           </select>
           <button type="submit" class="action-btn">Initialize Pre-Enrollment Token</button>
         </form>
@@ -163,6 +163,7 @@
     &copy; 2026 HAMBAK TECH & SERVICES • Multi-Service Identity Management Infrastructure Node.
   </footer>
 
+  <script src="../js/nin.js"></script>
   <script>
     function updateModificationPlaceholder(selectElement) {
       const textarea = selectElement.form.querySelector('textarea');
@@ -174,14 +175,6 @@
         textarea.placeholder = "Specify the new information fields explicitly...";
       }
     }
-
-    // Default basic form submission preventions until your API backend routing files are linked
-    document.querySelectorAll('.nin-form').forEach(form => {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert("🔒 Identity Record Staged! Forwarding to Hambak backend processing pipeline authorization layer...");
-      });
-    });
   </script>
 </body>
 </html>
