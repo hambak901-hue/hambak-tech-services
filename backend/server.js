@@ -22,7 +22,7 @@ import transactionRoutes from "./routes/transactionRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import vtuRoutes from './routes/vtuRoutes.js';
 
-import Contact from "./models/Contact.js";
+import Contact from "./models/contact.js";
 import NinRecord from "./models/NinRecord.js";
 import { Resend } from "resend";
 import OpenAI from "openai";
