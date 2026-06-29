@@ -23,6 +23,7 @@ import userRoutes from "./routes/userRoutes.js";
 import vtuRoutes from './routes/vtuRoutes.js';
 
 import Contact from "./models/Contact.js";
+import NinRecord from "./models/NinRecord.js";
 import { Resend } from "resend";
 import OpenAI from "openai";
 
@@ -117,25 +118,66 @@ app.use('/api/vtu', vtuRoutes);
 /* ==========================================================================
    DYNAMIC IDENTITY CAPTURE ENDPOINT (NIN Form Handler Node)
    ========================================================================== */
+/* UPDATE THE ENDPOINT TO THIS: */
 app.post('/api/nin/process-record', upload.single('legalDoc'), async (req, res) => {
     try {
-        const { actionType, computedCost, trackingId, fullName, dob } = req.body;
-        const attachedFile = req.file;
+        // Destructure everything coming securely from nin.js FormData
+        const { 
+            actionType, 
+            computedCost, 
+            tierLevel,
+            trackingId, 
+            modificationType, 
+            requirements, 
+            fullName, 
+            deliveryMethod, 
+            firstName, 
+            surname, 
+            phone, 
+            stateOfOrigin 
+        } = req.body;
 
+        // Generate the unique traceable reference token
         const referenceCode = `HM-NIMC-${Math.floor(100000 + Math.random() * 900000)}`;
-        console.log(`[NIMC AGENT LOG]: Processing ${actionType || 'NIN'} request. Reference: ${referenceCode}`);
+        
+        // Grab the file upload path safely if a legal doc was attached
+        const legalDocPath = req.file ? `/uploads/nin_docs/${req.file.filename}` : "";
 
-        // Note: You can bind this data to a custom Mongoose Model structure here in the future.
+        // Instantiating the new Mongoose Record Document
+        const newNinRecord = new NinRecord({
+            actionType,
+            computedCost: Number(computedCost || 0),
+            tierLevel,
+            referenceCode,
+            trackingId,
+            modificationType,
+            requirements,
+            fullName,
+            deliveryMethod,
+            firstName,
+            surname,
+            phone,
+            stateOfOrigin,
+            legalDocPath,
+            status: "pending" // Sets initial processing sequence state
+        });
+
+        // Commit permanently to your MongoDB Atlas cluster
+        await newNinRecord.save();
+
+        console.log(`[DATABASE LOG]: New Identity Node Document Stored. Ref: ${referenceCode}`);
+
         return res.status(200).json({
             success: true,
             reference: referenceCode,
-            message: "Identity capture payload successfully committed to internal storage node."
+            message: "Identity capture payload successfully validated and committed to database cluster."
         });
+
     } catch (error) {
-        console.error("NIMC Pipeline Error:", error);
+        console.error("NIMC Database Pipeline Error:", error);
         return res.status(500).json({ 
             success: false, 
-            message: "Internal cryptographic framework handling exception error." 
+            message: "Internal cryptographic database framework handling exception error." 
         });
     }
 });
