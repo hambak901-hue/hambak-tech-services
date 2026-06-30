@@ -23,7 +23,7 @@ import userRoutes from "./routes/userRoutes.js";
 import vtuRoutes from './routes/vtuRoutes.js';
 
 import Contact from "./models/contact.js";
-import NinRecord from "./models/NinRecord.js";
+import NinRecord from "./models/ninRecord.js";
 import { Resend } from "resend";
 import OpenAI from "openai";
 
