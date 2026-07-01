@@ -343,25 +343,8 @@
     </div>
 
     <!-- CARDS REGISTRY CONTAINER -->
-    <div class="users-grid">
-
-      <!-- NODE 1: ADMINISTRATOR -->
-      <div class="profile-card">
-        <span class="status-badge active">System Owner</span>
-        <div class="avatar-wrapper">
-          <i class="fa-solid fa-user-gear"></i>
-        </div>
-        <h3>Ahmad Hamahullah</h3>
-        <span class="profile-role">Chief Executive / Design Director</span>
-        <div class="profile-details">
-          <p><span class="label">Operational ID:</span> <span>HBK-CEO-01</span></p>
-          <p><span class="label">Primary Hub:</span> <span>Lagos Center</span></p>
-          <p><span class="label">System Priority:</span> <span>Root Access</span></p>
-        </div>
-        <button class="action-btn" onclick="alert('Accessing secure profile config path...')">Manage Node</button>
-      </div>
-
-      <!-- NODE 2: STAFF MEMBER A -->
+   
+    <!-- NODE 2: STAFF MEMBER A -->
       <div class="profile-card">
         <span class="status-badge active">Active</span>
         <div class="avatar-wrapper">
@@ -414,26 +397,8 @@
   </footer>
 
   <!-- SCRIPT LOGIC FILTERING -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const searchInputElement = document.getElementById("userSearch");
-
-      searchInputElement.addEventListener("input", () => {
-        const queryTerm = searchInputElement.value.toLowerCase().trim();
-        const profileCards = document.querySelectorAll(".profile-card");
-
-        profileCards.forEach(cardNode => {
-          const cardTextContent = cardNode.textContent.toLowerCase();
-          
-          if (cardTextContent.includes(queryTerm)) {
-            cardNode.style.display = "flex";
-          } else {
-            cardNode.style.display = "none";
-          }
-        });
-      });
-    });
-  </script>
+ <script src="../js/users.js"></script>
+</body>
 
 </body>
 </html>
