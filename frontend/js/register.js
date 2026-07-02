@@ -66,6 +66,7 @@ if (formElement) {
     const confirmPassword = document.getElementById("confirmPassword") ? document.getElementById("confirmPassword").value : "";
     const termsCheckbox = document.getElementById("termsCheckbox");
     const termsAccepted = termsCheckbox ? termsCheckbox.checked : false;
+    const avatarInput = document.getElementById("avatarFile");
 
     /* NATIVE FORM COMPLETENESS RULE VALIDATION */
     if (!name || !username || !email || !phone || !role || !password) {
@@ -92,17 +93,27 @@ if (formElement) {
       submitBtn.innerText = "Instantiating Credentials...";
     }
 
-    /* BUILD FORM ENVELOPE ENCAPSULATION */
+    /* BUILD MULTI-PART FORM DATA LAYOUT */
     try {
-      const dispatchPayload = { name, username, email, phone, role, password };
+      const formPayload = new FormData();
+      formPayload.append("name", name);
+      formPayload.append("username", username);
+      formPayload.append("email", email);
+      formPayload.append("phone", phone);
+      formPayload.append("role", role);
+      formPayload.append("password", password);
+
+      // Append binary asset file payload if it exists inside the drag block node
+      if (avatarInput && avatarInput.files && avatarInput.files[0]) {
+        formPayload.append("avatarFile", avatarInput.files[0]);
+      }
 
       // CONNECTS EXACTLY TO YOUR BACKEND API SERVER
+      // Note: Content-Type header must NOT be specified when passing FormData to fetch; 
+      // the browser will automatically declare it with the required boundary tokens.
       const serverTransportStream = await fetch(`${BASE_URL}/auth/register`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dispatchPayload)
+        body: formPayload
       });
 
       const processingResultData = await serverTransportStream.json();
@@ -127,15 +138,19 @@ if (formElement) {
       if (processingResultData.user) {
         localStorage.setItem("hambak_user", JSON.stringify(processingResultData.user));
       }
+      
+      // Ensure both authentication string variations mirror throughout storage targets safely
       if (processingResultData.token) {
+        localStorage.setItem("token", processingResultData.token);
         localStorage.setItem("hambak_token", processingResultData.token);
       }
 
       /* DISPATCH INTER-PAGE ROUTING REDIRECTS */
       setTimeout(() => {
-        if (role === "admin" || (processingResultData.user && processingResultData.user.role === "admin")) {
+        const exactRole = processingResultData.user?.role || role;
+        if (exactRole === "admin") {
           window.location.href = "admin.html";
-        } else if (role === "student") {
+        } else if (exactRole === "student") {
           window.location.href = "dashboard.html?context=training";
         } else {
           window.location.href = "dashboard.html";
