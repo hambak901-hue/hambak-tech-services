@@ -97,7 +97,6 @@
     /* SPLIT SYSTEM SPLIT LAYOUT */
     .payment-layout {
       display: grid;
-      grid-template-columns: 1.2fr 180px; /* Layout split */
       grid-template-columns: 1.3fr 1fr;
       gap: 40px;
     }
@@ -447,33 +446,26 @@
     const CLOUD_API_ROOT = "https://hambak-tech-services.onrender.com/api";
 
     document.addEventListener("DOMContentLoaded", () => {
-      const systemToken = localStorage.getItem("hambak_token");
+      const systemToken = localStorage.getItem("hambak_token") || localStorage.getItem("token");
       if (!systemToken) {
         alert("Session verification token missing. Routing to Login screen area.");
         window.location.href = "login.html";
         return;
       }
 
-      // Initialize workspace content data streams
       loadActiveOrdersIntoDropdown(systemToken);
       fetchPaymentLedgerStatements(systemToken);
     });
 
-    /**
-     * Account string buffer copy system
-     */
     function copyValueToClipboard() {
       const accountString = document.getElementById("accountNum").innerText;
       navigator.clipboard.writeText(accountString).then(() => {
         alert("Account number copied securely to clipboard: " + accountString);
       }).catch(err => {
-        console.error("Clipboard drop error handles:", err);
+        console.error("Clipboard copy failed:", err);
       });
     }
 
-    /**
-     * File sizing inspector keeping validation sizes lightweight
-     */
     function monitorReceiptFootprint(inputNode) {
       const labelText = document.getElementById("receiptNameTracker");
       const targetFile = inputNode.files[0];
@@ -487,18 +479,14 @@
       const calculatedSizeKb = targetFile.size / 1024;
       labelText.innerText = `${targetFile.name} (${calculatedSizeKb.toFixed(1)} KB)`;
 
-      // Verification alert for asset footprints above 15kb
       if (calculatedSizeKb > 15) {
         labelText.innerText += " - Note: File exceeds standard 15KB recommendations.";
-        labelText.style.color = var(--brand-gold);
+        labelText.style.color = "#f5b942";
       } else {
         labelText.style.color = "#10b981";
       }
     }
 
-    /**
-     * Fetches client service requests to load into the selection field
-     */
     async function loadActiveOrdersIntoDropdown(token) {
       const dropdownSelect = document.getElementById("orderSelectionDropdown");
       
@@ -528,14 +516,10 @@
       }
     }
 
-    /**
-     * Gathers payment histories matching authentication records
-     */
     async function fetchPaymentLedgerStatements(token) {
       const ledgerTarget = document.getElementById("paymentHistoryTarget");
       
       try {
-        // Query route linked directly to the Render endpoint framework
         const response = await fetch(`${CLOUD_API_ROOT}/orders/myorders`, {
           method: "GET",
           headers: { "Authorization": `Bearer ${token}` }
@@ -555,8 +539,6 @@
         ledgerTarget.innerHTML = "";
         relevantOrders.forEach(item => {
           const dateString = item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-NG') : "Recent";
-          
-          // Map payment status dynamically based on administrative review states
           const isSettled = item.status === "completed" || item.status === "processing";
           const statusText = isSettled ? "Verified Settlement" : "Awaiting Verification";
           const statusClass = isSettled ? "status-verified" : "status-awaiting";
@@ -580,7 +562,6 @@
       }
     }
 
-    // Intercept form submission to post the payment validation data packet
     document.getElementById("receiptSubmissionForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const actionBtn = document.getElementById("uploadActionBtn");
@@ -588,7 +569,7 @@
       actionBtn.disabled = true;
       actionBtn.innerText = "Transmitting Receipt File...";
 
-      const userSessionToken = localStorage.getItem("hambak_token");
+      const userSessionToken = localStorage.getItem("hambak_token") || localStorage.getItem("token");
       const transactionFormData = new FormData();
 
       transactionFormData.append("orderId", document.getElementById("orderSelectionDropdown").value);
@@ -596,7 +577,6 @@
       transactionFormData.append("file", document.getElementById("receiptFileField").files[0]);
 
       try {
-        // Direct integration loop pointing out to your operational database structures
         const submitResponse = await fetch(`${CLOUD_API_ROOT}/orders/pay`, {
           method: "POST",
           headers: { "Authorization": `Bearer ${userSessionToken}` },
