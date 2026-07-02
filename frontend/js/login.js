@@ -55,7 +55,7 @@ if (toggleForm) {
       if (emailField) emailField.placeholder = "Email Address or Username";
       if (nameField) nameField.removeAttribute("required");
       if (usernameField) usernameField.removeAttribute("required");
-      if (phoneField) phoneField.removeAttribute("removeAttribute");
+      if (phoneField) phoneField.removeAttribute("required");
       
       if (passwordField) passwordField.setAttribute("autocomplete", "current-password");
     } else {
@@ -152,13 +152,23 @@ if (authForm) {
           localStorage.setItem("token", data.token);
           localStorage.setItem("role", data.user?.role || "customer");
 
-          alert("Access Granted! Proceeding to Dashboard Area.");
+          alert("Access Granted! Proceeding to Ecosystem Platform.");
 
-          if (data.user && data.user.role === "admin") {
+          // ==========================================================================
+          // SMART REDIRECT ROUTER MODULE
+          // ==========================================================================
+          const returnRedirectUrl = sessionStorage.getItem("redirectAfterLogin");
+          
+          if (returnRedirectUrl) {
+            sessionStorage.removeItem("redirectAfterLogin"); // Wipe key to cleanly finish loop
+            window.location.href = returnRedirectUrl;       // Drop user right back on processing channel
+          } else if (data.user && data.user.role === "admin") {
             window.location.href = "admin.html";
           } else {
             window.location.href = "dashboard.html";
           }
+          // ==========================================================================
+
         } else {
           alert("Authentication Denied: " + (data.message || "Mismatch password or identifier data parameters."));
         }
