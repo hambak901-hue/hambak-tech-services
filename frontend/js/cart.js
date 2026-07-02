@@ -15,14 +15,14 @@ function displayCartContents() {
 
   // If cart is empty, toggle fallback presentation view blocks
   if (cartItems.length === 0) {
-    emptyNotice.style.display = "block";
-    checkoutSection.style.display = "none";
+    if (emptyNotice) emptyNotice.style.display = "block";
+    if (checkoutSection) checkoutSection.style.display = "none";
     tableBody.innerHTML = "";
     return;
   }
 
-  emptyNotice.style.display = "none";
-  checkoutSection.style.display = "block";
+  if (emptyNotice) emptyNotice.style.display = "none";
+  if (checkoutSection) checkoutSection.style.display = "block";
   tableBody.innerHTML = "";
 
   let totalSum = 0;
@@ -56,7 +56,9 @@ function displayCartContents() {
     tableBody.appendChild(row);
   });
 
-  totalPriceElement.innerText = `₦${totalSum.toLocaleString()}`;
+  if (totalPriceElement) {
+    totalPriceElement.innerText = `₦${totalSum.toLocaleString()}`;
+  }
 }
 
 // Increment or Decrement Quantities Safely
@@ -85,13 +87,24 @@ function saveAndSyncCartState() {
   displayCartContents();
 }
 
-// Processing Checkout Nodes
+// Processing Checkout Nodes with Integrated Security Intercept
 window.instantiateCartCheckout = function() {
   if (cartItems.length === 0) return;
 
-  const token = localStorage.getItem("token") || localStorage.getItem("hambak_token");
+  // 1. GATEWAY CONTROL: Check if user profile token exists in active storage keys
+  const savedToken = localStorage.getItem("token") || localStorage.getItem("hambak_token");
   
-  // Build clean human-readable WhatsApp text string matching business specifications
+  if (!savedToken) {
+    alert("Authentication Profile Required: Please sign in or create a Hambak account to process your payment parameters.");
+    
+    // Remember this page so login.js redirects right back back to their basket choice
+    sessionStorage.setItem("redirectAfterLogin", window.location.href);
+    
+    window.location.href = "login.html";
+    return;
+  }
+
+  // 2. TRANSACTION FLOW: Build clean human-readable WhatsApp text string matching business specifications
   let manifestText = "Hello Hambak Tech and Services, I want to complete a purchase order for the following items:\n\n";
   let runningTotal = 0;
 
@@ -106,7 +119,7 @@ window.instantiateCartCheckout = function() {
   // Redirect instantly to business WhatsApp customer channel routing profile
   const encodedUri = `https://wa.me/2349127469686?text=${encodeURIComponent(manifestText)}`;
   
-  // Optional: Clear cart after handoff
+  // Clear cart after secure system handoff
   localStorage.removeItem("hambak_cart");
   window.location.href = encodedUri;
 };
