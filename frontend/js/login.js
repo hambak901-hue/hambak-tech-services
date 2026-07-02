@@ -147,10 +147,18 @@ if (authForm) {
         const data = await response.json();
 
         if (response.ok || data.success) {
-          // KEY SYNC CORRECTION: Save using identical keys expected by your dashboard layout engine
+          /* ==========================================================================
+             UNIFIED ECOSYSTEM SESSION PERSISTENCE LAYER
+             ==========================================================================
+          */
+          // Traditional layout references
           localStorage.setItem("user", JSON.stringify(data.user));
           localStorage.setItem("token", data.token);
-          localStorage.setItem("role", data.user?.role || "customer");
+          localStorage.setItem("role", data.user?.role || "retailer");
+
+          // Advanced core infrastructure tracking alignments
+          localStorage.setItem("hambak_user", JSON.stringify(data.user));
+          localStorage.setItem("hambak_token", data.token);
 
           alert("Access Granted! Proceeding to Ecosystem Platform.");
 
@@ -164,6 +172,8 @@ if (authForm) {
             window.location.href = returnRedirectUrl;       // Drop user right back on processing channel
           } else if (data.user && data.user.role === "admin") {
             window.location.href = "admin.html";
+          } else if (data.user && data.user.role === "student") {
+            window.location.href = "dashboard.html?context=training";
           } else {
             window.location.href = "dashboard.html";
           }
