@@ -182,7 +182,7 @@
 
     .form-box h2 {
       margin-top: 0;
-      font-size: 2rem;
+      font-size: 1.5rem;
       background: var(--clean-white);
       color: #0f172a;
       display: inline-block;
@@ -339,7 +339,7 @@
       <a href="../index.html">Home</a>
       <a href="services.html">Services</a>
       <a href="shop.html">Shop</a>
-      <a href="games.html">Game Center</a>
+      <a href="orders.html">My Orders</a>
       <a href="contact.html">Contact</a>
     </nav>
   </header>
@@ -366,7 +366,6 @@
       window.location.href = "services.html";
     }
 
-    // Fetch details on page initialization
     window.addEventListener("DOMContentLoaded", fetchTargetServiceInstance);
 
     async function fetchTargetServiceInstance() {
@@ -382,7 +381,6 @@
         
         let cachedEcosystemProfile = { name: "", email: "", phone: "" };
         try {
-          // Check both storage models to guarantee user profile alignment
           const userMetaPayload = localStorage.getItem("hambak_user") || localStorage.getItem("user");
           if (userMetaPayload) {
             cachedEcosystemProfile = JSON.parse(userMetaPayload);
@@ -465,10 +463,8 @@
           </div>
         `;
 
-        // Bind core systems and watchdogs
         attachDynamicCalculationEngine(structuralServiceObj);
         
-        // Fix for the broken event hook
         document.getElementById("documentAssetFile").addEventListener("change", function() {
           evaluateFileFootprint(this);
         });
@@ -489,6 +485,7 @@
       const summaryTotalText = document.getElementById("summaryTotal");
 
       const lowerName = serviceRef.name.toLowerCase();
+      // One-time billing verification logic layout for typing tasks
       const isTypingTask = lowerName.includes("typing") || lowerName.includes("transcription");
 
       function executePricingRecalculation() {
@@ -578,7 +575,7 @@
       
       if (byteSizeInKb > 15) {
         statusTrackerNode.innerText += " - Note: Document exceeds recommended 15KB image optimization thresholds.";
-        statusTrackerNode.style.color = "#f5b942"; // Clean hex string mapping fallback
+        statusTrackerNode.style.color = "#f5b942";
       } else {
         statusTrackerNode.style.color = "#10b981";
       }
