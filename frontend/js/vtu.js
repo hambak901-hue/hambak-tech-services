@@ -5,8 +5,9 @@
 // Default system state configuration profile matching wholesale pricing matrices
 let currentUserTier = "retailer"; 
 let walletBalance = 0;
+const BASE_URL = "https://hambak-tech-services.onrender.com/api";
 
-// Centralized dynamic matrix structure resembling advanced infrastructure (e.g., ulamada)
+// Centralized dynamic matrix structure resembling advanced infrastructure
 const tierDiscounts = {
   retailer:   { airtime: 0.015, data1GB: 250, mtnPin100: 99.00 },
   wholesaler: { airtime: 0.025, data1GB: 235, mtnPin100: 97.50 },
@@ -14,8 +15,8 @@ const tierDiscounts = {
   dealer:     { airtime: 0.045, data1GB: 210, mtnPin100: 95.00 }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-    fetchUserProfile();
+document.addEventListener("DOMContentLoaded", async () => {
+    await verifyAndFetchUserProfile();
     setupFormListeners();
     setupDynamicPricingPrompts();
 });
@@ -23,30 +24,50 @@ document.addEventListener("DOMContentLoaded", () => {
 /**
  * Syncs user profiles from backend to accurately determine pricing tiers and wallet status
  */
-async function fetchUserProfile() {
+async function verifyAndFetchUserProfile() {
     const token = localStorage.getItem("token") || localStorage.getItem("hambak_token");
+    
+    // Intercept immediate entry if no active session profile exists
     if (!token) {
-        console.warn("No authentication token found. Operating under default Retailer rules.");
-        initializeTierHighlights();
+        alert("Authentication Profile Required: Please sign in or create a Hambak account to access the VTU distribution matrix.");
+        sessionStorage.setItem("redirectAfterLogin", window.location.href);
+        window.location.href = "login.html";
         return;
     }
 
     try {
-        const response = await fetch("/api/users/profile", {
+        const response = await fetch(`${BASE_URL}/users/profile`, {
             method: "GET",
-            headers: { "Authorization": `Bearer ${token}` }
+            headers: { 
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
         });
-        const data = await response.json();
 
-        if (data.success && data.user) {
-            currentUserTier = data.user.role || "retailer"; 
-            walletBalance = Number(data.user.wallet || 0);
+        if (response.status === 401) {
+            localStorage.clear();
+            alert("Session Expired: Please log back in to authenticate your ledger parameters.");
+            sessionStorage.setItem("redirectAfterLogin", window.location.href);
+            window.location.href = "login.html";
+            return;
+        }
+
+        const data = await response.json();
+        const activeUser = data.user || data;
+
+        if (activeUser) {
+            // Check for correct role/tier configuration mapping
+            currentUserTier = activeUser.role || "retailer"; 
+            
+            // Map exact structural ledger balance returned from database keys
+            walletBalance = Number(activeUser.walletBalance || activeUser.wallet || 0);
             
             initializeTierHighlights();
             updateDOMBalances();
         }
     } catch (err) {
         console.error("Ledger synchronization exception context:", err);
+        // Fallback checks using local UI presets without disrupting view layer completely
         initializeTierHighlights(); 
     }
 }
@@ -92,7 +113,7 @@ function setupDynamicPricingPrompts() {
             hintBox.innerText = "";
             return;
         }
-        const rates = tierDiscounts[currentUserTier];
+        const rates = tierDiscounts[currentUserTier] || tierDiscounts["retailer"];
         const multiplier = Number(bulkDenom.value) / 100;
         const unitCost = rates.mtnPin100 * multiplier;
         hintBox.innerHTML = `<i class="fa-solid fa-tags"></i> Your Active <strong>${currentUserTier.toUpperCase()}</strong> Rate: ₦${unitCost.toFixed(2)} per item card.`;
@@ -114,7 +135,8 @@ async function handleAirtimeSubmission(event) {
     const phoneNumber = document.getElementById("airtimePhone").value;
     const amount = Number(document.getElementById("airtimeAmount").value);
 
-    const discount = tierDiscounts[currentUserTier].airtime;
+    const currentRates = tierDiscounts[currentUserTier] || tierDiscounts["retailer"];
+    const discount = currentRates.airtime;
     const computedDebit = amount * (1 - discount);
 
     if (walletBalance < computedDebit) {
@@ -126,7 +148,7 @@ async function handleAirtimeSubmission(event) {
     submitBtn.disabled = true;
 
     try {
-        const response = await fetch("/api/vtu/airtime", {
+        const response = await fetch(`${BASE_URL}/vtu/airtime`, {
             method: "POST",
             headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
             body: JSON.stringify({ network, phoneNumber, amount, computedDebit, discountTier: currentUserTier })
@@ -136,14 +158,14 @@ async function handleAirtimeSubmission(event) {
         if (data.success) {
             alert(`🎉 Success: Airtime Dispensed! Charged ₦${computedDebit.toFixed(2)} instead of ₦${amount}.`);
             event.target.reset();
-            fetchUserProfile();
+            await verifyAndFetchUserProfile();
         } else {
             alert(`⚠️ Gateway Rejection: ${data.message}`);
         }
     } catch (error) {
         alert("System Timeout: Failed to reach standard telecommunications node link.");
     } finally {
-        submitBtn.innerText = "Execute Airtime Dispense";
+        submitBtn.innerText = "Dispense Airtime";
         submitBtn.disabled = false;
     }
 }
@@ -162,7 +184,7 @@ async function handleDataSubmission(event) {
     submitBtn.disabled = true;
 
     try {
-        const response = await fetch("/api/vtu/data", {
+        const response = await fetch(`${BASE_URL}/vtu/data`, {
             method: "POST",
             headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
             body: JSON.stringify({ network, plan, phoneNumber, tier: currentUserTier })
@@ -172,7 +194,7 @@ async function handleDataSubmission(event) {
         if (data.success) {
             alert(`🎉 Success: Data allocated successfully to ${phoneNumber}`);
             event.target.reset();
-            fetchUserProfile();
+            await verifyAndFetchUserProfile();
         } else {
             alert(`⚠️ Allocation Failure: ${data.message}`);
         }
@@ -200,7 +222,7 @@ async function handleBulkSubmission(event) {
     submitBtn.disabled = true;
 
     try {
-        const response = await fetch("/api/vtu/bulk-wholesale", {
+        const response = await fetch(`${BASE_URL}/vtu/bulk-wholesale`, {
             method: "POST",
             headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
             body: JSON.stringify({ network, denomination, quantity, deliveryMode, deliveryAddress, contactReceiver, tier: currentUserTier })
@@ -216,12 +238,11 @@ async function handleBulkSubmission(event) {
             }
             event.target.reset();
             window.toggleDeliveryFields("digital");
-            fetchUserProfile();
+            await verifyAndFetchUserProfile();
         } else {
             alert(`⚠️ Staging Rejected: ${data.message}`);
         }
     } catch (error) {
-        // Safe programmatic client-side local simulation block if database endpoint router path is disconnected
         handleOfflineCompilationFallback(network, denomination, quantity, deliveryMode, deliveryAddress);
     } finally {
         submitBtn.innerText = "Initialize Wholesale Request";
