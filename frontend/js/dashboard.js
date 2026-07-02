@@ -1,12 +1,16 @@
 /**
  * HAMBAK TECH & SERVICES - Advanced Dashboard Management Script
- * Production Operations Infrastructure
+ * Production Operations Infrastructure - Realignment Edition
  */
 
-// --- Global Application State Nodes ---
+// --- Global Application Config & State Nodes ---
+const BASE_URL = "https://hambak-tech-services.onrender.com/api";
+
 let userProfile = null;
 let allServicesArray = [];
-const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+
+// Unified Ecosystem Session Persistence Strategy Lookup
+const token = localStorage.getItem("hambak_token") || localStorage.getItem("token") || sessionStorage.getItem("token");
 
 let revenueChartInstance = null;
 let serviceChartInstance = null;
@@ -80,7 +84,7 @@ function showSection(viewId) {
 // --- Fetch User Profile Data & Update Dashboard Counters ---
 async function fetchUserProfile() {
   try {
-    const res = await fetch("/api/users/profile", {
+    const res = await fetch(`${BASE_URL}/users/profile`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -109,7 +113,6 @@ async function fetchUserProfile() {
 
       if (userProfile.role && userProfile.role.toLowerCase() === 'admin') {
           document.querySelectorAll(".admin-block-section, .admin-only-tab").forEach(el => {
-              // Using flex display fallback if element is a link in sidebar layout
               const targetDisplay = el.tagName === 'A' ? 'flex' : 'block';
               el.style.setProperty('display', targetDisplay, 'important');
           });
@@ -147,7 +150,7 @@ async function fetchUserProfile() {
 // --- Fetch Active Business Services from Backend Database ---
 async function fetchSystemServices() {
   try {
-    const res = await fetch("/api/services", {
+    const res = await fetch(`${BASE_URL}/services`, {
       method: "GET",
       headers: { "Authorization": `Bearer ${token}` }
     });
@@ -211,7 +214,6 @@ function setupOrderForms() {
         return;
       }
 
-      // Find selected service parameters to run balance checkout checks client-side
       const chosenService = allServicesArray.find(s => (s._id || s.id) === serviceSelect.value);
       const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
       const basePrice = chosenService ? (chosenService.price || 0) : 0;
@@ -233,7 +235,7 @@ function setupOrderForms() {
       }
 
       try {
-        const res = await fetch("/api/orders/create", {
+        const res = await fetch(`${BASE_URL}/orders/create`, {
           method: "POST",
           headers: { "Authorization": `Bearer ${token}` },
           body: formData
@@ -274,18 +276,19 @@ function setupWalletFunding() {
     }
 
     const handler = PaystackPop.setup({
-      key: "pk_live_your_real_paystack_key_here", // Replace with your verified public key
+      key: "pk_live_your_real_paystack_key_here", 
       email: userProfile.email,
       amount: Math.round(fundingAmount * 100), 
       currency: "NGN",
       callback: async (response) => {
         try {
-          const verification = await fetch("/api/wallet/verify-funding", {
+          const verification = await fetch(`${BASE_URL}/wallet/verify-funding`, {
             method: "POST",
             headers: {
               "Authorization": `Bearer ${token}`,
               "Content-Type": "application/json"
-            }
+            },
+            body: JSON.stringify({ reference: response.reference })
           });
 
           const verifiedData = await verification.json();
@@ -368,7 +371,6 @@ function getStatusBg(status) {
   }
 }
 
-// --- Order Manifest Printing Action ---
 function printHistoryLog() {
   window.print();
 }
@@ -385,8 +387,8 @@ function setupLogout() {
 }
 
 function handleSessionTimeout() {
-  localStorage.removeItem("token");
-  sessionStorage.removeItem("token");
+  localStorage.clear();
+  sessionStorage.clear();
   window.location.href = "login.html";
 }
 
