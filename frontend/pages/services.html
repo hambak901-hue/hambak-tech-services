@@ -534,37 +534,41 @@
 
   <script src="../js/services.js"></script>
   <script>
-    // Keep your navigation UI mechanics linked to the document safely here
+    // Safeguarded Navigation UI mechanics using Optional Chaining
     const menuToggle = document.getElementById('menuToggle');
     const navMenu = document.getElementById('navMenu');
-    menuToggle.addEventListener('click', () => {
-      navMenu.classList.toggle('show');
+    menuToggle?.addEventListener('click', () => {
+      navMenu?.classList.toggle('show');
     });
 
     const themeToggle = document.getElementById('themeToggle');
     const rootEl = document.documentElement;
-    themeToggle.addEventListener('click', () => {
+    themeToggle?.addEventListener('click', () => {
       const currentTheme = rootEl.getAttribute('data-theme');
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
       rootEl.setAttribute('data-theme', newTheme);
       
       const themeIcon = themeToggle.querySelector('i');
       const themeText = themeToggle.querySelector('span');
-      if(newTheme === 'light') {
-        themeIcon.className = 'fa-solid fa-sun';
-        themeText.innerText = 'Light Mode';
-      } else {
-        themeIcon.className = 'fa-solid fa-moon';
-        themeText.innerText = 'Dark Mode';
+      if (themeIcon && themeText) {
+        if(newTheme === 'light') {
+          themeIcon.className = 'fa-solid fa-sun';
+          themeText.innerText = 'Light Mode';
+        } else {
+          themeIcon.className = 'fa-solid fa-moon';
+          themeText.innerText = 'Dark Mode';
+        }
       }
     });
 
-    // Funnel Router for client execution checkout
+    // Funnel Router for Client Checkout Actions
     function checkoutService(serviceId, serviceCategory) {
-      const token = localStorage.getItem("token") || localStorage.getItem("hambak_token");
+      const token = localStorage.getItem("hambak_token") || localStorage.getItem("token");
+      const normalizedCategory = String(serviceCategory).toLowerCase();
 
-      if (serviceCategory === "Document & Design" || serviceCategory === "Internet & Charging") {
-        window.location.href = `https://wa.me/2349127469686?text=Hello+Hambak+Tech+and+Services,+I+want+to+order+the+${encodeURIComponent(serviceId)}+service.`;
+      // Direct WhatsApp routing rule check
+      if (normalizedCategory.includes("document") || normalizedCategory.includes("design") || normalizedCategory.includes("print")) {
+        window.location.href = `https://wa.me/2349127469686?text=Hello+Hambak+Tech+and+Services,+I+want+to+order+the+service+with+ID:+${encodeURIComponent(serviceId)}.`;
         return;
       }
 
